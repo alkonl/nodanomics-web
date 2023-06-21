@@ -1,10 +1,17 @@
-import {BrowserRouter, Routes} from "react-router-dom";
+import { createBrowserRouter} from "react-router-dom";
 import React from "react";
+import {DashboardPage, RegistrationPage, VerificationLink} from "../../pages";
+import {ELinks} from "./links";
 
-export const AppRouter: React.FC<{ children: React.ReactNode }> = ({children}) => {
-    return (<BrowserRouter>
-        <Routes>
-            {children}
-        </Routes>
-    </BrowserRouter>)
-}
+export const appRouter = createBrowserRouter([
+    {
+        path: ELinks.main,
+        element: <DashboardPage/>,
+    },{
+        path: ELinks.register,
+        element: <RegistrationPage/>,
+    }, {
+        path: ELinks.verificationLink,
+        element: <VerificationLink/>,
+    }
+]);
