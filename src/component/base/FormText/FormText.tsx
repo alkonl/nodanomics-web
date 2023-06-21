@@ -1,15 +1,25 @@
-import React from 'react';
-import {FormInput, IBaseFromInputProps, IFormBaseInputProps} from "../FormInput";
+import React, {HTMLInputTypeAttribute, InputHTMLAttributes} from 'react';
+import {FormInput, IFormBaseInputProps} from "../FormInput";
 
-const InputFormText: React.FC<IBaseFromInputProps> = ({placeholder, onChange, value}) => {
+const InputFormText: React.FC<InputHTMLAttributes<HTMLInputElement>> = ({
+    placeholder,
+    onChange,
+    value
+                                                                              }) => {
     return (
         <input placeholder={placeholder} onChange={onChange} value={value ? value : ''} type="text"/>
     );
 }
 
-export const FormText: React.FC<IFormBaseInputProps> = (props) => {
+interface IFormTextProps extends IFormBaseInputProps {
+    type?: HTMLInputTypeAttribute;
+}
+
+export const FormText: React.FC<IFormTextProps> = (props) => {
     return (
-        <FormInput {...props} Input={InputFormText}/>
+        <FormInput {...props} Input={(baseProps) => {
+            return <InputFormText {...baseProps}/>
+        }}/>
     );
 };
 

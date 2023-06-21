@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/named
 import {BaseQueryFn, createApi, FetchArgs, fetchBaseQuery, FetchBaseQueryError} from '@reduxjs/toolkit/query/react'
 import {emailPasswordSignUp} from "supertokens-web-js/recipe/thirdpartyemailpassword";
+import {ISignUpRequest} from "../interface";
 
 const baseQuery = fetchBaseQuery(({
     baseUrl: import.meta.env.VITE_API_URL,
@@ -42,30 +43,33 @@ export const baseApi = createApi({
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
         signUpEmailPassword: (builder.mutation({
-            queryFn: async ({email, password}: { email: string, password: string }) => {
+            queryFn: async (params: ISignUpRequest) => {
+                const formattedParams = Object.entries(params).map(([key, value]) => ({
+                    id: key,
+                    value
+                }))
                 try {
                     const response = await emailPasswordSignUp({
-                        formFields: [{
-                            id: "email",
-                            value: email
-                        }, {
-                            id: "password",
-                            value: password
-                        }]
+                        formFields: formattedParams
                     })
                     if (response.status === "FIELD_ERROR") {
+                        console.log(response.formFields)
+                        console.log(response)
                         return {
                             error: {
                                 status: 400,
-                                data: response.formFields
+                                data: {
+                                    formFields: response.formFields,
+                                    status: response.status,
+                                }
                             }
                         }
                     }
                     return {data: response.user};
                 } catch (e) {
-                    console.error(e)
+                    console.log(e)
                     return {
-                        error:{
+                        error: {
                             status: 400,
                             data: 'Unexpected error'
                         }
@@ -76,5 +80,5 @@ export const baseApi = createApi({
     }),
 })
 
-export const { useSignUpEmailPasswordMutation } = baseApi;
+export const {useSignUpEmailPasswordMutation} = baseApi;
 
