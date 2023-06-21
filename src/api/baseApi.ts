@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/named
 import {BaseQueryFn, createApi, FetchArgs, fetchBaseQuery, FetchBaseQueryError} from '@reduxjs/toolkit/query/react'
-import {emailPasswordSignUp} from "supertokens-web-js/recipe/thirdpartyemailpassword";
-import {ISignUpRequest} from "../interface";
+import {emailPasswordSignIn, emailPasswordSignUp} from "supertokens-web-js/recipe/thirdpartyemailpassword";
+import {ILoginEmailPasswordRequest, ISignUpRequest} from "../interface";
 
 const baseQuery = fetchBaseQuery(({
     baseUrl: import.meta.env.VITE_API_URL,
@@ -77,8 +77,42 @@ export const baseApi = createApi({
                 }
             },
         })),
+        loginEmailPassword: builder.mutation({
+            queryFn: async (params: ILoginEmailPasswordRequest) => {
+                const response = await emailPasswordSignIn({
+                    formFields: [{
+                        id: "email",
+                        value: params.email
+                    }, {
+                        id: "password",
+                        value: params.password
+                    }]
+                })
+                if (response.status === "FIELD_ERROR") {
+                    return {
+                        error: {
+                            status: 400,
+                            data: {
+                                formFields: response.formFields,
+                                status: response.status,
+                            }
+                        }
+                    }
+                }
+                if (response.status === "WRONG_CREDENTIALS_ERROR") {
+                    return {
+                        error: {
+                            status: 400,
+                            error: 'Wrong credentials',
+                        }
+                    }
+                }
+
+                return {data: response.status};
+            }
+        })
     }),
 })
 
-export const {useSignUpEmailPasswordMutation} = baseApi;
+export const {useSignUpEmailPasswordMutation, useLoginEmailPasswordMutation} = baseApi;
 

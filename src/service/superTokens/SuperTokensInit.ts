@@ -1,6 +1,6 @@
-import SuperTokens from "supertokens-web-js";
-import Session from "supertokens-web-js/recipe/session";
-import ThirdPartyEmailPassword from 'supertokens-web-js/recipe/thirdpartyemailpassword'
+import SuperTokens from "supertokens-auth-react";
+import Session from "supertokens-auth-react/recipe/session";
+import ThirdPartyEmailPassword from 'supertokens-auth-react/recipe/thirdpartyemailpassword'
 
 export const SuperTokensInit = () => {
     SuperTokens.init({
@@ -8,15 +8,15 @@ export const SuperTokensInit = () => {
             // learn more about this on https://supertokens.com/docs/thirdpartyemailpassword/appinfo
             appName: "game",
             apiDomain: "http://localhost:8080",
-            // websiteDomain: "http://localhost:3000",
+            websiteDomain: "http://localhost:3000",
             apiBasePath: "/api/auth",
-            // websiteBasePath: "/auth"
+            // websiteBasePath: "/222"
         },
         recipeList: [
             Session.init({
                 tokenTransferMethod: "header" // or "cookie"
             }),
-            ThirdPartyEmailPassword.init(),
+            ThirdPartyEmailPassword.init({}),
         ]
     });
 }
