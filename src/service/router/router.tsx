@@ -1,6 +1,6 @@
 import { createBrowserRouter} from "react-router-dom";
 import React from "react";
-import {DashboardPage, RegistrationPage, VerificationLink} from "../../pages";
+import {DashboardPage, LoginPage, RegistrationPage, VerificationLink} from "../../pages";
 import {ELinks} from "./links";
 
 export const appRouter = createBrowserRouter([
@@ -13,5 +13,8 @@ export const appRouter = createBrowserRouter([
     }, {
         path: ELinks.verificationLink,
         element: <VerificationLink/>,
+    },{
+        path: ELinks.login,
+        element: <LoginPage/>,
     }
 ]);
