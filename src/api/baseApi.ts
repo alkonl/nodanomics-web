@@ -4,8 +4,10 @@ import {
     emailPasswordSignIn,
     emailPasswordSignUp,
     sendPasswordResetEmail,
-    submitNewPassword
+    submitNewPassword,
 } from "supertokens-web-js/recipe/thirdpartyemailpassword";
+import {sendVerificationEmail, verifyEmail} from "supertokens-web-js/recipe/emailverification";
+
 import {
     ILoginEmailPasswordRequest,
     ISendEmailToResetPasswordRequest,
@@ -154,6 +156,18 @@ export const baseApi = createApi({
                 return {data: response.status}
             }
         }),
+        sendVerificationEmail: builder.mutation({
+            queryFn: async () => {
+                const response = await sendVerificationEmail()
+                return {data: response.status}
+            }
+        }),
+        consumeVerificationCode: builder.mutation({
+            queryFn: async () => {
+                const response = await verifyEmail();
+                return {data: response.status}
+            }
+        }),
     }),
 })
 
@@ -161,6 +175,8 @@ export const {
     useSignUpEmailPasswordMutation,
     useLoginEmailPasswordMutation,
     useSendEmailToResetPasswordMutation,
-    useSubmitNewPasswordMutation
+    useSubmitNewPasswordMutation,
+    useSendVerificationEmailMutation,
+    useConsumeVerificationCodeMutation,
 } = baseApi;
 

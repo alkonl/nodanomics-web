@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {useForm} from "react-hook-form";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {useSignUpEmailPasswordMutation} from "../../../api";
+import {useSendVerificationEmailMutation, useSignUpEmailPasswordMutation} from "../../../api";
 import {FormText, FormPassword} from "../../base";
 import {useNavigate} from "react-router-dom";
 import {ELinks} from "../../../service/router";
@@ -38,7 +38,8 @@ export const SignUpForm = () => {
         resolver: zodResolver(validationSchemaEmail),
     });
 
-    const [signUpEmailPassword, {isSuccess, error}] = useSignUpEmailPasswordMutation();
+    const [signUpEmailPassword, resSignUp] = useSignUpEmailPasswordMutation();
+    const [sendVerificationEmail, resVerificationEmail] = useSendVerificationEmailMutation();
     const onSubmit = async (data: IValidationSchemaEmail) => {
         await signUpEmailPassword({
             email: data[EFormFields.email],
@@ -51,12 +52,18 @@ export const SignUpForm = () => {
 
 
     useEffect(() => {
-        if (isSuccess) {
+        if (resSignUp.isSuccess) {
+            sendVerificationEmail({});
+        }
+    }, [resSignUp.isSuccess])
+
+    useEffect(() => {
+        if(resVerificationEmail.isSuccess){
             navigate(ELinks.verificationLink);
         }
-    }, [isSuccess])
+    }, [resVerificationEmail.isSuccess])
 
-    useSupertokensError({error, form, fields: EFormFields});
+    useSupertokensError({error:resSignUp.error, form, fields: EFormFields});
 
 
     return (
