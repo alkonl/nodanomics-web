@@ -1,16 +1,21 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import {ELinks} from "../../service/router";
-import {useSession} from "../../service/superTokens";
+import {useLogOut, useSession} from "../../service/superTokens";
 
 export const DashboardHeader = () => {
     const session = useSession();
+    const logOut = useLogOut(ELinks.login);
 
     return (
         <div>
             <Link to="/register">Register</Link>
             <br/>
             <Link to={ELinks.login}>Log-in</Link>
+            <br/>
+            <Link to={ELinks.protected}>protected</Link>
+            <br/>
+            <button onClick={logOut}>Log Out</button>
             <br/>
             <br/>
             <hr/>

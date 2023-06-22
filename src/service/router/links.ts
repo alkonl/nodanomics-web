@@ -4,4 +4,5 @@ export enum ELinks {
     register = '/register',
     verificationLink = '/verificationLink',
     forgotPassword = '/forgotPassword',
+    protected = '/protected',
 }

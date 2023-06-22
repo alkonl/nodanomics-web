@@ -1,6 +1,7 @@
 import SuperTokens from "supertokens-auth-react";
 import Session from "supertokens-auth-react/recipe/session";
 import ThirdPartyEmailPassword from 'supertokens-auth-react/recipe/thirdpartyemailpassword'
+import EmailVerification from "supertokens-auth-react/recipe/emailverification";
 
 export const SuperTokensInit = () => {
     SuperTokens.init({
@@ -16,6 +17,7 @@ export const SuperTokensInit = () => {
             Session.init({
                 tokenTransferMethod: "header" // or "cookie"
             }),
+            EmailVerification.init(),
             ThirdPartyEmailPassword.init({}),
         ]
     });
