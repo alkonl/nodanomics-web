@@ -6,7 +6,7 @@ import {useSignUpEmailPasswordMutation} from "../../../api";
 import {FormText, FormPassword} from "../../base";
 import {useNavigate} from "react-router-dom";
 import {ELinks} from "../../../service/router";
-import {checkSuperTokenError} from "../../../service/superTokens";
+import {useSupertokensError} from "../../../utils";
 
 enum EFormFields {
     email = 'email',
@@ -56,21 +56,8 @@ export const SignUpForm = () => {
         }
     }, [isSuccess])
 
-    useEffect(() => {
-        if (error && 'data' in error && checkSuperTokenError(error.data)) {
-            console.log('here')
-            error.data.formFields.forEach((field) => {
-                console.log(field.id)
-                if (Object.values(EFormFields).includes(field.id as EFormFields)) {
-                    form.setError(field.id as EFormFields, {
-                        type: 'FIELD_ERROR',
-                        message: field.error,
-                    })
-                }
+    useSupertokensError({error, form, fields: EFormFields});
 
-            })
-        }
-    }, [error])
 
     return (
         <div>
