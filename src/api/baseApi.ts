@@ -1,7 +1,17 @@
 // eslint-disable-next-line import/named
 import {BaseQueryFn, createApi, FetchArgs, fetchBaseQuery, FetchBaseQueryError} from '@reduxjs/toolkit/query/react'
-import {emailPasswordSignIn, emailPasswordSignUp} from "supertokens-web-js/recipe/thirdpartyemailpassword";
-import {ILoginEmailPasswordRequest, ISignUpRequest} from "../interface";
+import {
+    emailPasswordSignIn,
+    emailPasswordSignUp,
+    sendPasswordResetEmail,
+    submitNewPassword
+} from "supertokens-web-js/recipe/thirdpartyemailpassword";
+import {
+    ILoginEmailPasswordRequest,
+    ISendEmailToResetPasswordRequest,
+    ISignUpRequest,
+    ISubmitNewPasswordRequest
+} from "../interface";
 
 const baseQuery = fetchBaseQuery(({
     baseUrl: import.meta.env.VITE_API_URL,
@@ -110,9 +120,47 @@ export const baseApi = createApi({
 
                 return {data: response.status};
             }
-        })
+        }),
+        sendEmailToResetPassword: builder.mutation({
+            queryFn: async (params: ISendEmailToResetPasswordRequest) => {
+                const response = await sendPasswordResetEmail({
+                    formFields: [{
+                        id: "email",
+                        value: params.email
+                    }]
+                });
+                return {data: response.status}
+            }
+        }),
+        submitNewPassword: builder.mutation({
+            queryFn: async (params: ISubmitNewPasswordRequest) => {
+                const response = await submitNewPassword({
+                    formFields: [{
+                        id: "password",
+                        value: params.password
+                    }]
+                })
+                if (response.status === "FIELD_ERROR") {
+                    return {
+                        error: {
+                            status: 400,
+                            data: {
+                                formFields: response.formFields,
+                                status: response.status,
+                            }
+                        }
+                    }
+                }
+                return {data: response.status}
+            }
+        }),
     }),
 })
 
-export const {useSignUpEmailPasswordMutation, useLoginEmailPasswordMutation} = baseApi;
+export const {
+    useSignUpEmailPasswordMutation,
+    useLoginEmailPasswordMutation,
+    useSendEmailToResetPasswordMutation,
+    useSubmitNewPasswordMutation
+} = baseApi;
 

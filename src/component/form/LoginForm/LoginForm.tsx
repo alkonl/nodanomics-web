@@ -44,19 +44,30 @@ export const LoginForm = () => {
             setFormErrorMessage(error.error)
         }
     }, [error])
+    const forgotPassword = () => {
+        navigate(ELinks.forgotPassword);
+    }
     return (
-        <form onSubmit={(e) => {
-            e.preventDefault();
-            form.handleSubmit(onSubmit)();
-        }}>
-            LoginForm
-            <FormText type="email" placeholder={'Email'} form={form} name={EFormFields.email}/>
-            <FormPassword placeholder={'password'} form={form} name={EFormFields.password}/>
-            {formErrorMessage}
+        <div>
+            <form onSubmit={(e) => {
+                e.preventDefault();
+                form.handleSubmit(onSubmit)();
+            }}>
+                LoginForm
+                <FormText type="email" placeholder={'Email'} form={form} name={EFormFields.email}/>
+                <FormPassword placeholder={'password'} form={form} name={EFormFields.password}/>
+                {formErrorMessage}
+                <button
+                    type="submit"
+                >Login
+                </button>
+            </form>
             <button
-                type="submit"
-            >Login
+                onClick={forgotPassword}
+            >
+                forgot password
             </button>
-        </form>
+        </div>
+
     );
 };
