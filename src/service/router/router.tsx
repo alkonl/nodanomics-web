@@ -1,6 +1,6 @@
 import {createBrowserRouter} from "react-router-dom";
 import React from "react";
-import {DashboardPage, ForgotPassword, LoginPage, RegistrationPage, VerificationLink} from "../../pages";
+import {AuthGoogle, DashboardPage, ForgotPassword, LoginPage, RegistrationPage, VerificationLink} from "../../pages";
 import {ELinks} from "./links";
 import {ProtectedRoute} from "./ProtectedRoute";
 
@@ -21,9 +21,12 @@ export const appRouter = createBrowserRouter([
         path: ELinks.forgotPassword,
         element: <ForgotPassword/>,
     }, {
-        path: "/protected",
+        path: ELinks.protected,
         element: <ProtectedRoute>
             protected
         </ProtectedRoute>,
+    }, {
+        path: ELinks.authGoogle,
+        element: <AuthGoogle/>,
     }
 ]);

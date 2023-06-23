@@ -6,6 +6,7 @@ import {useLoginEmailPasswordMutation} from "../../../api";
 import {ELinks} from "../../../service/router";
 import {useNavigate} from "react-router-dom";
 import {FormPassword, FormText} from "../../base";
+import {GoogleSignInUpButton} from "../../button";
 
 enum EFormFields {
     email = 'email',
@@ -62,6 +63,9 @@ export const LoginForm = () => {
                 >Login
                 </button>
             </form>
+            <br/>
+            <GoogleSignInUpButton/>
+            <br/>
             <button
                 onClick={forgotPassword}
             >
