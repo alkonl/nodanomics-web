@@ -5,4 +5,5 @@ export enum ELinks {
     verificationLink = '/verificationLink',
     forgotPassword = '/forgotPassword',
     protected = '/protected',
+    authGoogle = '/auth/callback/google',
 }

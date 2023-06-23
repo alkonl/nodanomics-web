@@ -5,6 +5,8 @@ import {
     emailPasswordSignUp,
     sendPasswordResetEmail,
     submitNewPassword,
+    thirdPartySignInAndUp,
+    getAuthorisationURLWithQueryParamsAndSetState,
 } from "supertokens-web-js/recipe/thirdpartyemailpassword";
 import {sendVerificationEmail, verifyEmail} from "supertokens-web-js/recipe/emailverification";
 
@@ -14,9 +16,10 @@ import {
     ISignUpRequest,
     ISubmitNewPasswordRequest
 } from "../interface";
+import {CONFIG} from "../utils";
 
 const baseQuery = fetchBaseQuery(({
-    baseUrl: import.meta.env.VITE_API_URL,
+    baseUrl: CONFIG.API_URL,
     prepareHeaders: (headers) => {
         const accessToken = localStorage.getItem("accessToken")
         if (accessToken) {
@@ -168,6 +171,47 @@ export const baseApi = createApi({
                 return {data: response.status}
             }
         }),
+        singInUpGoogle: builder.mutation({
+            queryFn: async () => {
+                const authUrl = await getAuthorisationURLWithQueryParamsAndSetState({
+                    providerId: "google",
+                    authorisationURL: `${CONFIG.WEB_URL}/auth/callback/google`,
+                });
+                return {
+                    data: {
+                        authUrl
+                    }
+                }
+            }
+        }),
+        thirdPartySignInAndUp: builder.query({
+            queryFn: async () => {
+                const response = await thirdPartySignInAndUp();
+                if (response.status === "OK") {
+                    return {
+                        data: {
+                            status: response.status,
+                            user: response.user
+                        }
+                    }
+                } else if (response.status === "NO_EMAIL_GIVEN_BY_PROVIDER") {
+                    return {
+                        error: {
+                            status: 400,
+                            data: {
+                                status: response.status,
+                            }
+                        }
+                    }
+                }
+                return  {
+                    error: {
+                        status: 'CUSTOM_ERROR',
+                        error: 'Unexpected error',
+                    }
+                }
+            }
+        })
     }),
 })
 
@@ -178,5 +222,7 @@ export const {
     useSubmitNewPasswordMutation,
     useSendVerificationEmailMutation,
     useConsumeVerificationCodeMutation,
+    useSingInUpGoogleMutation,
+    useThirdPartySignInAndUpQuery,
 } = baseApi;
 
