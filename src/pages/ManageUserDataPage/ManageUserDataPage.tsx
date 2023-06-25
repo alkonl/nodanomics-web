@@ -1,10 +1,12 @@
 import React from 'react';
-import {FormManageUserData} from "../../component/form/ManageUserData";
+import {ChangePasswordForm} from "../../component/form/ChangePasswordForm";
+import {ManageUserDataForm} from "../../component/form/ManageUserDataForm";
 
 export const ManageUserDataPage = () => {
     return (
         <div>
-            <FormManageUserData/>
+            <ManageUserDataForm/>
+            {/*<ChangePasswordForm/>*/}
         </div>
     );
 };

@@ -6,7 +6,7 @@ import {useSendVerificationEmailMutation, useSignUpEmailPasswordMutation} from "
 import {FormText, FormPassword} from "../../base";
 import {useNavigate} from "react-router-dom";
 import {ELinks} from "../../../service/router";
-import {useSupertokensError} from "../../../utils";
+import {useSupertokensError, validation} from "../../../utils";
 
 enum EFormFields {
     email = 'email',
@@ -18,12 +18,12 @@ enum EFormFields {
 }
 
 const validationSchemaEmail = z.object({
-    [EFormFields.email]: z.string().email(),
-    [EFormFields.password]: z.string().min(8),
-    [EFormFields.confirmPassword]: z.string().min(8),
-    [EFormFields.firstName]: z.string().min(3),
-    [EFormFields.lastName]: z.string().min(3),
-    [EFormFields.phoneNumber]: z.string().refine((value) => /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(value), 'Phone number is not valid. example +919367788755'),
+    [EFormFields.email]: validation.email,
+    [EFormFields.password]: validation.password,
+    [EFormFields.confirmPassword]: validation.password,
+    [EFormFields.firstName]: validation.firstName,
+    [EFormFields.lastName]: validation.lastName,
+    [EFormFields.phoneNumber]: validation.phoneNumber,
 }).refine((data) => data[EFormFields.password] === data[EFormFields.confirmPassword], {
     path: [EFormFields.confirmPassword], // path of error
     message: "Password doesn't match",

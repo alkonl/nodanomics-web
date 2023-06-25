@@ -4,7 +4,7 @@ import {FormPassword} from "../../base";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useChangePasswordMutation} from "../../../api";
-import {useNavigate, useNavigation} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {ELinks} from "../../../service/router";
 
 enum EFormFields {
@@ -23,7 +23,7 @@ const validationSchema = z.object({
 });
 
 type IValidationSchema = z.infer<typeof validationSchema>;
-export const FormManageUserData = () => {
+export const ChangePasswordForm = () => {
     const navigate = useNavigate();
 
     const form = useForm<IValidationSchema>({
@@ -49,7 +49,7 @@ export const FormManageUserData = () => {
                 e.preventDefault()
                 form.handleSubmit(onSubmit)();
             }}>
-                ForgotPasswordChangeEmailForm
+                ChangePasswordForm
                 <FormPassword placeholder={'the old password'} form={form} name={EFormFields.oldPassword}/>
                 <FormPassword placeholder={'the new password'} form={form} name={EFormFields.newPassword}/>
                 <FormPassword placeholder={'confirm the new password'} form={form} name={EFormFields.confirmNewPassword}/>
