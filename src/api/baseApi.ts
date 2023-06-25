@@ -11,22 +11,24 @@ import {
 import {sendVerificationEmail, verifyEmail} from "supertokens-web-js/recipe/emailverification";
 
 import {
+    IChangePasswordRequest, IChangePasswordResponse,
     ILoginEmailPasswordRequest,
     ISendEmailToResetPasswordRequest,
     ISignUpRequest,
     ISubmitNewPasswordRequest
 } from "../interface";
 import {CONFIG} from "../utils";
+import {IServerErrorResponse} from "../interface/serverErrorResponse";
 
 const baseQuery = fetchBaseQuery(({
-    baseUrl: CONFIG.API_URL,
-    prepareHeaders: (headers) => {
-        const accessToken = localStorage.getItem("accessToken")
-        if (accessToken) {
-            headers.set('Authorization', `Bearer ${accessToken}`)
-        }
-        return headers
-    },
+    baseUrl: `${CONFIG.API_URL}/api`,
+    // prepareHeaders: (headers) => {
+    //     // const accessToken = localStorage.getItem("accessToken")
+    //     // if (accessToken) {
+    //     //     headers.set('Authorization', `Bearer ${accessToken}`)
+    //     // }
+    //     return headers
+    // },
 }))
 
 const baseQueryWithReauth: BaseQueryFn<
@@ -204,13 +206,22 @@ export const baseApi = createApi({
                         }
                     }
                 }
-                return  {
+                return {
                     error: {
                         status: 'CUSTOM_ERROR',
                         error: 'Unexpected error',
                     }
                 }
             }
+        }),
+        changePassword: builder.mutation<IServerErrorResponse | IChangePasswordResponse, IChangePasswordRequest>({
+            query(body: IChangePasswordRequest) {
+                return {
+                    url: '/auth/change-password',
+                    method: 'POST',
+                    body: body,
+                }
+            },
         })
     }),
 })
@@ -224,5 +235,6 @@ export const {
     useConsumeVerificationCodeMutation,
     useSingInUpGoogleMutation,
     useThirdPartySignInAndUpQuery,
+    useChangePasswordMutation
 } = baseApi;
 

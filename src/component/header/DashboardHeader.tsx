@@ -13,7 +13,10 @@ export const DashboardHeader = () => {
             <br/>
             <Link to={ELinks.login}>Log-in</Link>
             <br/>
+            <Link to={ELinks.userManageData}>manage data</Link>
+            <br/>
             <Link to={ELinks.protected}>protected</Link>
+            <br/>
             <br/>
             <button onClick={logOut}>Log Out</button>
             <br/>
