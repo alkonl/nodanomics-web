@@ -1,17 +1,24 @@
-import React, {ChangeEvent} from 'react';
+import React from 'react';
 import {Controller, UseFormReturn} from "react-hook-form";
 import styles from './FormInput.module.scss';
 
-export interface IBaseFromInputProps {
-    placeholder?: string;
-    onChange?: (event: ChangeEvent) => void;
-    value?: string;
-}
+export type  IBaseInputProps = Pick<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>,
+'type'|
+'placeholder'|
+'value'|
+'onChange'|
+'disabled'|
+'checked'|
+'className'|
+'id'|
+'name'|
+'autoFocus'
+>
+
 
 export interface IFormBaseInputProps {
     name: string;
     form: UseFormReturn<any>;
-    placeholder?: string;
 }
 
 export interface IFormLabelNode {
@@ -20,15 +27,14 @@ export interface IFormLabelNode {
 }
 
 export interface IFormInputProps extends IFormBaseInputProps {
-    Input: React.FC<IBaseFromInputProps>;
+    Input: React.FC<Pick<IBaseInputProps, 'value' | 'onChange'>>;
     Label?: IFormLabelNode;
 }
 
-export const FormInput: React.FC<IFormInputProps> = (
+export const FormBaseInput: React.FC<IFormInputProps> = (
     {
         name,
         form,
-        placeholder,
         Input,
         Label,
     }
@@ -43,8 +49,7 @@ export const FormInput: React.FC<IFormInputProps> = (
                     {Label && <div>
                         {Label.Node}
                     </div>}
-                    <Input placeholder={placeholder} value={value} onChange={onChange}/>
-                    {/*<input placeholder={placeholder} onChange={onChange} value={value ? value : ''} type="text"/>*/}
+                    <Input value={value} onChange={onChange}/>
                     {error && <div className={styles.errorText}>{error.message}</div>}
                 </div>
             )}

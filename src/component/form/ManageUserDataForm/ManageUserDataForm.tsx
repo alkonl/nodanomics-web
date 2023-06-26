@@ -1,23 +1,28 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {FormPassword, FormText} from "../../base";
+import {FormPassword, FormText} from "../../base/FormInput";
 import {z} from "zod";
+import {validation} from "../../../utils";
+import {ChangePasswordPopUp} from "../../popUp";
 
 enum EFormFields {
     firstName = 'firstName',
     lastName = 'lastName',
     phoneNumber = 'phoneNumber',
+    email = 'email',
+    password = 'password',
 }
 
 const validationSchema = z.object({
-    [EFormFields.firstName]: z.string().min(3),
-    [EFormFields.lastName]: z.string().min(3),
-    [EFormFields.phoneNumber]: z.string().min(8),
+    [EFormFields.firstName]: validation.firstName,
+    [EFormFields.lastName]: validation.lastName,
+    [EFormFields.phoneNumber]: validation.phoneNumber,
 })
 
 type IValidationSchema = z.infer<typeof validationSchema>;
 export const ManageUserDataForm = () => {
+    const [isChangePasswordPopUpOpen, setIsChangePasswordPopUpOpen] = useState(false)
 
     const form = useForm<IValidationSchema>({
         resolver: zodResolver(validationSchema),
@@ -26,8 +31,16 @@ export const ManageUserDataForm = () => {
     const onSubmit = (formData: IValidationSchema) => {
 
     }
+
+    const onChangePassword = () => {
+        setIsChangePasswordPopUpOpen(true)
+    }
+    const closeChangePasswordPopUp = () => {
+        setIsChangePasswordPopUpOpen(false)
+    }
     return (
         <div>
+            <ChangePasswordPopUp onClose={closeChangePasswordPopUp} isShow={isChangePasswordPopUpOpen}/>
             <form onSubmit={(e) => {
                 e.preventDefault()
                 form.handleSubmit(onSubmit)();
@@ -43,6 +56,20 @@ export const ManageUserDataForm = () => {
                             <FormText label={'Last Name'} name={EFormFields.lastName} form={form}/>
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            <FormText disabled={true} label={'Email'} name={EFormFields.email} form={form}/>
+                        </td>
+                        <td>
+                            <FormPassword disabled={true} onChangePassword={onChangePassword} labelType={'CHANGE_PASSWORD'}
+                                          name={EFormFields.password} form={form}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <FormText label={'Phone Number'} name={EFormFields.phoneNumber} form={form}/>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
                 {/*<FormPassword placeholder={'the old password'} form={form} name={EFormFields.oldPassword}/>*/}
@@ -54,5 +81,5 @@ export const ManageUserDataForm = () => {
                 </button>
             </form>
         </div>
-);
+    );
 };

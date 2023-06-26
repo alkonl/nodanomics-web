@@ -3,7 +3,7 @@ import {useForm} from "react-hook-form";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useSendVerificationEmailMutation, useSignUpEmailPasswordMutation} from "../../../api";
-import {FormText, FormPassword} from "../../base";
+import {FormText, FormPassword} from "../../base/FormInput";
 import {useNavigate} from "react-router-dom";
 import {ELinks} from "../../../service/router";
 import {useSupertokensError, validation} from "../../../utils";

@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {z} from "zod";
-import {FormPassword} from "../../base";
+import {FormPassword} from "../../base/FormInput";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useChangePasswordMutation} from "../../../api";
@@ -50,7 +50,7 @@ export const ChangePasswordForm = () => {
                 form.handleSubmit(onSubmit)();
             }}>
                 ChangePasswordForm
-                <FormPassword placeholder={'the old password'} form={form} name={EFormFields.oldPassword}/>
+                <FormPassword placeholder={'the old password'}  form={form} name={EFormFields.oldPassword}/>
                 <FormPassword placeholder={'the new password'} form={form} name={EFormFields.newPassword}/>
                 <FormPassword placeholder={'confirm the new password'} form={form} name={EFormFields.confirmNewPassword}/>
                 <button
