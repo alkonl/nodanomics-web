@@ -13,11 +13,6 @@ const LabelFormText: React.FC<{ text: string }> = ({text}) => {
     )
 }
 
-// interface IFormTextProps extends IFormBaseInputProps {
-//     type?: HTMLInputTypeAttribute;
-//     label?: string;
-// }
-
 type IFormTextProps = IFormBaseInputProps & IBaseInputProps & {
     label?: string;
 }

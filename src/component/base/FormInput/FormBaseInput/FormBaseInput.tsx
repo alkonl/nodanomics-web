@@ -3,16 +3,16 @@ import {Controller, UseFormReturn} from "react-hook-form";
 import styles from './FormInput.module.scss';
 
 export type  IBaseInputProps = Pick<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>,
-'type'|
-'placeholder'|
-'value'|
-'onChange'|
-'disabled'|
-'checked'|
-'className'|
-'id'|
-'name'|
-'autoFocus'
+    'type' |
+    'placeholder' |
+    'value' |
+    'onChange' |
+    'disabled' |
+    'checked' |
+    'className' |
+    'id' |
+    'name' |
+    'autoFocus'
 >
 
 
@@ -49,7 +49,7 @@ export const FormBaseInput: React.FC<IFormInputProps> = (
                     {Label && <div>
                         {Label.Node}
                     </div>}
-                    <Input value={value} onChange={onChange}/>
+                        <Input value={value} onChange={onChange}/>
                     {error && <div className={styles.errorText}>{error.message}</div>}
                 </div>
             )}
