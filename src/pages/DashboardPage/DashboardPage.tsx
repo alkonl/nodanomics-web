@@ -1,11 +1,16 @@
 import React from 'react';
-import styles from './DashboardPage.module.scss';
-import {DashboardHeader} from "../../component";
+import {Box} from "@mui/material";
+import {NewDiagramButton} from "../../component";
 
 export const DashboardPage = () => {
+
     return (
-        <div className={styles.wrapper}>
-            <DashboardHeader/>
-        </div>
+        <Box style={{
+            padding: 10,
+            margin: 20,
+        }}>
+            <NewDiagramButton/>
+
+        </Box>
     );
 };

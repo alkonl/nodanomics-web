@@ -1,4 +1,4 @@
-export * from './DashboardPage'
+export * from './LandingPage'
 export * from './RegistrationPage'
 export * from './VerificationLink'
 export * from './LoginPage'
