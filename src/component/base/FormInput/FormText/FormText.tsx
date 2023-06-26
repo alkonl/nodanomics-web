@@ -1,4 +1,4 @@
-import React, {HTMLInputTypeAttribute, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {FormBaseInput, IBaseInputProps, IFormBaseInputProps, IFormLabelNode} from "../FormBaseInput";
 
 const InputFormText: React.FC<IBaseInputProps> = ({value, ...props}) => {
@@ -38,8 +38,8 @@ export const FormText: React.FC<IFormTextProps> = (props) => {
                        Label={Label}
                        Input={(baseProps) => {
                            const {value, onChange} = baseProps
-                       return <InputFormText  onChange={onChange} value={value} {...props} />
-                   }}/>
+                           return <InputFormText onChange={onChange} value={value} {...props} />
+                       }}/>
     );
 };
 

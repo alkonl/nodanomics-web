@@ -29,7 +29,7 @@ export const ChangePasswordForm = () => {
     const form = useForm<IValidationSchema>({
         resolver: zodResolver(validationSchema),
     });
-    const [changePassword, {isSuccess, data}] = useChangePasswordMutation()
+    const [changePassword, {isSuccess}] = useChangePasswordMutation()
     const onSubmit = (formData: IValidationSchema) => {
         changePassword({
             oldPassword: formData[EFormFields.oldPassword],
@@ -50,9 +50,9 @@ export const ChangePasswordForm = () => {
                 form.handleSubmit(onSubmit)();
             }}>
                 ChangePasswordForm
-                <FormPassword placeholder={'the old password'}  form={form} name={EFormFields.oldPassword}/>
-                <FormPassword placeholder={'the new password'} form={form} name={EFormFields.newPassword}/>
-                <FormPassword placeholder={'confirm the new password'} form={form} name={EFormFields.confirmNewPassword}/>
+                <FormPassword label={{labelType: 'TEXT', text: 'old password'}}  form={form} name={EFormFields.oldPassword}/>
+                <FormPassword  label={{labelType: 'TEXT', text: 'the new password'}} form={form} name={EFormFields.newPassword}/>
+                <FormPassword  label={{labelType: 'TEXT', text: 'confirm the new password'}} form={form} name={EFormFields.confirmNewPassword}/>
                 <button
                     type="submit"
                 >change password

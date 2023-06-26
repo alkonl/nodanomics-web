@@ -19,6 +19,7 @@ import {
 } from "../interface";
 import {CONFIG} from "../utils";
 import {IServerErrorResponse} from "../interface/serverErrorResponse";
+import {ISessionUserDataResponse, IUpdateUserDataRequest, IUpdateUserDataResponse} from "../interface/api/user";
 
 const baseQuery = fetchBaseQuery(({
     baseUrl: `${CONFIG.API_URL}/api`,
@@ -56,6 +57,7 @@ const baseQueryWithReauth: BaseQueryFn<
 }
 
 export const baseApi = createApi({
+    tagTypes: ['User'],
     reducerPath: 'baseApi',
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
@@ -214,7 +216,7 @@ export const baseApi = createApi({
                 }
             }
         }),
-        changePassword: builder.mutation<IServerErrorResponse | IChangePasswordResponse, IChangePasswordRequest>({
+        changePassword: builder.mutation<IChangePasswordResponse | IServerErrorResponse, IChangePasswordRequest>({
             query(body: IChangePasswordRequest) {
                 return {
                     url: '/auth/change-password',
@@ -222,6 +224,26 @@ export const baseApi = createApi({
                     body: body,
                 }
             },
+            invalidatesTags: ['User']
+        }),
+        sessionUserData: builder.query<ISessionUserDataResponse, unknown>({
+            query() {
+                return {
+                    url: '/user/session-user',
+                    method: 'GET',
+                }
+            },
+            providesTags: ['User']
+        }),
+        updateUserData: builder.mutation<IUpdateUserDataResponse, IUpdateUserDataRequest>({
+            query(body: IUpdateUserDataRequest) {
+                return {
+                    url: '/user/update-session-user-data',
+                    method: 'POST',
+                    body: body,
+                }
+            },
+            invalidatesTags: ['User']
         })
     }),
 })
@@ -235,6 +257,8 @@ export const {
     useConsumeVerificationCodeMutation,
     useSingInUpGoogleMutation,
     useThirdPartySignInAndUpQuery,
-    useChangePasswordMutation
+    useChangePasswordMutation,
+    useSessionUserDataQuery,
+    useUpdateUserDataMutation
 } = baseApi;
 
