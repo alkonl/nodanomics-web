@@ -72,8 +72,7 @@ export const baseApi = createApi({
                         formFields: formattedParams
                     })
                     if (response.status === "FIELD_ERROR") {
-                        console.log(response.formFields)
-                        console.log(response)
+
                         return {
                             error: {
                                 status: 400,
