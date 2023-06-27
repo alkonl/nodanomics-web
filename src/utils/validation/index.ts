@@ -18,4 +18,5 @@ export const validation = {
         id: z.string().nullable(),
         name: z.string(),
     })),
+    searchTerm: z.string().min(3),
 }

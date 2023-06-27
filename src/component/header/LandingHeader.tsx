@@ -19,7 +19,7 @@ import {Adb, Menu as MenuIcon} from '@mui/icons-material';
 import {useSessionUserDataQuery} from "../../api";
 
 
-export function DashboardHeader() {
+export function LandingHeader() {
     const logOut = useLogOut(ELinks.login);
 
     const pages = [

@@ -1,6 +1,8 @@
 import React from 'react';
 import {Box} from "@mui/material";
-import {NewDiagramButton} from "../../component";
+import {DashboardHeader, NewDiagramButton, TagList} from "../../component";
+
+
 
 export const DashboardPage = () => {
 
@@ -9,7 +11,9 @@ export const DashboardPage = () => {
             padding: 10,
             margin: 20,
         }}>
-            <NewDiagramButton/>
+            <Box>
+                <DashboardHeader/>
+            </Box>
 
         </Box>
     );
