@@ -4,6 +4,7 @@ import style from "./DashboardHeader.module.scss";
 import {DiagramSearchBar} from "../../searchBar";
 import {NewDiagramButton} from "../../button";
 import {TagList} from "../../list";
+import {AccountDropDownMenu, NotificationBell} from "../../dropDownMenu";
 
 const mockTags = [{
     name: 'Mock tag_1',
@@ -20,8 +21,10 @@ export const DashboardHeader = () => {
                 <Typography>
                     My Diagrams
                 </Typography>
-                <div>
+                <div className={style.rightTopSide}>
                     <DiagramSearchBar/>
+                    <NotificationBell/>
+                    <AccountDropDownMenu/>
                 </div>
             </div>
             <div className={style.bottomContainer}>

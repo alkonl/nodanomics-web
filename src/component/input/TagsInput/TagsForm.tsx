@@ -52,7 +52,7 @@ const TagsInput2: React.FC<{
                 <>
                     <Combobox.Input
                         onChange={(event) => setQuery(event.target.value)}
-                        displayValue={(person) => {
+                        displayValue={(person: any) => {
                             if ('name' in person && typeof person.name === 'string') {
                                 return person.name
                             }

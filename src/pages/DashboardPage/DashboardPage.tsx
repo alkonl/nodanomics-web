@@ -9,7 +9,6 @@ export const DashboardPage = () => {
     return (
         <Box style={{
             padding: 10,
-            margin: 20,
         }}>
             <Box>
                 <DashboardHeader/>
