@@ -1,7 +1,7 @@
 import React from 'react';
 import style from './TagList.module.scss'
 import {TagElement} from "./TagElement";
-import {useTagsDashboardView} from "../../../hooks/useTagsDashboardView";
+import {useTagsDashboardView} from "../../../hooks";
 
 export const TagList: React.FC<{
     dashboardViewId: string
