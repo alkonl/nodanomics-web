@@ -20,6 +20,8 @@ import {
 import {CONFIG} from "../utils";
 import {IServerErrorResponse} from "../interface/serverErrorResponse";
 import {ISessionUserDataResponse, IUpdateUserDataRequest, IUpdateUserDataResponse} from "../interface/api/user";
+import {ERTKTags} from "./requestTags";
+import {IGetDiagramTagsRequest, IGetDiagramTagsResponse} from "../interface/api";
 
 const baseQuery = fetchBaseQuery(({
     baseUrl: `${CONFIG.API_URL}/api`,
@@ -57,7 +59,7 @@ const baseQueryWithReauth: BaseQueryFn<
 }
 
 export const baseApi = createApi({
-    tagTypes: ['User'],
+    tagTypes: [ERTKTags.User, ERTKTags.DiagramTags],
     reducerPath: 'baseApi',
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
@@ -223,7 +225,7 @@ export const baseApi = createApi({
                     body: body,
                 }
             },
-            invalidatesTags: ['User']
+            invalidatesTags: [ERTKTags.User]
         }),
         sessionUserData: builder.query<ISessionUserDataResponse, unknown>({
             query() {
@@ -232,7 +234,7 @@ export const baseApi = createApi({
                     method: 'GET',
                 }
             },
-            providesTags: ['User']
+            providesTags: [ERTKTags.User]
         }),
         updateUserData: builder.mutation<IUpdateUserDataResponse, IUpdateUserDataRequest>({
             query(body: IUpdateUserDataRequest) {
@@ -242,7 +244,19 @@ export const baseApi = createApi({
                     body: body,
                 }
             },
-            invalidatesTags: ['User']
+            invalidatesTags: [ERTKTags.User]
+        }),
+        getDiagramTags: builder.query<IGetDiagramTagsResponse, IGetDiagramTagsRequest>({
+            queryFn: async (body) => {
+                const mockRes = [...Array(10)].map((_,index) => ({
+                    name: `tag show page ${index} id:${body.diagramsShowPageId}`,
+                    id: index.toString()
+                }))
+                return {
+                    data: mockRes
+                }
+            },
+            providesTags: [ERTKTags.DiagramTags]
         })
     }),
 })
@@ -258,6 +272,8 @@ export const {
     useThirdPartySignInAndUpQuery,
     useChangePasswordMutation,
     useSessionUserDataQuery,
-    useUpdateUserDataMutation
+    useUpdateUserDataMutation,
+    useGetDiagramTagsQuery,
+
 } = baseApi;
 
