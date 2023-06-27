@@ -6,4 +6,5 @@ export enum ELinks {
     forgotPassword = '/forgotPassword',
     protected = '/protected',
     authGoogle = '/auth/callback/google',
+    userManageData = '/user/manage-data',
 }

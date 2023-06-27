@@ -2,7 +2,7 @@ import React from 'react';
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
-import {FormText} from "../../base";
+import {FormText} from "../../base/FormInput";
 import {useSendEmailToResetPasswordMutation} from "../../../api";
 
 enum EFormFields {

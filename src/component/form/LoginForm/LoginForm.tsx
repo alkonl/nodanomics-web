@@ -5,7 +5,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {useLoginEmailPasswordMutation} from "../../../api";
 import {ELinks} from "../../../service/router";
 import {useNavigate} from "react-router-dom";
-import {FormPassword, FormText} from "../../base";
+import {FormPassword, FormText} from "../../base/FormInput";
 import {GoogleSignInUpButton} from "../../button";
 
 enum EFormFields {
@@ -56,7 +56,7 @@ export const LoginForm = () => {
             }}>
                 LoginForm
                 <FormText type="email" placeholder={'Email'} form={form} name={EFormFields.email}/>
-                <FormPassword placeholder={'password'} form={form} name={EFormFields.password}/>
+                <FormPassword form={form} name={EFormFields.password}/>
                 {formErrorMessage}
                 <button
                     type="submit"

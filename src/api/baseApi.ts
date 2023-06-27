@@ -11,22 +11,25 @@ import {
 import {sendVerificationEmail, verifyEmail} from "supertokens-web-js/recipe/emailverification";
 
 import {
+    IChangePasswordRequest, IChangePasswordResponse,
     ILoginEmailPasswordRequest,
     ISendEmailToResetPasswordRequest,
     ISignUpRequest,
     ISubmitNewPasswordRequest
 } from "../interface";
 import {CONFIG} from "../utils";
+import {IServerErrorResponse} from "../interface/serverErrorResponse";
+import {ISessionUserDataResponse, IUpdateUserDataRequest, IUpdateUserDataResponse} from "../interface/api/user";
 
 const baseQuery = fetchBaseQuery(({
-    baseUrl: CONFIG.API_URL,
-    prepareHeaders: (headers) => {
-        const accessToken = localStorage.getItem("accessToken")
-        if (accessToken) {
-            headers.set('Authorization', `Bearer ${accessToken}`)
-        }
-        return headers
-    },
+    baseUrl: `${CONFIG.API_URL}/api`,
+    // prepareHeaders: (headers) => {
+    //     // const accessToken = localStorage.getItem("accessToken")
+    //     // if (accessToken) {
+    //     //     headers.set('Authorization', `Bearer ${accessToken}`)
+    //     // }
+    //     return headers
+    // },
 }))
 
 const baseQueryWithReauth: BaseQueryFn<
@@ -54,6 +57,7 @@ const baseQueryWithReauth: BaseQueryFn<
 }
 
 export const baseApi = createApi({
+    tagTypes: ['User'],
     reducerPath: 'baseApi',
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
@@ -68,8 +72,7 @@ export const baseApi = createApi({
                         formFields: formattedParams
                     })
                     if (response.status === "FIELD_ERROR") {
-                        console.log(response.formFields)
-                        console.log(response)
+
                         return {
                             error: {
                                 status: 400,
@@ -204,13 +207,42 @@ export const baseApi = createApi({
                         }
                     }
                 }
-                return  {
+                return {
                     error: {
                         status: 'CUSTOM_ERROR',
                         error: 'Unexpected error',
                     }
                 }
             }
+        }),
+        changePassword: builder.mutation<IChangePasswordResponse | IServerErrorResponse, IChangePasswordRequest>({
+            query(body: IChangePasswordRequest) {
+                return {
+                    url: '/auth/change-password',
+                    method: 'POST',
+                    body: body,
+                }
+            },
+            invalidatesTags: ['User']
+        }),
+        sessionUserData: builder.query<ISessionUserDataResponse, unknown>({
+            query() {
+                return {
+                    url: '/user/session-user',
+                    method: 'GET',
+                }
+            },
+            providesTags: ['User']
+        }),
+        updateUserData: builder.mutation<IUpdateUserDataResponse, IUpdateUserDataRequest>({
+            query(body: IUpdateUserDataRequest) {
+                return {
+                    url: '/user/update-session-user-data',
+                    method: 'POST',
+                    body: body,
+                }
+            },
+            invalidatesTags: ['User']
         })
     }),
 })
@@ -224,5 +256,8 @@ export const {
     useConsumeVerificationCodeMutation,
     useSingInUpGoogleMutation,
     useThirdPartySignInAndUpQuery,
+    useChangePasswordMutation,
+    useSessionUserDataQuery,
+    useUpdateUserDataMutation
 } = baseApi;
 

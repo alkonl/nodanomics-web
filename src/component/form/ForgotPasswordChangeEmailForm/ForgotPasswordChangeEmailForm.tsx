@@ -2,7 +2,7 @@ import React from 'react';
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {FormPassword} from "../../base";
+import {FormPassword} from "../../base/FormInput";
 import {useSubmitNewPasswordMutation} from "../../../api";
 import {useSupertokensError} from "../../../utils";
 

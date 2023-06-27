@@ -9,7 +9,7 @@ SuperTokensInit();
 const App = () => {
     return (
         <SuperTokensWrapper>
-            <RouterProvider router={appRouter}/>
+                <RouterProvider router={appRouter}/>
         </ SuperTokensWrapper>
     )
 }
