@@ -1,6 +1,7 @@
 import React from 'react';
 import {Controller, UseFormReturn} from "react-hook-form";
 import styles from './FormInput.module.scss';
+import {Box} from "@mui/material";
 
 export type  IBaseInputProps = Pick<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>,
     'type' |
@@ -45,13 +46,13 @@ export const FormBaseInput: React.FC<IFormInputProps> = (
                          field: {onChange, value},
                          fieldState: {error},
                      }) => (
-                <div>
-                    {Label && <div>
+                <Box>
+                    {Label && <Box>
                         {Label.Node}
-                    </div>}
+                    </Box>}
                         <Input value={value} onChange={onChange}/>
-                    {error && <div className={styles.errorText}>{error.message}</div>}
-                </div>
+                    {error && <Box className={styles.errorText}>{error.message}</Box>}
+                </Box>
             )}
             control={form.control}
             name={name}/>

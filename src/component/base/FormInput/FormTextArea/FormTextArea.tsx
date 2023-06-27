@@ -5,9 +5,10 @@ import {TextField} from "@mui/material";
 const InputFormText: React.FC<IBaseInputProps> = ({value, ...props}) => {
     return (
         <TextField
+            style={{width: '100%'}}
             multiline
-            rows={2}
-            maxRows={5}
+            minRows={3}
+            maxRows={7}
             value={value ? value : ''}
             {...props}/>
     );

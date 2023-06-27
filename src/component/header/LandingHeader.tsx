@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 import {Link} from "react-router-dom";
 import {ELinks} from "../../service/router";
-import {useLogOut, useSession} from "../../service/superTokens";
+import {useLogOut} from "../../service/superTokens";
 import {
     AppBar,
     Avatar,

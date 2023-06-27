@@ -1,15 +1,23 @@
 import React from "react";
-import {Controller} from "react-hook-form";
-import {ITagsInputProps, AddTagsInput} from "../../input";
+import {Controller, UseFormReturn} from "react-hook-form";
+import {AddTagsInput} from "../../input";
+import {ITag} from "../../../interface";
 
-export const FormAddTags: React.FC<ITagsInputProps> = ({form, onSave, name}) => {
+export interface ITagsInputProps {
+    name: string;
+    form: UseFormReturn<any>;
+    onSave: () => void
+    allTags: ITag[]
+}
+
+export const FormAddTags: React.FC<ITagsInputProps> = ({form, allTags, onSave, name}) => {
 
     return (
         <Controller
             render={({
                          field: {onChange, value},
                      }) => (
-                <AddTagsInput values={value} onSave={onSave} onChange={onChange}/>
+                <AddTagsInput allTags={allTags} selectedTags={value} onSave={onSave} onChange={onChange}/>
             )}
             control={form.control}
             name={name}

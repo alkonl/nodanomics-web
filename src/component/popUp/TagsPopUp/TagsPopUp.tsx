@@ -1,14 +1,13 @@
 import React from 'react';
 import {BasePopUp} from "../PopUp";
 import {Dialog} from "@headlessui/react";
-import {ITagsInputProps} from "../../input";
-import {FormAddTags} from "../../form";
+import {FormAddTags, ITagsInputProps} from "../../form";
 
 export const TagsPopUp: React.FC<{
     isShow: boolean;
     onClose: () => void;
-    tagsInput: ITagsInputProps
-}> = ({tagsInput, onClose, isShow}) => {
+    tagsForm: ITagsInputProps
+}> = ({tagsForm, onClose, isShow}) => {
     console.log('TagsPopUp')
     return (
         <Dialog open={isShow} onClose={onClose}>
@@ -19,7 +18,7 @@ export const TagsPopUp: React.FC<{
                         backgroundColor: 'white',
                         borderRadius: 8,
                     }}>
-                        <FormAddTags {...tagsInput}/>
+                        <FormAddTags {...tagsForm}/>
                     </div>
                 </Dialog.Panel>
             </BasePopUp>

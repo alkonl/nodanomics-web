@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {z} from "zod";
 import {validation} from "../../../utils";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {FormText, FormTextArea} from "../../base/FormInput";
-import {Button, Typography} from "@mui/material";
+import {Box, Button, Typography} from "@mui/material";
 import AddIcon from '@mui/icons-material/AddBoxTwoTone';
 import {TagsPopUp} from "../../popUp/TagsPopUp";
+import {TagListSmall} from "../../list";
 
 
 enum EFormFields {
@@ -43,25 +44,31 @@ export const NewDiagramForm = () => {
     }
 
     return (
-        <div>
+        <Box
+            style={{
+                width: '400px'
+
+            }}
+        >
             <form onSubmit={(e) => {
                 e.preventDefault()
                 form.handleSubmit(onSubmit)();
             }}>
                 <FormText label={'Name'} name={EFormFields.diagramName} form={form}/>
                 <FormTextArea label={'Description'} name={EFormFields.diagramDescription} form={form}/>
-                <div>
-                    <div style={{
+                <Box>
+                    <Box sx={{
                         display: "flex"
                     }}>
 
                         <TagsPopUp
                             isShow={isTagsPopUpShow}
                             onClose={closeTagsPopUp}
-                            tagsInput={{
+                            tagsForm={{
                                 form: form,
                                 name: EFormFields.diagramTags,
-                                onSave: closeTagsPopUp
+                                onSave: closeTagsPopUp,
+                                allTags: [],
                             }}
                         />
 
@@ -74,13 +81,13 @@ export const NewDiagramForm = () => {
                             </Typography>
                             <AddIcon color='info'/>
                         </Button>
-                    </div>
-
-                </div>
+                    </Box>
+                    <TagListSmall selectedTags={form.getValues()[EFormFields.diagramTags]}/>
+                </Box>
                 <Button variant="contained" type='submit'>
                     Save
                 </Button>
             </form>
-        </div>
+        </Box>
     );
 };

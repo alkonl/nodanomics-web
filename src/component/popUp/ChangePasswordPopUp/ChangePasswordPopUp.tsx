@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {BasePopUp} from "../PopUp";
 import {Dialog} from "@headlessui/react";
 import {ChangePasswordForm} from "../../form/ChangePasswordForm";
