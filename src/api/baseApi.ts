@@ -11,17 +11,23 @@ import {
 import {sendVerificationEmail, verifyEmail} from "supertokens-web-js/recipe/emailverification";
 
 import {
-    IChangePasswordRequest, IChangePasswordResponse,
+    IChangePasswordRequest,
+    IChangePasswordResponse,
     ILoginEmailPasswordRequest,
     ISendEmailToResetPasswordRequest,
     ISignUpRequest,
-    ISubmitNewPasswordRequest
+    ISubmitNewPasswordRequest,
+    ISessionUserDataResponse,
+    IUpdateUserDataRequest,
+    IUpdateUserDataResponse,
+    IGetDiagramTagsRequest,
+    IGetDiagramTagsResponse
 } from "../interface";
 import {CONFIG} from "../utils";
 import {IServerErrorResponse} from "../interface/serverErrorResponse";
-import {ISessionUserDataResponse, IUpdateUserDataRequest, IUpdateUserDataResponse} from "../interface/api/user";
+
 import {ERTKTags} from "./requestTags";
-import {IGetDiagramTagsRequest, IGetDiagramTagsResponse} from "../interface/api";
+
 
 const baseQuery = fetchBaseQuery(({
     baseUrl: `${CONFIG.API_URL}/api`,
@@ -45,13 +51,13 @@ const baseQueryWithReauth: BaseQueryFn<
         if (!refreshToken) {
             //   api.dispatch(logout())
         }
-        const {data} = await baseQuery({
-            url: '/auth/token/refresh',
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${refreshToken}`,
-            },
-        }, api, extraOptions)
+        // const {data} = await baseQuery({
+        //     url: '/auth/token/refresh',
+        //     method: 'POST',
+        //     headers: {
+        //         'Authorization': `Bearer ${refreshToken}`,
+        //     },
+        // }, api, extraOptions)
         // api.dispatch(saveTokens(data))
     }
 
@@ -246,21 +252,28 @@ export const baseApi = createApi({
             },
             invalidatesTags: [ERTKTags.User]
         }),
-        getDiagramTags: builder.query<IGetDiagramTagsResponse, IGetDiagramTagsRequest>({
+        getDiagramTags: builder.query<{
+            dashboardViewId: string
+            tags: IGetDiagramTagsResponse
+        }, IGetDiagramTagsRequest>({
             queryFn: async (body) => {
-                const mockRes = [...Array(10)].map((_,index) => ({
-                    name: `tag show page ${index} id:${body.diagramsShowPageId}`,
+                const mockRes = [...Array(10)].map((_, index) => ({
+                    name: `tag show page ${index} id:${body.dashboardViewId}`,
                     id: index.toString()
                 }))
                 return {
-                    data: mockRes
+                    data: {
+                        dashboardViewId: body.dashboardViewId,
+                        tags: mockRes
+                    }
                 }
             },
-            providesTags: [ERTKTags.DiagramTags]
+            providesTags: (result, error, arg) => {
+                return [{type: ERTKTags.DiagramTags, id: arg.dashboardViewId}]
+            }
         })
     }),
 })
-
 export const {
     useSignUpEmailPasswordMutation,
     useLoginEmailPasswordMutation,

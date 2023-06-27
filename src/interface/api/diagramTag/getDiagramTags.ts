@@ -1,6 +1,6 @@
 
 export interface IGetDiagramTagsRequest {
-    diagramsShowPageId: string
+    dashboardViewId: string
 }
 
 export type IGetDiagramTagsResponse = {

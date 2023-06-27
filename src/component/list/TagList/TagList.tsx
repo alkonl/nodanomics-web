@@ -1,12 +1,16 @@
 import React from 'react';
 import style from './TagList.module.scss'
-import { TagElement} from "./TagElement";
-import {ITag} from "../../../interface";
+import {TagElement} from "./TagElement";
+import {useTagsDashboardView} from "../../../hooks/useTagsDashboardView";
 
-export const TagList: React.FC<{ tags: ITag[], onSelect: (tag: ITag) => void }> = ({tags, onSelect}) => {
+export const TagList: React.FC<{
+    dashboardViewId: string
+}> = ({dashboardViewId}) => {
+    const {tags, onTagSelect, isLoaded} = useTagsDashboardView({dashboardViewId})
+
     return (
         <div className={style.container}>
-            {tags.map((params) => <TagElement key={params.name} tag={params} onSelect={onSelect}/>)}
+            {isLoaded && tags.map((params) => <TagElement key={params.name} tag={params} onSelect={onTagSelect}/>)}
         </div>
     );
 };

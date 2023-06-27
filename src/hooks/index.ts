@@ -1,1 +1,1 @@
-export * from './useDashboardView'
+export * from './useTagsDashboardView'

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Box} from "@mui/material";
-import {DashboardHeader, NewDiagramButton, TagList} from "../../component";
+import {DashboardHeader} from "../../component";
 
 
 

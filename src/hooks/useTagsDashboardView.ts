@@ -1,38 +1,61 @@
-import {useAppDispatch, useAppSelector} from "../redux";
+import {useAppDispatch, useSelectedDashboardViewState} from "../redux";
 import {useGetDiagramTagsQuery} from "../api";
-import {addTags, IDiagramDashboardView, selectTag} from "../redux/store";
+import {dashboardViewsActions,} from "../redux/store";
 import {useEffect} from "react";
 import {ITag} from "../interface";
 
+interface IUseTagsDashboardViewLoadedReturn {
+    isLoaded: true,
+    tags: ITag[],
+    onTagSelect: (tag: ITag) => void
+}
+
+interface IUseTagsDashboardViewLoadingReturn {
+    isLoaded: false,
+    tags: undefined,
+    onTagSelect: undefined
+}
+
+type IUseTagsDashboardViewReturn = IUseTagsDashboardViewLoadedReturn | IUseTagsDashboardViewLoadingReturn
+
+const loadingReturn: IUseTagsDashboardViewLoadingReturn = {
+    isLoaded: false,
+    tags: undefined,
+    onTagSelect: undefined
+}
+
 export const useTagsDashboardView = (params: {
-    selectedDiagramPageId: string
-}) => {
-    const {selectedDiagramPageId} = params
+    dashboardViewId: string
+}): IUseTagsDashboardViewReturn => {
+    const {dashboardViewId} = params
+
     const dispatch = useAppDispatch()
 
-    const {data: apiTags} = useGetDiagramTagsQuery({
-        diagramsShowPageId: selectedDiagramPageId
+    const {data: tagsResponse} = useGetDiagramTagsQuery({
+        dashboardViewId
     })
 
     useEffect(() => {
-        if (apiTags) {
-            dispatch(addTags({
-                dashboardViewId: selectedDiagramPageId,
-                tags: apiTags,
+        if (tagsResponse) {
+            dispatch(dashboardViewsActions.addTags({
+                dashboardViewId: tagsResponse.dashboardViewId,
+                tags: tagsResponse.tags,
             }))
         }
-    }, [apiTags, dispatch, selectedDiagramPageId])
+    }, [tagsResponse])
 
-    const dashboardViews = useAppSelector(state => state.diagramDashboard.dashboardViews)
-    const tags = dashboardViews.find((view: IDiagramDashboardView) => view.dashboardViewId === selectedDiagramPageId)?.tags
+    const dashboardView = useSelectedDashboardViewState(dashboardViewId)
+    const tags = dashboardView?.tags
 
     const onTagSelect = (tag: ITag) => {
-        console.log(selectedDiagramPageId)
-        dispatch(selectTag({
-            dashboardViewId: selectedDiagramPageId,
+        console.log(dashboardViewId)
+        dispatch(dashboardViewsActions.selectTag({
+            dashboardViewId: dashboardViewId,
             updatedTag: tag,
         }))
     }
-
-    return {tags, onTagSelect}
+    if (!tags) {
+        return loadingReturn
+    }
+    return {tags, onTagSelect, isLoaded: true}
 }

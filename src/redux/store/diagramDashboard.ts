@@ -1,22 +1,27 @@
 // eslint-disable-next-line import/named
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {ITag} from "../../interface";
+import {ESortType, ITag} from "../../interface";
 
 export interface IDiagramDashboardView {
     dashboardViewId?: string,
     tags: ITag[],
+    sortType: ESortType
 }
 
-interface IDiagramDashboardViewsState {
+export interface IDiagramDashboardViewsState {
+    selectedDashboardViewId?: string,
+    searchQuery: string,
     dashboardViews: IDiagramDashboardView[]
 }
 
 const initialState: IDiagramDashboardViewsState = {
+    searchQuery: '',
     dashboardViews: []
 }
 
 const initialObject: IDiagramDashboardView = {
-    tags: []
+    tags: [],
+    sortType: ESortType.NameA2Z,
 }
 
 
@@ -29,7 +34,6 @@ export const diagramDashboardSlice = createSlice({
             tags: ITag[]
         }>) => {
             const {dashboardViewId, tags} = action.payload
-            console.log(dashboardViewId, tags)
             const dashboardView = state.dashboardViews.find(dashboardView => dashboardView.dashboardViewId === dashboardViewId)
             if (!dashboardView) {
                 state.dashboardViews.push({
@@ -55,8 +59,25 @@ export const diagramDashboardSlice = createSlice({
                     tagToSelect.isSelected = tagToSelect.isSelected ? !tagToSelect.isSelected : true
                 }
             }
+        },
+        updateSearchQuery: (state, action: PayloadAction<string>) => {
+            state.searchQuery = action.payload
+        },
+        updateDashboardView: (state, action: PayloadAction<{ dashboardViewId: string}>) => {
+            const {dashboardViewId} = action.payload
+            state.selectedDashboardViewId = dashboardViewId
+        },
+        updateSortType: (state, action: PayloadAction<{ dashboardViewId: string, sortType: ESortType}>) => {
+            const {dashboardViewId, sortType} = action.payload
+            const dashboardView = state.dashboardViews
+                .find(dashboardView => dashboardView.dashboardViewId === dashboardViewId)
+            if (!dashboardView) {
+                console.error(`dashboardView with id ${dashboardViewId} not found`)
+            } else {
+                dashboardView.sortType = sortType
+            }
         }
     }
 })
 
-export const {selectTag, addTags} = diagramDashboardSlice.actions
+export const dashboardViewsActions = diagramDashboardSlice.actions

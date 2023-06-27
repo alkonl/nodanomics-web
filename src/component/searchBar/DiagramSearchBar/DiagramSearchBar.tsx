@@ -1,10 +1,12 @@
-import React from 'react';
-import {Container, InputAdornment, TextField} from "@mui/material";
+import React, {useEffect} from 'react';
+import {InputAdornment, TextField} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import {z} from "zod";
 import {validation} from "../../../utils";
 import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
+import {useAppDispatch} from "../../../redux";
+import {dashboardViewsActions} from "../../../redux/store";
 
 enum EFormFields {
     searchTerm = 'searchTerm',
@@ -16,10 +18,19 @@ const validationSchemaEmail = z.object({
 
 type IValidationSchemaEmail = z.infer<typeof validationSchemaEmail>;
 export const DiagramSearchBar = () => {
+    const dispatch = useAppDispatch()
 
     const form = useForm<IValidationSchemaEmail>({
         resolver: zodResolver(validationSchemaEmail),
+        defaultValues: {
+            [EFormFields.searchTerm]: ''
+        }
     });
+    const data = form.watch()
+    useEffect(() => {
+        dispatch(dashboardViewsActions.updateSearchQuery(data.searchTerm))
+    }, [data])
+
     return (
         <div>
             <Controller

@@ -1,7 +1,8 @@
 import React from 'react';
 import {BasePopUp} from "../PopUp";
 import {Dialog} from "@headlessui/react";
-import {ITagsInputProps, TagsForm} from "../../input";
+import {ITagsInputProps} from "../../input";
+import {FormAddTags} from "../../form";
 
 export const TagsPopUp: React.FC<{
     isShow: boolean;
@@ -18,7 +19,7 @@ export const TagsPopUp: React.FC<{
                         backgroundColor: 'white',
                         borderRadius: 8,
                     }}>
-                        <TagsForm {...tagsInput}/>
+                        <FormAddTags {...tagsInput}/>
                     </div>
                 </Dialog.Panel>
             </BasePopUp>

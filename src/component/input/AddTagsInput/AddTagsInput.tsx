@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {Controller, UseFormReturn} from "react-hook-form";
+import {UseFormReturn} from "react-hook-form";
 import {Combobox} from "@headlessui/react";
 import {Button, Chip} from "@mui/material";
+import {ITag} from "../../../interface";
 
 export interface ITagsInputProps {
     name: string;
@@ -10,12 +11,9 @@ export interface ITagsInputProps {
 }
 
 
-interface ITag {
-    id: string,
-    name: string
-}
 
-const TagsInput2: React.FC<{
+
+export const AddTagsInput: React.FC<{
     onChange: (data: ITag[]) => void,
     values: ITag[],
     onSave: () => void
@@ -52,11 +50,8 @@ const TagsInput2: React.FC<{
                 <>
                     <Combobox.Input
                         onChange={(event) => setQuery(event.target.value)}
-                        displayValue={(person: any) => {
-                            if ('name' in person && typeof person.name === 'string') {
-                                return person.name
-                            }
-                            return ''
+                        displayValue={(tag: ITag) => {
+                                return tag.name
                         }}
                     />
 
@@ -109,18 +104,3 @@ const TagsInput2: React.FC<{
     );
 }
 
-export const TagsForm: React.FC<ITagsInputProps> = ({form, onSave, name}) => {
-
-    return (
-        <Controller
-            render={({
-                         field: {onChange, value},
-                         fieldState: {error},
-                     }) => (
-                <TagsInput2 values={value} onSave={onSave} onChange={onChange}/>
-            )}
-            control={form.control}
-            name={name}
-        />
-    );
-};
