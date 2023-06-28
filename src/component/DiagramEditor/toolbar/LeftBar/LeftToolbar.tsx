@@ -1,8 +1,8 @@
 import React, {useMemo} from "react";
-import styles from './LeftBar.module.scss';
+import styles from './LeftToolbar.module.scss';
 import {Box} from "@mui/material";
 import {Svg} from "../../../../assets";
-import {LeftBarItem} from "./LeftBarItem";
+import {LeftToolbarItem} from "./LeftToolbarItem";
 import {SideMenu} from "./SideMenu";
 import {ELeftToolbarSideMenu} from "../../../../interface";
 import {BaseSideMenu} from "./SideMenu/BaseSideMenu/BaseSideMenu";
@@ -31,7 +31,7 @@ const menuOptions: {
     },
 ]
 
-export function LeftBar() {
+export function LeftToolbar() {
     const [selectedSideMenu, setSelectedSideMenu] = React.useState<ELeftToolbarSideMenu | undefined>(undefined);
     const [isSideMenuOpen, setIsSideMenuOpen] = React.useState<boolean>(false);
 
@@ -58,7 +58,7 @@ export function LeftBar() {
                 {menuOptions.map((option) => {
                     const isSelected = option.name === selectedSideMenu;
                    return (
-                    <LeftBarItem
+                    <LeftToolbarItem
                         isSelected={isSelected}
                         onClick={onSelectSideMenu}
                         name={option.name}

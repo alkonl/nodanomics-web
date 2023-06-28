@@ -1,10 +1,10 @@
 import React from 'react';
-import {IDiagramNodePreview} from "../../../../../interface";
+import {IDiagramElementPreviewTooltip} from "../../../../../interface";
 import {Box, Tooltip} from "@mui/material";
 
-export const TopToolBarElement: React.FC<IDiagramNodePreview> = ({preview}) => {
+export const TopToolBarElement: React.FC<IDiagramElementPreviewTooltip> = ({preview, tooltip}) => {
     return (
-        <Tooltip title={'name'}>
+        <Tooltip title={tooltip}>
             <Box
                 sx={{
                     padding: '2px',

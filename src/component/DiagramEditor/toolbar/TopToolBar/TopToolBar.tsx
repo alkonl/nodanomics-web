@@ -1,13 +1,14 @@
 import React from 'react';
 import styles from './TopToolBar.module.scss';
-import {EDiagramNode, IDiagramNodePreview} from "../../../../interface";
+import {EDiagramNode, EElementType, IDiagramElementPreviewTooltip} from "../../../../interface";
 import {NodePreviewSVG} from "../../../../assets";
 import {TopToolBarElement} from "./TopToolBarElement";
 
 
-const mockDiagramNodes: IDiagramNodePreview[] = [
+const mockDiagramNodes: IDiagramElementPreviewTooltip[] = [
     {
-        name: EDiagramNode.Source,
+        elementType: EElementType.Node,
+        tooltip: EDiagramNode.Source,
         type: EDiagramNode.Source,
         preview: {
             Component: NodePreviewSVG.Source,
@@ -15,7 +16,8 @@ const mockDiagramNodes: IDiagramNodePreview[] = [
         }
     },
     {
-        name: EDiagramNode.Drain,
+        elementType: EElementType.Node,
+        tooltip: EDiagramNode.Drain,
         type: EDiagramNode.Drain,
         preview: {
             Component: NodePreviewSVG.Drain,
@@ -23,7 +25,8 @@ const mockDiagramNodes: IDiagramNodePreview[] = [
         }
     },
     {
-        name: EDiagramNode.Pool,
+        elementType: EElementType.Node,
+        tooltip: EDiagramNode.Pool,
         type: EDiagramNode.Pool,
         preview: {
             Component: NodePreviewSVG.Pool,
@@ -35,7 +38,7 @@ export const TopToolBar = () => {
     return (
         <div className={styles.topToolbarContainer}>
             {mockDiagramNodes.map((node) => (
-                <TopToolBarElement key={node.name} {...node}/>
+                <TopToolBarElement key={node.tooltip} {...node}/>
             ))}
         </div>
     );

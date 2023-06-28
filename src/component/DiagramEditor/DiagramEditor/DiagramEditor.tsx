@@ -1,7 +1,7 @@
 import React from 'react';
 import {DiagramCanvas} from "../DiagramCanvas";
 import style from './DiagramEditor.module.scss'
-import {TopToolBar, LeftBar} from "../toolbar";
+import {TopToolBar, LeftToolbar, RightToolbar} from "../toolbar";
 import {useWidthAndHeight} from "../../../hooks";
 
 export const DiagramEditor = () => {
@@ -28,7 +28,7 @@ export const DiagramEditor = () => {
                             height: '100%',
                         }}
                     >
-                        <LeftBar/>
+                        <LeftToolbar/>
                         <div
                             style={{
                                 position: 'relative',
@@ -45,6 +45,7 @@ export const DiagramEditor = () => {
                                 <TopToolBar/>
                             </div>
                         </div>
+                        <RightToolbar/>
                     </div>
 
                 </div>

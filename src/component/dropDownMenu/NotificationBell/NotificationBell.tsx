@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Badge, Box, IconButton, Menu, MenuItem, Typography} from "@mui/material";
+import {Badge, IconButton, Menu, Typography} from "@mui/material";
 import MailIcon from '@mui/icons-material/Mail';
 import moment from "moment";
 import styles from './NotificationBell.module.scss'
