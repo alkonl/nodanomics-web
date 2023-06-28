@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './TopToolBar.module.scss';
 import {EDiagramNode, IDiagramNodePreview} from "../../../../interface";
-import {nodePreviewSVG} from "../../../../assets";
+import {NodePreviewSVG} from "../../../../assets";
 import {TopToolBarElement} from "./TopToolBarElement";
 
 
@@ -10,7 +10,7 @@ const mockDiagramNodes: IDiagramNodePreview[] = [
         name: EDiagramNode.Source,
         type: EDiagramNode.Source,
         preview: {
-            Component: nodePreviewSVG.source,
+            Component: NodePreviewSVG.Source,
             type: 'Component',
         }
     },
@@ -18,15 +18,15 @@ const mockDiagramNodes: IDiagramNodePreview[] = [
         name: EDiagramNode.Drain,
         type: EDiagramNode.Drain,
         preview: {
-            Component: nodePreviewSVG.drain,
+            Component: NodePreviewSVG.Drain,
             type: 'Component',
         }
     },
     {
-        name: EDiagramNode.Drain,
+        name: EDiagramNode.Pool,
         type: EDiagramNode.Pool,
         preview: {
-            Component: nodePreviewSVG.pool,
+            Component: NodePreviewSVG.Pool,
             type: 'Component',
         }
     }

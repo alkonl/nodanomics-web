@@ -7,6 +7,23 @@ export const useWidthAndHeight = () => {
         height: 0,
     })
     const elementRef = useRef<HTMLDivElement>(null)
+    const [dimensions, setDimensions] = useState({
+        height: window.innerHeight,
+        width: window.innerWidth
+    })
+    useEffect(() => {
+        function handleResize() {
+            setDimensions({
+                height: window.innerHeight,
+                width: window.innerWidth
+            })
+
+        }
+        window.addEventListener('resize', handleResize)
+        return () => {
+            window.removeEventListener('resize', handleResize)
+        }
+    }, [])
 
     useEffect(() => {
         if (elementRef.current !== null) {
@@ -16,6 +33,6 @@ export const useWidthAndHeight = () => {
                 width: offsetWidth,
             })
         }
-    }, [])
+    }, [dimensions])
     return {elementSize, elementRef}
 }
