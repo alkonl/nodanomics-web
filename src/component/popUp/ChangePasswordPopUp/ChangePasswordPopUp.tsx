@@ -7,6 +7,7 @@ export const ChangePasswordPopUp: React.FC<{
     isShow: boolean;
     onClose: () => void;
 }> = ({isShow, onClose}) => {
+
     return (
         <Dialog open={isShow} onClose={onClose}>
             <BasePopUp>
@@ -15,6 +16,5 @@ export const ChangePasswordPopUp: React.FC<{
                 </Dialog.Panel>
             </BasePopUp>
         </Dialog>
-
     );
 };

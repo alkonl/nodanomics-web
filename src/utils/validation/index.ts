@@ -12,4 +12,11 @@ export const validation = {
     phoneNumber: z.string().refine((value) => /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(value), 'Phone number is not valid. example +919367788755'),
     firstName:  z.string().min(3),
     lastName:  z.string().min(3),
+    diagramName:  z.string().min(3),
+    diagramDescription:  z.string().min(3),
+    diagramTags:  z.array(z.object({
+        id: z.string().optional(),
+        name: z.string(),
+    })),
+    searchTerm: z.string().min(3),
 }

@@ -4,7 +4,7 @@ export enum ELinks {
     register = '/register',
     verificationLink = '/verificationLink',
     forgotPassword = '/forgotPassword',
-    protected = '/protected',
     authGoogle = '/auth/callback/google',
     userManageData = '/user/manage-data',
+    dashboard = '/dashboard',
 }

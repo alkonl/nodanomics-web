@@ -4,9 +4,12 @@ import {useMemo} from "react";
 export const useShouldLoadRoute = () => {
     const session = useSession()
     return useMemo(() => {
-        if (session && session.invalidClaims.length === 0) {
-            return true
+        if (!session) {
+            return {isLoading: true}
         }
-        return false
+        if (session.invalidClaims.length === 0) {
+            return {isLoading: false, hasInvalidClaims: false}
+        }
+        return {isLoading: false, hasInvalidClaims: true}
     }, [session])
 }

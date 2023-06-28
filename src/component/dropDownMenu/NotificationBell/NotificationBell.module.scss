@@ -1,0 +1,16 @@
+.menuContainer {
+  width: 320px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.menuItemContainer {
+  width: 100%;
+
+  .menuItemMessage {
+    text-align: left;
+    overflow-wrap: break-word;
+  }
+}

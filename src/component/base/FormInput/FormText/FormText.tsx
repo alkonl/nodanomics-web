@@ -1,15 +1,16 @@
 import React, {useMemo} from 'react';
 import {FormBaseInput, IBaseInputProps, IFormBaseInputProps, IFormLabelNode} from "../FormBaseInput";
+import {Input, Typography} from "@mui/material";
 
 const InputFormText: React.FC<IBaseInputProps> = ({value, ...props}) => {
     return (
-        <input value={value ? value : ''} {...props}/>
+        <Input value={value ? value : ''} {...props}/>
     );
 }
 
 const LabelFormText: React.FC<{ text: string }> = ({text}) => {
     return (
-        <div>{text}</div>
+        <Typography>{text}</Typography>
     )
 }
 
