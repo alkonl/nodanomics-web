@@ -43,7 +43,7 @@ export const DiagramCanvas = () => {
                     attributionPosition="top-right"
                 >
                     <Controls/>
-                    <Background color="#aaa" gap={16}/>
+                    <Background color="blue" gap={16}/>
                 </ReactFlow>
             </div>
         </div>
