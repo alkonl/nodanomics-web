@@ -1,5 +1,7 @@
-import {Library} from "./library";
+import {Library} from "./Library";
+import {Variable} from "./Variable";
 
 export const Svg = {
-    Library
+    Library,
+    Variable
 }

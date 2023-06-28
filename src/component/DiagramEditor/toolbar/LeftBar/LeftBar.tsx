@@ -1,4 +1,5 @@
 import React, {useMemo} from "react";
+import styles from './LeftBar.module.scss';
 import {Box} from "@mui/material";
 import {Svg} from "../../../../assets";
 import {LeftBarItem} from "./LeftBarItem";
@@ -25,7 +26,7 @@ const menuOptions: {
         name: ELeftToolbarSideMenu.CustomVariablesSideMenu,
         preview: {
             type: 'Component',
-            Component: Svg.Library
+            Component: Svg.Variable
         }
     },
 ]
@@ -50,22 +51,21 @@ export function LeftBar() {
         }
     }
     return (
-        <Box style={{
-            display: 'flex',
-            pointerEvents: 'auto',
-        }}>
+        <Box className={styles.container}>
             <Box
-                sx={{
-                    width: 100,
-                }}
+                className={styles.buttonList}
             >
-                {menuOptions.map((option) => (
+                {menuOptions.map((option) => {
+                    const isSelected = option.name === selectedSideMenu;
+                   return (
                     <LeftBarItem
+                        isSelected={isSelected}
                         onClick={onSelectSideMenu}
                         name={option.name}
                         Component={option.preview.Component}
                         key={option.name}
-                    />))}
+                    />)
+                })}
             </Box>
             <BaseSideMenu isOpen={isSideMenuOpen}>
                 {SelectedSideMenu && <SelectedSideMenu/>}
