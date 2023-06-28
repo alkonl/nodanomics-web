@@ -7,7 +7,7 @@ import {
     LoginPage,
     ManageUserDataPage,
     RegistrationPage,
-    VerificationLink
+    VerificationLink, DiagramEditorPage
 } from "../../pages";
 import {ELinks} from "./links";
 import {ProtectedRoute} from "./ProtectedRoute";
@@ -40,5 +40,9 @@ export const appRouter = createBrowserRouter([
         element: <ProtectedRoute>
             <DashboardPage/>
         </ProtectedRoute>
+    }, {
+        path: ELinks.diagram,
+        element: <DiagramEditorPage/>
+
     }
 ]);
