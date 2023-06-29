@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {z} from "zod";
 import {validation} from "../../../utils";
 import {useForm} from "react-hook-form";
@@ -8,6 +8,11 @@ import {Box, Button, Typography} from "@mui/material";
 import AddIcon from '@mui/icons-material/AddBoxTwoTone';
 import {TagsPopUp} from "../../popUp/TagsPopUp";
 import {TagListSmall} from "../../list";
+import {useCreateDiagramMutation} from "../../../api";
+import {useNavigate} from "react-router-dom";
+import {ELinks} from "../../../service/router";
+import {useAppDispatch} from "../../../redux";
+import {diagramEditorActions} from "../../../redux/store";
 
 
 enum EFormFields {
@@ -25,8 +30,21 @@ const validationSchema = z.object({
 type IValidationSchema = z.infer<typeof validationSchema>;
 
 export const NewDiagramForm = () => {
-
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
     const [isTagsPopUpShow, setTagsPopUpShow] = useState(false)
+    const [createDiagram, {data: createdDiagram}] = useCreateDiagramMutation()
+
+    useEffect(() => {
+        if (createdDiagram && createdDiagram !== null) {
+            console.log(createdDiagram)
+            dispatch(diagramEditorActions.setCurrentDiagram({
+                diagramId: createdDiagram.id,
+                diagramName: createdDiagram.name,
+            }))
+            navigate(`${ELinks.diagram}/${createdDiagram.id}`, {replace: true})
+        }
+    }, [createdDiagram])
 
     const form = useForm<IValidationSchema>({
         resolver: zodResolver(validationSchema),
@@ -36,7 +54,11 @@ export const NewDiagramForm = () => {
     });
 
     const onSubmit = async (data: IValidationSchema) => {
-        console.log(data)
+        await createDiagram({
+            diagramName: data.diagramName,
+            diagramDescription: data.diagramDescription,
+            diagramTags: data.diagramTags,
+        })
     }
 
     const closeTagsPopUp = () => {

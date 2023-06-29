@@ -21,7 +21,7 @@ import {
     IUpdateUserDataRequest,
     IUpdateUserDataResponse,
     IGetDiagramTagsRequest,
-    IGetDiagramTagsResponse
+    IGetDiagramTagsResponse, ICreateNewDiagramRequest, ICreateNewDiagramResponse, IGetDiagramByIdResponse
 } from "../interface";
 import {CONFIG} from "../utils";
 import {IServerErrorResponse} from "../interface/serverErrorResponse";
@@ -271,6 +271,23 @@ export const baseApi = createApi({
             providesTags: (result, error, arg) => {
                 return [{type: ERTKTags.DiagramTags, id: arg.dashboardViewId}]
             }
+        }),
+        createDiagram: builder.mutation<ICreateNewDiagramResponse, ICreateNewDiagramRequest>({
+            query: (body: ICreateNewDiagramRequest) => {
+                return {
+                    url: '/diagram/create',
+                    method: 'POST',
+                    body: body,
+                }
+            }
+        }),
+        getDiagramById: builder.query<IGetDiagramByIdResponse, string>({
+            query: (id: string) => {
+                return {
+                    url: `/diagram?id=${id}`,
+                    method: 'GET',
+                }
+            }
         })
     }),
 })
@@ -287,6 +304,7 @@ export const {
     useSessionUserDataQuery,
     useUpdateUserDataMutation,
     useGetDiagramTagsQuery,
-
+    useCreateDiagramMutation,
+    useGetDiagramByIdQuery,
 } = baseApi;
 

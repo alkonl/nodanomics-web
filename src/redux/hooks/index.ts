@@ -14,3 +14,7 @@ export const useSelectedDashboardViewState = (dashboardViewId: string): IDiagram
 export const useDashboardViewsState = (): IDiagramDashboardViewsState => {
     return useAppSelector(state => state.diagramDashboard)
 }
+
+export const useDiagramEditorState = () => {
+    return useAppSelector(state => state.diagramEditor)
+}
