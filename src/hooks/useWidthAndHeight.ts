@@ -13,13 +13,20 @@ export const useWidthAndHeight = () => {
     })
     useEffect(() => {
         function handleResize() {
+            console.log('handleResize')
+            console.log(  window.innerHeight,
+                 window.innerWidth)
             setDimensions({
                 height: window.innerHeight,
                 width: window.innerWidth
             })
 
         }
+
         window.addEventListener('resize', handleResize)
+        window.addEventListener('resize', () => {
+            console.log('resize')
+        })
         return () => {
             window.removeEventListener('resize', handleResize)
         }

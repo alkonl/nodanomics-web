@@ -1,1 +1,1 @@
-export * from './NewDiagramForm'
+export * from './DiagramManagerForm'

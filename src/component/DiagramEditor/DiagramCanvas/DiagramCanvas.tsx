@@ -29,8 +29,7 @@ export const DiagramCanvas = () => {
         >
             <div
                 style={{
-                    height: canvasContainerSize.height,
-                    width: canvasContainerSize.width,
+                    flex: 1,
                 }}
             >
                 <ReactFlow

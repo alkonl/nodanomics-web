@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Button} from "@mui/material";
-import {NewDiagramPopUp} from "../../popUp/NewDiagramPopUp";
+import {DiagramManagerPopUp} from "../../popUp/NewDiagramPopUp";
 
 export const NewDiagramButton = () => {
     const [isCreateDiagramPopUpShow, setIsCreateDiagramPopUpShow] = useState(false)
@@ -13,7 +13,7 @@ export const NewDiagramButton = () => {
     }
     return (
         <>
-            <NewDiagramPopUp isShow={isCreateDiagramPopUpShow} onClose={closeNewDiagramPopUp}/>
+            <DiagramManagerPopUp type="new" isShow={isCreateDiagramPopUpShow} onClose={closeNewDiagramPopUp}/>
             <Button onClick={openNewDiagramPopUp}>
                 New diagram
             </Button>

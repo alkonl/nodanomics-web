@@ -1,15 +1,15 @@
 import React, {useEffect} from 'react';
-import {DiagramEditor} from "../../component";
+import {DiagramEditor, DiagramEditorHeader} from "../../component";
 import style from './DiagramEditorPage.module.scss'
-import {Typography} from "@mui/material";
-import {useAppDispatch, useDiagramEditorState} from "../../redux";
+import {useAppDispatch} from "../../redux";
 import {useGetDiagramByIdQuery} from "../../api";
 import {diagramEditorActions} from "../../redux/store";
+import {useParams} from "react-router-dom";
 
 export const DiagramEditorPage = () => {
     const dispatch = useAppDispatch()
-    const {data: diagram} = useGetDiagramByIdQuery('dbffdb70-f38f-4a3b-84c4-bd624ecf738c')
-    const {diagramName} = useDiagramEditorState()
+    const {diagramId} = useParams() as { diagramId: string }
+    const {data: diagram} = useGetDiagramByIdQuery(diagramId)
 
     useEffect(() => {
         if(diagram) {
@@ -22,9 +22,7 @@ export const DiagramEditorPage = () => {
 
     return (
         <div className={style.container}>
-            <Typography variant="h3">
-                {diagramName}
-            </Typography>
+            <DiagramEditorHeader/>
             <DiagramEditor/>
         </div>
     );

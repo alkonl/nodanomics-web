@@ -11,9 +11,15 @@ import {TagListSmall} from "../../list";
 import {useCreateDiagramMutation} from "../../../api";
 import {useNavigate} from "react-router-dom";
 import {ELinks} from "../../../service/router";
-import {useAppDispatch} from "../../../redux";
+import {useAppDispatch, useDiagramEditorState} from "../../../redux";
 import {diagramEditorActions} from "../../../redux/store";
 
+
+export enum EDiagramManagerType {
+    new = 'new',
+    rename = 'rename',
+    makeACopy = 'makeACopy',
+}
 
 enum EFormFields {
     diagramName = 'diagramName',
@@ -29,11 +35,24 @@ const validationSchema = z.object({
 
 type IValidationSchema = z.infer<typeof validationSchema>;
 
-export const NewDiagramForm = () => {
+export const DiagramManagerForm: React.FC<{
+    onSave: () => void;
+    type: EDiagramManagerType
+}> = ({onSave}) => {
+
+    const diagramState = useDiagramEditorState()
+
+
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const [isTagsPopUpShow, setTagsPopUpShow] = useState(false)
     const [createDiagram, {data: createdDiagram}] = useCreateDiagramMutation()
+
+
+    useEffect(() => {
+
+    }, [diagramState])
+
 
     useEffect(() => {
         if (createdDiagram && createdDiagram !== null) {
@@ -59,11 +78,13 @@ export const NewDiagramForm = () => {
             diagramDescription: data.diagramDescription,
             diagramTags: data.diagramTags,
         })
+        onSave()
     }
 
     const closeTagsPopUp = () => {
         setTagsPopUpShow(false)
     }
+
 
     return (
         <Box
@@ -106,7 +127,8 @@ export const NewDiagramForm = () => {
                     </Box>
                     <TagListSmall selectedTags={form.getValues()[EFormFields.diagramTags]}/>
                 </Box>
-                <Button variant="contained" type='submit'>
+                <Button
+                    variant="contained" type='submit'>
                     Save
                 </Button>
             </form>
