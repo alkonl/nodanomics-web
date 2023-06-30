@@ -1,40 +1,21 @@
-import {useEffect, useRef, useState} from "react";
+import {useLayoutEffect, useRef, useState} from "react";
+import useResizeObserver from "@react-hook/resize-observer";
 
 // get width and height of rendered element
 export const useWidthAndHeight = () => {
-    const [elementSize, setElementSize] = useState({
+    const ref = useRef<HTMLDivElement | null>(null)
+    const [elementSize, setSize] = useState({
         width: 0,
         height: 0,
     })
-    const elementRef = useRef<HTMLDivElement>(null)
-    const [dimensions, setDimensions] = useState({
-        height: window.innerHeight,
-        width: window.innerWidth
-    })
-    useEffect(() => {
-        function handleResize() {
-            setDimensions({
-                height: window.innerHeight,
-                width: window.innerWidth
-            })
 
+    useLayoutEffect(() => {
+        if (ref !== null) {
+            const node = ref.current
+            if (!(node instanceof Element)) return
+            setSize(node.getBoundingClientRect())
         }
-
-        window.addEventListener('resize', handleResize)
-
-        return () => {
-            window.removeEventListener('resize', handleResize)
-        }
-    }, [])
-
-    useEffect(() => {
-        if (elementRef.current !== null) {
-            const {offsetHeight, offsetWidth} = elementRef.current
-            setElementSize({
-                height: offsetHeight,
-                width: offsetWidth,
-            })
-        }
-    }, [dimensions])
-    return {elementSize, elementRef}
+    }, [ref])
+    useResizeObserver(ref, (entry) => setSize(entry.contentRect))
+    return {elementSize, elementRef: ref}
 }
