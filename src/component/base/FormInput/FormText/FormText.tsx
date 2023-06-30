@@ -1,33 +1,46 @@
 import React, {useMemo} from 'react';
 import {FormBaseInput, IBaseInputProps, IFormBaseInputProps, IFormLabelNode} from "../FormBaseInput";
-import {Input, Typography} from "@mui/material";
+import {Input, OutlinedInput, TextField, Typography} from "@mui/material";
 
 const InputFormText: React.FC<IBaseInputProps> = ({value, ...props}) => {
     return (
-        <Input value={value ? value : ''} {...props}/>
+        <TextField
+            style={{
+                width: '100%'
+            }}
+            variant="outlined"
+            inputProps={{
+                style: {
+                    padding: 8
+                }
+            }}
+            value={value ? value : ''} {...props}/>
     );
 }
 
 const LabelFormText: React.FC<{ text: string }> = ({text}) => {
     return (
-        <Typography>{text}</Typography>
+        <Typography style={{
+            fontSize: '12px',
+            fontWeight: 'bold',
+            marginBottom: '4px'
+        }}>{text}</Typography>
     )
 }
 
 type IFormTextProps = IFormBaseInputProps & IBaseInputProps & {
     label?: string;
 }
-export const FormText: React.FC<IFormTextProps> = (props) => {
+export const FormText: React.FC<IFormTextProps> = ({label, ...props}) => {
     const Label: IFormLabelNode | undefined = useMemo(() => {
-        const text = props.label
-        if (text) {
+        if (label) {
             return {
                 type: 'NODE',
-                Node: <LabelFormText text={text}/>
+                Node: <LabelFormText text={label}/>
             }
         }
         return undefined
-    }, [props.label])
+    }, [label])
 
     return (
         <FormBaseInput {...props}

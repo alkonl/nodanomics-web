@@ -46,7 +46,11 @@ export const FormBaseInput: React.FC<IFormInputProps> = (
                          field: {onChange, value},
                          fieldState: {error},
                      }) => (
-                <Box>
+                <Box
+                style={{
+                    width: '100%'
+                }}
+                >
                     {Label && <Box>
                         {Label.Node}
                     </Box>}

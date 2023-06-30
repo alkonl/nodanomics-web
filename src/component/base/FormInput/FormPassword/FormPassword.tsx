@@ -1,27 +1,59 @@
 import React, {useMemo, useState} from 'react';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import {FormBaseInput, IBaseInputProps, IFormBaseInputProps, IFormLabelNode} from "../FormBaseInput";
+import {Box, Button, IconButton, InputAdornment, TextField, Typography} from "@mui/material";
 
 const InputFormText: React.FC<IBaseInputProps> = ({value, ...props}) => {
     const [inputType, setInputType] = useState<'password' | 'text'>('password');
-    const [buttonText, setButtonText] = useState<'Show password' | 'Hide password'>('Show password');
+    const [EyeIcon, setEyeIcon] = useState<React.FC>(VisibilityOffIcon);
     const changeInputType = () => {
         setInputType(inputType === 'password' ? 'text' : 'password')
-        setButtonText(buttonText === 'Show password' ? 'Hide password' : 'Show password')
+        setEyeIcon(() => inputType === 'password' ? VisibilityIcon : VisibilityOffIcon)
     }
     return (
-        <div>
-            <input {...props} value={value ? value : ''} type={inputType}/>
-            <button onClick={changeInputType}>{buttonText}</button>
-        </div>
+        <Box>
+            <TextField
+                style={{
+                    width: '100%'
+                }}
+                variant="outlined"
+                inputProps={{
+                    style: {
+                        padding: 8
+                    }
+                }}
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton onClick={changeInputType}><EyeIcon/></IconButton>
+                        </InputAdornment>
+                    )
+                }}
+                {...props} value={value ? value : ''} type={inputType}
+
+            />
+        </Box>
     );
 }
 
 const LabelChange: React.FC<{ onChangePassword?: () => void; }> = ({onChangePassword}) => {
 
     return (
-        <button onClick={onChangePassword} style={{color: 'blue'}}>Change password</button>
+        <Button onClick={onChangePassword} style={{color: 'blue'}}>Change password</Button>
     )
 }
+
+const LabelFormText: React.FC<{ text?: string }> = ({text}) => {
+    return (
+        <Typography style={{
+            fontSize: '12px',
+            fontWeight: 'bold',
+            marginBottom: '4px'
+        }}>{text}</Typography>
+    )
+}
+
 
 interface LabelChangePasswordProps {
     labelType?: 'CHANGE_PASSWORD';
@@ -46,7 +78,7 @@ export const FormPassword: React.FC<IFormPasswordProps> = ({label, ...props}) =>
             } else if (label.labelType === 'TEXT') {
                 return {
                     type: 'NODE',
-                    Node: <div>{label.text}</div>
+                    Node: <LabelFormText text={label.text}/>
                 }
             }
         }
