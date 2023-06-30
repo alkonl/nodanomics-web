@@ -17,6 +17,6 @@ export const validation = {
     diagramTags:  z.array(z.object({
         id: z.string().optional(),
         name: z.string(),
-    })),
+    })).optional(),
     searchTerm: z.string().min(3),
 }

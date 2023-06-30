@@ -8,7 +8,7 @@ import {Box, Button, Typography} from "@mui/material";
 import AddIcon from '@mui/icons-material/AddBoxTwoTone';
 import {TagsPopUp} from "../../popUp/TagsPopUp";
 import {TagListSmall} from "../../list";
-import {useCreateDiagramMutation} from "../../../api";
+import {useCreateDiagramMutation, useUpdateDiagramMutation} from "../../../api";
 import {useNavigate} from "react-router-dom";
 import {ELinks} from "../../../service/router";
 import {useAppDispatch, useDiagramEditorState} from "../../../redux";
@@ -38,32 +38,17 @@ type IValidationSchema = z.infer<typeof validationSchema>;
 export const DiagramManagerForm: React.FC<{
     onSave: () => void;
     type: EDiagramManagerType
-}> = ({onSave}) => {
-
+}> = ({onSave, type}) => {
     const diagramState = useDiagramEditorState()
 
 
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const [isTagsPopUpShow, setTagsPopUpShow] = useState(false)
-    const [createDiagram, {data: createdDiagram}] = useCreateDiagramMutation()
 
+    const [createDiagram, {data: resCreateDiagram}] = useCreateDiagramMutation()
+    const [updateDiagram, {data: resUpdateDiagram}] = useUpdateDiagramMutation()
 
-    useEffect(() => {
-
-    }, [diagramState])
-
-
-    useEffect(() => {
-        if (createdDiagram && createdDiagram !== null) {
-            console.log(createdDiagram)
-            dispatch(diagramEditorActions.setCurrentDiagram({
-                diagramId: createdDiagram.id,
-                diagramName: createdDiagram.name,
-            }))
-            navigate(`${ELinks.diagram}/${createdDiagram.id}`, {replace: true})
-        }
-    }, [createdDiagram])
 
     const form = useForm<IValidationSchema>({
         resolver: zodResolver(validationSchema),
@@ -72,12 +57,67 @@ export const DiagramManagerForm: React.FC<{
         }
     });
 
-    const onSubmit = async (data: IValidationSchema) => {
+    useEffect(() => {
+        if (type === EDiagramManagerType.rename) {
+            form.reset({
+                [EFormFields.diagramName]: diagramState.name,
+                [EFormFields.diagramDescription]: diagramState.description,
+                [EFormFields.diagramTags]: diagramState.diagramTags,
+            })
+        }
+    }, [diagramState])
+
+
+    useEffect(() => {
+        if (resCreateDiagram && resCreateDiagram !== null) {
+            dispatch(diagramEditorActions.setCurrentDiagram({
+                diagramId: resCreateDiagram.id,
+                name: resCreateDiagram.name,
+                description: resCreateDiagram.description,
+            }))
+            navigate(`${ELinks.diagram}/${resCreateDiagram.id}`, {replace: true})
+        }
+    }, [resCreateDiagram])
+
+
+    const onCreateNewDiagram = async (data: IValidationSchema) => {
         await createDiagram({
             diagramName: data.diagramName,
             diagramDescription: data.diagramDescription,
             diagramTags: data.diagramTags,
         })
+    }
+
+    useEffect(() => {
+        console.log(resUpdateDiagram)
+        if (resUpdateDiagram) {
+           dispatch( diagramEditorActions.setCurrentDiagram({
+                diagramId: resUpdateDiagram.id,
+                name: resUpdateDiagram.name,
+                description: resUpdateDiagram.description,
+            }))
+        }
+    }, [resUpdateDiagram])
+
+    const onRenameDiagram = async (data: IValidationSchema) => {
+
+        if (diagramState.currentDiagramId) {
+            await updateDiagram({
+                diagramId: diagramState.currentDiagramId,
+                diagramName: data.diagramName,
+                diagramDescription: data.diagramDescription,
+                diagramTags: data.diagramTags,
+                // diagramDescription: data.diagramDescription,
+            })
+        }
+    }
+
+    const onSubmit = async (data: IValidationSchema) => {
+        if (type === EDiagramManagerType.new) {
+            await onCreateNewDiagram(data)
+        } else if (type === EDiagramManagerType.rename) {
+            await onRenameDiagram(data)
+        }
         onSave()
     }
 

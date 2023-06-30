@@ -4,7 +4,7 @@ import {Box, Typography} from "@mui/material";
 import {DiagramEditorDropDownMenu} from "../dropDownMenu";
 
 export const DiagramEditorHeader = () => {
-    const {diagramName} = useDiagramEditorState()
+    const {name} = useDiagramEditorState()
 
     return (
         <Box
@@ -17,7 +17,7 @@ export const DiagramEditorHeader = () => {
         >
             <DiagramEditorDropDownMenu/>
             <Typography variant="h3">
-                {diagramName}
+                {name}
             </Typography>
         </Box>
     );

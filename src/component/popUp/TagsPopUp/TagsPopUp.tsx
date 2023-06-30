@@ -8,7 +8,7 @@ export const TagsPopUp: React.FC<{
     onClose: () => void;
     tagsForm: ITagsInputProps
 }> = ({tagsForm, onClose, isShow}) => {
-    console.log('TagsPopUp')
+
     return (
         <Dialog open={isShow} onClose={onClose}>
             <BasePopUp>

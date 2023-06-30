@@ -1,11 +1,12 @@
-export interface ICreateNewDiagramRequest {
-    diagramName: string
-    diagramDescription: string
+export interface IUpdateDiagramRequest {
+    diagramId?: string
+    diagramName?: string
+    diagramDescription?: string
     diagramTags?: { id?: string, name: string }[]
     elements?: JSON
 }
 
-export interface ICreateNewDiagramResponse {
+export interface IUpdateDiagramResponse {
     id: string
     userId: string
     elements: JSON

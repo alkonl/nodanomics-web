@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
-import {Box, Menu, MenuItem} from "@mui/material";
+import React from 'react';
+import {Menu, MenuItem} from "@mui/material";
 import {useSimplePopUpManager} from "../../../hooks/useSimplePopUpManager";
 import {DiagramManagerPopUp} from "../../popUp/NewDiagramPopUp";
+import {EDiagramManagerType} from "../../form";
 
 export const DiagramEditorDropDownMenuContent: React.FC<{
     anchorEl: HTMLElement | null
@@ -16,9 +17,11 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
         isPopUpShow: isNewDiagramPopUpShow
     } = useSimplePopUpManager()
 
-    const onCloseNewDiagramPopUp = () =>{
-
-    }
+    const {
+        openPopUp: openRenameDiagramPopUp,
+        closePopUp: closeRenameDiagramPopUp,
+        isPopUpShow: isRenameDiagramPopUpShow
+    } = useSimplePopUpManager()
 
     const buttons: {
         name: string
@@ -26,18 +29,21 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
     }[] = [{
         name: 'New',
         onClick: openNewDiagramPopUp
-    },{
+    }, {
         name: 'Open-',
-        onClick: () => {}
-    },{
+        onClick: () => {
+        }
+    }, {
         name: 'Save-',
-        onClick: () => {}
-    },{
-        name: 'Rename-',
-        onClick: () => {}
-    },{
+        onClick: () => {
+        }
+    }, {
+        name: 'Rename',
+        onClick: openRenameDiagramPopUp
+    }, {
         name: 'Make a copy-',
-        onClick: () => {}
+        onClick: () => {
+        }
     }]
 
     return (
@@ -57,7 +63,10 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
             open={Boolean(anchorEl)}
             onClose={close}
         >
-            <DiagramManagerPopUp type="new" isShow={isNewDiagramPopUpShow} onClose={closeNewDiagramPopUp}/>
+            <DiagramManagerPopUp type={EDiagramManagerType.new} isShow={isNewDiagramPopUpShow}
+                                 onClose={closeNewDiagramPopUp}/>
+            <DiagramManagerPopUp type={EDiagramManagerType.rename} isShow={isRenameDiagramPopUpShow}
+                                 onClose={closeRenameDiagramPopUp}/>
             {buttons.map((button) => (<MenuItem
                 onClick={button.onClick}
                 key={button.name}

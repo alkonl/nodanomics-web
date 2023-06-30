@@ -6,4 +6,5 @@ export interface IGetDiagramByIdResponse {
     description: string
     updatedAt: Date
     createdAt: Date
+    diagramTags?: { id: string, name: string }[]
 }

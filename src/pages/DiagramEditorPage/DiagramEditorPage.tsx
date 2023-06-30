@@ -13,9 +13,12 @@ export const DiagramEditorPage = () => {
 
     useEffect(() => {
         if(diagram) {
+            console.log(diagram)
             dispatch(diagramEditorActions.setCurrentDiagram({
-                currentDiagramId: diagram.id,
-                diagramName: diagram.name,
+                diagramId: diagram.id,
+                name: diagram.name,
+                description: diagram.description,
+                diagramTags: diagram.diagramTags,
             }))
         }
     }, [dispatch, diagram])

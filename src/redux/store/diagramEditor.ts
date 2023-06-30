@@ -4,7 +4,9 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 export interface IDiagramEditorState {
     currentDiagramId?: string
-    diagramName?: string
+    name?: string
+    description?: string
+    diagramTags?: { id: string, name: string }[]
 }
 
 const initialState: IDiagramEditorState = {
@@ -15,12 +17,17 @@ export const diagramEditorSlice = createSlice({
     name: 'diagramEditor',
     initialState,
     reducers: {
-        setCurrentDiagram: (state, action: PayloadAction<{
+        setCurrentDiagram: (state, {payload}: PayloadAction<{
             diagramId: string
-            diagramName: string
+            name: string
+            description: string
+            diagramTags?: { id: string, name: string }[]
         }>) => {
-            state.currentDiagramId = action.payload.diagramId
-            state.diagramName = action.payload.diagramName
+            state.currentDiagramId = payload.diagramId
+            state.name = payload.name
+            state.description = payload.description
+            state.description = payload.description
+            state.diagramTags = payload.diagramTags
         }
     }
 })

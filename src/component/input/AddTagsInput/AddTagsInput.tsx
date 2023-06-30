@@ -7,13 +7,14 @@ import {TagListSmall} from "../../list";
 
 export const AddTagsInput: React.FC<{
     onChange: (data: ITag[]) => void,
-    selectedTags: ITag[],
+    selectedTags?: ITag[],
     allTags: ITag[],
     onSave: () => void
-}> = ({allTags, onChange, onSave, selectedTags}) => {
+}> = ({allTags, onChange, onSave, selectedTags = []}) => {
     const [query, setQuery] = useState('')
 
     const filteredTags = useMemo(() => {
+
         if (query === '') {
             return allTags.filter(tag => {
                 return selectedTags.every(selected => {
