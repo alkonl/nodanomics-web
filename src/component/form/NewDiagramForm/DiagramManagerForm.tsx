@@ -64,6 +64,12 @@ export const DiagramManagerForm: React.FC<{
                 [EFormFields.diagramDescription]: diagramState.description,
                 [EFormFields.diagramTags]: diagramState.diagramTags,
             })
+        }else if (type === EDiagramManagerType.makeACopy){
+            form.reset({
+                [EFormFields.diagramName]:`Copy of ${diagramState.name}`,
+                [EFormFields.diagramDescription]: diagramState.description,
+                [EFormFields.diagramTags]: diagramState.diagramTags,
+            })
         }
     }, [diagramState])
 
@@ -89,7 +95,6 @@ export const DiagramManagerForm: React.FC<{
     }
 
     useEffect(() => {
-        console.log(resUpdateDiagram)
         if (resUpdateDiagram) {
            dispatch( diagramEditorActions.setCurrentDiagram({
                 diagramId: resUpdateDiagram.id,
@@ -113,7 +118,7 @@ export const DiagramManagerForm: React.FC<{
     }
 
     const onSubmit = async (data: IValidationSchema) => {
-        if (type === EDiagramManagerType.new) {
+        if (type === EDiagramManagerType.new || type === EDiagramManagerType.makeACopy) {
             await onCreateNewDiagram(data)
         } else if (type === EDiagramManagerType.rename) {
             await onRenameDiagram(data)

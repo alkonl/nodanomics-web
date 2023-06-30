@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {Menu, MenuItem} from "@mui/material";
 import {useSimplePopUpManager} from "../../../hooks/useSimplePopUpManager";
 import {DiagramManagerPopUp} from "../../popUp/NewDiagramPopUp";
@@ -11,24 +11,38 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
           anchorEl,
           close
       }) => {
+    const [diagramManagerType, setDiagramManagerType] = useState<EDiagramManagerType>(EDiagramManagerType.new)
     const {
-        openPopUp: openNewDiagramPopUp,
-        closePopUp: closeNewDiagramPopUp,
-        isPopUpShow: isNewDiagramPopUpShow
+        openPopUp: openManagerDiagramPopUp,
+        closePopUp: closeManagerDiagramPopUp,
+        isPopUpShow: isManagerDiagramPopUpShow
     } = useSimplePopUpManager()
 
-    const {
-        openPopUp: openRenameDiagramPopUp,
-        closePopUp: closeRenameDiagramPopUp,
-        isPopUpShow: isRenameDiagramPopUpShow
-    } = useSimplePopUpManager()
+    const onNewDiagram= () => {
+        setDiagramManagerType(EDiagramManagerType.new)
+        openManagerDiagramPopUp()
+    }
+
+    const onRenameDiagram= () => {
+        setDiagramManagerType(EDiagramManagerType.rename)
+        openManagerDiagramPopUp()
+    }
+
+    const onCloseManagerDiagramPopUp = useCallback(()=>{
+            closeManagerDiagramPopUp()
+    },[])
+
+    const onCopyDiagram= () => {
+        setDiagramManagerType(EDiagramManagerType.makeACopy)
+        openManagerDiagramPopUp()
+    }
 
     const buttons: {
         name: string
         onClick: () => void
     }[] = [{
         name: 'New',
-        onClick: openNewDiagramPopUp
+        onClick: onNewDiagram
     }, {
         name: 'Open-',
         onClick: () => {
@@ -39,11 +53,10 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
         }
     }, {
         name: 'Rename',
-        onClick: openRenameDiagramPopUp
+        onClick: onRenameDiagram
     }, {
-        name: 'Make a copy-',
-        onClick: () => {
-        }
+        name: 'Make a copy',
+        onClick: onCopyDiagram
     }]
 
     return (
@@ -63,10 +76,9 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
             open={Boolean(anchorEl)}
             onClose={close}
         >
-            <DiagramManagerPopUp type={EDiagramManagerType.new} isShow={isNewDiagramPopUpShow}
-                                 onClose={closeNewDiagramPopUp}/>
-            <DiagramManagerPopUp type={EDiagramManagerType.rename} isShow={isRenameDiagramPopUpShow}
-                                 onClose={closeRenameDiagramPopUp}/>
+           <DiagramManagerPopUp type={diagramManagerType} isShow={isManagerDiagramPopUpShow}
+                                  onClose={onCloseManagerDiagramPopUp}/>
+
             {buttons.map((button) => (<MenuItem
                 onClick={button.onClick}
                 key={button.name}

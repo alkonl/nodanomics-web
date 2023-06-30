@@ -48,7 +48,6 @@ export const useTagsDashboardView = (params: {
     const tags = dashboardView?.tags
 
     const onTagSelect = (tag: ITag) => {
-        console.log(dashboardViewId)
         dispatch(dashboardViewsActions.selectTag({
             dashboardViewId: dashboardViewId,
             updatedTag: tag,

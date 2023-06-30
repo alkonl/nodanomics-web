@@ -97,7 +97,7 @@ export const baseApi = createApi({
                     }
                     return {data: response.user};
                 } catch (e) {
-                    console.log(e)
+                    console.error(e)
                     return {
                         error: {
                             status: 400,
