@@ -1,10 +1,12 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Menu, MenuItem} from "@mui/material";
 import {useSimplePopUpManager} from "../../../hooks/useSimplePopUpManager";
 import {DiagramManagerPopUp} from "../../popUp/NewDiagramPopUp";
 import {EDiagramManagerType} from "../../form";
 import {useNavigate} from "react-router-dom";
 import {ELinks} from "../../../service/router";
+import {useDiagramEditorState} from "../../../redux";
+import {useDeleteDiagramMutation} from "../../../api";
 
 export const DiagramEditorDropDownMenuContent: React.FC<{
     anchorEl: HTMLElement | null
@@ -14,7 +16,8 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
           close
       }) => {
     const navigate = useNavigate()
-
+    const diagramState = useDiagramEditorState()
+    const [deleteDiagram, {isSuccess: isDiagramDeleted}] = useDeleteDiagramMutation()
     const [diagramManagerType, setDiagramManagerType] = useState<EDiagramManagerType>(EDiagramManagerType.new)
     const {
         openPopUp: openManagerDiagramPopUp,
@@ -45,6 +48,18 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
         navigate(ELinks.dashboard)
     }
 
+
+
+    const onDelete = () => {
+        if (diagramState.currentDiagramId) {
+            deleteDiagram(diagramState.currentDiagramId)
+        }
+    }
+    useEffect(() => {
+        if (isDiagramDeleted) {
+            navigate(ELinks.dashboard)
+        }
+    }, [isDiagramDeleted])
     const buttons: {
         name: string
         onClick: () => void
@@ -64,6 +79,9 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
     }, {
         name: 'Make a copy',
         onClick: onCopyDiagram
+    }, {
+        name: 'Delete',
+        onClick: onDelete
     }]
 
     return (

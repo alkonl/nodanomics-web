@@ -69,7 +69,7 @@ const baseQueryWithReauth: BaseQueryFn<
 }
 
 export const baseApi = createApi({
-    tagTypes: [ERTKTags.User, ERTKTags.DiagramTags, ERTKTags.EditedDiagram, ERTKTags.DiagramsByUserId],
+    tagTypes: [ERTKTags.User, ERTKTags.DiagramTags, ERTKTags.EditedDiagram, ERTKTags.PersonalDashboard],
     reducerPath: 'baseApi',
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
@@ -284,6 +284,7 @@ export const baseApi = createApi({
                     body: body,
                 }
             },
+            invalidatesTags: [ERTKTags.PersonalDashboard]
         }),
         getDiagramById: builder.query<IGetDiagramByIdResponse, string>({
             query: (id: string) => {
@@ -305,7 +306,7 @@ export const baseApi = createApi({
                 }
             },
             invalidatesTags: (result, error, diagram) => {
-                return [{type: ERTKTags.EditedDiagram, id: diagram.diagramId}]
+                return [{type: ERTKTags.EditedDiagram, id: diagram.diagramId}, ERTKTags.PersonalDashboard]
             }
         }),
         getDiagramsByUserId: builder.query<IGetDiagramsByUserIdResponse, unknown>({
@@ -315,7 +316,16 @@ export const baseApi = createApi({
                     method: 'GET',
                 }
             },
-            providesTags: [ERTKTags.DiagramsByUserId]
+            providesTags: [ERTKTags.PersonalDashboard]
+        }),
+        deleteDiagram: builder.mutation({
+            query: (id: string) => {
+                return {
+                    url: `/diagram?id=${id}`,
+                    method: 'DELETE',
+                }
+            },
+            invalidatesTags: [ERTKTags.PersonalDashboard]
         })
     }),
 })
@@ -336,5 +346,6 @@ export const {
     useGetDiagramByIdQuery,
     useUpdateDiagramMutation,
     useGetDiagramsByUserIdQuery,
+    useDeleteDiagramMutation,
 } = baseApi;
 
