@@ -57,7 +57,7 @@ export const LoginForm = () => {
 
     return (
         <Box
-            style={{
+            sx={{
                 width: '320px',
                 display: 'flex',
                 flexDirection: 'column',
@@ -122,18 +122,19 @@ export const LoginForm = () => {
                     justifyContent: 'center',
                 }}
             >
-                Don&apos;t have an account?<Button
+                Don&apos;t have an account?
+                <Button
                 variant="text"
                 size="small"
-                style={{
+                sx={{
                     textTransform: 'none',
                     padding: 0,
-                    paddingLeft: 4,
+                    paddingLeft: '4px',
                 }}
             >
                 <Typography
                     onClick={onRegister}
-                    style={{
+                    sx={{
                         fontWeight: 600,
                     }}>Register
                 </Typography>

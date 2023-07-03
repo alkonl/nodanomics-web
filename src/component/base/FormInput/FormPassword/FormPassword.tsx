@@ -31,7 +31,6 @@ const InputFormText: React.FC<IBaseInputProps> = ({value, ...props}) => {
                     )
                 }}
                 {...props} value={value ? value : ''} type={inputType}
-
             />
         </Box>
     );

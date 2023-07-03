@@ -5,6 +5,9 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {FormPassword} from "../../base/FormInput";
 import {useSubmitNewPasswordMutation} from "../../../api";
 import {useSupertokensError} from "../../../utils";
+import {Box, Button, Typography} from "@mui/material";
+import {useNavigate} from "react-router-dom";
+import {ELinks} from "../../../service/router";
 
 enum EFormFields {
     password = 'password',
@@ -22,6 +25,8 @@ const validationSchema = z.object({
 type IValidationSchema = z.infer<typeof validationSchema>;
 
 export const ForgotPasswordChangeEmailForm = () => {
+    const navigate = useNavigate()
+
     const [submitNewPassword, {isSuccess, error}] = useSubmitNewPasswordMutation()
     const form = useForm<IValidationSchema>({
         resolver: zodResolver(validationSchema),
@@ -34,23 +39,71 @@ export const ForgotPasswordChangeEmailForm = () => {
 
     useSupertokensError({error, form, fields: EFormFields})
 
-    return (
-        <div>
-            <form onSubmit={(e) => {
-                e.preventDefault()
-                form.handleSubmit(onSubmit)();
-            }}>
-                ForgotPasswordChangeEmailForm
-                <FormPassword placeholder={'enter the new password'} form={form} name={EFormFields.password}/>
-                <FormPassword placeholder={'confirm the password'} form={form} name={EFormFields.confirmPassword}/>
+    const onContinue = () => {
+        navigate(ELinks.login)
+    }
 
-                <button
-                    type="submit"
-                >change password
-                </button>
-            </form>
-            {isSuccess && <div>password was changed</div>}
-        </div>
+    return (
+        <Box>
+            {!isSuccess ? <Box
+                    onSubmit={(e) => {
+                        e.preventDefault()
+                        form.handleSubmit(onSubmit)();
+                    }}
+                    component="form"
+                    sx={{
+                        width: '320px',
+                        height: 'fit-content',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '10px',
+                    }}
+                >
+                    <Typography>
+                        Reset password
+                    </Typography>
+                    <FormPassword label={{
+                        labelType: 'TEXT',
+                        text: 'enter the new password'
+                    }}
+                                  placeholder={'enter the new password'}
+                                  form={form}
+                                  name={EFormFields.password}/>
+                    <FormPassword
+                        label={{
+                            labelType: 'TEXT',
+                            text: 'confirm the password'
+                        }}
+                        placeholder={'confirm the password'}
+                        form={form}
+                        name={EFormFields.confirmPassword}/>
+
+                    <Button
+                        type="submit"
+                    >change password
+                    </Button>
+
+                </Box>
+                : <Box
+
+                    sx={{
+                        width: '320px',
+                        height: 'fit-content',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '10px',
+                    }}>
+                    <Typography>
+                        Your Password was changed successfully
+                    </Typography>
+                    <Button
+                        variant="contained"
+                        onClick={onContinue}
+                    >
+                        OK
+                    </Button>
+                </Box>}
+        </Box>
     );
 };
 

@@ -2,6 +2,7 @@ import React from 'react';
 import {BasePopUp} from "../PopUp";
 import {Dialog} from "@headlessui/react";
 import {FormAddTags, ITagsInputProps} from "../../form";
+import {Box} from "@mui/material";
 
 export const TagsPopUp: React.FC<{
     isShow: boolean;
@@ -13,13 +14,13 @@ export const TagsPopUp: React.FC<{
         <Dialog open={isShow} onClose={onClose}>
             <BasePopUp>
                 <Dialog.Panel>
-                    <div style={{
+                    <Box sx={{
                         padding: '40px',
                         backgroundColor: 'white',
                         borderRadius: 8,
                     }}>
                         <FormAddTags {...tagsForm}/>
-                    </div>
+                    </Box>
                 </Dialog.Panel>
             </BasePopUp>
         </Dialog>

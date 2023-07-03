@@ -43,6 +43,7 @@ export const FormText: React.FC<IFormTextProps> = ({label, ...props}) => {
     }, [label])
 
     return (
+
         <FormBaseInput {...props}
                        Label={Label}
                        Input={(baseProps) => {
