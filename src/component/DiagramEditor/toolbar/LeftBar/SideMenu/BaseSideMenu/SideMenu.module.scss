@@ -1,0 +1,9 @@
+.sideMenu{
+  width: 0;
+  overflow: hidden;
+  transition: 0.2s ease-in-out width;
+}
+
+.isSideMenuOpen{
+  width: 200px;
+}

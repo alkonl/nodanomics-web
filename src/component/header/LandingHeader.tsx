@@ -26,6 +26,9 @@ export function LandingHeader() {
         {
             name: 'Dashboard',
             link: ELinks.dashboard,
+        }, {
+            name: 'Diagram',
+            link: ELinks.diagram,
         }
     ]
 

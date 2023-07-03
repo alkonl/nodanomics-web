@@ -7,4 +7,5 @@ export enum ELinks {
     authGoogle = '/auth/callback/google',
     userManageData = '/user/manage-data',
     dashboard = '/dashboard',
+    diagram = '/diagram',
 }
