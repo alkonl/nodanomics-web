@@ -3,6 +3,8 @@ import {Menu, MenuItem} from "@mui/material";
 import {useSimplePopUpManager} from "../../../hooks/useSimplePopUpManager";
 import {DiagramManagerPopUp} from "../../popUp/NewDiagramPopUp";
 import {EDiagramManagerType} from "../../form";
+import {useNavigate} from "react-router-dom";
+import {ELinks} from "../../../service/router";
 
 export const DiagramEditorDropDownMenuContent: React.FC<{
     anchorEl: HTMLElement | null
@@ -11,6 +13,8 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
           anchorEl,
           close
       }) => {
+    const navigate = useNavigate()
+
     const [diagramManagerType, setDiagramManagerType] = useState<EDiagramManagerType>(EDiagramManagerType.new)
     const {
         openPopUp: openManagerDiagramPopUp,
@@ -18,23 +22,27 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
         isPopUpShow: isManagerDiagramPopUpShow
     } = useSimplePopUpManager()
 
-    const onNewDiagram= () => {
+    const onNewDiagram = () => {
         setDiagramManagerType(EDiagramManagerType.new)
         openManagerDiagramPopUp()
     }
 
-    const onRenameDiagram= () => {
+    const onRenameDiagram = () => {
         setDiagramManagerType(EDiagramManagerType.rename)
         openManagerDiagramPopUp()
     }
 
-    const onCloseManagerDiagramPopUp = useCallback(()=>{
-            closeManagerDiagramPopUp()
-    },[])
+    const onCloseManagerDiagramPopUp = useCallback(() => {
+        closeManagerDiagramPopUp()
+    }, [])
 
-    const onCopyDiagram= () => {
+    const onCopyDiagram = () => {
         setDiagramManagerType(EDiagramManagerType.makeACopy)
         openManagerDiagramPopUp()
+    }
+
+    const onOpen = () => {
+        navigate(ELinks.dashboard)
     }
 
     const buttons: {
@@ -44,9 +52,8 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
         name: 'New',
         onClick: onNewDiagram
     }, {
-        name: 'Open-',
-        onClick: () => {
-        }
+        name: 'Open',
+        onClick: onOpen
     }, {
         name: 'Save-',
         onClick: () => {
@@ -76,8 +83,8 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
             open={Boolean(anchorEl)}
             onClose={close}
         >
-           <DiagramManagerPopUp type={diagramManagerType} isShow={isManagerDiagramPopUpShow}
-                                  onClose={onCloseManagerDiagramPopUp}/>
+            <DiagramManagerPopUp type={diagramManagerType} isShow={isManagerDiagramPopUpShow}
+                                 onClose={onCloseManagerDiagramPopUp}/>
 
             {buttons.map((button) => (<MenuItem
                 onClick={button.onClick}

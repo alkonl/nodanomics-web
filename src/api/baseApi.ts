@@ -25,7 +25,7 @@ import {
     ICreateNewDiagramRequest,
     ICreateNewDiagramResponse,
     IGetDiagramByIdResponse,
-    IUpdateDiagramRequest, IUpdateDiagramResponse
+    IUpdateDiagramRequest, IUpdateDiagramResponse, IGetDiagramsByUserIdResponse
 } from "../interface";
 import {CONFIG} from "../utils";
 import {IServerErrorResponse} from "../interface/serverErrorResponse";
@@ -69,7 +69,7 @@ const baseQueryWithReauth: BaseQueryFn<
 }
 
 export const baseApi = createApi({
-    tagTypes: [ERTKTags.User, ERTKTags.DiagramTags, ERTKTags.EditedDiagram],
+    tagTypes: [ERTKTags.User, ERTKTags.DiagramTags, ERTKTags.EditedDiagram, ERTKTags.DiagramsByUserId],
     reducerPath: 'baseApi',
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
@@ -307,6 +307,15 @@ export const baseApi = createApi({
             invalidatesTags: (result, error, diagram) => {
                 return [{type: ERTKTags.EditedDiagram, id: diagram.diagramId}]
             }
+        }),
+        getDiagramsByUserId: builder.query<IGetDiagramsByUserIdResponse, unknown>({
+            query: () => {
+                return {
+                    url: '/diagram/own',
+                    method: 'GET',
+                }
+            },
+            providesTags: [ERTKTags.DiagramsByUserId]
         })
     }),
 })
@@ -326,5 +335,6 @@ export const {
     useCreateDiagramMutation,
     useGetDiagramByIdQuery,
     useUpdateDiagramMutation,
+    useGetDiagramsByUserIdQuery,
 } = baseApi;
 
