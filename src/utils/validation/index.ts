@@ -19,4 +19,9 @@ export const validation = {
         name: z.string(),
     })).optional(),
     searchTerm: z.string().min(3),
+    companyName: z.string().min(3).optional(),
+    clientRole: z.object({
+        id: z.string().optional(),
+        name: z.string(),
+    }).optional(),
 }
