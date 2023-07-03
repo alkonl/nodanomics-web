@@ -1,0 +1,14 @@
+.container{
+   display: flex;
+    margin: 10px auto;
+}
+.grayLine{
+    flex: 1;
+    height: 1px;
+    background-color: #e5e5e5;
+}
+.text{
+    padding: 0 10px;
+    text-align: center;
+    transform: translateY(-50%);
+}

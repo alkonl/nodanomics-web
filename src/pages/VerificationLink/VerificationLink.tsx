@@ -3,6 +3,7 @@ import {useConsumeVerificationCodeMutation} from "../../api";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {ELinks} from "../../service/router";
 import {Button, Typography} from "@mui/material";
+import {AuthLayout} from "../../component/layout";
 
 export const VerificationLink = () => {
     const [consumeVerificationCode, {data}] = useConsumeVerificationCodeMutation();
@@ -22,18 +23,28 @@ export const VerificationLink = () => {
     }, [data])
 
     return (
-        <div>
-            {!submitEmailToken && <Typography >
+        <AuthLayout>
+            {!submitEmailToken && <Typography
+            sx={{
+                fontWeight: 'bold'
+            }}
+            >
                 Verification link was sent to your email
             </Typography>}
-            <Typography>
-    Press button to submit
-            </Typography>
-            {submitEmailToken && <Button
-                onClick={consumeVerificationCode}
+            {submitEmailToken && <>  <Typography
+                sx={{
+                    fontWeight: 'bold'
+                }}
             >
-                Submit
-            </Button>}
-        </div>
+                Press button to submit
+            </Typography>
+                <Button
+                    onClick={consumeVerificationCode}
+                >
+                    Submit
+                </Button>
+            </>
+            }
+        </AuthLayout>
     );
 };

@@ -1,10 +1,11 @@
 import React from 'react';
 import {Box} from "@mui/material";
-import {DashboardHeader} from "../../component";
-
+import {DashboardHeader, DiagramList} from "../../component";
+import {useGetDiagramsByUserIdQuery} from "../../api";
 
 
 export const DashboardPage = () => {
+    const {data: resDiagrams} = useGetDiagramsByUserIdQuery(undefined);
 
     return (
         <Box style={{
@@ -13,7 +14,7 @@ export const DashboardPage = () => {
             <Box>
                 <DashboardHeader/>
             </Box>
-
+            {resDiagrams && <DiagramList diagrams={resDiagrams.diagrams}/>}
         </Box>
     );
 };

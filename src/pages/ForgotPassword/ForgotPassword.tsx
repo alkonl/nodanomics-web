@@ -1,6 +1,7 @@
 import React, {useMemo} from 'react';
 import {ForgotPasswordChangeEmailForm, ForgotPasswordSendEmailForm} from "../../component";
 import {useSearchParams} from "react-router-dom";
+import {AuthLayout} from "../../component/layout";
 
 export const ForgotPassword = () => {
     const [searchParams] = useSearchParams();
@@ -10,9 +11,8 @@ export const ForgotPassword = () => {
         return token ? token : undefined
     }, [searchParams])
     return (
-        <div>
-            ForgotPassword
+        <AuthLayout>
             {!resetPasswordToken ? <ForgotPasswordSendEmailForm/> : <ForgotPasswordChangeEmailForm/>}
-        </div>
+        </AuthLayout>
     );
 };
