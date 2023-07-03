@@ -1,12 +1,13 @@
 import React from 'react';
 import {Dialog} from "@headlessui/react";
 import {BasePopUp} from "../PopUp";
-import {NewDiagramForm} from "../../form";
+import {DiagramManagerForm, EDiagramManagerType} from "../../form";
 
-export const NewDiagramPopUp: React.FC<{
+export const DiagramManagerPopUp: React.FC<{
     isShow: boolean;
     onClose: () => void;
-}> = ({isShow, onClose}) => {
+    type: EDiagramManagerType
+}> = ({isShow, onClose, type}) => {
     return (
         <Dialog open={isShow} onClose={onClose}>
             <BasePopUp>
@@ -16,7 +17,7 @@ export const NewDiagramPopUp: React.FC<{
                         backgroundColor: 'white',
                         borderRadius: 8,
                     }}>
-                    <NewDiagramForm/>
+                    <DiagramManagerForm type={type} onSave={onClose}/>
                     </div>
                 </Dialog.Panel>
             </BasePopUp>

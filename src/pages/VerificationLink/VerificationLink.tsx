@@ -2,6 +2,7 @@ import React, {useEffect, useMemo} from 'react';
 import {useConsumeVerificationCodeMutation} from "../../api";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {ELinks} from "../../service/router";
+import {Button, Typography} from "@mui/material";
 
 export const VerificationLink = () => {
     const [consumeVerificationCode, {data}] = useConsumeVerificationCodeMutation();
@@ -22,17 +23,17 @@ export const VerificationLink = () => {
 
     return (
         <div>
-            <h2>
+            {!submitEmailToken && <Typography >
                 Verification link was sent to your email
-            </h2>
-            <br/>
-            <hr/>
-            <br/>
-            {submitEmailToken && <button
+            </Typography>}
+            <Typography>
+    Press button to submit
+            </Typography>
+            {submitEmailToken && <Button
                 onClick={consumeVerificationCode}
             >
                 Submit
-            </button>}
+            </Button>}
         </div>
     );
 };

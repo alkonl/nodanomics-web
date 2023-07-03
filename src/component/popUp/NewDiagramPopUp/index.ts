@@ -1,1 +1,1 @@
-export * from './NewDiagramPopUp'
+export * from './DiagramManagerPopUp'

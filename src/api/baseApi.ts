@@ -21,7 +21,11 @@ import {
     IUpdateUserDataRequest,
     IUpdateUserDataResponse,
     IGetDiagramTagsRequest,
-    IGetDiagramTagsResponse
+    IGetDiagramTagsResponse,
+    ICreateNewDiagramRequest,
+    ICreateNewDiagramResponse,
+    IGetDiagramByIdResponse,
+    IUpdateDiagramRequest, IUpdateDiagramResponse
 } from "../interface";
 import {CONFIG} from "../utils";
 import {IServerErrorResponse} from "../interface/serverErrorResponse";
@@ -65,7 +69,7 @@ const baseQueryWithReauth: BaseQueryFn<
 }
 
 export const baseApi = createApi({
-    tagTypes: [ERTKTags.User, ERTKTags.DiagramTags],
+    tagTypes: [ERTKTags.User, ERTKTags.DiagramTags, ERTKTags.EditedDiagram],
     reducerPath: 'baseApi',
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
@@ -93,7 +97,7 @@ export const baseApi = createApi({
                     }
                     return {data: response.user};
                 } catch (e) {
-                    console.log(e)
+                    console.error(e)
                     return {
                         error: {
                             status: 400,
@@ -271,6 +275,38 @@ export const baseApi = createApi({
             providesTags: (result, error, arg) => {
                 return [{type: ERTKTags.DiagramTags, id: arg.dashboardViewId}]
             }
+        }),
+        createDiagram: builder.mutation<ICreateNewDiagramResponse, ICreateNewDiagramRequest>({
+            query: (body: ICreateNewDiagramRequest) => {
+                return {
+                    url: '/diagram/create',
+                    method: 'POST',
+                    body: body,
+                }
+            },
+        }),
+        getDiagramById: builder.query<IGetDiagramByIdResponse, string>({
+            query: (id: string) => {
+                return {
+                    url: `/diagram?id=${id}`,
+                    method: 'GET',
+                }
+            },
+            providesTags: (result, error, diagramId) => {
+                return [{type: ERTKTags.EditedDiagram, id: diagramId}]
+            }
+        }),
+        updateDiagram: builder.mutation<IUpdateDiagramResponse, IUpdateDiagramRequest>({
+            query: (body: IUpdateDiagramRequest) => {
+                return {
+                    url: '/diagram/update',
+                    method: 'POST',
+                    body: body
+                }
+            },
+            invalidatesTags: (result, error, diagram) => {
+                return [{type: ERTKTags.EditedDiagram, id: diagram.diagramId}]
+            }
         })
     }),
 })
@@ -287,6 +323,8 @@ export const {
     useSessionUserDataQuery,
     useUpdateUserDataMutation,
     useGetDiagramTagsQuery,
-
+    useCreateDiagramMutation,
+    useGetDiagramByIdQuery,
+    useUpdateDiagramMutation,
 } = baseApi;
 
