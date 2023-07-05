@@ -24,4 +24,12 @@ export const validation = {
         id: z.string().optional(),
         name: z.string(),
     }).optional(),
+    billingAddress: z.string(),
+    city: z.string().min(3),
+    postalCode: z.string().min(3),
+    country: z.string(),
+    cardNumber: z.string().refine((value)=> /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14})$/.test(value), 'Card number is not valid'),
+    cardHolderName: z.string(),
+    expirationDate: z.string(),
+    cvv: z.string(),
 }

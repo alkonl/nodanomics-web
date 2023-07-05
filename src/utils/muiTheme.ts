@@ -1,17 +1,18 @@
 import {createTheme, ThemeOptions} from "@mui/material";
+import {EFontColor} from "../constant";
 
 export const themeOptions: ThemeOptions = {
     palette: {
         // type: 'light',
         primary: {
-            main: '#f5f5f5',
+            main: EFontColor.grey,
         },
         secondary: {
-            main: '#c64bff',
+            main: EFontColor.purple,
         },
         text: {
-            primary: '#A8ABAD',
-            secondary:'#c64bff'
+            primary:EFontColor.grey2,
+            secondary:EFontColor.purple,
         },
     },
     components: {
@@ -19,7 +20,30 @@ export const themeOptions: ThemeOptions = {
             styleOverrides: {
                 root: {
                     textTransform: 'none',
-                    color: '#000000d6',
+                    color: EFontColor.black,
+                    borderRadius: 0,
+                    "&.MuiButtonBase-root:hover": {
+                        backgroundColor: "inherit",
+                    }
+                }
+            }
+        },
+        MuiAccordion: {
+            styleOverrides: {
+                root: {
+                    color: EFontColor.black,
+                }
+            }
+        },
+
+        MuiTextField: {
+            styleOverrides: {
+                root: {
+                    "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": {
+                            borderColor: 'inherit',
+                        }
+                    }
                 }
             }
         }
