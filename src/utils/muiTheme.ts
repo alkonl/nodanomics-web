@@ -10,7 +10,8 @@ export const themeOptions: ThemeOptions = {
             main: '#c64bff',
         },
         text: {
-            primary: '#000000d6',
+            primary: '#A8ABAD',
+            secondary:'#c64bff'
         },
     },
     components: {

@@ -31,7 +31,7 @@ export const AccountDropDownMenuItem: React.FC<{
             {
                 type: 'link',
                 name: 'Profile',
-                link: ELinks.userManageData,
+                link: ELinks.accountManageData,
             }, {
                 type: 'link',
                 name: 'Log in',

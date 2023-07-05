@@ -5,7 +5,11 @@ export enum ELinks {
     verificationLink = '/verificationLink',
     forgotPassword = '/forgotPassword',
     authGoogle = '/auth/callback/google',
-    userManageData = '/user/manage-data',
+    accountManageData = '/account',
+    accountPlan = '/account/plan',
+    accountBilling = '/account/billing',
+    accountNFT = '/account/NFT',
+    accountSettings = '/account/settings',
     dashboard = '/dashboard',
     diagram = '/diagram',
 }

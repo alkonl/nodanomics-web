@@ -11,11 +11,29 @@ import {
 } from "../../pages";
 import {ELinks} from "./links";
 import {DashboardPage} from "../../pages/DashboardPage";
+import {AccountLayout} from "../../component";
 
 export const appRouter = createBrowserRouter([
     {
         path: ELinks.main,
         element: <LandingPage/>,
+        children: [{
+            path: ELinks.accountManageData,
+            element: <AccountLayout/>,
+            children: [{
+                path: ELinks.accountPlan,
+                element: <div>accountPlan</div>
+            },{
+                path: ELinks.accountBilling,
+                element: <div>accountBilling</div>
+            },{
+                path: ELinks.accountNFT,
+                element: <div>accountNFT</div>
+            },{
+                path: ELinks.accountSettings,
+                element: <div>accountSettings</div>
+            }]
+        }]
     }, {
         path: ELinks.register,
         element: <RegistrationPage/>,
@@ -32,16 +50,13 @@ export const appRouter = createBrowserRouter([
         path: ELinks.authGoogle,
         element: <AuthGoogle/>,
     }, {
-        path: ELinks.userManageData,
-        element: <ManageUserDataPage/>
-    }, {
         path: ELinks.dashboard,
         element: <DashboardPage/>
     }, {
-        path:`${ELinks.diagram}/:diagramId`,
+        path: `${ELinks.diagram}/:diagramId`,
         element: <DiagramEditorPage/>
-    },{
-        path:`${ELinks.diagram}`,
+    }, {
+        path: `${ELinks.diagram}`,
         element: <DiagramEditorPage/>
     }
 ]);
