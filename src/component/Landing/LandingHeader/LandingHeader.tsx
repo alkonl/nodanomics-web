@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 import {Link} from "react-router-dom";
-import {ELinks} from "../../service/router";
-import {useLogOut} from "../../service/superTokens";
+import {ELinks} from "../../../service/router";
+import {useLogOut} from "../../../service/superTokens";
 import {
     AppBar,
     Avatar,
@@ -16,7 +16,7 @@ import {
     Typography
 } from "@mui/material";
 import {Adb, Menu as MenuIcon} from '@mui/icons-material';
-import {useSessionUserDataQuery} from "../../api";
+import {useSessionUserDataQuery} from "../../../api";
 
 
 export function LandingHeader() {
@@ -24,16 +24,18 @@ export function LandingHeader() {
 
     const pages = [
         {
-            name: 'Dashboard',
+            name: 'Projects',
             link: ELinks.dashboard,
+        }, {
+            name: 'Teams',
+            link: ELinks.diagram,
         }
     ]
 
 
-
     const {data: userData} = useSessionUserDataQuery(undefined)
 
-    const settings = useMemo(()=>{
+    const settings = useMemo(() => {
         const settingsBase: ({
             type: 'link',
             name: string,
@@ -68,7 +70,7 @@ export function LandingHeader() {
             })
         }
         return settingsBase
-    },[userData])
+    }, [userData])
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -88,8 +90,13 @@ export function LandingHeader() {
     };
 
     return (
-        <AppBar position="static">
-            <Container maxWidth="xl">
+        <AppBar>
+            <Container maxWidth={false}
+                       sx={{
+                           paddingRight: {xs: 0, md: 2},
+                           paddingLeft: {xs: 0, md: 2},
+                       }}
+            >
                 <Toolbar disableGutters>
                     <Adb sx={{display: {xs: 'none', md: 'flex'}, mr: 1}}/>
                     <Typography
@@ -103,7 +110,6 @@ export function LandingHeader() {
                             fontFamily: 'monospace',
                             fontWeight: 700,
                             letterSpacing: '.3rem',
-                            color: 'inherit',
                             textDecoration: 'none',
                         }}
                     >
@@ -117,7 +123,6 @@ export function LandingHeader() {
                             aria-controls="menu-appbar"
                             aria-haspopup="true"
                             onClick={handleOpenNavMenu}
-                            color="inherit"
                         >
                             <MenuIcon/>
                         </IconButton>
@@ -161,7 +166,6 @@ export function LandingHeader() {
                             fontFamily: 'monospace',
                             fontWeight: 700,
                             letterSpacing: '.3rem',
-                            color: 'inherit',
                             textDecoration: 'none',
                         }}
                     >
@@ -172,7 +176,7 @@ export function LandingHeader() {
                             <Link to={page.link} key={page.name}>
                                 <Button
                                     onClick={handleCloseNavMenu}
-                                    sx={{my: 2, color: 'white', display: 'block'}}
+                                    sx={{my: 2, display: 'block'}}
                                 >
                                     {page.name}
                                 </Button>

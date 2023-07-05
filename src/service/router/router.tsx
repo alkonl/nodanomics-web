@@ -10,7 +10,6 @@ import {
     VerificationLink, DiagramEditorPage
 } from "../../pages";
 import {ELinks} from "./links";
-import {ProtectedRoute} from "./ProtectedRoute";
 import {DashboardPage} from "../../pages/DashboardPage";
 
 export const appRouter = createBrowserRouter([
@@ -37,11 +36,12 @@ export const appRouter = createBrowserRouter([
         element: <ManageUserDataPage/>
     }, {
         path: ELinks.dashboard,
-        element: <ProtectedRoute>
-            <DashboardPage/>
-        </ProtectedRoute>
+        element: <DashboardPage/>
     }, {
         path:`${ELinks.diagram}/:diagramId`,
+        element: <DiagramEditorPage/>
+    },{
+        path:`${ELinks.diagram}`,
         element: <DiagramEditorPage/>
     }
 ]);
