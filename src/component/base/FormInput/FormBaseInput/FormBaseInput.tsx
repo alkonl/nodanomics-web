@@ -27,9 +27,11 @@ export interface IFormLabelNode {
     Node: React.ReactNode
 }
 
+export type IFormLabel = IFormLabelNode
+
 export interface IFormInputProps extends IFormBaseInputProps {
     Input: React.FC<Pick<IBaseInputProps, 'value' | 'onChange'>>;
-    Label?: IFormLabelNode;
+    Label?: IFormLabel;
 }
 
 export const FormBaseInput: React.FC<IFormInputProps> = (

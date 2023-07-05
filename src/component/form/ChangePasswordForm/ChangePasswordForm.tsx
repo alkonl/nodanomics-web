@@ -6,6 +6,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {useChangePasswordMutation} from "../../../api";
 import {useNavigate} from "react-router-dom";
 import {ELinks} from "../../../service/router";
+import {Box, Button} from "@mui/material";
 
 enum EFormFields {
     oldPassword = 'oldPassword',
@@ -23,12 +24,17 @@ const validationSchema = z.object({
 });
 
 type IValidationSchema = z.infer<typeof validationSchema>;
-export const ChangePasswordForm = () => {
+
+export const ChangePasswordForm: React.FC<{
+    onCancel?: () => void
+}> = ({onCancel}) => {
     const navigate = useNavigate();
 
     const form = useForm<IValidationSchema>({
         resolver: zodResolver(validationSchema),
     });
+
+
     const [changePassword, {isSuccess}] = useChangePasswordMutation()
     const onSubmit = (formData: IValidationSchema) => {
         changePassword({
@@ -37,27 +43,54 @@ export const ChangePasswordForm = () => {
         })
     }
 
-    useEffect(()=>{
-        if(isSuccess){
+    useEffect(() => {
+        if (isSuccess) {
             navigate(ELinks.login)
         }
-    },[isSuccess])
+    }, [isSuccess])
+
 
     return (
-        <div>
-            <form onSubmit={(e) => {
+        <Box
+            sx={{
+                backgroundColor: 'white',
+                padding: 2,
+                borderRadius: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+            }}
+            onSubmit={(e) => {
                 e.preventDefault()
                 form.handleSubmit(onSubmit)();
-            }}>
-                ChangePasswordForm
-                <FormPassword label={{labelType: 'TEXT', text: 'old password'}}  form={form} name={EFormFields.oldPassword}/>
-                <FormPassword  label={{labelType: 'TEXT', text: 'the new password'}} form={form} name={EFormFields.newPassword}/>
-                <FormPassword  label={{labelType: 'TEXT', text: 'confirm the new password'}} form={form} name={EFormFields.confirmNewPassword}/>
-                <button
+            }}
+            component="form"
+        >
+            <FormPassword label={{labelType: 'TEXT', text: 'old password'}} form={form}
+                          name={EFormFields.oldPassword}/>
+            <FormPassword label={{labelType: 'TEXT', text: 'the new password'}} form={form}
+                          name={EFormFields.newPassword}/>
+            <FormPassword label={{labelType: 'TEXT', text: 'confirm the new password'}} form={form}
+                          name={EFormFields.confirmNewPassword}/>
+            <Box
+                sx={{
+                    display: 'flex',
+                    gap: '10px'
+                }}
+            >
+                <Button
                     type="submit"
-                >change password
-                </button>
-            </form>
-        </div>
+                    variant="contained"
+                >confirm
+                </Button>
+                <Button
+                    onClick={onCancel}
+                    variant="outlined"
+                >
+                    Cancel
+                </Button>
+            </Box>
+
+        </Box>
     );
 };

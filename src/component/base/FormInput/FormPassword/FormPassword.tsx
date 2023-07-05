@@ -2,7 +2,8 @@ import React, {useMemo, useState} from 'react';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import {FormBaseInput, IBaseInputProps, IFormBaseInputProps, IFormLabelNode} from "../FormBaseInput";
-import {Box, Button, IconButton, InputAdornment, TextField, Typography} from "@mui/material";
+import {Box, IconButton, InputAdornment, TextField} from "@mui/material";
+import {BaseLabel} from "../../Label";
 
 const InputFormText: React.FC<IBaseInputProps> = ({value, ...props}) => {
     const [inputType, setInputType] = useState<'password' | 'text'>('password');
@@ -36,23 +37,40 @@ const InputFormText: React.FC<IBaseInputProps> = ({value, ...props}) => {
     );
 }
 
+
+
+// const LabelFormText: React.FC<{ text?: string }> = ({text}) => {
+//     return (
+//         <Typography sx={{
+//             fontSize: '12px',
+//             fontWeight: 'bold',
+//             marginBottom: '4px'
+//         }}>{text}</Typography>
+//     )
+// }
+
 const LabelChange: React.FC<{ onChangePassword?: () => void; }> = ({onChangePassword}) => {
 
     return (
-        <Button onClick={onChangePassword} style={{color: 'blue'}}>Change password</Button>
+        <Box sx={{
+            display: 'flex',
+            justifyContent: 'space-between'
+        }}>
+            <BaseLabel  text="Password" />
+            <BaseLabel
+                text="Change Password"
+                onClick={onChangePassword}
+                sx={{
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    marginBottom: '4px',
+                    color: 'blue',
+                    cursor: 'pointer'
+                }}
+            />
+        </Box>
     )
 }
-
-const LabelFormText: React.FC<{ text?: string }> = ({text}) => {
-    return (
-        <Typography style={{
-            fontSize: '12px',
-            fontWeight: 'bold',
-            marginBottom: '4px'
-        }}>{text}</Typography>
-    )
-}
-
 
 interface LabelChangePasswordProps {
     labelType?: 'CHANGE_PASSWORD';
@@ -77,7 +95,7 @@ export const FormPassword: React.FC<IFormPasswordProps> = ({label, ...props}) =>
             } else if (label.labelType === 'TEXT') {
                 return {
                     type: 'NODE',
-                    Node: <LabelFormText text={label.text}/>
+                    Node: <BaseLabel text={label.text}/>
                 }
             }
         }
