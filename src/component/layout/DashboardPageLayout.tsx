@@ -16,9 +16,9 @@ export const DashboardPageLayout: React.FC<{
                 borderColor: 'text.primary',
                 borderWidth: 2,
                 borderStyle: 'solid',
-                flex: 1,
                 display: 'flex',
                 flexDirection: 'column',
+                flex: 1,
             }}
         >
             <Typography variant="h4" sx={{

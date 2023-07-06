@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Menu, MenuItem} from "@mui/material";
-import {useSimplePopUpManager} from "../../../hooks/useSimplePopUpManager";
+import {useToggle} from "../../../hooks/useToggle";
 import {DiagramManagerPopUp} from "../../popUp/NewDiagramPopUp";
 import {EDiagramManagerType} from "../../form";
 import {useNavigate} from "react-router-dom";
@@ -20,10 +20,10 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
     const [deleteDiagram, {isSuccess: isDiagramDeleted}] = useDeleteDiagramMutation()
     const [diagramManagerType, setDiagramManagerType] = useState<EDiagramManagerType>(EDiagramManagerType.new)
     const {
-        openPopUp: openManagerDiagramPopUp,
-        closePopUp: closeManagerDiagramPopUp,
-        isPopUpShow: isManagerDiagramPopUpShow
-    } = useSimplePopUpManager()
+        open: openManagerDiagramPopUp,
+        close: closeManagerDiagramPopUp,
+        isOpened: isManagerDiagramPopUpShow
+    } = useToggle()
 
     const onNewDiagram = () => {
         setDiagramManagerType(EDiagramManagerType.new)
@@ -47,7 +47,6 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
     const onOpen = () => {
         navigate(ELinks.dashboard)
     }
-
 
 
     const onDelete = () => {

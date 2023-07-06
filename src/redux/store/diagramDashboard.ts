@@ -24,7 +24,7 @@ const initialObject: IDiagramDashboardView = {
     sortType: ESortType.NameA2Z,
 }
 
-
+// Maybe deprecated
 export const diagramDashboardSlice = createSlice({
     name: 'diagramDashboard',
     initialState,

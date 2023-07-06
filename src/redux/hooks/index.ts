@@ -1,6 +1,13 @@
 // eslint-disable-next-line import/named
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux'
-import {AppDispatch, IDiagramDashboardView, IDiagramDashboardViewsState, IDiagramEditorState, RootState} from '../store'
+import {
+    AppDispatch,
+    IDiagramDashboardView,
+    IDiagramDashboardViewsState,
+    IDiagramEditorState,
+    IProjectDashboardState,
+    RootState
+} from '../store'
 
 export const useAppDispatch: () => AppDispatch = useDispatch
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
@@ -17,4 +24,8 @@ export const useDashboardViewsState = (): IDiagramDashboardViewsState => {
 
 export const useDiagramEditorState = (): IDiagramEditorState => {
     return useAppSelector(state => state.diagramEditor)
+}
+
+export const useProjectDashboardState = (): IProjectDashboardState => {
+    return useAppSelector(state => state.projectDashboard)
 }

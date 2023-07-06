@@ -14,7 +14,7 @@ import {
     AccountPage, AccountSettingsPage
 } from "../../pages";
 import {ELinks} from "./links";
-import {DashboardPage} from "../../pages/DashboardPage";
+import {ProjectPage} from "../../pages/ProjectPage";
 
 
 export const appRouter = createBrowserRouter([
@@ -37,7 +37,10 @@ export const appRouter = createBrowserRouter([
                 path: ELinks.accountSettings,
                 element: <AccountSettingsPage/>
             }]
-        }]
+        },  {
+            path: ELinks.dashboard,
+            element: <ProjectPage/>
+        },]
     }, {
         path: ELinks.register,
         element: <RegistrationPage/>,
@@ -53,9 +56,6 @@ export const appRouter = createBrowserRouter([
     }, {
         path: ELinks.authGoogle,
         element: <AuthGoogle/>,
-    }, {
-        path: ELinks.dashboard,
-        element: <DashboardPage/>
     }, {
         path: `${ELinks.diagram}/:diagramId`,
         element: <DiagramEditorPage/>

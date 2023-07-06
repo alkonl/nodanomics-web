@@ -8,7 +8,7 @@ import {ChangePasswordPopUp} from "../../popUp";
 import {useSessionUserDataQuery, useUpdateUserDataMutation} from "../../../api";
 import {Alert, Box, Button, Grid, Snackbar} from "@mui/material";
 import {FormSelectInput} from "../../base/FormInput/FormSelectInput/FormSelectInput";
-import {useSimplePopUpManager} from "../../../hooks/useSimplePopUpManager";
+import {useToggle} from "../../../hooks/useToggle";
 
 
 const MOCK_ROLE_LIST = [
@@ -50,10 +50,10 @@ export const ManageUserDataForm = () => {
 
     const [isChangePasswordPopUpOpen, setIsChangePasswordPopUpOpen] = useState(false)
     const {
-        openPopUp: openToastInfoChanged,
-        closePopUp: closeToastInfoChanged,
-        isPopUpShow: isOpenToastInfoChanged
-    } = useSimplePopUpManager()
+        open: openToastInfoChanged,
+        close: closeToastInfoChanged,
+        isOpened: isOpenToastInfoChanged
+    } = useToggle()
 
     const form = useForm<IValidationSchema>({
         resolver: zodResolver(validationSchema),
@@ -75,11 +75,11 @@ export const ManageUserDataForm = () => {
         }
     }, [userData])
 
-    useEffect(()=>{
-        if(isUserDataUpdated){
+    useEffect(() => {
+        if (isUserDataUpdated) {
             openToastInfoChanged()
         }
-    },[isUserDataUpdated])
+    }, [isUserDataUpdated])
 
     const onSubmit = (formData: IValidationSchema) => {
         sendDataToUpdate({
@@ -107,7 +107,7 @@ export const ManageUserDataForm = () => {
                 autoHideDuration={3000}
                 onClose={closeToastInfoChanged}
             >
-                <Alert onClose={closeToastInfoChanged} severity="info" sx={{ width: '100%' }}>
+                <Alert onClose={closeToastInfoChanged} severity="info" sx={{width: '100%'}}>
                     Information was updated
                 </Alert>
             </Snackbar>
@@ -153,7 +153,7 @@ export const ManageUserDataForm = () => {
                     <FormMobileInput form={form} name={EFormFields.phoneNumber} label="phone number (private)"/>
                 </Grid>
             </Grid>
-             <Box
+            <Box
                 sx={{
                     display: 'flex',
                     justifyContent: 'space-between',

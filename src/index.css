@@ -1,13 +1,13 @@
 body {
     width: 100%;
-    min-height: 100vh;
+    height: 100vh;
     margin: 0;
     padding: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-button{
+button {
     border: none;
     margin: 0;
     padding: 0;
@@ -19,12 +19,13 @@ button{
     outline: none;
     line-height: normal;
 }
+
 a {
     color: inherit; /* blue colors for links too */
     text-decoration: inherit; /* no underline */
 }
 
-#root{
+#root {
     width: 100%;
     min-height: 100vh;
     display: flex;
