@@ -1,1 +1,2 @@
-export * from './AccountBilling'
+export * from './BillingAddressAccordion'
+export * from './PaymentMethodAccording'

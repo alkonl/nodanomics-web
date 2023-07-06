@@ -1,31 +1,11 @@
 import React from 'react';
-import {Box, Typography} from "@mui/material";
 import {Outlet} from "react-router-dom";
-import {AccountLayoutNav} from "./AccountLayoutNav";
+import {Box} from "@mui/material";
+import {DashboardPageLayout, AccountNav} from "../../component";
 
-
-export const AccountLayout = () => {
-
-
+export const AccountPage = () => {
     return (
-        <Box
-            sx={{
-                margin: 2,
-                padding: 4,
-                borderColor: 'text.primary',
-                borderWidth: 2,
-                borderStyle: 'solid',
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-            }}
-        >
-            <Typography variant="h4" sx={{
-                fontWeight: 500,
-                marginBottom: 2,
-            }}>
-                Account
-            </Typography>
+        <DashboardPageLayout pageName="Account">
             <Box
                 sx={{
                     display: 'flex',
@@ -45,7 +25,7 @@ export const AccountLayout = () => {
                         gap: 1,
                     }}
                 >
-                    <AccountLayoutNav/>
+                    <AccountNav/>
                 </Box>
 
                 <Box
@@ -59,6 +39,6 @@ export const AccountLayout = () => {
                     <Outlet/>
                 </Box>
             </Box>
-        </Box>
+        </DashboardPageLayout>
     );
 };

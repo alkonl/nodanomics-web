@@ -1,14 +1,10 @@
 import React from 'react';
-import {Box, Grid, Typography} from "@mui/material";
+import {AccountInnerLayout} from "../../component";
+import {Box, Typography} from "@mui/material";
 
-export const AccountPlan = () => {
+export const AccountPlanPage = () => {
     return (
-        <Box
-            sx={{
-                px: 2,
-                py: 5,
-            }}
-        >
+        <AccountInnerLayout>
             <Box
                 sx={{
                     display: 'flex',
@@ -28,6 +24,6 @@ export const AccountPlan = () => {
                     Price
                 </Typography>
             </Box>
-        </Box>
+        </AccountInnerLayout>
     );
 };

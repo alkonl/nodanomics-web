@@ -6,11 +6,16 @@ import {
     ForgotPassword,
     LoginPage,
     RegistrationPage,
-    VerificationLink, DiagramEditorPage
+    VerificationLink,
+    DiagramEditorPage,
+    AccountPlanPage,
+    AccountBillingPage,
+    AccountNftPage,
+    AccountPage, AccountSettingsPage
 } from "../../pages";
 import {ELinks} from "./links";
 import {DashboardPage} from "../../pages/DashboardPage";
-import {AccountBilling, AccountLayout, AccountNFT, AccountPlan, AccountSettings} from "../../component";
+
 
 export const appRouter = createBrowserRouter([
     {
@@ -18,19 +23,19 @@ export const appRouter = createBrowserRouter([
         element: <LandingPage/>,
         children: [{
             path: ELinks.accountManageData,
-            element: <AccountLayout/>,
+            element: <AccountPage/>,
             children: [{
                 path: ELinks.accountPlan,
-                element: <AccountPlan/>
+                element: <AccountPlanPage/>
             }, {
                 path: ELinks.accountBilling,
-                element: <AccountBilling/>
+                element: <AccountBillingPage/>
             }, {
                 path: ELinks.accountNFT,
-                element: <AccountNFT/>
+                element: <AccountNftPage/>
             }, {
                 path: ELinks.accountSettings,
-                element: <AccountSettings/>
+                element: <AccountSettingsPage/>
             }]
         }]
     }, {

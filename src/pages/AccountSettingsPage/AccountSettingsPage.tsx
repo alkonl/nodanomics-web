@@ -1,7 +1,7 @@
 import React from 'react';
 import {Box} from "@mui/material";
 
-export const AccountSettings = () => {
+export const AccountSettingsPage = () => {
     return (
         <Box>
             AccountSettings

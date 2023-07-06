@@ -19,7 +19,7 @@ const accountPages = [
         link: ELinks.accountSettings,
     }];
 
-export const AccountLayoutNav = () => {
+export const AccountNav = () => {
 
     const [activePage, setActivePage] = useState<ELinks>();
     const currentPath = useCurrentPath()
