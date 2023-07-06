@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 import {FormBaseInput, IFormBaseInputProps, IFormLabelNode} from "../FormBaseInput";
 import {BaseLabel} from "../../Label";
-import {SelectInput, SelectInputList, SelectInputOnChange} from "../../../input";
+import {SelectInput, SelectInputList, SelectInputOnChange} from "../../Input";
 
 
 type IFormTextProps = IFormBaseInputProps & {

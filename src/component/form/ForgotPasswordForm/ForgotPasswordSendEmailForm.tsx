@@ -6,7 +6,7 @@ import {FormText} from "../../base/FormInput";
 import {useSendEmailToResetPasswordMutation} from "../../../api";
 import {Box, Button, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import {ELinks} from "../../../service/router";
+import {ELinks} from "../../../service";
 
 enum EFormFields {
     email = 'email',

@@ -28,8 +28,11 @@ export const validation = {
     city: z.string().min(3),
     postalCode: z.string().min(3),
     country: z.string(),
-    cardNumber: z.string().refine((value)=> /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14})$/.test(value), 'Card number is not valid'),
+    cardNumber: z.string().refine((value)=> {
+        console.log(value)
+       return /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14})$/.test(value.trim())
+    }, 'Card number is not valid'),
     cardHolderName: z.string(),
-    expirationDate: z.string(),
-    cvv: z.string(),
+    expirationDate: z.string().max(5).min(5).refine((value)=> /^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/.test(value), 'Expiration date is not valid'),
+    cvv: z.string().max(4).min(3).refine((value)=> /^[0-9]{3,4}$/.test(value), 'CVV is not valid'),
 }

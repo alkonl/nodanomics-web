@@ -1,10 +1,10 @@
 import React from 'react';
 // eslint-disable-next-line import/named
 import {Box, FormControl, MenuItem, Select, SelectChangeEvent, Typography} from "@mui/material";
-import {ESortType} from "../../../interface";
-import {sortTypesText} from "../../../constant";
-import {useAppDispatch, useDashboardViewsState} from "../../../redux";
-import {dashboardViewsActions} from "../../../redux/store";
+import {ESortType} from "../../../../interface";
+import {sortTypesText} from "../../../../constant";
+import {useAppDispatch, useDashboardViewsState} from "../../../../redux";
+import {dashboardViewsActions} from "../../../../redux/store";
 
 export const SortDiagramsInput = () => {
     const dispatch = useAppDispatch()

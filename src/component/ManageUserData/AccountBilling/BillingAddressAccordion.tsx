@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
-import {Accordion, AccordionDetails, AccordionSummary, Box, Button, Grid, Typography} from "@mui/material";
+import React, {Fragment, useState} from 'react';
+import {Accordion, AccordionDetails, AccordionSummary, Box, Grid, Typography} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {EColor} from "../../../constant";
 import {EditBillingInformationForm} from "../../form";
 import {MButton} from "../../base";
 
@@ -66,8 +65,8 @@ export const BillingAddressAccordion = () => {
                         width: 'fit-content'
                     }}>
                         {MOCK_BILLING_ADDRESS.map((item) => (
-                            <>
-                                <Grid item xs={1}>
+                            <Fragment key={item.name}>
+                                <Grid item xs={1} >
                                     <Typography sx={{
                                         textAlign: 'right',
                                         fontWeight: 'bold',
@@ -80,7 +79,7 @@ export const BillingAddressAccordion = () => {
                                         {item.value}
                                     </Typography>
                                 </Grid>
-                            </>
+                            </Fragment>
                         ))}
                     </Grid>
                     <MButton.Submit

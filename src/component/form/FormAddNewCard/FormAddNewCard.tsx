@@ -1,13 +1,15 @@
 import React, {useEffect} from 'react';
 import {validation} from "../../../utils";
 import {z} from "zod";
-import {Controller, useForm} from "react-hook-form";
+import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Box, Typography} from "@mui/material";
-import {EColor} from "../../../constant";
 import {Text} from "../../base/Text";
-import {FormText} from "../../base/FormInput";
+import {FormCvvInput, FormText} from "../../base/FormInput";
 import {MButton} from "../../base";
+import {FormExpireDateInput} from "../../base/FormInput/FormExpireDateInput";
+import {FormCardNumberInput} from "../../base/FormInput/FormCardNumberInput";
+import {BankCard} from "../../Card";
 
 enum EFormFields {
     cardNumber = 'cardNumber',
@@ -33,14 +35,16 @@ export const FormAddNewCard = () => {
 
     useEffect(() => {
         form.reset({
-            [EFormFields.cardNumber]: '1234 1234 1234 1234',
+            [EFormFields.cardNumber]: '4024007154656739',
             [EFormFields.cardHolderName]: 'John Doe',
             [EFormFields.expirationDate]: '12/22',
             [EFormFields.cvv]: '123',
         })
     }, [])
 
-
+    const onSubmit = (data: IValidationSchema) => {
+        console.log(data)
+    }
     return (
         <Box sx={{
             py: 4,
@@ -50,58 +54,24 @@ export const FormAddNewCard = () => {
             justifyContent: 'center',
             alignItems: 'center',
             width: 400,
-        }}>
+        }}
+             onSubmit={(e) => {
+                 e.preventDefault()
+                 form.handleSubmit(onSubmit)();
+             }}
+             component="form"
+        >
             <Typography sx={{
                 fontWeight: 'bold',
                 alignSelf: 'flex-start'
             }}>
                 Add New Card
             </Typography>
-            <Box sx={{
-                marginTop: 2,
-                padding: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                borderWidth: 1,
-                borderStyle: 'solid',
-                borderColor: EColor.black,
-                width: 200,
-            }}>
-                <Box sx={{
-                    width: 20,
-                    height: 20,
-                    marginTop: 4,
-                    borderWidth: 1,
-                    borderStyle: 'solid',
-                    borderColor: EColor.black,
-                }}/>
-                <Typography sx={{
-                    fontSize: 14,
-                    height: 16,
-                }}>
-                    {formValues.cardNumber}
-                </Typography>
-                <Box sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    width: '100%',
-                }}>
-                    <Typography sx={{
-                        fontSize: 14,
-                        height: 16,
-                    }}>
-                        {formValues.cardHolderName}
-                    </Typography>
-                    <Typography sx={{
-                        fontSize: 14,
-                        height: 16,
-                    }}>
-                        {formValues.cvv.replace(/./g, ' * ')}
-                    </Typography>
-                </Box>
-            </Box>
+            <BankCard
+                cardNumber={formValues[EFormFields.cardNumber]}
+                cardHolderName={formValues[EFormFields.cardHolderName]}
+                expireDate={formValues[EFormFields.expirationDate]}
+            />
             <Box
                 sx={{
                     marginTop: 1,
@@ -124,7 +94,7 @@ export const FormAddNewCard = () => {
                         <Box sx={{
                             px: 2,
                         }}>
-                            <FormText name={EFormFields.cardNumber} form={form}/>
+                            <FormCardNumberInput name={EFormFields.cardNumber} form={form}/>
                         </Box>
                     </Box>
                     <Box>
@@ -150,7 +120,7 @@ export const FormAddNewCard = () => {
                             <Box sx={{
                                 px: 2,
                             }}>
-                                <FormText name={EFormFields.expirationDate} form={form}/>
+                                <FormExpireDateInput name={EFormFields.expirationDate} form={form}/>
                             </Box>
                         </Box>
                         <Box>
@@ -160,18 +130,20 @@ export const FormAddNewCard = () => {
                             <Box sx={{
                                 px: 2,
                             }}>
-                                <FormText name={EFormFields.cvv} form={form}/>
+                                <FormCvvInput name={EFormFields.cvv} form={form}/>
                             </Box>
                         </Box>
                     </Box>
 
                 </Box>
             </Box>
-            <MButton.Submit sx={{
-                marginTop: 4,
-                alignSelf: 'flex-end',
-                px: 6,
-            }}>
+            <MButton.Submit
+                type="submit"
+                sx={{
+                    marginTop: 4,
+                    alignSelf: 'flex-end',
+                    px: 6,
+                }}>
                 Save
             </MButton.Submit>
         </Box>

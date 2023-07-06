@@ -1,6 +1,6 @@
 import React from "react";
 import {Controller, UseFormReturn} from "react-hook-form";
-import {AddTagsInput} from "../../input";
+import {AddTagsInput} from "../../base";
 import {ITag} from "../../../interface";
 
 export interface ITagsInputProps {

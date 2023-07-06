@@ -1,6 +1,6 @@
 import React from 'react';
 import {Chip} from "@mui/material";
-import {ITag} from "../../../interface";
+import {ITag} from "../../../../interface";
 
 export const SelectedTag: React.FC<{
     tag: ITag

@@ -1,6 +1,7 @@
 import React, {useMemo} from 'react';
-import {FormBaseInput, IBaseInputProps, IFormBaseInputProps, IFormLabelNode} from "../FormBaseInput";
+import {FormBaseInput, IFormBaseInputProps, IFormLabelNode} from "../FormBaseInput";
 import {TextField} from "@mui/material";
+import {IBaseInputProps} from "../../Input";
 
 const InputFormText: React.FC<IBaseInputProps> = ({value, ...props}) => {
     return (

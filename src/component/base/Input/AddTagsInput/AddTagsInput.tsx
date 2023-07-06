@@ -1,8 +1,8 @@
 import React, {useMemo, useState} from 'react';
 import {Combobox} from "@headlessui/react";
 import {Button, Chip} from "@mui/material";
-import {ITag} from "../../../interface";
-import {TagListSmall} from "../../list";
+import {ITag} from "../../../../interface";
+import {TagListSmall} from "../../../list";
 
 
 export const AddTagsInput: React.FC<{
