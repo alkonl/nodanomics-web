@@ -6,19 +6,36 @@ import {
     ProjectsList
 } from "../../component";
 import {EColor} from "../../constant";
-import {useAppDispatch} from "../../redux";
+import {useAppDispatch, useProjectDashboardState} from "../../redux";
 import {projectDashboardAction} from "../../redux/store";
 import {MOCK_PROJECTS} from "../../mock/MOCK_PROJECT";
-
+import moment from "moment";
+import {useDidMountEffect} from "../../hooks";
 
 export const ProjectPage = () => {
     const dispatch = useAppDispatch()
 
-    useEffect(()=>{
+
+
+    useEffect(() => {
+       const sortedProjects = [...MOCK_PROJECTS].sort((a, b) => {
+            return moment(a.createdAt).diff(b.createdAt);
+        })
         dispatch(projectDashboardAction.setProjects({
-            projects: MOCK_PROJECTS
+            projects: sortedProjects
         }))
-    },[])
+    }, [dispatch])
+
+    const projects = useProjectDashboardState().projects
+
+    useDidMountEffect(() => {
+        if (projects.length > 0) {
+            const projectId = projects[0].id
+            dispatch(projectDashboardAction.setSelectedProjectId({
+                projectId: projectId
+            }))
+        }
+    }, [projects])
 
 
     return (
@@ -28,7 +45,7 @@ export const ProjectPage = () => {
                     display: 'flex',
                     flex: 1,
                     justifyContent: 'space-between',
-                    gap: 5,
+                    gap: 4,
                     paddingBottom: 4,
                 }}
             >
@@ -42,6 +59,7 @@ export const ProjectPage = () => {
                     <Box sx={{
                         position: 'absolute',
                         height: '100%',
+                        width: '100%',
                         display: 'flex',
                         flexDirection: 'column',
                         borderColor: EColor.grey2,

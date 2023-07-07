@@ -38,7 +38,7 @@ export const appRouter = createBrowserRouter([
                 element: <AccountSettingsPage/>
             }]
         },  {
-            path: ELinks.dashboard,
+            path: ELinks.projects,
             element: <ProjectPage/>
         },]
     }, {

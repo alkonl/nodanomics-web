@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 // eslint-disable-next-line import/named
-import {Button, ButtonProps, SxProps} from "@mui/material";
+import {Button, ButtonProps, SxProps, Theme} from "@mui/material";
 import {EColor} from "../../../constant";
 
 
@@ -25,17 +25,15 @@ const buttonBorderSx: SxProps = {
 export const SubmitButton: React.FC<ISubmitButtonProps> = ({children, variant, sx, ...props}) => {
 
 
-    const buttonSx: SxProps = useMemo(() => {
-        const styles: SxProps = {
-            ...baseButtonSx,
-            ...sx,
-        }
-        if (variant === 'border') {
-            Object.assign(styles, buttonBorderSx)
-        }
-
-        return styles
-    }, [variant, sx])
+    const buttonSx: SxProps<Theme> = {
+        backgroundColor: EColor.grey2,
+        borderRadius: 0,
+        "&.MuiButtonBase-root:hover": {
+            backgroundColor: EColor.grey2,
+        },
+        ...(variant === 'border' ? buttonBorderSx : {}),
+        ...sx,
+    };
 
     return (
         <Button

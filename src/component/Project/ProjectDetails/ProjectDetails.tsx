@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Box, Button, Typography} from "@mui/material";
 import style from './ProjectDetails.module.scss'
 import {EColor, EFontColor} from "../../../constant";
@@ -12,7 +12,17 @@ export const ProjectDetails = () => {
     const projectInfo = useMemo(() => {
         return projectDashboardState.projects.find(project => project.id === projectDashboardState.selectedProjectId)
     }, [projectDashboardState])
+    const prevProjectId = useRef(projectDashboardState.selectedProjectId)
+
     const manageProjectTab = useToggle()
+
+    useEffect(() => {
+        if (prevProjectId.current !== projectInfo?.id) {
+            manageProjectTab.close()
+            prevProjectId.current = projectDashboardState.selectedProjectId
+        }
+    }, [projectInfo])
+
     return (
         <Box
             sx={{
@@ -36,7 +46,7 @@ export const ProjectDetails = () => {
                         color: EFontColor.grey2,
                     }}
                 >
-                    Project A
+                    {projectInfo?.name}
                 </Typography>
                 <Box sx={{
                     marginTop: 3,
@@ -77,7 +87,7 @@ export const ProjectDetails = () => {
                         Last Edited
                     </Typography>
                     <Typography>
-                        {projectInfo &&  formatDate(projectInfo.editedAt, 'v1')}
+                        {projectInfo && formatDate(projectInfo.editedAt, 'v1')}
                     </Typography>
                     <Typography className={style.projectInfoKey}>
                         Last Edited By

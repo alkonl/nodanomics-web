@@ -1,8 +1,8 @@
 export interface IBaseProject {
     id: string;
     name: string;
-    createdAt: Date;
-    editedAt: Date;
+    createdAt: string;
+    editedAt: string;
     createdBy: string;
     lastEditedBy: string;
 }

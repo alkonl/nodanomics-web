@@ -45,7 +45,7 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
     }
 
     const onOpen = () => {
-        navigate(ELinks.dashboard)
+        navigate(ELinks.projects)
     }
 
 
@@ -56,7 +56,7 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
     }
     useEffect(() => {
         if (isDiagramDeleted) {
-            navigate(ELinks.dashboard)
+            navigate(ELinks.projects)
         }
     }, [isDiagramDeleted])
     const buttons: {
