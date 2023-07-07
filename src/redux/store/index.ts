@@ -4,6 +4,7 @@ import { baseApi } from '../../api'
 import {diagramDashboardSlice} from "./diagramDashboard";
 import {diagramEditorSlice} from "./diagramEditor";
 import {projectDashboardSlice} from "./projectDashboard";
+import {teamDashboardSlice} from "./teamDashboard";
 
 const store = configureStore({
   reducer: combineReducers({
@@ -11,6 +12,7 @@ const store = configureStore({
     [diagramDashboardSlice.name]: diagramDashboardSlice.reducer,
     [projectDashboardSlice.name]: projectDashboardSlice.reducer,
     [diagramEditorSlice.name]: diagramEditorSlice.reducer,
+    [teamDashboardSlice.name]: teamDashboardSlice.reducer,
   }),
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(baseApi.middleware),
@@ -26,3 +28,4 @@ export type AppDispatch = typeof store.dispatch;
 export * from './diagramDashboard'
 export * from './diagramEditor'
 export * from './projectDashboard'
+export * from './teamDashboard'

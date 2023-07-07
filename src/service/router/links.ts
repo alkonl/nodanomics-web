@@ -12,4 +12,5 @@ export enum ELinks {
     accountSettings = '/account/settings',
     projects = '/projects',
     diagram = '/diagram',
+    team = '/team',
 }

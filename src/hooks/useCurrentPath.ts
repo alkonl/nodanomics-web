@@ -1,5 +1,5 @@
 import {matchRoutes, useLocation} from "react-router-dom";
-import {appRouter, ELinks} from "../service";
+import {ELinks} from "../service";
 
 const routes = Object.values(ELinks).map((path) => ({path}))
 
