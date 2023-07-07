@@ -3,29 +3,33 @@ import {BaseQueryFn, createApi, FetchArgs, fetchBaseQuery, FetchBaseQueryError} 
 import {
     emailPasswordSignIn,
     emailPasswordSignUp,
+    getAuthorisationURLWithQueryParamsAndSetState,
     sendPasswordResetEmail,
     submitNewPassword,
     thirdPartySignInAndUp,
-    getAuthorisationURLWithQueryParamsAndSetState,
 } from "supertokens-web-js/recipe/thirdpartyemailpassword";
 import {sendVerificationEmail, verifyEmail} from "supertokens-web-js/recipe/emailverification";
 
 import {
     IChangePasswordRequest,
     IChangePasswordResponse,
-    ILoginEmailPasswordRequest,
-    ISendEmailToResetPasswordRequest,
-    ISignUpRequest,
-    ISubmitNewPasswordRequest,
-    ISessionUserDataResponse,
-    IUpdateUserDataRequest,
-    IUpdateUserDataResponse,
-    IGetDiagramTagsRequest,
-    IGetDiagramTagsResponse,
     ICreateNewDiagramRequest,
     ICreateNewDiagramResponse,
+    ICreateProjectRequest,
     IGetDiagramByIdResponse,
-    IUpdateDiagramRequest, IUpdateDiagramResponse, IGetDiagramsByUserIdResponse
+    IGetDiagramsByUserIdResponse,
+    IGetDiagramTagsRequest,
+    IGetDiagramTagsResponse,
+    IGetProjectsResponse,
+    ILoginEmailPasswordRequest,
+    ISendEmailToResetPasswordRequest,
+    ISessionUserDataResponse,
+    ISignUpRequest,
+    ISubmitNewPasswordRequest,
+    IUpdateDiagramRequest,
+    IUpdateDiagramResponse,
+    IUpdateUserDataRequest,
+    IUpdateUserDataResponse
 } from "../interface";
 import {CONFIG} from "../utils";
 import {IServerErrorResponse} from "../interface/serverErrorResponse";
@@ -69,7 +73,7 @@ const baseQueryWithReauth: BaseQueryFn<
 }
 
 export const baseApi = createApi({
-    tagTypes: [ERTKTags.User, ERTKTags.DiagramTags, ERTKTags.EditedDiagram, ERTKTags.PersonalDashboard],
+    tagTypes: [ERTKTags.User, ERTKTags.DiagramTags, ERTKTags.EditedDiagram, ERTKTags.PersonalDashboard, ERTKTags.Projects],
     reducerPath: 'baseApi',
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
@@ -326,7 +330,26 @@ export const baseApi = createApi({
                 }
             },
             invalidatesTags: [ERTKTags.PersonalDashboard]
-        })
+        }),
+        createProject: builder.mutation<unknown, ICreateProjectRequest>({
+            query: (body: ICreateProjectRequest) => {
+                return {
+                    url: '/project',
+                    method: 'POST',
+                    body: body,
+                }
+            },
+            invalidatesTags: [ERTKTags.Projects],
+        }),
+        getProjects: builder.query<IGetProjectsResponse, unknown>({
+            query: () => {
+                return {
+                    url: '/project',
+                    method: 'GET',
+                }
+            },
+            providesTags: [ERTKTags.Projects, ERTKTags.User],
+        }),
     }),
 })
 export const {
@@ -347,5 +370,7 @@ export const {
     useUpdateDiagramMutation,
     useGetDiagramsByUserIdQuery,
     useDeleteDiagramMutation,
+    useCreateProjectMutation,
+    useGetProjectsQuery,
 } = baseApi;
 

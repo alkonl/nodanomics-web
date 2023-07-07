@@ -35,4 +35,5 @@ export const validation = {
     cardHolderName: z.string(),
     expirationDate: z.string().max(5).min(5).refine((value)=> /^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/.test(value), 'Expiration date is not valid'),
     cvv: z.string().max(4).min(3).refine((value)=> /^[0-9]{3,4}$/.test(value), 'CVV is not valid'),
+    projectName: z.string().min(3).max(100),
 }
