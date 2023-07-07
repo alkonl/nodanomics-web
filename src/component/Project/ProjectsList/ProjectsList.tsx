@@ -8,6 +8,10 @@ import {useProjectDashboardState} from "../../../redux";
 
 
 export const ProjectsList = () => {
+
+
+
+
     const {projects} = useProjectDashboardState()
 
     const formattedProjects: IGroupedProjects = useMemo(() => {
@@ -15,7 +19,6 @@ export const ProjectsList = () => {
             const createdAt = moment(project.createdAt)
             const now = moment.now()
             const differenceInDays = Math.abs(createdAt.diff(now, 'days'))
-            console.log(differenceInDays)
             if (differenceInDays === 0) {
                 addToGroup({allGroups: acc, project, addTo: EProjectDateGroup.DAY})
             } else if (differenceInDays < 7) {

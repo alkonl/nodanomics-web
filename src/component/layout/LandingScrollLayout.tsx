@@ -4,7 +4,8 @@ import {EColor} from "../../constant";
 
 export const LandingScrollLayout: React.FC<{
     children?: React.ReactNode
-}> = ({children}) => {
+    scrollRef?: React.RefObject<HTMLDivElement>
+}> = ({children, scrollRef}) => {
     return (
         <Box sx={{
             display: 'flex',
@@ -29,7 +30,9 @@ export const LandingScrollLayout: React.FC<{
                     flex: 1,
                     minHeight: '0px',
                 }}>
-                    <Box sx={{
+                    <Box
+                        ref={scrollRef}
+                        sx={{
                         flex: 1,
                         overflow: 'auto',
                     }}>

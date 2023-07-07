@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
     DashboardPageLayout,
     ProjectDetails,
@@ -6,17 +6,26 @@ import {
     LandingScrollLayout, CreateProject
 } from "../../component";
 import {useAppDispatch, useProjectDashboardState, projectDashboardAction} from "../../redux";
-import {MOCK_PROJECTS} from "../../mock/MOCK_PROJECT";
-import moment from "moment";
-import {useDidMountEffect} from "../../hooks";
+import {useDidMountEffect, useScrollToBottom} from "../../hooks";
 import {useGetProjectsQuery} from "../../api";
 import {IBaseProject} from "../../interface";
 
 export const ProjectPage = () => {
+    const myDivRef = useRef<HTMLDivElement>(null);
     const dispatch = useAppDispatch()
+    const [offset, setOffset] = React.useState(0);
 
-    const {data: allProjects} = useGetProjectsQuery(undefined)
-
+    const {data: allProjects} = useGetProjectsQuery({
+        offset: offset,
+        limit: 50,
+    })
+    const reachedBottom = useScrollToBottom(myDivRef)
+    useEffect(() => {
+        // setOffset(prevOffset => prevOffset + 50)
+    }, [reachedBottom])
+    useEffect(() => {
+        console.log(offset)
+    }, [offset])
     useEffect(() => {
         if (allProjects) {
             const sortedProjects: IBaseProject[] = allProjects.map((project) => ({
@@ -47,7 +56,7 @@ export const ProjectPage = () => {
 
     return (
         <DashboardPageLayout pageName="Projects">
-            <LandingScrollLayout>
+            <LandingScrollLayout scrollRef={myDivRef}>
                 <CreateProject/>
                 <ProjectsList/>
             </LandingScrollLayout>

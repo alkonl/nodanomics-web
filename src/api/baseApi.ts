@@ -341,12 +341,24 @@ export const baseApi = createApi({
             },
             invalidatesTags: [ERTKTags.Projects],
         }),
-        getProjects: builder.query<IGetProjectsResponse, unknown>({
+        getProjects: builder.query<IGetProjectsResponse, {
+            offset: number
+            limit: number
+        }>({
             query: () => {
                 return {
                     url: '/project',
                     method: 'GET',
                 }
+            },
+            forceRefetch: ({ currentArg, previousArg }) => {
+                return currentArg?.offset !== previousArg?.offset
+            },
+            serializeQueryArgs: ({ endpointName }) => {
+                return endpointName
+            },
+            merge: (currentCache, newItems) => {
+                currentCache.push(...newItems)
             },
             providesTags: [ERTKTags.Projects, ERTKTags.User],
         }),
