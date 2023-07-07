@@ -7,7 +7,7 @@ import {useSubmitNewPasswordMutation} from "../../../api";
 import {useSupertokensError} from "../../../utils";
 import {Box, Button, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import {ELinks} from "../../../service/router";
+import {ELinks} from "../../../service";
 
 enum EFormFields {
     password = 'password',

@@ -1,0 +1,5 @@
+@mixin floatChildRight {
+  & > * {
+    float: right;
+  }
+}

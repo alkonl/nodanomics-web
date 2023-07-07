@@ -5,18 +5,42 @@ import {
     LandingPage,
     ForgotPassword,
     LoginPage,
-    ManageUserDataPage,
     RegistrationPage,
-    VerificationLink, DiagramEditorPage
+    VerificationLink,
+    DiagramEditorPage,
+    AccountPlanPage,
+    AccountBillingPage,
+    AccountNftPage,
+    AccountPage, AccountSettingsPage
 } from "../../pages";
 import {ELinks} from "./links";
-import {ProtectedRoute} from "./ProtectedRoute";
-import {DashboardPage} from "../../pages/DashboardPage";
+import {ProjectPage} from "../../pages/ProjectPage";
+
 
 export const appRouter = createBrowserRouter([
     {
         path: ELinks.main,
         element: <LandingPage/>,
+        children: [{
+            path: ELinks.accountManageData,
+            element: <AccountPage/>,
+            children: [{
+                path: ELinks.accountPlan,
+                element: <AccountPlanPage/>
+            }, {
+                path: ELinks.accountBilling,
+                element: <AccountBillingPage/>
+            }, {
+                path: ELinks.accountNFT,
+                element: <AccountNftPage/>
+            }, {
+                path: ELinks.accountSettings,
+                element: <AccountSettingsPage/>
+            }]
+        },  {
+            path: ELinks.projects,
+            element: <ProjectPage/>
+        },]
     }, {
         path: ELinks.register,
         element: <RegistrationPage/>,
@@ -33,15 +57,10 @@ export const appRouter = createBrowserRouter([
         path: ELinks.authGoogle,
         element: <AuthGoogle/>,
     }, {
-        path: ELinks.userManageData,
-        element: <ManageUserDataPage/>
+        path: `${ELinks.diagram}/:diagramId`,
+        element: <DiagramEditorPage/>
     }, {
-        path: ELinks.dashboard,
-        element: <ProtectedRoute>
-            <DashboardPage/>
-        </ProtectedRoute>
-    }, {
-        path:`${ELinks.diagram}/:diagramId`,
+        path: `${ELinks.diagram}`,
         element: <DiagramEditorPage/>
     }
 ]);

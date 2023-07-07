@@ -1,11 +1,11 @@
 import React from 'react';
-import {Button, Card, Typography, Grid} from "@mui/material";
+import {Button, Card, Typography} from "@mui/material";
 import {Link, useNavigate} from "react-router-dom";
-import {IBaseDiagram} from '../../../interface';
-import {ELinks} from "../../../service/router";
+import {ELinks} from "../../../service";
+import {IBaseProject} from "../../../interface";
 
 export const DiagramListItem: React.FC<{
-    diagram: IBaseDiagram,
+    diagram: IBaseProject,
 }> = ({diagram: {id, name}}) => {
     const navigate = useNavigate()
 

@@ -5,7 +5,7 @@ import {NewDiagramButton} from "../../button";
 import {TagList} from "../../list";
 import {AccountDropDownMenu, NotificationBell} from "../../dropDownMenu";
 import {DashboardDiagramNavigator} from "./DashboardDiagramNavigator";
-import {SortDiagramsInput} from "../../input";
+import {SortDiagramsInput} from "../../base";
 import {useAppDispatch, useDashboardViewsState} from "../../../redux";
 import {dashboardViewsActions} from "../../../redux/store";
 

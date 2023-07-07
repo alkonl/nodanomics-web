@@ -1,0 +1,68 @@
+@import "src/mixins";
+
+.parent {
+  display: grid;
+  grid-template-columns: repeat(4, fit-content(100%));
+  grid-template-rows: repeat(6, 1fr);
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+}
+
+
+.labelFirstName {
+  grid-area: 1 / 1 / 2 / 2;
+  @include floatChildRight;
+}
+
+.firstNameInput {
+  grid-area: 1 / 2 / 2 / 3;
+}
+
+.lastNameLabel {
+  grid-area: 1 / 3 / 2 / 4;
+  @include floatChildRight;
+}
+
+.lastNameInput {
+  grid-area: 1 / 4 / 2 / 5;
+}
+
+.billingAddressLabel {
+  grid-area: 2 / 1 / 3 / 2;
+  @include floatChildRight;
+}
+
+.billingAddressInput1 {
+  grid-area: 2 / 2 / 3 / 5;
+}
+
+.billingAddressInput2 {
+  grid-area: 3 / 2 / 4 / 5;
+}
+
+.cityLabel {
+  grid-area: 4 / 1 / 5 / 2;
+  @include floatChildRight;
+}
+
+.cityInput {
+  grid-area: 4 / 2 / 5 / 3;
+}
+
+.postalCodeLabel {
+  grid-area: 5 / 1 / 6 / 2;
+  @include floatChildRight;
+}
+
+.postalCodeInput {
+  grid-area: 5 / 2 / 6 / 3;
+}
+
+.countryLabel {
+  grid-area: 6 / 1 / 7 / 2;
+  @include floatChildRight;
+}
+
+.countryInput {
+  grid-area: 6 / 2 / 7 / 3;
+}

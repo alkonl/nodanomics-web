@@ -1,42 +1,20 @@
 import React, {useMemo} from 'react';
-import {FormBaseInput, IBaseInputProps, IFormBaseInputProps, IFormLabelNode} from "../FormBaseInput";
-import {TextField, Typography} from "@mui/material";
-
-const InputFormText: React.FC<IBaseInputProps> = ({value, ...props}) => {
-    return (
-        <TextField
-            style={{
-                width: '100%'
-            }}
-            variant="outlined"
-            inputProps={{
-                style: {
-                    padding: 8
-                }
-            }}
-            value={value ? value : ''} {...props}/>
-    );
-}
-
-const LabelFormText: React.FC<{ text: string }> = ({text}) => {
-    return (
-        <Typography style={{
-            fontSize: '12px',
-            fontWeight: 'bold',
-            marginBottom: '4px'
-        }}>{text}</Typography>
-    )
-}
+import {FormBaseInput, IFormBaseInputProps, IFormLabelNode} from "../FormBaseInput";
+import {BaseInput, IBaseInputProps} from "../../Input";
+import {Text} from "../../Text";
 
 type IFormTextProps = IFormBaseInputProps & IBaseInputProps & {
     label?: string;
 }
+
 export const FormText: React.FC<IFormTextProps> = ({label, ...props}) => {
     const Label: IFormLabelNode | undefined = useMemo(() => {
         if (label) {
             return {
                 type: 'NODE',
-                Node: <LabelFormText text={label}/>
+                Node: <Text.Label>
+                    {label}
+                </Text.Label>
             }
         }
         return undefined
@@ -46,10 +24,9 @@ export const FormText: React.FC<IFormTextProps> = ({label, ...props}) => {
 
         <FormBaseInput {...props}
                        Label={Label}
-                       Input={(baseProps) => {
-                           const {value, onChange} = baseProps
-                           return <InputFormText onChange={onChange} value={value} {...props} />
-                       }}/>
+                       Input={BaseInput}
+                       inputProps={props}
+        />
     );
 };
 

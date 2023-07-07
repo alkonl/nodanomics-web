@@ -3,13 +3,18 @@ import {RouterProvider} from "react-router-dom";
 import {appRouter} from "./service/router";
 import {SuperTokensInit} from "./service/superTokens";
 import {SuperTokensWrapper} from "supertokens-auth-react";
+import {ThemeProvider} from "@mui/material";
+import {theme} from "./utils/muiTheme";
 
 
 SuperTokensInit();
 const App = () => {
     return (
         <SuperTokensWrapper>
-                <RouterProvider router={appRouter}/>
+            <ThemeProvider theme={theme}>
+
+            <RouterProvider router={appRouter}/>
+            </ThemeProvider>
         </ SuperTokensWrapper>
     )
 }

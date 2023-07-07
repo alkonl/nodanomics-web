@@ -1,11 +1,10 @@
 import React from 'react';
 import {Box} from "@mui/material";
-import {useGetDiagramsByUserIdQuery} from "../../../api";
 import {DiagramListItem} from './DiagramListItem';
-import {IBaseDiagram} from "../../../interface";
+import {IBaseProject} from "../../../interface/busines/project/project";
 
 export const DiagramList: React.FC<{
-    diagrams: IBaseDiagram[]
+    diagrams: IBaseProject[]
 }> = ({diagrams}) => {
 
 

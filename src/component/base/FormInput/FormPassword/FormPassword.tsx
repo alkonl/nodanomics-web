@@ -1,9 +1,10 @@
 import React, {useMemo, useState} from 'react';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import {FormBaseInput, IBaseInputProps, IFormBaseInputProps, IFormLabelNode} from "../FormBaseInput";
+import {FormBaseInput, IFormBaseInputProps, IFormLabelNode} from "../FormBaseInput";
 import {Box, IconButton, InputAdornment, TextField} from "@mui/material";
 import {BaseLabel} from "../../Label";
+import {IBaseInputProps} from "../../Input";
 
 const InputFormText: React.FC<IBaseInputProps> = ({value, ...props}) => {
     const [inputType, setInputType] = useState<'password' | 'text'>('password');
