@@ -1,9 +1,21 @@
-import React from 'react';
-import {Outlet} from "react-router-dom";
+import React, {useEffect} from 'react';
+import {Outlet, useNavigate} from "react-router-dom";
 import {Box} from "@mui/material";
 import {DashboardPageLayout, AccountNav} from "../../component";
+import {useCurrentPath} from "../../hooks/useCurrentPath";
+import {ELinks} from "../../service";
 
 export const AccountPage = () => {
+
+    const navigate = useNavigate()
+    const path = useCurrentPath()
+
+    useEffect(() => {
+        if (path === ELinks.accountManageData) {
+            navigate(ELinks.accountPlan)
+        }
+    }, [navigate])
+
     return (
         <DashboardPageLayout pageName="Account">
             <Box
