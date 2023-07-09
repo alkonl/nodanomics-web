@@ -1,45 +1,44 @@
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useState} from 'react';
+import {checkIsBottom} from "../utils";
+
 
 export const useScrollToBottom = (ref: React.RefObject<HTMLDivElement>, tolerance = 20): boolean => {
     const [isBottom, setIsBottom] = useState(false);
-    const prevScrollHeight = useRef(0);
 
     useEffect(() => {
         const {current} = ref;
+        let resizeObserver: ResizeObserver;
 
-        const onScroll = () => {
-            const {scrollHeight, scrollTop, clientHeight} = current;
-            // console.log('onScroll', {
-            //     scrollHeight: scrollHeight,
-            //     scrollTop: scrollTop,
-            //     clientHeight: clientHeight,
-            //     tolerance: tolerance,
-            //     left: scrollHeight - (scrollTop + tolerance),
-            //     isScrolledToBottom: current.scrollHeight - (current.scrollTop + tolerance) <= current.clientHeight
-            // })
-            const isScrolledToBottom =
-                scrollHeight - (scrollTop + tolerance) <= clientHeight;
-
-            // const isScrolledToBottom = scrollHeight - (clientHeight + 10)
-            // console.log({
-            //     isScrolledToBottom,
-            //     prevScrollHeight: prevScrollHeight.current,
-            //     scrollHeight,
-            // })
-            if (isScrolledToBottom) {
-                setIsBottom(true);
-            } else {
-                setIsBottom(false);
+        const onScrollHandler = () => {
+            if (current !== null && current !== undefined) {
+                checkIsBottom(current, setIsBottom, tolerance);
             }
-        };
+        }
 
+        const observerHandler = () => {
+            if (current !== null && current !== undefined) {
+                const container = current;
+                resizeObserver = new ResizeObserver(function () {
+                    checkIsBottom(container, setIsBottom);
+                });
+
+                // This is the critical part: We observe the size of all children!
+                for (let i = 0; i < container.children.length; i++) {
+                    resizeObserver.observe(container.children[i]);
+                }
+            }
+        }
         if (current !== null && current !== undefined) {
-            current.addEventListener('scroll', onScroll);
+            new ResizeObserver(observerHandler).observe(current)
+            current.addEventListener('scroll', onScrollHandler);
         }
 
         return () => {
             if (current !== null && current !== undefined) {
-                current.removeEventListener('scroll', onScroll);
+                current.removeEventListener('scroll', onScrollHandler);
+            }
+            if (resizeObserver) {
+                resizeObserver.disconnect();
             }
         };
     }, [ref, tolerance]);

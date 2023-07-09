@@ -19,7 +19,7 @@ import {
     IGetDiagramByIdResponse,
     IGetDiagramsByUserIdResponse,
     IGetDiagramTagsRequest,
-    IGetDiagramTagsResponse,
+    IGetDiagramTagsResponse, IGetProjectsRequest,
     IGetProjectsResponse,
     ILoginEmailPasswordRequest,
     ISendEmailToResetPasswordRequest,
@@ -341,18 +341,16 @@ export const baseApi = createApi({
             },
             invalidatesTags: [ERTKTags.Projects],
         }),
-        getProjects: builder.query<IGetProjectsResponse, {
-            offset: number
-            limit: number
-        }>({
-            query: () => {
+        getProjects: builder.query<IGetProjectsResponse, IGetProjectsRequest>({
+            query: (body: IGetProjectsRequest) => {
                 return {
                     url: '/project',
                     method: 'GET',
+                    params: body,
                 }
             },
             forceRefetch: ({ currentArg, previousArg }) => {
-                return currentArg?.offset !== previousArg?.offset
+                return currentArg?.cursorId !== previousArg?.cursorId
             },
             serializeQueryArgs: ({ endpointName }) => {
                 return endpointName

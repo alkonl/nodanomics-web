@@ -1,3 +1,7 @@
+export interface IGetProjectsRequest {
+    cursorId?: string;
+}
+
 export type IGetProjectsResponse = {
     id: string;
     name: string;
