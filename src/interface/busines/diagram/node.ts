@@ -1,6 +1,7 @@
 import {IDiagramTextStyle} from "../font";
 import {DiagramElementPreview} from "./diagramElement";
-
+// eslint-disable-next-line import/named
+import {Node} from "reactflow";
 
 export enum EDiagramNode {
     Variable = 'Variable',
@@ -34,3 +35,5 @@ export interface IVariableNodeData extends IDiagramNodeBaseData {
 }
 
 export type INodeData = IVariableNodeData
+
+export type INode = Node<INodeData>

@@ -12,9 +12,10 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import {useWidthAndHeight} from "../../../hooks";
 import styles from './DiagramCanvas.module.scss'
-import {EDiagramNode, INodeData} from "../../../interface";
+import {EDiagramNode, EElementType, EFontAlign, EFontStyle, INodeData} from "../../../interface";
 import {VariableNode} from "../CutomNode";
 import {createNode} from "../../../service";
+import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../redux";
 
 
 const nodeTypes: {
@@ -30,8 +31,12 @@ const getId = () => `dndnode_${id++}`;
 
 export const DiagramCanvas = () => {
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
+    const dispatch = useAppDispatch()
 
-    const [nodes, setNodes, onNodesChange] = useNodesState<INodeData[]>([]);
+    const [node2s, setNode2s, onNodesChange22] = useNodesState<INodeData[]>([]);
+    const nodes = useDiagramEditorState().diagramNodes
+    const {addNode, onNodesChange} = diagramEditorActions
+
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>([]);
     const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance>();
     const onConnect = useCallback((params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)), []);
@@ -60,12 +65,15 @@ export const DiagramCanvas = () => {
                     event,
                     wrapperNode
                 })
-                setNodes((nds) => {
-                    if (newNode) {
-                        return nds.concat(newNode)
-                    }
-                    return nds
-                });
+                if (newNode) {
+                    dispatch(addNode(newNode))
+                }
+                // setNodes((nds) => {
+                //     if (newNode) {
+                //         return nds.concat(newNode)
+                //     }
+                //     return nds
+                // });
             }
         },
         [reactFlowInstance]
