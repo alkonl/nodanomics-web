@@ -19,6 +19,7 @@ export const DashboardPageLayout: React.FC<{
                 display: 'flex',
                 flexDirection: 'column',
                 flex: 1,
+
             }}
         >
             <Typography variant="h4" sx={{
@@ -27,7 +28,15 @@ export const DashboardPageLayout: React.FC<{
             }}>
                 {pageName}
             </Typography>
+            <Box sx={{
+                display: 'flex',
+                flex: 1,
+                justifyContent: 'space-between',
+                gap: 4,
+                paddingBottom: 4,
+            }}>
             {children}
+            </Box>
         </Box>
     );
 };

@@ -5,7 +5,7 @@ import {
     IDiagramDashboardView,
     IDiagramDashboardViewsState,
     IDiagramEditorState,
-    IProjectDashboardState,
+    IProjectDashboardState, ITeamDashboardState,
     RootState
 } from '../store'
 
@@ -28,4 +28,8 @@ export const useDiagramEditorState = (): IDiagramEditorState => {
 
 export const useProjectDashboardState = (): IProjectDashboardState => {
     return useAppSelector(state => state.projectDashboard)
+}
+
+export const useTeamDashboardState = (): ITeamDashboardState => {
+    return useAppSelector(state => state.teamDashboard)
 }

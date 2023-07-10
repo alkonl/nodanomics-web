@@ -11,3 +11,4 @@ export * from './AccountPlanPage'
 export * from './AccountBillingPage';
 export * from './AccountNFTPage'
 export * from './AccountSettingsPage'
+export * from './TeamPage'

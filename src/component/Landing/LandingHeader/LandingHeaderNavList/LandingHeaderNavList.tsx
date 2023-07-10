@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Box} from "@mui/material";
 import {LandingHeaderNavListItem} from "./LandingHeaderNavListItem";
-import {ELinks} from "../../../../service/router";
+import {ELinks} from "../../../../service";
 import {useCurrentPath} from "../../../../hooks/useCurrentPath";
 
 
@@ -11,7 +11,7 @@ const pages = [
         link: ELinks.projects,
     }, {
         name: 'Teams',
-        link: ELinks.diagram,
+        link: ELinks.team,
     }, {
         name: 'Account',
         link: ELinks.accountManageData,

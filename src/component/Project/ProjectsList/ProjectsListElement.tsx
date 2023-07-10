@@ -1,8 +1,7 @@
 import React from 'react';
 import {Box, Typography} from "@mui/material";
 import {EColor} from "../../../constant";
-import {useAppDispatch} from "../../../redux";
-import {projectDashboardAction} from "../../../redux/store";
+import {useAppDispatch, useProjectDashboardState, projectDashboardAction} from "../../../redux";
 
 export const ProjectsListElement: React.FC<{
     projectName: string
@@ -10,7 +9,8 @@ export const ProjectsListElement: React.FC<{
     isBig: boolean
 }> = ({projectName, projectId, isBig}) => {
     const dispatch = useAppDispatch()
-
+const selectedProjectId = useProjectDashboardState().selectedProjectId
+    const isSelected = selectedProjectId === projectId
     const onClick = () => {
         dispatch(projectDashboardAction.setSelectedProjectId({
             projectId: projectId
@@ -28,6 +28,7 @@ export const ProjectsListElement: React.FC<{
                 justifyContent: 'center',
                 alignItems: 'center',
                 cursor: 'pointer',
+                backgroundColor: isSelected ? EColor.grey2 : EColor.white,
             }}
             onClick={onClick}
             component="button"
