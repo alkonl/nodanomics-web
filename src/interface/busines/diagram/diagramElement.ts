@@ -1,9 +1,14 @@
 import React from "react";
-import {IBaseDiagramNode} from "./node";
+import {EDiagramNode} from "./node";
 export enum EElementType {
     Node = 'Node',
     Edge = 'Edge',
     Text = 'Text',
+}
+
+export interface IBaseElement {
+    elementType: EElementType;
+    type: EDiagramNode;
 }
 
 export interface DiagramElementPreview {
@@ -11,7 +16,7 @@ export interface DiagramElementPreview {
     Component: React.FC;
 };
 
-export interface IDiagramElementPreviewTooltip extends IBaseDiagramNode {
+export interface IDiagramElementPreviewTooltip extends IBaseElement {
     tooltip: string;
     preview: DiagramElementPreview
 }

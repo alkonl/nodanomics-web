@@ -1,1 +1,1 @@
-export * from './TopToolBar'
+export * from './ElementsToolbar'

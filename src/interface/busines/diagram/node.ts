@@ -1,20 +1,14 @@
 import {IDiagramTextStyle} from "../font";
-import {DiagramElementPreview, EElementType} from "./diagramElement";
+import {DiagramElementPreview} from "./diagramElement";
 
 
 export enum EDiagramNode {
-    Source = 'Source',
+    Variable = 'Variable',
+    // TODO change on actual node types below
     Drain = 'Drain',
     Pool = 'Pool',
-    Gate = 'Gate',
+    // Gate = 'Gate',
 }
-
-
-export interface IBaseDiagramNode {
-    elementType: EElementType.Node;
-    type: EDiagramNode;
-}
-
 
 
 
@@ -26,11 +20,17 @@ export interface IDiagramNodeStyle {
     textStyles: IDiagramTextStyle
 }
 
-export interface IDiagramNode extends IBaseDiagramNode {
+export interface IDiagramNodeBaseData {
     id: string;
     name: string;
     label: string;
     style: IDiagramNodeStyle;
-    zIndex: number;
     preview: DiagramElementPreview;
 }
+
+
+export interface IVariableNodeData extends IDiagramNodeBaseData {
+    value: string
+}
+
+export type INodeData = IVariableNodeData

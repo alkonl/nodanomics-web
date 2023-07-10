@@ -1,15 +1,13 @@
 import React from 'react';
 import style from './RightToolbar.module.scss'
 import {Box} from "@mui/material";
-import {EDiagramNode, EElementType, IDiagramNode, EFontAlign} from "../../../../interface";
+import {EDiagramNode, EElementType, EFontAlign, IDiagramNodeBaseData} from "../../../../interface";
 import {NodePreviewSVG} from "../../../../assets";
 import {TopToolBarHeader} from "./TopToolBarHeader";
 import {RightToolbarElementSection, RightToolbarStyleSection} from "./section";
 
-const mockSelectedNode: IDiagramNode = {
+const mockSelectedNode: IDiagramNodeBaseData = {
     id: '1',
-    elementType: EElementType.Node,
-    type: EDiagramNode.Source,
     name: 'Source',
     label: '',
     style: {
@@ -24,7 +22,6 @@ const mockSelectedNode: IDiagramNode = {
             fontStyles: [],
         }
     },
-    zIndex: 1,
     preview: {
         type: 'Component',
         Component: NodePreviewSVG.Pool
@@ -32,10 +29,10 @@ const mockSelectedNode: IDiagramNode = {
 }
 
 export const RightToolbar = () => {
-    const [selectedNode, setSelectedNode] = React.useState<IDiagramNode | undefined>(mockSelectedNode);
+    const [selectedNode, setSelectedNode] = React.useState<IDiagramNodeBaseData | undefined>(mockSelectedNode);
     return (
         <Box className={style.container}>
-            {selectedNode && <TopToolBarHeader elementInfo={selectedNode}/>}
+            {selectedNode && <TopToolBarHeader elementData={selectedNode}/>}
             <RightToolbarElementSection/>
             <RightToolbarStyleSection/>
         </Box>

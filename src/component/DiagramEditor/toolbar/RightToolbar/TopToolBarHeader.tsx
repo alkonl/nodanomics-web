@@ -1,11 +1,11 @@
 import React from 'react';
-import {IDiagramNode} from "../../../../interface";
+import {IDiagramNodeBaseData} from "../../../../interface";
 import {Box, Typography} from "@mui/material";
-import {RightToolbarStyleSection} from "./section";
+
 
 export const TopToolBarHeader: React.FC<{
-    elementInfo: Pick<IDiagramNode, 'id' | 'preview' | 'name'>;
-}> = ({elementInfo}) => {
+    elementData: Pick<IDiagramNodeBaseData, 'id' | 'preview' | 'name'>;
+}> = ({elementData}) => {
     return (
         <Box sx={{
             display: 'flex',
@@ -15,11 +15,11 @@ export const TopToolBarHeader: React.FC<{
             <Box sx={{
                 width: 20,
             }}>
-                <elementInfo.preview.Component/>
+                <elementData.preview.Component/>
             </Box>
 
             <Typography>
-                #{elementInfo.id} / {elementInfo.name}
+                #{elementData.id} / {elementData.name}
             </Typography>
         </Box>
     );

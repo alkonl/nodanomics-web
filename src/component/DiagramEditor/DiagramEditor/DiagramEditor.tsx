@@ -1,8 +1,9 @@
 import React from 'react';
 import {DiagramCanvas} from "../DiagramCanvas";
 import style from './DiagramEditor.module.scss'
-import {TopToolBar, LeftToolbar, RightToolbar} from "../toolbar";
+import {ElementsToolbar, LeftToolbar, RightToolbar} from "../toolbar";
 import {useWidthAndHeight} from "../../../hooks";
+import {Box} from "@mui/material";
 
 export const DiagramEditor = () => {
 
@@ -35,15 +36,16 @@ export const DiagramEditor = () => {
                                 flex: 1,
                             }}
                         >
-                            <div
-                                style={{
+                            <Box
+                                sx={{
                                     position: 'absolute',
-                                    top: 15,
-                                    left: 15,
+                                    bottom: 15,
+                                    left: '50%',
+                                    transform: 'translateX(-50%)',
                                 }}
                             >
-                                <TopToolBar/>
-                            </div>
+                                <ElementsToolbar/>
+                            </Box>
                         </div>
                         <RightToolbar/>
                     </div>
