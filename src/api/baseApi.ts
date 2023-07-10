@@ -35,6 +35,7 @@ import {CONFIG} from "../utils";
 import {IServerErrorResponse} from "../interface/serverErrorResponse";
 
 import {ERTKTags} from "./requestTags";
+import moment from "moment";
 
 
 const baseQuery = fetchBaseQuery(({
@@ -357,6 +358,9 @@ export const baseApi = createApi({
             },
             merge: (currentCache, newItems) => {
                 currentCache.push(...newItems)
+                currentCache.sort((a, b) => {
+                    return moment(b.updatedAt).diff(moment(a.updatedAt))
+                })
             },
             providesTags: [ERTKTags.Projects, ERTKTags.User],
         }),
