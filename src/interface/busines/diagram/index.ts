@@ -1,3 +1,6 @@
 export * from './node'
 export * from './leftToolbar'
 export * from './diagramElement'
+export * from './connection'
+export * from './logic'
+export * from './event'

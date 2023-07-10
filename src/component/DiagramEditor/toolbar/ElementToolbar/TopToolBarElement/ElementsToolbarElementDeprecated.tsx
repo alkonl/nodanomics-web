@@ -1,10 +1,10 @@
 import React, {DragEvent} from 'react';
-import {EDiagramNode, IDiagramElementPreviewTooltip} from "../../../../../interface";
+import {EDiagramNode, IDiagramElement, IDiagramElementPreviewToolbarElement} from "../../../../../interface";
 import {Box, Tooltip} from "@mui/material";
 
-export const ElementsToolbarElement: React.FC<IDiagramElementPreviewTooltip> = ({preview, tooltip, type}) => {
+export const ElementsToolbarElementDeprecated: React.FC<IDiagramElementPreviewToolbarElement> = ({ tooltip, type}) => {
     // TODO add correct node type
-    const onDragStart = (event: DragEvent<HTMLDivElement>, nodeType: EDiagramNode) => {
+    const onDragStart = (event: DragEvent<HTMLDivElement>, nodeType: IDiagramElement) => {
         event.dataTransfer.setData('application/reactflow', nodeType);
         event.dataTransfer.effectAllowed = 'move';
     };
@@ -18,7 +18,7 @@ export const ElementsToolbarElement: React.FC<IDiagramElementPreviewTooltip> = (
                 }}
                 draggable
             >
-                <preview.Component/>
+                {/*<preview.Component/>*/}
             </Box>
         </Tooltip>
 

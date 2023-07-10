@@ -11,9 +11,10 @@ import {
     SelectChangeEvent,
     Typography
 } from "@mui/material";
-import {BaseSection} from "./BaseSection";
+import {BaseSectionDeprecated} from "./BaseSectionDeprecated";
 import {ColorPicker} from "../../../../ColorPicker";
 import {AlignButtons, FormattingButtons} from "../../../../button";
+import {IDiagramNodeBaseData} from "../../../../../interface";
 
 const mockFontFamily = [
     'Arial',
@@ -21,14 +22,16 @@ const mockFontFamily = [
     'Courier New',
 ]
 
-export const RightToolbarStyleSection = () => {
+export const RightToolbarStyleSectionDeprecated: React.FC<{
+    elementData: Pick<IDiagramNodeBaseData, 'id' | 'name'>;
+}> = () => {
 
     const [fontFamily, setFontFamily] = React.useState('Arial');
     const selectFontFamily = (event: SelectChangeEvent) => {
         setFontFamily(event.target.value)
     }
     return (
-        <BaseSection title="styles">
+        <BaseSectionDeprecated title="styles">
             <Box style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -106,6 +109,6 @@ export const RightToolbarStyleSection = () => {
 
                 </Box>
             </Box>
-        </BaseSection>
+        </BaseSectionDeprecated>
     );
 };

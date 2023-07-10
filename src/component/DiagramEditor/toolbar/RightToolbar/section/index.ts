@@ -1,2 +1,2 @@
-export * from './RightToolbarStyleSection'
-export * from './RightToolbarElementSection'
+export * from './RightToolbarStyleSectionDeprecated'
+export * from './RightToolbarElementSectionDeprecated'

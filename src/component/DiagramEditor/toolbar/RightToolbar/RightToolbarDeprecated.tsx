@@ -3,8 +3,9 @@ import style from './RightToolbar.module.scss'
 import {Box} from "@mui/material";
 import {EDiagramNode, EElementType, EFontAlign, IDiagramNodeBaseData} from "../../../../interface";
 import {NodePreviewSVG} from "../../../../assets";
-import {TopToolBarHeader} from "./TopToolBarHeader";
-import {RightToolbarElementSection, RightToolbarStyleSection} from "./section";
+import {TopToolBarHeaderDeprecated} from "./TopToolBarHeaderDeprecated";
+import {RightToolbarElementSectionDeprecated, RightToolbarStyleSectionDeprecated} from "./section";
+import {useDiagramEditorState} from "../../../../redux";
 
 const mockSelectedNode: IDiagramNodeBaseData = {
     id: '1',
@@ -13,7 +14,6 @@ const mockSelectedNode: IDiagramNodeBaseData = {
     style: {
         borderColor: 'red',
         borderWidth: 2,
-        isFilled: false,
         textStyles: {
             fontAlign: EFontAlign.Left,
             fontColor: 'black',
@@ -22,19 +22,17 @@ const mockSelectedNode: IDiagramNodeBaseData = {
             fontStyles: [],
         }
     },
-    preview: {
-        type: 'Component',
-        Component: NodePreviewSVG.Pool
-    },
 }
 
-export const RightToolbar = () => {
-    const [selectedNode, setSelectedNode] = React.useState<IDiagramNodeBaseData | undefined>(mockSelectedNode);
+export const RightToolbarDeprecated = () => {
+    const {currentEditNodeId, diagramNodes} = useDiagramEditorState()
+    const selectedNode = diagramNodes.find(node => node.id === currentEditNodeId)
+    console.log(selectedNode)
     return (
         <Box className={style.container}>
-            {selectedNode && <TopToolBarHeader elementData={selectedNode}/>}
-            <RightToolbarElementSection/>
-            <RightToolbarStyleSection/>
+            {selectedNode && <TopToolBarHeaderDeprecated elementData={selectedNode.data}/>}
+            <RightToolbarElementSectionDeprecated/>
+            {selectedNode &&  <RightToolbarStyleSectionDeprecated elementData={selectedNode.data}/>}
         </Box>
     );
 };

@@ -1,1 +1,1 @@
-export * from './RightToolbar'
+export * from './RightToolbarDeprecated'

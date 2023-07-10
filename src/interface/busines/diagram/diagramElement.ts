@@ -1,14 +1,21 @@
 import React from "react";
 import {EDiagramNode} from "./node";
+import {EConnection} from "./connection";
+import {EEvent} from "./event";
+import {ELogic} from "./logic";
+
 export enum EElementType {
     Node = 'Node',
-    Edge = 'Edge',
-    Text = 'Text',
+    Connection = 'Connection',
+    Event = 'Event',
+    Logic = 'Logic',
 }
+
+export type IDiagramElement = EDiagramNode | EConnection | EEvent | ELogic;
 
 export interface IBaseElement {
     elementType: EElementType;
-    type: EDiagramNode;
+    type: IDiagramElement;
 }
 
 export interface DiagramElementPreview {
@@ -16,7 +23,12 @@ export interface DiagramElementPreview {
     Component: React.FC;
 };
 
-export interface IDiagramElementPreviewTooltip extends IBaseElement {
+export interface IDiagramElementPreviewToolbarElement extends IBaseElement {
     tooltip: string;
-    preview: DiagramElementPreview
+    toolbarName: string;
+    // preview: DiagramElementPreview
+}
+
+export type DiagramElementPreviewToolbar = {
+    [key in EElementType]: IDiagramElementPreviewToolbarElement[]
 }

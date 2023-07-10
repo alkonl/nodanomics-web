@@ -1,22 +1,20 @@
 import {IDiagramTextStyle} from "../font";
-import {DiagramElementPreview} from "./diagramElement";
 // eslint-disable-next-line import/named
 import {Node} from "reactflow";
 
 export enum EDiagramNode {
     Variable = 'Variable',
-    // TODO change on actual node types below
-    Drain = 'Drain',
-    Pool = 'Pool',
-    // Gate = 'Gate',
+    D = 'D',
+    S = 'S',
+    F = 'F',
+    UP = 'UP',
+    DOWN = 'DOWN',
 }
-
 
 
 export interface IDiagramNodeStyle {
     borderWidth: number;
     borderColor: string;
-    isFilled: boolean;
     fillColor?: string;
     textStyles: IDiagramTextStyle
 }
@@ -26,11 +24,11 @@ export interface IDiagramNodeBaseData {
     name: string;
     label: string;
     style: IDiagramNodeStyle;
-    preview: DiagramElementPreview;
 }
 
 
 export interface IVariableNodeData extends IDiagramNodeBaseData {
+    type: EDiagramNode.Variable;
     value: string
 }
 

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Menu, MenuItem} from "@mui/material";
 import {useToggle} from "../../../hooks/useToggle";
 import {DiagramManagerPopUp} from "../../popUp/NewDiagramPopUp";
@@ -54,15 +54,13 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
             deleteDiagram(diagramState.currentDiagramId)
         }
     }
-    useEffect(() => {
-        if (isDiagramDeleted) {
-            navigate(ELinks.projects)
-        }
-    }, [isDiagramDeleted])
-    const buttons: {
-        name: string
-        onClick: () => void
-    }[] = [{
+    // useEffect(() => {
+    //     if (isDiagramDeleted) {
+    //         navigate(ELinks.projects)
+    //     }
+    // }, [isDiagramDeleted])
+
+    const buttons = [{
         name: 'New',
         onClick: onNewDiagram
     }, {
@@ -82,7 +80,6 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
         name: 'Delete',
         onClick: onDelete
     }]
-
     return (
         <Menu
             sx={{mt: '25px'}}
@@ -110,3 +107,4 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
         </Menu>
     );
 };
+

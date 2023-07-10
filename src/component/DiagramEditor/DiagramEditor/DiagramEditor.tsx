@@ -1,37 +1,38 @@
 import React from 'react';
 import {DiagramCanvas} from "../DiagramCanvas";
 import style from './DiagramEditor.module.scss'
-import {ElementsToolbar, LeftToolbar, RightToolbar} from "../toolbar";
+import {ElementSetupToolbar, ElementsToolbarDeprecated, LeftToolbar, RightToolbarDeprecated} from "../toolbar";
 import {useWidthAndHeight} from "../../../hooks";
 import {Box} from "@mui/material";
+import {ElementToolbar} from "../toolbar/ElementToolbar/ElementToolbar";
 
 export const DiagramEditor = () => {
 
     const {elementSize: diagramCanvasContainerSize, elementRef: diagramCanvasContainerRef} = useWidthAndHeight()
     return (
-        <div
+        <Box
             className={style.container}
         >
-            <div
+            <Box
                 ref={diagramCanvasContainerRef}
                 className={style.canvasContainer}>
                 <DiagramCanvas/>
-                <div style={{
+                <Box sx={{
                     position: 'absolute',
                     width: diagramCanvasContainerSize.width,
                     height: diagramCanvasContainerSize.height,
                     pointerEvents: 'none',
                 }}>
-                    <div
-                        style={{
+                    <Box
+                        sx={{
                             display: 'flex',
                             width: '100%',
                             height: '100%',
                         }}
                     >
                         <LeftToolbar/>
-                        <div
-                            style={{
+                        <Box
+                            sx={{
                                 position: 'relative',
                                 flex: 1,
                             }}
@@ -44,15 +45,15 @@ export const DiagramEditor = () => {
                                     transform: 'translateX(-50%)',
                                 }}
                             >
-                                <ElementsToolbar/>
+                                <ElementToolbar/>
                             </Box>
-                        </div>
-                        <RightToolbar/>
-                    </div>
+                        </Box>
+                        <ElementSetupToolbar/>
+                    </Box>
 
-                </div>
-            </div>
+                </Box>
+            </Box>
 
-        </div>
+        </Box>
     );
 };

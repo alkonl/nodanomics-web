@@ -10,6 +10,7 @@ export interface IDiagramEditorState {
     description?: string
     diagramTags?: { id: string, name: string }[]
     diagramNodes: INode[]
+    currentEditNodeId?: string
 }
 
 const initialState: IDiagramEditorState = {
@@ -36,7 +37,15 @@ export const diagramEditorSlice = createSlice({
             state.diagramNodes.push(payload)
         },
         onNodesChange: (state, {payload}: PayloadAction<NodeChange[]>) => {
-            state.diagramNodes = applyNodeChanges(payload, state.diagramNodes)
+            const nodes = applyNodeChanges(payload, state.diagramNodes)
+            state.diagramNodes = nodes
+        },
+        setEditNode: (state, {payload}: PayloadAction<string>) => {
+            state.currentEditNodeId = payload
+        },
+        updateNode: (state, {payload}: PayloadAction<INode>) => {
+            const index = state.diagramNodes.findIndex(node => node.id === payload.id)
+            state.diagramNodes[index] = payload
         }
     }
 })

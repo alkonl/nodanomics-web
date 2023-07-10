@@ -1,20 +1,20 @@
 import {EDiagramNode, EFontAlign, INodeData} from "../../interface";
 // eslint-disable-next-line import/named
 import {Node, ReactFlowInstance} from "reactflow";
-import {NodePreviewSVG} from "../../assets";
 import {DragEvent} from "react";
+import {EFontColor} from "../../constant";
 
 let id = 0;
-const getId = () => `dndnode_${id++}`;
+const getId = () => `${id++}`;
 
-export const createNode = ({type, reactFlowInstance, wrapperNode, event}: {
+export const createNode = ({type, flowInstance, wrapperNode, event}: {
     type: EDiagramNode,
-    reactFlowInstance: ReactFlowInstance<any, any>
+    flowInstance: ReactFlowInstance<any, any>
     wrapperNode: HTMLDivElement
     event: DragEvent<HTMLDivElement>
 }): Node<INodeData> | undefined => {
     const reactFlowBounds = wrapperNode?.getBoundingClientRect();
-    const position = reactFlowInstance.project({
+    const position = flowInstance.project({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
     });
@@ -25,24 +25,20 @@ export const createNode = ({type, reactFlowInstance, wrapperNode, event}: {
                 type,
                 position,
                 data: {
-                    label: 'oooo',
-                    value: 'my value',
+                    type,
+                    label: '',
+                    value: '',
                     id: getId(),
-                    preview: {
-                        type: 'Component',
-                        Component: NodePreviewSVG.Pool,
-                    },
-                    name: 'name of node',
+                    name: `node name ${getId()}`,
                     style: {
                         borderColor: '#000',
                         textStyles: {
                             fontAlign: EFontAlign.Center,
                             fontFamily: 'Roboto',
                             fontSize: 14,
-                            fontColor: '#000',
+                            fontColor: EFontColor.grey4,
                             fontStyles: [],
                         },
-                        isFilled: false,
                         borderWidth: 1,
                     }
                 }
