@@ -1,7 +1,7 @@
 import React from 'react';
 import {Box, Input, Typography} from "@mui/material";
 // eslint-disable-next-line import/named
-import {Node, NodeProps} from 'reactflow';
+import {Handle, Node, NodeProps, Position} from 'reactflow';
 import {EDiagramNode, IVariableNodeData} from "../../../../interface";
 import {diagramEditorActions, useAppDispatch} from "../../../../redux";
 import {useUpdateNode} from "../../../../hooks";
@@ -20,12 +20,13 @@ export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = ({data, id})
     const onChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
         updateNodeData({
             type: EDiagramNode.Variable,
-            value: event.target.value,
+            value: Number(event.target.value),
         })
     }
 
     return (
         <Box onClick={onClick}>
+            <Handle type="source" position={Position.Right}/>
             <Box sx={{
                 position: 'relative',
 
@@ -43,6 +44,7 @@ export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = ({data, id})
                     Variable: {data.name}
                 </Typography>
                 <Input
+                    type="number"
                     value={data.value}
                     onChange={onChangeValue}
                 />

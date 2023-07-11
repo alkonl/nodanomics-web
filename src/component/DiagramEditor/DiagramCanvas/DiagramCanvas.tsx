@@ -13,13 +13,12 @@ import 'reactflow/dist/style.css';
 import {useOnDrop, useWidthAndHeight} from "../../../hooks";
 import styles from './DiagramCanvas.module.scss'
 import {EDiagramNode} from "../../../interface";
-import {VariableNode} from "../CutomNode";
+import {FormulaNode, VariableNode} from "../CutomNode";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../redux";
 import {Box} from "@mui/material";
 
 
-let id = 0;
-const getId = () => `dndnode_${id++}`;
+const initialEdges: Edge[] = [];
 
 export const DiagramCanvas = () => {
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
@@ -31,7 +30,7 @@ export const DiagramCanvas = () => {
     const onNodesChangeHandler = useCallback((nodes: NodeChange[]) => dispatch(onNodesChange(nodes)), [])
 
 
-    const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>([]);
+    const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>(initialEdges);
     const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance>();
     const onConnect = useCallback((params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)), []);
 
@@ -52,6 +51,7 @@ export const DiagramCanvas = () => {
     } = useMemo(() => {
         return {
             [EDiagramNode.Variable]: VariableNode,
+            [EDiagramNode.Formula]: FormulaNode,
             // [EDiagramNode.Drain]: VariableNode,
             // [EDiagramNode.Pool]: VariableNode,
         }

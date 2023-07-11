@@ -7,6 +7,7 @@ export const ElementToolbarElement: React.FC<{
     element: IDiagramElementPreviewToolbarElement
 }> = ({element}) => {
     const onDragStart = (event: DragEvent<HTMLSpanElement>, nodeType: IDiagramElement) => {
+        console.log('onDragStart: ', nodeType)
         event.dataTransfer.setData('application/reactflow', nodeType);
         event.dataTransfer.effectAllowed = 'move';
     };

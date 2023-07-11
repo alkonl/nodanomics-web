@@ -20,17 +20,17 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
     },{
         elementType: EElementType.Node,
         type: EDiagramNode.D,
-        tooltip: 'Variable',
+        tooltip: 'no',
         toolbarName: 'D',
     },{
         elementType: EElementType.Node,
         type: EDiagramNode.S,
-        tooltip: 'Variable',
+        tooltip: 'no',
         toolbarName: 'S',
     },{
         elementType: EElementType.Node,
-        type: EDiagramNode.F,
-        tooltip: 'Variable',
+        type: EDiagramNode.Formula,
+        tooltip: 'Formula',
         toolbarName: 'F',
     },{
         elementType: EElementType.Node,

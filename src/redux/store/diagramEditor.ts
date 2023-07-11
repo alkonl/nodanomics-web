@@ -1,7 +1,9 @@
 // eslint-disable-next-line import/named
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {INode} from "../../interface";
+import {EDiagramNode, INode, INodeData} from "../../interface";
+// eslint-disable-next-line import/named
 import {applyNodeChanges, NodeChange} from "reactflow";
+import {Optionalize} from "../../utils";
 
 
 export interface IDiagramEditorState {
@@ -46,6 +48,17 @@ export const diagramEditorSlice = createSlice({
         updateNode: (state, {payload}: PayloadAction<INode>) => {
             const index = state.diagramNodes.findIndex(node => node.id === payload.id)
             state.diagramNodes[index] = payload
+        },
+        updateNodeData: (state, {payload}: PayloadAction<Optionalize<INodeData, 'id'| 'type'>>) => {
+            const index = state.diagramNodes.findIndex(node => node.id === payload.id)
+            const node = state.diagramNodes[index]
+            const nodeData = node.data
+            if(payload.type === nodeData.type) {
+                node.data = {
+                    ...nodeData,
+                    ...payload
+                }
+            }
         }
     }
 })

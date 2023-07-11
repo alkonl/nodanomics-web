@@ -6,7 +6,7 @@ export enum EDiagramNode {
     Variable = 'Variable',
     D = 'D',
     S = 'S',
-    F = 'F',
+    Formula = 'Formula',
     UP = 'UP',
     DOWN = 'DOWN',
 }
@@ -20,6 +20,7 @@ export interface IDiagramNodeStyle {
 }
 
 export interface IDiagramNodeBaseData {
+    type: EDiagramNode;
     id: string;
     name: string;
     label: string;
@@ -29,9 +30,14 @@ export interface IDiagramNodeBaseData {
 
 export interface IVariableNodeData extends IDiagramNodeBaseData {
     type: EDiagramNode.Variable;
-    value: string
+    value?: number
 }
 
-export type INodeData = IVariableNodeData
+export interface IFormulaNodeData extends IDiagramNodeBaseData {
+    type: EDiagramNode.Formula;
+    formula?: string
+}
+
+export type INodeData = IFormulaNodeData | IVariableNodeData
 
 export type INode = Node<INodeData>
