@@ -30,7 +30,6 @@ const ParameterContainer = styled(Box)({
 
 export const ElementSetupToolbar = () => {
     const dispatch = useAppDispatch()
-    const {updateNode} = diagramEditorActions
     const {currentEditNodeId, diagramNodes} = useDiagramEditorState()
     const selectedNode = diagramNodes.find(node => node.id === currentEditNodeId)
     const {updateNodeData, updateNodeStyle} = useUpdateNode({

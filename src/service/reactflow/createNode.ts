@@ -1,4 +1,4 @@
-import {EDiagramNode, EFontAlign, IDiagramNodeBaseData, INodeData} from "../../interface";
+import {EDiagramNode, EFontAlign, IDiagramNodeBaseData, INodeData, IReactFlowNode} from "../../interface";
 // eslint-disable-next-line import/named
 import {Node, ReactFlowInstance} from "reactflow";
 import {DragEvent} from "react";
@@ -25,7 +25,7 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
     flowInstance: ReactFlowInstance<any, any>
     wrapperNode: HTMLDivElement
     event: DragEvent<HTMLDivElement>
-}): Node<INodeData> | undefined => {
+}): IReactFlowNode | undefined => {
     const reactFlowBounds = wrapperNode?.getBoundingClientRect();
     const position = flowInstance.project({
         x: event.clientX - reactFlowBounds.left,
@@ -47,6 +47,7 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
     switch (type) {
         case EDiagramNode.Variable: {
             return {
+                // _type: EDiagramNode.Variable,
                 ...baseParams,
                 data: {
                     ...baseData,
@@ -57,6 +58,7 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
         }
         case EDiagramNode.Formula: {
             return {
+                // _type: EDiagramNode.Formula,
                 ...baseParams,
                 data: {
                     ...baseData,
