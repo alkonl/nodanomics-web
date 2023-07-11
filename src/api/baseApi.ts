@@ -40,6 +40,12 @@ import moment from "moment";
 
 const baseQuery = fetchBaseQuery(({
     baseUrl: `${CONFIG.API_URL}/api`,
+    // headers: (headers) => {
+    //     return {
+    //         ...headers,
+    //         'ngrok-skip-browser-warning': true
+    //     }
+    // }
     // prepareHeaders: (headers) => {
     //     // const accessToken = localStorage.getItem("accessToken")
     //     // if (accessToken) {
@@ -350,10 +356,10 @@ export const baseApi = createApi({
                     params: body,
                 }
             },
-            forceRefetch: ({ currentArg, previousArg }) => {
+            forceRefetch: ({currentArg, previousArg}) => {
                 return currentArg?.cursorId !== previousArg?.cursorId
             },
-            serializeQueryArgs: ({ endpointName }) => {
+            serializeQueryArgs: ({endpointName}) => {
                 return endpointName
             },
             merge: (currentCache, newItems) => {

@@ -26,6 +26,8 @@
     "@react-hook/resize-observer": "^1.2.6",
     "@reduxjs/toolkit": "^1.9.1",
     "@types/react-color": "^3.0.6",
+    "graph-data-structure": "^3.3.0",
+    "graphlib": "^2.1.8",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",
     "react": "^18.2.0",

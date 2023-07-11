@@ -1,10 +1,23 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Box} from "@mui/material";
+import {Handle, NodeProps, Position} from "reactflow";
+import {IFormulaNodeData, IVariableNodeData} from "../../../../interface";
 
-export const FormulaNode = () => {
+export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectable, data}) => {
+    const result = useMemo(()=>{
+        console.log('FormulaNode.data: ', data)
+        if(data.result && data.result.type === 'number'){
+            return data.result.value
+        }
+    },[data])
     return (
-        <Box>
+        <Box sx={{
+            padding: 1,
+        }}>
+            <Handle type="target" position={Position.Top} isConnectable={isConnectable}/>
+
             FormulaNode
+            result: {result}
         </Box>
     );
 };

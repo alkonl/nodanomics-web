@@ -1,4 +1,4 @@
-import React, {DragEvent, useCallback, useMemo, useRef, useState} from 'react';
+import React, {DragEvent, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import ReactFlow, {
     addEdge,
     Background,
@@ -6,7 +6,8 @@ import ReactFlow, {
     Connection, Edge, ReactFlowInstance, Node, NodeChange,
 
     Controls,
-    useEdgesState,
+    // eslint-disable-next-line import/named
+    useEdgesState, applyNodeChanges, applyEdgeChanges, Handle, Position, EdgeChange,
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
@@ -18,21 +19,23 @@ import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../..
 import {Box} from "@mui/material";
 
 
-const initialEdges: Edge[] = [];
+const nodeTypes = {
+    [EDiagramNode.Variable]: VariableNode,
+    [EDiagramNode.Formula]: FormulaNode,
+};
 
 export const DiagramCanvas = () => {
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
     const dispatch = useAppDispatch()
 
-    // const [nodes, setNodes, onNodesChange] = useNodesState<INodeData[]>([]);
-    const nodes = useDiagramEditorState().diagramNodes
-    const {onNodesChange} = diagramEditorActions
-    const onNodesChangeHandler = useCallback((nodes: NodeChange[]) => dispatch(onNodesChange(nodes)), [])
+    const {diagramNodes, diagramEdges} = useDiagramEditorState()
+    const {onNodesChange, onConnect, addEdge} = diagramEditorActions
+    const onNodesChangeHandler = useCallback((nodes: NodeChange[]) => dispatch(onNodesChange(nodes)), [dispatch])
+    const onEgeChangeHandler = useCallback((eges: EdgeChange[]) => dispatch(addEdge(eges)), [dispatch])
+    const onConnectHandler = useCallback((params: Edge | Connection) => dispatch(onConnect(params)), [dispatch])
 
-
-    const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>(initialEdges);
     const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance>();
-    const onConnect = useCallback((params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)), []);
+
 
     const onDragOver = useCallback((event: DragEvent<HTMLDivElement>) => {
         event.preventDefault();
@@ -45,21 +48,9 @@ export const DiagramCanvas = () => {
     })
 
 
-    const {elementSize: canvasContainerSize, elementRef: canvasContainerRef} = useWidthAndHeight()
-    const nodeTypes: {
-        [key in EDiagramNode]?: React.FC<any>
-    } = useMemo(() => {
-        return {
-            [EDiagramNode.Variable]: VariableNode,
-            [EDiagramNode.Formula]: FormulaNode,
-            // [EDiagramNode.Drain]: VariableNode,
-            // [EDiagramNode.Pool]: VariableNode,
-        }
-    }, []);
     return (
         <Box
             className={styles.canvasContainer}
-            ref={canvasContainerRef}
         >
             <Box
                 sx={{
@@ -68,14 +59,21 @@ export const DiagramCanvas = () => {
                 ref={reactFlowWrapper}
             >
                 <ReactFlow
-                    nodeTypes={nodeTypes}
-                    nodes={nodes}
-                    edges={edges}
+                    nodes={diagramNodes}
+                    edges={diagramEdges}
                     onNodesChange={onNodesChangeHandler}
-                    onEdgesChange={onEdgesChange}
-                    onConnect={onConnect}
+                    onEdgesChange={onEgeChangeHandler}
+                    onConnect={onConnectHandler}
+                    nodeTypes={nodeTypes}
                     fitView
-                    attributionPosition="top-right"
+                    // nodeTypes={nodeTypes}
+                    // nodes={nodes}
+                    // edges={edges}
+                    // onNodesChange={onNodesChangeHandler}
+                    // onEdgesChange={handler}
+                    // onConnect={onConnect}
+                    // fitView
+                    // attributionPosition="top-right"
                     onInit={setReactFlowInstance}
                     onDrop={onDrop}
                     onDragOver={onDragOver}

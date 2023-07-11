@@ -5,7 +5,7 @@ import {DragEvent} from "react";
 import {EFontColor} from "../../constant";
 
 let id = 0;
-const getId = () => `${id++}`;
+const getId = () => `nodeId_${id++}`;
 
 
 const initialNodeStyle = {
@@ -31,17 +31,18 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
     });
+    const nodeId = getId();
     const baseParams = {
-        id: getId(),
+        id: nodeId,
         type,
         position,
     }
     const baseData: IDiagramNodeBaseData = {
         type,
         label: '',
-        id: getId(),
+        id: nodeId,
         style: initialNodeStyle,
-        name: `node name ${getId()}`,
+        name: `node name ${nodeId}`,
     }
     switch (type) {
         case EDiagramNode.Variable: {
@@ -55,9 +56,13 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
             break;
         }
         case EDiagramNode.Formula: {
-            // return {
-            //     ...baseParams,
-            // }
+            return {
+                ...baseParams,
+                data: {
+                    ...baseData,
+                    type,
+                },
+            }
             break;
         }
         default :

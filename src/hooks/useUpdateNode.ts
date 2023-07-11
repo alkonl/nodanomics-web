@@ -19,18 +19,16 @@ export const useUpdateNode = ({nodeId}: {
         }
     }
 
-    const updateNodeStyle = (label: Partial<IDiagramNodeStyle>) => {
+    const updateNodeStyle = (nodeStyles: Partial<IDiagramNodeStyle>) => {
         if (selectedNode) {
-            // dispatch(updateNode({
-            //     ...selectedNode,
-            //     data: {
-            //         ...selectedNode.data,
-            //         style: {
-            //             ...selectedNode.data.style,
-            //             ...label
-            //         }
-            //     }
-            // }))
+            updateNodeDataWrapper({
+                id: selectedNode.id,
+                type: selectedNode?.data.type,
+                style: {
+                    ...selectedNode.data.style,
+                    ...nodeStyles
+                }
+            })
         }
     }
     return {

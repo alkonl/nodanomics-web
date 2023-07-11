@@ -33,9 +33,22 @@ export interface IVariableNodeData extends IDiagramNodeBaseData {
     value?: number
 }
 
+export interface IFormulaResultBoolean {
+    type: 'boolean'
+    value: boolean
+}
+
+export interface IFormulaResultNumber {
+    type: 'number'
+    value: number
+}
+
+export type IFormulaResult = IFormulaResultBoolean | IFormulaResultNumber
+
 export interface IFormulaNodeData extends IDiagramNodeBaseData {
     type: EDiagramNode.Formula;
     formula?: string
+    result?: IFormulaResult
 }
 
 export type INodeData = IFormulaNodeData | IVariableNodeData
