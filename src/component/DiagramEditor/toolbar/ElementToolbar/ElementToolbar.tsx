@@ -24,7 +24,7 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
         toolbarName: 'D',
     },{
         elementType: EElementType.Node,
-        type: EDiagramNode.S,
+        type: EDiagramNode.Source,
         tooltip: 'no',
         toolbarName: 'S',
     },{
@@ -39,9 +39,9 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
         toolbarName: 'Do',
     },{
         elementType: EElementType.Node,
-        type: EDiagramNode.UP,
-        tooltip: 'Variable',
-        toolbarName: 'UP',
+        type: EDiagramNode.Pool,
+        tooltip: 'Pool',
+        toolbarName: 'P',
     }],
     [EElementType.Logic]: [{
         elementType: EElementType.Logic,
@@ -67,12 +67,12 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
     }],
     [EElementType.Connection]: [{
         elementType: EElementType.Connection,
-        type: EConnection.oneType,
-        tooltip: '1',
-        toolbarName: '1',
+        type: EDiagramNode.ConnectionNode,
+        tooltip: 'Con',
+        toolbarName: 'Con',
     },{
         elementType: EElementType.Connection,
-        type: EConnection.secondType,
+        type: EConnection.LogicConnection,
         tooltip: '2',
         toolbarName: '2',
     },{

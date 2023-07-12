@@ -2,7 +2,7 @@ import React from 'react';
 import {Box, Input, Typography} from "@mui/material";
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from 'reactflow';
-import {EDiagramNode, IVariableNodeData} from "../../../../interface";
+import {EDiagramNode, EElementType, IVariableNodeData} from "../../../../interface";
 import {diagramEditorActions, useAppDispatch} from "../../../../redux";
 import {useUpdateNode} from "../../../../hooks";
 
@@ -13,7 +13,10 @@ export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = ({data, id, 
     const {textStyles} = style
     const {setEditNode} = diagramEditorActions
     const onClick = () => {
-        dispatch(setEditNode(id))
+        dispatch(setEditNode({
+            id,
+            type: EElementType.Node,
+        }))
     }
 
     const {updateNodeData} = useUpdateNode({nodeId: id})

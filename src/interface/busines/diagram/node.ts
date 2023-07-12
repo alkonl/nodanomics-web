@@ -1,30 +1,21 @@
-import {IDiagramTextStyle} from "../font";
 // eslint-disable-next-line import/named
 import {Node} from "reactflow";
+import {IDiagramBaseInteractiveElementData} from "./diagramElement";
 
 export enum EDiagramNode {
     Variable = 'Variable',
     D = 'D',
-    S = 'S',
+    Source = 'Source',
     Formula = 'Formula',
-    UP = 'UP',
+    Pool = 'Pool',
     DOWN = 'DOWN',
+    ConnectionNode = 'ConnectionNode',
 }
 
 
-export interface IDiagramNodeStyle {
-    borderWidth: number;
-    borderColor: string;
-    fillColor?: string;
-    textStyles: IDiagramTextStyle
-}
 
-export interface IDiagramNodeBaseData {
+export interface IDiagramNodeBaseData extends IDiagramBaseInteractiveElementData{
     type: EDiagramNode;
-    id: string;
-    name: string;
-    label: string;
-    style: IDiagramNodeStyle;
 }
 
 
@@ -51,7 +42,21 @@ export interface IFormulaNodeData extends IDiagramNodeBaseData {
     result?: IFormulaResult
 }
 
-export type INodeData = IVariableNodeData | IFormulaNodeData
+export interface IResource {
+    color: string
+}
+
+export interface ISourceNodeData extends IDiagramNodeBaseData {
+    type: EDiagramNode.Source;
+}
+
+export interface IPoolNodeData extends IDiagramNodeBaseData {
+    type: EDiagramNode.Pool
+    resources: IResource[]
+}
+
+
+export type INodeData = IVariableNodeData | IFormulaNodeData | ISourceNodeData | IPoolNodeData
 
 export type IReactFlowNode = Node<INodeData>
 

@@ -1,24 +1,14 @@
-import {EDiagramNode, EFontAlign, IDiagramNodeBaseData, IReactFlowNode} from "../../interface";
+import {EDiagramNode, EElementType, IDiagramNodeBaseData, IReactFlowNode} from "../../interface";
 // eslint-disable-next-line import/named
 import {ReactFlowInstance} from "reactflow";
 import {DragEvent} from "react";
-import {EFontColor} from "../../constant";
+import {initialNodeDiagramElement} from "../../constant";
 
 let id = 0;
 const getId = () => `nodeId_${id++}`;
 
 
-const initialNodeStyle = {
-    borderColor: '#000',
-    textStyles: {
-        fontAlign: EFontAlign.Center,
-        fontFamily: 'Roboto',
-        fontSize: 14,
-        fontColor: EFontColor.grey4,
-        fontStyles: [],
-    },
-    borderWidth: 1,
-}
+
 
 export const createNode = ({type, flowInstance, wrapperNode, event}: {
     type: EDiagramNode,
@@ -38,10 +28,11 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
         position,
     }
     const baseData: IDiagramNodeBaseData = {
+        elementType: EElementType.Node,
         type,
         label: '',
         id: nodeId,
-        style: initialNodeStyle,
+        style: initialNodeDiagramElement,
         name: `node name ${nodeId}`,
     }
     switch (type) {
@@ -61,6 +52,25 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
                     ...baseData,
                     type,
                 },
+            }
+        }
+        case EDiagramNode.Source: {
+            return {
+                ...baseParams,
+                data: {
+                    ...baseData,
+                    type,
+                }
+            }
+        }
+        case EDiagramNode.Pool: {
+            return {
+                ...baseParams,
+                data: {
+                    ...baseData,
+                    type,
+                    resources: [],
+                }
             }
         }
         default :

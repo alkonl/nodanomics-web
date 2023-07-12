@@ -1,62 +1,33 @@
-import React, {useEffect} from 'react';
-import {useDiagramEditorState} from "../../../../redux";
-import {Box, Typography, styled, Input} from "@mui/material";
+import React from 'react';
+import {Box, Typography, Input} from "@mui/material";
 import {EColor, EFontColor} from "../../../../constant";
-import {EDiagramNode} from "../../../../interface";
-import {useUpdateNode} from "../../../../hooks";
-import {ColorPicker} from "../../../ColorPicker";
+import {EDiagramNode, EElementType} from "../../../../interface";
+import {useCurrentEditElement, useUpdateElement} from "../../../../hooks";
+import {ParameterContainer, ParameterLabel, SectionTitle} from "./styledComponents";
+import {ElementSetupToolbarStyleSection} from "./ElementSetupToolbarStyleSection";
 
-const SectionTitle = styled(Typography)({
-    display: 'block',
-    backgroundColor: EColor.grey1,
-    paddingLeft: 1,
-    color: EFontColor.grey4,
-    fontWeight: 'bold',
-    borderColor: EColor.grey2,
-    borderStyle: 'solid',
-    borderWidth: '1px',
-    marginBottom: 16,
-})
-
-const ParameterLabel = styled(Typography)({
-    color: EFontColor.grey4,
-})
-
-const ParameterContainer = styled(Box)({
-    display: 'flex',
-    alignItems: 'center',
-    gap: 16,
-})
 
 export const ElementSetupToolbar = () => {
-    const {currentEditNodeId, diagramNodes} = useDiagramEditorState()
-    const selectedNode = diagramNodes.find(node => node.id === currentEditNodeId)
-    const {updateNodeData, updateNodeStyle} = useUpdateNode({
-        nodeId: currentEditNodeId,
+    const selectedElementData = useCurrentEditElement()?.data
+    const {updateNodeData, updateEdgeData} = useUpdateElement({
+        elementType: selectedElementData?.elementType,
+        elementId: selectedElementData?.id,
     })
-    const onTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        updateNodeData({
-            type: EDiagramNode.Variable,
-            label: event.target.value,
-        })
-    }
+
 
     const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        updateNodeData({
-            type: EDiagramNode.Variable,
-            name: event.target.value,
-        })
+        if (selectedElementData?.elementType === EElementType.Node) {
+            updateNodeData({
+                type: EDiagramNode.Variable,
+                name: event.target.value,
+            })
+        } else if (selectedElementData?.elementType === EElementType.Connection) {
+            updateEdgeData({
+                name: event.target.value,
+            })
+        }
     }
 
-    const onColorChange = (color: string) => {
-        updateNodeStyle({
-            fillColor: color,
-        })
-    }
-
-    useEffect(() => {
-        console.log('VariableNode:style', selectedNode)
-    }, [selectedNode])
 
     return (
         <Box
@@ -74,56 +45,25 @@ export const ElementSetupToolbar = () => {
             <Typography sx={{
                 color: EFontColor.grey4,
             }}>
-                {selectedNode?.type}
+                {selectedElementData?.type}
             </Typography>
             <SectionTitle>
                 Function
             </SectionTitle>
-            <ParameterContainer>
+            {selectedElementData && <ParameterContainer>
                 <ParameterLabel>
                     Name
                 </ParameterLabel>
                 <Input
-                    value={selectedNode?.data.name || ''}
+                    value={selectedElementData?.name || ''}
                     onChange={onNameChange}
                     type="text"
                     sx={{
                         color: EFontColor.grey4,
                         width: '100%',
                     }}/>
-            </ParameterContainer>
-            <SectionTitle>
-                Style
-            </SectionTitle>
-            <Box sx={{
-                paddingLeft: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 1,
-            }}>
-                <ParameterContainer>
-                    <ParameterLabel>
-                        Colour
-                    </ParameterLabel>
-                    <ColorPicker
-                        onChange={onColorChange}
-                        value={selectedNode?.data.style.fillColor || EColor.white}
-                    />
-                </ParameterContainer>
-                <ParameterContainer>
-                    <ParameterLabel>
-                        Text
-                    </ParameterLabel>
-                    <Input
-                        value={selectedNode?.data.label || ''}
-                        onChange={onTextChange}
-                        type="text"
-                        sx={{
-                            color: EFontColor.grey4,
-                            width: '100%',
-                        }}/>
-                </ParameterContainer>
-            </Box>
+            </ParameterContainer>}
+            {selectedElementData && <ElementSetupToolbarStyleSection element={selectedElementData}/>}
         </Box>
     );
 };

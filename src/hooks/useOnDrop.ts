@@ -5,14 +5,14 @@ import {createNode} from "../service";
 import {ReactFlowInstance} from "reactflow";
 import {diagramEditorActions, useAppDispatch} from "../redux";
 
-export const useOnDrop = ({flowWrapper, flowInstance}:{
+export const useOnDrop = ({flowWrapper, flowInstance}: {
     flowWrapper?: HTMLDivElement
     flowInstance?: ReactFlowInstance
-}) =>{
+}) => {
     const dispatch = useAppDispatch()
     const {addNode} = diagramEditorActions
 
-  return   useCallback(
+    return useCallback(
         (event: DragEvent<HTMLDivElement>) => {
             if (flowWrapper && flowInstance) {
                 event.preventDefault();

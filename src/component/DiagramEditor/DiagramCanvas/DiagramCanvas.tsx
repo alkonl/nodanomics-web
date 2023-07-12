@@ -3,32 +3,47 @@ import ReactFlow, {
     Background,
     Controls,
     // eslint-disable-next-line import/named
-    Connection, Edge, ReactFlowInstance, NodeChange, EdgeChange,
+    ReactFlowInstance, NodeChange, EdgeChange, ConnectionMode,
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
 import {useOnDrop} from "../../../hooks";
 import styles from './DiagramCanvas.module.scss'
-import {EDiagramNode} from "../../../interface";
-import {FormulaNode, VariableNode} from "../CutomNode";
+import {EConnection, EDiagramNode} from "../../../interface";
+import {FormulaNode, PoolNode, SourceNode, VariableNode} from "../CutomNode";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../redux";
 import {Box} from "@mui/material";
+import {DataConnection} from "../CustomConnectionLine/DataConnection";
+import {LogicConnection} from "../CustomConnectionLine/LogicConnection";
+import {useOnConnect} from "../../../hooks/useOnConnect";
 
 
 const nodeTypes = {
     [EDiagramNode.Variable]: VariableNode,
     [EDiagramNode.Formula]: FormulaNode,
+    [EDiagramNode.Source]: SourceNode,
+    [EDiagramNode.Pool]: PoolNode,
 };
+
+const edgeTypes = {
+    [EConnection.DataConnection]: DataConnection,
+    [EConnection.LogicConnection]: LogicConnection,
+}
+
 
 export const DiagramCanvas = () => {
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
     const dispatch = useAppDispatch()
 
     const {diagramNodes, diagramEdges} = useDiagramEditorState()
-    const {onNodesChange, onConnect, addEdge} = diagramEditorActions
+    const {onNodesChange, addEdge} = diagramEditorActions
     const onNodesChangeHandler = useCallback((nodes: NodeChange[]) => dispatch(onNodesChange(nodes)), [dispatch])
     const onEgeChangeHandler = useCallback((eges: EdgeChange[]) => dispatch(addEdge(eges)), [dispatch])
-    const onConnectHandler = useCallback((params: Edge | Connection) => dispatch(onConnect(params)), [dispatch])
+    const onConnectHandler = useOnConnect()
+    // const onConnectHandler = useCallback((params: IReactFlowEdge | Connection) => {
+    //     const edge = createEdge(params)
+    //     dispatch(onConnect(edge))
+    // }, [dispatch])
 
     const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance>();
 
@@ -62,17 +77,11 @@ export const DiagramCanvas = () => {
                     onConnect={onConnectHandler}
                     nodeTypes={nodeTypes}
                     fitView
-                    // nodeTypes={nodeTypes}
-                    // nodes={nodes}
-                    // edges={edges}
-                    // onNodesChange={onNodesChangeHandler}
-                    // onEdgesChange={handler}
-                    // onConnect={onConnect}
-                    // fitView
-                    // attributionPosition="top-right"
                     onInit={setReactFlowInstance}
                     onDrop={onDrop}
                     onDragOver={onDragOver}
+                    edgeTypes={edgeTypes}
+                    connectionMode={ConnectionMode.Loose}
                 >
                     <Controls/>
                     <Background color="blue" gap={16}/>

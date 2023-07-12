@@ -3,18 +3,17 @@ import style from './RightToolbar.module.scss'
 import {Box} from "@mui/material";
 import {TopToolBarHeaderDeprecated} from "./TopToolBarHeaderDeprecated";
 import {RightToolbarElementSectionDeprecated, RightToolbarStyleSectionDeprecated} from "./section";
-import {useDiagramEditorState} from "../../../../redux";
+import {useCurrentEditElement} from "../../../../hooks";
 
 
 export const RightToolbarDeprecated = () => {
-    const {currentEditNodeId, diagramNodes} = useDiagramEditorState()
-    const selectedNode = diagramNodes.find(node => node.id === currentEditNodeId)
-    console.log(selectedNode)
+    const selectedElement = useCurrentEditElement()
+
     return (
         <Box className={style.container}>
-            {selectedNode && <TopToolBarHeaderDeprecated elementData={selectedNode.data}/>}
+            {selectedElement?.data && <TopToolBarHeaderDeprecated elementData={selectedElement.data}/>}
             <RightToolbarElementSectionDeprecated/>
-            {selectedNode &&  <RightToolbarStyleSectionDeprecated elementData={selectedNode.data}/>}
+            {selectedElement?.data && <RightToolbarStyleSectionDeprecated elementData={selectedElement.data}/>}
         </Box>
     );
 };
