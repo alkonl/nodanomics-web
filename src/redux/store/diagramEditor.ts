@@ -82,6 +82,7 @@ export const diagramEditorSlice = createSlice({
         updateEdgeData: (state, {payload}: PayloadAction<Optionalize<IDiagramConnectionData, 'id' | 'type'>>) => {
             console.log('updateEdgeData: ', payload)
             const edge = state.diagramEdges.find(edge => edge.id === payload.id)
+            // graph.updateEdgeData(payload.id, payload)
             console.log('updateEdgeData: ', edge)
             if (edge && edge.data && edge.data.type === payload.type) {
                 console.log('updateEdgeData: ', JSON.stringify(edge.data, null, 2))

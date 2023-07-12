@@ -40,10 +40,6 @@ export const DiagramCanvas = () => {
     const onNodesChangeHandler = useCallback((nodes: NodeChange[]) => dispatch(onNodesChange(nodes)), [dispatch])
     const onEgeChangeHandler = useCallback((eges: EdgeChange[]) => dispatch(addEdge(eges)), [dispatch])
     const onConnectHandler = useOnConnect()
-    // const onConnectHandler = useCallback((params: IReactFlowEdge | Connection) => {
-    //     const edge = createEdge(params)
-    //     dispatch(onConnect(edge))
-    // }, [dispatch])
 
     const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance>();
 

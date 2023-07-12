@@ -1,10 +1,11 @@
 import React from 'react';
-import {Box, Typography, Input} from "@mui/material";
+import {Box, Input, Typography} from "@mui/material";
 import {EColor, EFontColor} from "../../../../constant";
-import {EDiagramNode, EElementType} from "../../../../interface";
+import {EConnection, EDiagramNode, EElementType} from "../../../../interface";
 import {useCurrentEditElement, useUpdateElement} from "../../../../hooks";
 import {ParameterContainer, ParameterLabel, SectionTitle} from "./styledComponents";
 import {ElementSetupToolbarStyleSection} from "./ElementSetupToolbarStyleSection";
+import {FormulaParameter} from "./FormulaParameter";
 
 
 export const ElementSetupToolbar = () => {
@@ -63,6 +64,7 @@ export const ElementSetupToolbar = () => {
                         width: '100%',
                     }}/>
             </ParameterContainer>}
+            {selectedElementData?.type === EConnection.DataConnection && <FormulaParameter/>}
             {selectedElementData && <ElementSetupToolbarStyleSection element={selectedElementData}/>}
         </Box>
     );

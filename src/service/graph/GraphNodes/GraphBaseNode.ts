@@ -1,10 +1,10 @@
 import {IDiagramNodeBaseData, INodeData} from "../../../interface";
-import {Edge} from "../Edge";
+import {GraphBaseEdge} from "../GraphEdge/GraphBaseEdge";
 
 export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseData = INodeData> {
     private _data: IGenericNodeData;
-    private _outgoingEdges: Edge[] = [];
-    private _incomingEdges: Edge[] = [];
+    private _outgoingEdges: GraphBaseEdge[] = [];
+    private _incomingEdges: GraphBaseEdge[] = [];
 
 
     constructor(value: IGenericNodeData) {
@@ -36,18 +36,18 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
 
     abstract onParentUpdate(): void
 
-    get outgoingEdges(): Edge[] {
+    get outgoingEdges(): GraphBaseEdge[] {
         return this._outgoingEdges;
     }
 
-    get incomingEdges(): Edge[] {
+    get incomingEdges(): GraphBaseEdge[] {
         return this._incomingEdges;
     }
 
     addEdge(target: GraphBaseNode) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        const edge = new Edge(this, target);
+        const edge = new GraphBaseEdge(this, target);
         this._outgoingEdges.push(edge);
         target._incomingEdges.push(edge);
         target.onParentUpdate()

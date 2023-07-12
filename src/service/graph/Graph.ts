@@ -7,6 +7,7 @@ import {GraphBaseNode, GraphNodeFactory} from "./GraphNodes";
 export class Graph {
     private _nodes: GraphBaseNode[] = [];
 
+
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     constructor() {
     }
@@ -47,6 +48,14 @@ export class Graph {
         const target = this.findNode(targetId);
         if (source && target) {
             source.addEdge(target);
+        }
+    }
+
+    updateEdge({targetId, sourceId}: { sourceId: string, targetId: string }) {
+        const source = this.findNode(sourceId);
+        const target = this.findNode(targetId);
+        if (source && target) {
+            // source.updateEdge(target);
         }
     }
 }
