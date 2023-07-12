@@ -1,10 +1,10 @@
 // eslint-disable-next-line import/named
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {EDiagramNode, IReactFlowNode, INodeData} from "../../interface";
+import {IReactFlowNode, INodeData} from "../../interface";
 // eslint-disable-next-line import/named
 import {addEdge, applyEdgeChanges, applyNodeChanges, Edge, NodeChange, Connection, EdgeChange} from "reactflow";
 import {Optionalize} from "../../utils";
-import {FormulaNode, Graph} from "../../utils/graph";
+import {Graph} from "../../service";
 
 export interface IDiagramEditorState {
     currentDiagramId?: string
@@ -22,6 +22,15 @@ const initialState: IDiagramEditorState = {
 }
 
 const graph = new Graph()
+
+const updateNodes = (diagramNodes: IReactFlowNode[]) => {
+    diagramNodes.forEach(node => {
+        const updatedData = graph.findNode(node.id)?.data
+        if (updatedData) {
+            node.data = updatedData
+        }
+    })
+}
 
 export const diagramEditorSlice = createSlice({
     name: 'diagramEditor',
@@ -41,12 +50,11 @@ export const diagramEditorSlice = createSlice({
         },
         addNode: (state, {payload}: PayloadAction<IReactFlowNode>) => {
             const lenth = state.diagramNodes.push(payload)
-            graph.addOrGetNode(state.diagramNodes[lenth - 1])
+            graph.addOrGetNode(state.diagramNodes[lenth - 1].data)
             console.log('graph.addOrGetNode: ', graph)
         },
         onNodesChange: (state, {payload}: PayloadAction<NodeChange[]>) => {
-            const nodes = applyNodeChanges<INodeData>(payload, state.diagramNodes)
-            state.diagramNodes = nodes
+            state.diagramNodes = applyNodeChanges<INodeData>(payload, state.diagramNodes)
         },
         setEditNode: (state, {payload}: PayloadAction<string>) => {
             state.currentEditNodeId = payload
@@ -56,39 +64,11 @@ export const diagramEditorSlice = createSlice({
             state.diagramNodes[index] = payload
         },
         updateNodeData: (state, {payload}: PayloadAction<Optionalize<INodeData, 'id' | 'type'>>) => {
-            const index = state.diagramNodes.findIndex(node => node.id === payload.id)
-            const node = state.diagramNodes[index]
-            const nodeData = node.data
-            if (payload.type === nodeData.type) {
-                node.data = {
-                    ...nodeData,
-                    ...payload
-                }
-            }
-            graph.updateNode(payload.id, node)
-            const changedNode = graph.findNode(payload.id)
-            if (changedNode) {
-                const neighbors = changedNode.getChildNodes()
-                neighbors.forEach(neighbor => {
-                    if (neighbor instanceof FormulaNode) {
-                        neighbor.calculate()
-                    }
-                })
-                console.log(graph)
-            }
-            console.log('graph.serialize()', graph.serialize())
-            state.diagramNodes.forEach(node => {
-                const updatedData = graph.findNode(node.id)?.data
-                console.log('updatedData: ', updatedData?.data, node.data)
-                if(updatedData){
-                    node.data = updatedData.data
-                }
-            })
-            console.log('graph.updateNodeData: ', graph)
+            graph.updateNodeData(payload.id, payload)
+            updateNodes(state.diagramNodes)
         },
         addEdge: (state, {payload}: PayloadAction<EdgeChange[]>) => {
             state.diagramEdges = applyEdgeChanges(payload, state.diagramEdges)
-            // graph.addNode(payload)
         },
         onConnect: (state, {payload}: PayloadAction<Edge | Connection>) => {
             state.diagramEdges = addEdge(payload, state.diagramEdges)
@@ -97,50 +77,8 @@ export const diagramEditorSlice = createSlice({
                     sourceId: payload.source,
                     targetId: payload.target
                 })
+                updateNodes(state.diagramNodes)
             }
-            console.log(graph)
-            const payloadEdge = payload as Connection
-            // if (typeof payloadEdge.target === 'string' && typeof payloadEdge.source === 'string') {
-            //     const nodeTarget = graph.findNode(payloadEdge.target)
-            //     const nodeSource = graph.findNode(payloadEdge.source)
-            //     if (nodeTarget && nodeSource) {
-            //         graph.addEdge(nodeTarget, nodeSource)
-            //     }
-            //     console.log('state.diagramEdges: ', state.diagramEdges);
-            //     const changedNode = graph.findNode(payloadEdge.target)
-            //     if (changedNode) {
-            //         console.log('changedNode.neighbors: ', changedNode.neighbors)
-            //         const w = changedNode.neighbors.reduce((acc, node) => {
-            //             console.log('node.value: ', node.value)
-            //             if (node.value.type === EDiagramNode.Variable) {
-            //                 const value = node.value.value
-            //                 if (value) {
-            //                     acc += value
-            //                 }
-            //             }
-            //             return acc
-            //         }, 0)
-            //         if (changedNode.value.type === EDiagramNode.Formula) {
-            //             changedNode.value = {
-            //                 ...changedNode.value,
-            //                 result: {
-            //                     type: 'number',
-            //                     value: w
-            //                 }
-            //             }
-            //         }
-            //         const index = state.diagramNodes.findIndex(node => node.id === changedNode.value.id)
-            //         const node = state.diagramNodes[index]
-            //         const nodeData = node.data
-            //         if (changedNode.value.type === nodeData.type) {
-            //             node.data = {
-            //                 ...nodeData,
-            //                 ...changedNode.value
-            //             }
-            //         }
-            //         console.log('w: ', w)
-            //     }
-            // }
         }
     }
 })

@@ -8,6 +8,7 @@ import {useUpdateNode} from "../../../../hooks";
 
 export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = ({data, id, isConnectable}) => {
     const dispatch = useAppDispatch()
+
     const {style} = data
     const {textStyles} = style
     const {setEditNode} = diagramEditorActions
@@ -18,11 +19,16 @@ export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = ({data, id, 
     const {updateNodeData} = useUpdateNode({nodeId: id})
 
     const onChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-        updateNodeData({
-            type: EDiagramNode.Variable,
-            value: Number(event.target.value),
-        })
+        const number = Number(event.target.value)
+        if (!isNaN(number)) {
+            updateNodeData({
+                type: EDiagramNode.Variable,
+                value: number,
+            })
+        }
+
     }
+
 
     return (
         <Box onClick={onClick}>
@@ -44,12 +50,10 @@ export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = ({data, id, 
                     Variable: {data.name}
                 </Typography>
                 <Input
-                    type="number"
+                    type="text"
                     value={data.value || ''}
                     onChange={onChangeValue}
                 />
-               value: {data.value}
-                {/*VariableNode {data.value}*/}
             </Box>
             <Box sx={{
                 height: '100%',

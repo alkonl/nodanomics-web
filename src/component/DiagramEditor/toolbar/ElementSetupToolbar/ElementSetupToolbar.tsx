@@ -1,6 +1,6 @@
-import React from 'react';
-import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../../redux";
-import {Box, Typography, styled, Input, FormControlLabel} from "@mui/material";
+import React, {useEffect} from 'react';
+import {useDiagramEditorState} from "../../../../redux";
+import {Box, Typography, styled, Input} from "@mui/material";
 import {EColor, EFontColor} from "../../../../constant";
 import {EDiagramNode} from "../../../../interface";
 import {useUpdateNode} from "../../../../hooks";
@@ -29,7 +29,6 @@ const ParameterContainer = styled(Box)({
 })
 
 export const ElementSetupToolbar = () => {
-    const dispatch = useAppDispatch()
     const {currentEditNodeId, diagramNodes} = useDiagramEditorState()
     const selectedNode = diagramNodes.find(node => node.id === currentEditNodeId)
     const {updateNodeData, updateNodeStyle} = useUpdateNode({
@@ -54,6 +53,10 @@ export const ElementSetupToolbar = () => {
             fillColor: color,
         })
     }
+
+    useEffect(() => {
+        console.log('VariableNode:style', selectedNode)
+    }, [selectedNode])
 
     return (
         <Box
@@ -103,8 +106,8 @@ export const ElementSetupToolbar = () => {
                         Colour
                     </ParameterLabel>
                     <ColorPicker
-                    onChange={onColorChange}
-                    value={selectedNode?.data.style.fillColor || EColor.white}
+                        onChange={onColorChange}
+                        value={selectedNode?.data.style.fillColor || EColor.white}
                     />
                 </ParameterContainer>
                 <ParameterContainer>

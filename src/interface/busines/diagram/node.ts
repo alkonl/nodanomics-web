@@ -51,12 +51,8 @@ export interface IFormulaNodeData extends IDiagramNodeBaseData {
     result?: IFormulaResult
 }
 
-export type INodeData = IFormulaNodeData | IVariableNodeData
+export type INodeData = IVariableNodeData | IFormulaNodeData
 
-// export type IRFormula = Node<IFormulaNodeData>
-//
-// export type IRVariable = Node<IVariableNodeData>
-
-// export type IReactFlowNode = IRFormula | IRVariable
 export type IReactFlowNode = Node<INodeData>
+
 

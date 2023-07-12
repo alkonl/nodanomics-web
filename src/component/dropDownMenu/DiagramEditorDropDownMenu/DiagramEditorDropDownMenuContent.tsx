@@ -1,10 +1,10 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Menu, MenuItem} from "@mui/material";
-import {useToggle} from "../../../hooks/useToggle";
+import {useToggle} from "../../../hooks";
 import {DiagramManagerPopUp} from "../../popUp/NewDiagramPopUp";
 import {EDiagramManagerType} from "../../form";
 import {useNavigate} from "react-router-dom";
-import {ELinks} from "../../../service/router";
+import {ELinks} from "../../../service";
 import {useDiagramEditorState} from "../../../redux";
 import {useDeleteDiagramMutation} from "../../../api";
 
@@ -17,7 +17,7 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
       }) => {
     const navigate = useNavigate()
     const diagramState = useDiagramEditorState()
-    const [deleteDiagram, {isSuccess: isDiagramDeleted}] = useDeleteDiagramMutation()
+    const [deleteDiagram] = useDeleteDiagramMutation()
     const [diagramManagerType, setDiagramManagerType] = useState<EDiagramManagerType>(EDiagramManagerType.new)
     const {
         open: openManagerDiagramPopUp,

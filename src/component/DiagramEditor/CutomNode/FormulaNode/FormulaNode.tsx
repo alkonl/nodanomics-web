@@ -1,7 +1,8 @@
 import React, {useMemo} from 'react';
 import {Box} from "@mui/material";
+// eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from "reactflow";
-import {IFormulaNodeData, IVariableNodeData} from "../../../../interface";
+import {IFormulaNodeData} from "../../../../interface";
 
 export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectable, data}) => {
     const result = useMemo(()=>{

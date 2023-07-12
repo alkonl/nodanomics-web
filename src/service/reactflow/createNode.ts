@@ -1,6 +1,6 @@
-import {EDiagramNode, EFontAlign, IDiagramNodeBaseData, INodeData, IReactFlowNode} from "../../interface";
+import {EDiagramNode, EFontAlign, IDiagramNodeBaseData, IReactFlowNode} from "../../interface";
 // eslint-disable-next-line import/named
-import {Node, ReactFlowInstance} from "reactflow";
+import {ReactFlowInstance} from "reactflow";
 import {DragEvent} from "react";
 import {EFontColor} from "../../constant";
 
@@ -22,7 +22,7 @@ const initialNodeStyle = {
 
 export const createNode = ({type, flowInstance, wrapperNode, event}: {
     type: EDiagramNode,
-    flowInstance: ReactFlowInstance<any, any>
+    flowInstance: ReactFlowInstance
     wrapperNode: HTMLDivElement
     event: DragEvent<HTMLDivElement>
 }): IReactFlowNode | undefined => {
@@ -47,25 +47,21 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
     switch (type) {
         case EDiagramNode.Variable: {
             return {
-                // _type: EDiagramNode.Variable,
                 ...baseParams,
                 data: {
                     ...baseData,
                     type,
                 },
             };
-            break;
         }
         case EDiagramNode.Formula: {
             return {
-                // _type: EDiagramNode.Formula,
                 ...baseParams,
                 data: {
                     ...baseData,
                     type,
                 },
             }
-            break;
         }
         default :
             console.error(`wrong node type: ${type}`)

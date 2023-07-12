@@ -1,6 +1,5 @@
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {IDiagramNodeStyle, INodeData} from "../interface";
-import {Optionalize} from "../utils";
 
 export const useUpdateNode = ({nodeId}: {
     nodeId?: string

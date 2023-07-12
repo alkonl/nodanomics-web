@@ -1,17 +1,13 @@
-import React, {DragEvent, useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {DragEvent, useCallback, useRef, useState} from 'react';
 import ReactFlow, {
-    addEdge,
     Background,
-    // eslint-disable-next-line import/named
-    Connection, Edge, ReactFlowInstance, Node, NodeChange,
-
     Controls,
     // eslint-disable-next-line import/named
-    useEdgesState, applyNodeChanges, applyEdgeChanges, Handle, Position, EdgeChange,
+    Connection, Edge, ReactFlowInstance, NodeChange, EdgeChange,
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
-import {useOnDrop, useWidthAndHeight} from "../../../hooks";
+import {useOnDrop} from "../../../hooks";
 import styles from './DiagramCanvas.module.scss'
 import {EDiagramNode} from "../../../interface";
 import {FormulaNode, VariableNode} from "../CutomNode";
