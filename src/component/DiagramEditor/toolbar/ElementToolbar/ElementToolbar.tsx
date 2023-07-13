@@ -89,7 +89,7 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
 export const ElementToolbar = () => {
     const formated = Object.entries(mockDiagramNodes);
 
-    const {runStepInterval, isRunning, runStep} = useInvokeStep();
+    const {toggleStepInterval, isRunning, runStep} = useInvokeStep();
 
     return (
         <Box sx={{
@@ -118,9 +118,9 @@ export const ElementToolbar = () => {
                 Step
             </MButton.Submit>
             <MButton.Submit
-                onClick={runStepInterval}
+                onClick={toggleStepInterval}
             >
-                Play
+                {isRunning ? 'Stop' : 'Start'}
             </MButton.Submit>
         </Box>
     );

@@ -10,6 +10,7 @@ export const useInvokeStep = () => {
         dispatch(invokeStep())
     }
 
+
     useEffect(() => {
         let interval: NodeJS.Timer | undefined
         if (isRunning) {
@@ -22,8 +23,8 @@ export const useInvokeStep = () => {
         }
     }, [isRunning])
 
-    const runStepInterval = () => {
+    const toggleStepInterval = () => {
         setIsRunning(!isRunning)
     }
-    return {runStepInterval, isRunning, runStep}
+    return {runStep, isRunning, toggleStepInterval}
 }
