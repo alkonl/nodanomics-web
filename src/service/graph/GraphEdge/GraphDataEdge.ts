@@ -3,28 +3,23 @@ import {IDataConnectionData, IDiagramNodeBaseData, IResource} from "../../../int
 import {GraphBaseNode} from "../GraphNodes";
 import {GraphSourceNode} from "../GraphNodes/GraphSourceNode";
 import {GraphPoolNode} from "../GraphNodes/GraphPoolNode";
-import {RunManager} from "../Graph";
 
 let resourceId = 0;
 const genResourceId = () => `resource_${resourceId++}`
 
 export class GraphDataEdge extends GraphBaseEdge<IDataConnectionData> {
 
-    // private _resources: IResource[] = [];
-
 
     constructor(
         source: GraphBaseNode<IDiagramNodeBaseData>,
         target: GraphBaseNode<IDiagramNodeBaseData>,
         data: IDataConnectionData,
-        renderGraph: RunManager,
     ) {
-        super(source, target, data, renderGraph);
+        super(source, target, data);
     }
 
     invokeStep() {
         this.provideResources();
-        super.invokeStep();
     }
 
     private provideResources() {
@@ -39,12 +34,6 @@ export class GraphDataEdge extends GraphBaseEdge<IDataConnectionData> {
         }
     }
 
-    private getResourceFromPool(poolNode: GraphPoolNode) {
-        return poolNode.takeCountResources(this.countOfResource)
-    }
-
-    // private transfer
-
     private generateResourceFromSource() {
         const countOfResource = this.countOfResource;
         return Array(countOfResource).fill(0).map(() => ({
@@ -56,5 +45,4 @@ export class GraphDataEdge extends GraphBaseEdge<IDataConnectionData> {
     get countOfResource() {
         return Number(this.data.formula);
     }
-
 }

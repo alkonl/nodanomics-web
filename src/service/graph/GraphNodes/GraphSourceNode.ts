@@ -5,16 +5,4 @@ export class GraphSourceNode extends GraphBaseNode<ISourceNodeData> {
     constructor(data: ISourceNodeData) {
         super(data);
     }
-
-    start() {
-        this.invokeStepOutgoingEdges()
-    }
-
-    onParentUpdate() {
-        //
-    }
-
-    onEdgeInvoke() {
-        //
-    }
 }

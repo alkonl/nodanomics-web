@@ -21,13 +21,4 @@ export class GraphFormulaNode extends GraphBaseNode<IFormulaNodeData> {
         });
         return result;
     }
-
-    onParentUpdate() {
-        this.calculate();
-        // this.updateOutgoingNodes();
-    }
-
-    onEdgeInvoke() {
-        //
-    }
 }

@@ -10,7 +10,7 @@ import {
 // eslint-disable-next-line import/named
 import {addEdge, applyEdgeChanges, applyNodeChanges, NodeChange, EdgeChange} from "reactflow";
 import {Optionalize} from "../../utils";
-import {Graph} from "../../service";
+import {Graph, RunManager} from "../../service";
 
 export interface IDiagramEditorState {
     currentDiagramId?: string
@@ -31,6 +31,7 @@ const initialState: IDiagramEditorState = {
 }
 
 const graph = new Graph()
+const runManager = new RunManager(graph)
 
 const updateNodes = (diagramNodes: IReactFlowNode[]) => {
     diagramNodes.forEach(node => {
@@ -103,15 +104,10 @@ export const diagramEditorSlice = createSlice({
             }
         },
         invokeStep: (state) => {
-           graph.invokeStep()
 
-            // graph.invokeStep()
+            runManager.invokeStep()
             updateNodes(state.diagramNodes)
-            // console.log('invokeStep: ',graph)
         },
-        invokeEdge: () =>{
-
-        }
     }
 })
 

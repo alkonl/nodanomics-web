@@ -5,12 +5,4 @@ export class GraphVariableNode extends GraphBaseNode<IVariableNodeData> {
     constructor(value: IVariableNodeData) {
         super(value);
     }
-
-    onParentUpdate() {
-        // this.updateOutgoingNodes();
-    }
-
-    onEdgeInvoke() {
-        // this.updateOutgoingNodes();
-    }
 }

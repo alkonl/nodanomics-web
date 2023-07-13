@@ -1,5 +1,4 @@
 import {
-    IDiagramConnectionBaseData,
     IDiagramNodeBaseData,
     INodeData
 } from "../../../interface";
@@ -15,7 +14,6 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
     }
 
     invokeStepOutgoingEdges() {
-        console.log('invokeStepOutgoingEdges:render', this._data.id)
         this._outgoingEdges.forEach(edge => {
             edge.invokeStep()
         })
@@ -36,42 +34,17 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
         this.updateNode(data)
     }
 
-    // updateOutgoingNodes() {
-    //     this._outgoingEdges.forEach(edge => {
-    //         edge.target.onParentUpdate();
-    //     })
-    // }
-
-    abstract onParentUpdate(): void
-
-
-    abstract onEdgeInvoke(edge: GraphBaseEdge<IDiagramConnectionBaseData>): void
-
-
     get outgoingEdges(): GraphBaseEdge[] {
         return this._outgoingEdges;
-    }
-
-    get incomingEdges(): GraphBaseEdge[] {
-        return this._incomingEdges;
     }
 
     addEdge(target: GraphBaseNode, edge: GraphBaseEdge) {
         this._outgoingEdges.push(edge);
         target._incomingEdges.push(edge);
-        target.onParentUpdate()
-    }
-
-
-    findOutgoingEdge(targetId: string) {
-        return this._outgoingEdges.find(edge => edge.target._data.id === targetId);
     }
 
     findIncomingEdges() {
         return this._incomingEdges;
     }
 
-    getChildNodes() {
-        return this._outgoingEdges.map(edge => edge.target);
-    }
 }

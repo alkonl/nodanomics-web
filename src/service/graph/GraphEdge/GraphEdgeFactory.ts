@@ -1,18 +1,16 @@
 import {EConnection, IDiagramConnectionData} from "../../../interface";
 import {GraphBaseNode} from "../GraphNodes";
 import {GraphDataEdge} from "./GraphDataEdge";
-import {RunManager} from "../Graph";
 
 export class GraphEdgeFactory {
-    static createEdge({source, target, edgeData, renderGraph}: {
+    static createEdge({source, target, edgeData}: {
         source: GraphBaseNode,
         target: GraphBaseNode,
         edgeData: IDiagramConnectionData
-        renderGraph: RunManager
     }) {
         switch (edgeData.type) {
             case EConnection.DataConnection:
-                return new GraphDataEdge(source, target, edgeData, renderGraph);
+                return new GraphDataEdge(source, target, edgeData);
             default:
                 throw new Error(`Unknown edge type: ${edgeData.type}`);
         }
