@@ -7,7 +7,7 @@ export class GraphSourceNode extends GraphBaseNode<ISourceNodeData> {
     }
 
     start() {
-        this.invokeOutgoingEdges()
+        this.invokeStepOutgoingEdges()
     }
 
     onParentUpdate() {

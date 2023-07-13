@@ -1,15 +1,23 @@
 import {GraphBaseNode} from "../GraphNodes";
 import {IDiagramConnectionBaseData, IDiagramConnectionData, IDiagramNodeBaseData} from "../../../interface";
+import {RunManager} from "../Graph";
 
 export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionBaseData = IDiagramConnectionBaseData> {
     private _source: GraphBaseNode<IDiagramNodeBaseData>;
     private _target: GraphBaseNode<IDiagramNodeBaseData>;
     private _data: IGenericEdgeData;
+    private _renderGraph: RunManager;
 
-    protected constructor(source: GraphBaseNode<IDiagramNodeBaseData>, target: GraphBaseNode<IDiagramNodeBaseData>, data: IGenericEdgeData) {
+    protected constructor(
+        source: GraphBaseNode<IDiagramNodeBaseData>,
+        target: GraphBaseNode<IDiagramNodeBaseData>,
+        data: IGenericEdgeData,
+        renderGraph: RunManager,
+    ) {
         this._source = source;
         this._target = target;
         this._data = data
+        this._renderGraph = renderGraph;
     }
 
     get source() {
@@ -24,9 +32,8 @@ export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionB
         return this._data;
     }
 
-    invoke(incomingNode: GraphBaseNode<IDiagramNodeBaseData>) {
+    invokeStep() {
         this._target.onEdgeInvoke(this);
-        this._target.invokeOutgoingEdges();
     }
 
     updateEdge(data: Partial<IDiagramConnectionData>) {
@@ -35,8 +42,4 @@ export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionB
             ...data,
         }
     }
-
-    // updateTarget() {
-    //     this._target.onEdgeInvoke(this);
-    // }
 }

@@ -103,9 +103,14 @@ export const diagramEditorSlice = createSlice({
             }
         },
         invokeStep: (state) => {
-            graph.invokeStep()
+           graph.invokeStep()
+
+            // graph.invokeStep()
             updateNodes(state.diagramNodes)
-            console.log('invokeStep: ',graph)
+            // console.log('invokeStep: ',graph)
+        },
+        invokeEdge: () =>{
+
         }
     }
 })

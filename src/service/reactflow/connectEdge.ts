@@ -24,7 +24,7 @@ export const connectEdge = (params: Connection): Connection & { data: IDiagramCo
             name: 'data connection',
             id: edgeId,
             type: EConnection.DataConnection,
-            formula: '1+1',
+            formula: '1',
             label: 'some label',
             style: initialNodeDiagramElement
         }

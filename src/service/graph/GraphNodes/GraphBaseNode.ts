@@ -3,21 +3,21 @@ import {
     IDiagramNodeBaseData,
     INodeData
 } from "../../../interface";
-import {GraphBaseEdge} from "../GraphEdge/GraphBaseEdge";
+import {GraphBaseEdge} from "../GraphEdge";
 
 export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseData = INodeData> {
     protected _data: IGenericNodeData;
     private _outgoingEdges: GraphBaseEdge[] = [];
     private _incomingEdges: GraphBaseEdge[] = [];
 
-
     constructor(value: IGenericNodeData) {
         this._data = value;
     }
 
-    invokeOutgoingEdges(){
+    invokeStepOutgoingEdges() {
+        console.log('invokeStepOutgoingEdges:render', this._data.id)
         this._outgoingEdges.forEach(edge => {
-            edge.invoke(this)
+            edge.invokeStep()
         })
     }
 
@@ -46,7 +46,6 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
 
 
     abstract onEdgeInvoke(edge: GraphBaseEdge<IDiagramConnectionBaseData>): void
-
 
 
     get outgoingEdges(): GraphBaseEdge[] {

@@ -3,45 +3,54 @@ import {IDataConnectionData, IDiagramNodeBaseData, IResource} from "../../../int
 import {GraphBaseNode} from "../GraphNodes";
 import {GraphSourceNode} from "../GraphNodes/GraphSourceNode";
 import {GraphPoolNode} from "../GraphNodes/GraphPoolNode";
+import {RunManager} from "../Graph";
+
+let resourceId = 0;
+const genResourceId = () => `resource_${resourceId++}`
 
 export class GraphDataEdge extends GraphBaseEdge<IDataConnectionData> {
 
-    private _resources: IResource[] = [];
+    // private _resources: IResource[] = [];
 
 
-    constructor(source: GraphBaseNode<IDiagramNodeBaseData>, target: GraphBaseNode<IDiagramNodeBaseData>, data: IDataConnectionData) {
-        super(source, target, data);
+    constructor(
+        source: GraphBaseNode<IDiagramNodeBaseData>,
+        target: GraphBaseNode<IDiagramNodeBaseData>,
+        data: IDataConnectionData,
+        renderGraph: RunManager,
+    ) {
+        super(source, target, data, renderGraph);
     }
 
-    invoke(incomingNode: GraphBaseNode<IDiagramNodeBaseData>) {
-        this.generateResource(incomingNode);
-        super.invoke(incomingNode);
+    invokeStep() {
+        this.provideResources();
+        super.invokeStep();
     }
 
-    private generateResource(fromNode: GraphBaseNode<IDiagramNodeBaseData>) {
-        console.log('fromNode: ', fromNode)
-        if (fromNode instanceof GraphSourceNode) {
-            this.generateResourceFromSource();
-        } else if (fromNode instanceof GraphPoolNode) {
-            this.getResourceFromPool(fromNode)
+    private provideResources() {
+        let resources: IResource[] = [];
+        if (this.source instanceof GraphSourceNode) {
+            resources = this.generateResourceFromSource();
+        } else if (this.source instanceof GraphPoolNode) {
+            resources = this.source.takeCountResources(this.countOfResource);
+        }
+        if (this.target instanceof GraphPoolNode) {
+            this.target.addResource(resources)
         }
     }
 
     private getResourceFromPool(poolNode: GraphPoolNode) {
-        this._resources = poolNode.takeCountResources(this.countOfResource)
+        return poolNode.takeCountResources(this.countOfResource)
     }
 
-   // private transfer
+    // private transfer
 
     private generateResourceFromSource() {
         const countOfResource = this.countOfResource;
-        this._resources = Array(countOfResource).fill(0).map(() => ({
+        return Array(countOfResource).fill(0).map(() => ({
             color: 'red',
+            id: genResourceId(),
         }))
-    }
-
-    get resources() {
-        return this._resources;
     }
 
     get countOfResource() {

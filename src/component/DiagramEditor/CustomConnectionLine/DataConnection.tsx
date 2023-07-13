@@ -25,6 +25,8 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = ({
         targetY,
         targetPosition,
     });
+
+
     const dispatch = useAppDispatch()
     const {setEditNode} = diagramEditorActions
 
@@ -49,7 +51,7 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = ({
                     }}
                 >
                     <Button onClick={onClick}>
-                        Data Connection
+                        Data Connection: ${data?.id}
                     </Button>
                     formula: {data?.formula}
                 </Box>

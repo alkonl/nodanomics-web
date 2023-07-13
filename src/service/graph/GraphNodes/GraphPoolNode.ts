@@ -15,9 +15,9 @@ export class GraphPoolNode extends GraphBaseNode<IPoolNodeData> {
 
     onEdgeInvoke(edge: GraphBaseEdge) {
         console.log('onEdgeInvoke: ', edge);
-        if (edge instanceof GraphDataEdge) {
-            this.addResource(edge.resources);
-        }
+        // if (edge instanceof GraphDataEdge) {
+        //     this.addResource(edge.resources);
+        // }
     }
 
     get resources() {
@@ -26,6 +26,7 @@ export class GraphPoolNode extends GraphBaseNode<IPoolNodeData> {
 
     takeCountResources(count: number) {
         const deletedResources = this.resources.slice(0, count);
+        console.log(`tt1 takeCountResources ${count}: `, deletedResources)
         this._data = {
             ...this.data,
             resources: this.resources.slice(count)
@@ -34,7 +35,7 @@ export class GraphPoolNode extends GraphBaseNode<IPoolNodeData> {
     }
 
     addResource(resource: IResource[]) {
-        console.log('addResource: ', resource)
+        console.log('addResource: ', resource, this.data.resources)
         this._data = {
             ...this.data,
             resources: [...this.data.resources, ...resource]
