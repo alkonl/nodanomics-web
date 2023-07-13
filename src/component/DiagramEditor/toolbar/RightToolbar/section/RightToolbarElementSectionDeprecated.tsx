@@ -1,13 +1,13 @@
 import React from 'react';
-import {BaseSection} from "./BaseSection";
+import {BaseSectionDeprecated} from "./BaseSectionDeprecated";
 import {FormControlLabel, Input} from "@mui/material";
 
-export const RightToolbarElementSection = () => {
+export const RightToolbarElementSectionDeprecated = () => {
     return (
-        <BaseSection title="Functions">
+        <BaseSectionDeprecated title="Functions">
             <FormControlLabel control={<Input
                 type="text"
                />} label="Label"/>
-        </BaseSection>
+        </BaseSectionDeprecated>
     );
 };

@@ -7,6 +7,8 @@ import {MButton} from "../../base";
 import {useToggle} from "../../../hooks/useToggle";
 import {useProjectDashboardState} from "../../../redux";
 import {LandingRightPanelLayout} from "../../layout";
+import {Link} from "react-router-dom";
+import {ELinks} from "../../../service";
 
 export const ProjectDetails = () => {
     const projectDashboardState = useProjectDashboardState()
@@ -23,6 +25,7 @@ export const ProjectDetails = () => {
             prevProjectId.current = projectDashboardState.selectedProjectId
         }
     }, [projectInfo])
+
 
     return (
         <LandingRightPanelLayout>
@@ -125,11 +128,13 @@ export const ProjectDetails = () => {
                         variant="border">
                         Manage
                     </MButton.Submit>}
-                    <MButton.Submit sx={{
-                        alignSelf: 'flex-end'
-                    }} variant="border">
-                        Open
-                    </MButton.Submit>
+                    <Link to={ELinks.diagram}>
+                        <MButton.Submit sx={{
+                            alignSelf: 'flex-end'
+                        }} variant="border">
+                            Open
+                        </MButton.Submit>
+                    </Link>
 
                 </Box>
             </Box>

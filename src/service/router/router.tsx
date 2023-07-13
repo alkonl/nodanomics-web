@@ -60,10 +60,7 @@ export const appRouter = createBrowserRouter([
         path: ELinks.authGoogle,
         element: <AuthGoogle/>,
     }, {
-        path: `${ELinks.diagram}/:diagramId`,
-        element: <DiagramEditorPage/>
-    }, {
-        path: `${ELinks.diagram}`,
+        path: ELinks.diagram,
         element: <DiagramEditorPage/>
     }
 ]);

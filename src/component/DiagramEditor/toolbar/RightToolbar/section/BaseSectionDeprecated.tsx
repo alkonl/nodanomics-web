@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Accordion, AccordionDetails, AccordionSummary, Typography} from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-export const BaseSection: React.FC<{
+export const BaseSectionDeprecated: React.FC<{
     children: React.ReactNode;
     title: string;
 }> = ({children, title}) => {

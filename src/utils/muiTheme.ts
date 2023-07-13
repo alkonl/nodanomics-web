@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/named
 import {createTheme, ThemeOptions} from "@mui/material";
 import {EFontColor} from "../constant";
 

@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import {DiagramEditor, DiagramEditorHeader} from "../../component";
 import style from './DiagramEditorPage.module.scss'
-import {useAppDispatch} from "../../redux";
+import {useAppDispatch,diagramEditorActions} from "../../redux";
 import {useGetDiagramByIdQuery} from "../../api";
-import {diagramEditorActions} from "../../redux/store";
+
 import {useParams} from "react-router-dom";
 
 export const DiagramEditorPage = () => {

@@ -64,9 +64,9 @@ export const DiagramManagerForm: React.FC<{
                 [EFormFields.diagramDescription]: diagramState.description,
                 [EFormFields.diagramTags]: diagramState.diagramTags,
             })
-        }else if (type === EDiagramManagerType.makeACopy){
+        } else if (type === EDiagramManagerType.makeACopy) {
             form.reset({
-                [EFormFields.diagramName]:`Copy of ${diagramState.name}`,
+                [EFormFields.diagramName]: `Copy of ${diagramState.name}`,
                 [EFormFields.diagramDescription]: diagramState.description,
                 [EFormFields.diagramTags]: diagramState.diagramTags,
             })
@@ -96,7 +96,7 @@ export const DiagramManagerForm: React.FC<{
 
     useEffect(() => {
         if (resUpdateDiagram) {
-           dispatch( diagramEditorActions.setCurrentDiagram({
+            dispatch(diagramEditorActions.setCurrentDiagram({
                 diagramId: resUpdateDiagram.id,
                 name: resUpdateDiagram.name,
                 description: resUpdateDiagram.description,

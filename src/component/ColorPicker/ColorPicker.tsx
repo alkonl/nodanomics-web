@@ -1,9 +1,14 @@
-import React, {useState} from 'react';
-import {Popover} from "@mui/material";
+import React from 'react';
+import {Box, Button, Popover} from "@mui/material";
 import {HexColorPicker} from "react-colorful";
 
-export const ColorPicker = () => {
-    const [color, setColor] = useState<string| undefined>(undefined);
+export const ColorPicker: React.FC<{
+    onChange?: (newColor: string) => void
+    value?: string
+}> = ({
+          onChange,
+          value,
+      }) => {
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
@@ -18,26 +23,26 @@ export const ColorPicker = () => {
     const open = Boolean(anchorEl);
     const id = open ? 'ColorPicker' : undefined;
     return (
-        <div>
+        <Box>
 
-            <button
-                style={{
-                    width: 40,
+            <Button
+                sx={{
+                    width: '40px',
                     border: '1px solid gray',
-                    height: 20,
+                    height: '20px',
                     borderRadius: 5,
-                    padding: 4,
+                    padding: '4px',
                 }}
                 onClick={handleClick}
             >
-                <div
-                    style={{
+                <Box
+                    sx={{
                         width: '100%',
                         height: '100%',
-                        backgroundColor: color,
+                        backgroundColor: value,
                     }}
                 />
-            </button>
+            </Button>
 
             <Popover
                 id={id}
@@ -49,8 +54,8 @@ export const ColorPicker = () => {
                     horizontal: 'left',
                 }}
             >
-                <HexColorPicker color={color} onChange={setColor}/>
+                <HexColorPicker color={value} onChange={onChange}/>
             </Popover>
-        </div>
+        </Box>
     );
 };

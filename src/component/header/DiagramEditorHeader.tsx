@@ -8,7 +8,7 @@ export const DiagramEditorHeader = () => {
 
     return (
         <Box
-            style={{
+            sx={{
                 display: 'flex',
                 alignContent: 'center',
                 gap: '20px',

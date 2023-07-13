@@ -5,9 +5,9 @@ export enum EFontStyle {
 }
 
 export enum EFontAlign {
-    Left = 'Left',
-    Center = 'Center',
-    Right = 'Right',
+    Left = 'left',
+    Center = 'center',
+    Right = 'right',
 }
 
 export interface IDiagramTextStyle {

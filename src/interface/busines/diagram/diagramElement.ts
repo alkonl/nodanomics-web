@@ -1,17 +1,29 @@
-import React from "react";
-import {IBaseDiagramNode} from "./node";
+import {EDiagramNode} from "./node";
+import {EConnection} from "./connection";
+import {EEvent} from "./event";
+import {ELogic} from "./logic";
+import {IDiagramNodeStyle} from "./elementStyle";
+
 export enum EElementType {
     Node = 'Node',
-    Edge = 'Edge',
-    Text = 'Text',
+    Connection = 'Connection',
+    Event = 'Event',
+    Logic = 'Logic',
 }
 
-export interface DiagramElementPreview {
-    type: 'Component';
-    Component: React.FC;
-};
+export type IDiagramElement = EDiagramNode | EConnection | EEvent | ELogic;
 
-export interface IDiagramElementPreviewTooltip extends IBaseDiagramNode {
-    tooltip: string;
-    preview: DiagramElementPreview
+export interface IBaseDiagramElement {
+    elementType: EElementType;
+    type: IDiagramElement;
+}
+
+
+export interface IDiagramBaseInteractiveElementData extends IBaseDiagramElement{
+    elementType: EElementType.Connection | EElementType.Node;
+    type: EDiagramNode | EConnection
+    id: string;
+    name: string;
+    label: string;
+    style: IDiagramNodeStyle;
 }

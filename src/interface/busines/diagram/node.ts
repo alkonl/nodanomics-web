@@ -1,36 +1,64 @@
-import {IDiagramTextStyle} from "../font";
-import {DiagramElementPreview, EElementType} from "./diagramElement";
-
+// eslint-disable-next-line import/named
+import {Node} from "reactflow";
+import {IDiagramBaseInteractiveElementData} from "./diagramElement";
 
 export enum EDiagramNode {
+    Variable = 'Variable',
+    D = 'D',
     Source = 'Source',
-    Drain = 'Drain',
+    Formula = 'Formula',
     Pool = 'Pool',
-    Gate = 'Gate',
+    DOWN = 'DOWN',
+    ConnectionNode = 'ConnectionNode',
 }
 
 
-export interface IBaseDiagramNode {
-    elementType: EElementType.Node;
+
+export interface IDiagramNodeBaseData extends IDiagramBaseInteractiveElementData{
     type: EDiagramNode;
 }
 
 
-
-
-export interface IDiagramNodeStyle {
-    borderWidth: number;
-    borderColor: string;
-    isFilled: boolean;
-    fillColor?: string;
-    textStyles: IDiagramTextStyle
+export interface IVariableNodeData extends IDiagramNodeBaseData {
+    type: EDiagramNode.Variable;
+    value?: number
 }
 
-export interface IDiagramNode extends IBaseDiagramNode {
-    id: string;
-    name: string;
-    label: string;
-    style: IDiagramNodeStyle;
-    zIndex: number;
-    preview: DiagramElementPreview;
+export interface IFormulaResultBoolean {
+    type: 'boolean'
+    value: boolean
 }
+
+export interface IFormulaResultNumber {
+    type: 'number'
+    value: number
+}
+
+export type IFormulaResult = IFormulaResultBoolean | IFormulaResultNumber
+
+export interface IFormulaNodeData extends IDiagramNodeBaseData {
+    type: EDiagramNode.Formula;
+    formula?: string
+    result?: IFormulaResult
+}
+
+export interface IResource {
+    id: string
+    color: string
+}
+
+export interface ISourceNodeData extends IDiagramNodeBaseData {
+    type: EDiagramNode.Source;
+}
+
+export interface IPoolNodeData extends IDiagramNodeBaseData {
+    type: EDiagramNode.Pool
+    resources: IResource[]
+}
+
+
+export type INodeData = IVariableNodeData | IFormulaNodeData | ISourceNodeData | IPoolNodeData
+
+export type IReactFlowNode = Node<INodeData>
+
+

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Box, IconButton, Tooltip} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import {DiagramEditorDropDownMenuContent} from "./DiagramEditorDropDownMenuContent";
@@ -10,12 +10,12 @@ export const DiagramEditorDropDownMenu = () => {
         setAnchorElUser(event.currentTarget);
     };
 
-    const handleCloseUserMenu = () => {
+    const handleCloseUserMenu = useCallback(() => {
         setAnchorElUser(null);
-    };
+    }, [])
     return (
         <Box
-            style={{
+            sx={{
                 display: 'flex',
                 alignItems: 'center',
             }}
