@@ -7,19 +7,29 @@ import {IPoolNodeData} from "../../../../interface";
 export const PoolNode: React.FC<NodeProps<IPoolNodeData>> = ({isConnectable, data}) => {
     return (
         <Box>
-            <Handle type="target" position={Position.Top} isConnectable={isConnectable}/>
-            <Typography sx={{
+            <Handle type="target" position={Position.Left} isConnectable={isConnectable}/>
+            <Handle type="source" position={Position.Right} isConnectable={isConnectable}/>
+            <Box sx={{
                 border: '1px solid #777',
-                borderRadius: '100%',
                 width: 40,
                 height: 40,
                 display: 'flex',
+                flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
             }}>
-                {data.resources.length}
-            </Typography>
-            PoolNode
+                <Box>
+                    <Typography sx={{
+                        fontSize: 10,
+                    }}>
+                        Pool
+                    </Typography>
+                </Box>
+                <Typography>
+                    {data.resources.length}
+                </Typography>
+            </Box>
+
         </Box>
     );
 };

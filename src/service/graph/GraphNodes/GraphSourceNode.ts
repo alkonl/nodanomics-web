@@ -6,9 +6,8 @@ export class GraphSourceNode extends GraphBaseNode<ISourceNodeData> {
         super(data);
     }
 
-    invoke() {
+    start() {
         this.invokeOutgoingEdges()
-        console.log('invokes GraphSourceNode')
     }
 
     onParentUpdate() {

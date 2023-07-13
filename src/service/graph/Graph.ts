@@ -19,7 +19,7 @@ export class Graph {
     invokeStep() {
         this.nodes.forEach(node => {
             if (node instanceof GraphSourceNode) {
-                node.invoke()
+                node.start()
             }
         })
     }

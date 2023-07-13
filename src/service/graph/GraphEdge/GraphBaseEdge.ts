@@ -24,7 +24,7 @@ export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionB
         return this._data;
     }
 
-    invoke() {
+    invoke(incomingNode: GraphBaseNode<IDiagramNodeBaseData>) {
         this._target.onEdgeInvoke(this);
         this._target.invokeOutgoingEdges();
     }

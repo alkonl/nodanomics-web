@@ -17,7 +17,7 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
 
     invokeOutgoingEdges(){
         this._outgoingEdges.forEach(edge => {
-            edge.invoke()
+            edge.invoke(this)
         })
     }
 
