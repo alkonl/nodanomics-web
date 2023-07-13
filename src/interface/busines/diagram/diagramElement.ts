@@ -1,4 +1,4 @@
-import {EDiagramNode} from "./node";
+import {EDiagramNode} from "./node/node";
 import {EConnection} from "./connection";
 import {EEvent} from "./event";
 import {ELogic} from "./logic";

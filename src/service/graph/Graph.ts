@@ -64,4 +64,8 @@ export class Graph {
             source.addEdge(target, edge);
         }
     }
+
+    resetNodeValues() {
+        // this.nodes.forEach(node => node.resetValue());
+    }
 }

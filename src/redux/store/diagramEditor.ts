@@ -104,10 +104,12 @@ export const diagramEditorSlice = createSlice({
             }
         },
         invokeStep: (state) => {
-
             runManager.invokeStep()
             updateNodes(state.diagramNodes)
         },
+        resetDiagramRun: (state) => {
+            graph.resetNodeValues()
+        }
     }
 })
 

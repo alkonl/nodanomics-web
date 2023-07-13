@@ -10,7 +10,7 @@ import {
 import {Box} from "@mui/material";
 import {EColor} from "../../../../constant";
 import {ElementToolbarSection} from "./ElementToolbarSection";
-import {useInvokeStep} from "../../../../hooks";
+import {useInvokeStep, useResetDiagramRun} from "../../../../hooks";
 import {MButton} from '../../../base';
 
 const mockDiagramNodes: DiagramElementPreviewToolbar = {
@@ -90,6 +90,7 @@ export const ElementToolbar = () => {
     const formated = Object.entries(mockDiagramNodes);
 
     const {toggleStepInterval, isRunning, runStep} = useInvokeStep();
+    const reset = useResetDiagramRun();
 
     return (
         <Box sx={{
@@ -121,6 +122,9 @@ export const ElementToolbar = () => {
                 onClick={toggleStepInterval}
             >
                 {isRunning ? 'Stop' : 'Start'}
+            </MButton.Submit>
+            <MButton.Submit onClick={reset}>
+                Reset
             </MButton.Submit>
         </Box>
     );
