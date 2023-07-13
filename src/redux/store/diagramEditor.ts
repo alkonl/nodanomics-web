@@ -5,10 +5,10 @@ import {
     INodeData,
     IReactFlowEdge,
     IDiagramConnectionData,
-    EElementType
+    EElementType, IReactFlowEdgeConnection
 } from "../../interface";
 // eslint-disable-next-line import/named
-import {addEdge, applyEdgeChanges, applyNodeChanges, NodeChange, Connection, EdgeChange} from "reactflow";
+import {addEdge, applyEdgeChanges, applyNodeChanges, NodeChange, EdgeChange} from "reactflow";
 import {Optionalize} from "../../utils";
 import {Graph} from "../../service";
 
@@ -58,9 +58,8 @@ export const diagramEditorSlice = createSlice({
             state.diagramTags = payload.diagramTags
         },
         addNode: (state, {payload}: PayloadAction<IReactFlowNode>) => {
-            const lenth = state.diagramNodes.push(payload)
-            graph.addOrGetNode(state.diagramNodes[lenth - 1].data)
-            console.log('graph.addOrGetNode: ', graph)
+            const length = state.diagramNodes.push(payload)
+            graph.addOrGetNode(state.diagramNodes[length - 1].data)
         },
         onNodesChange: (state, {payload}: PayloadAction<NodeChange[]>) => {
             state.diagramNodes = applyNodeChanges<INodeData>(payload, state.diagramNodes)
@@ -80,12 +79,9 @@ export const diagramEditorSlice = createSlice({
             updateNodes(state.diagramNodes)
         },
         updateEdgeData: (state, {payload}: PayloadAction<Optionalize<IDiagramConnectionData, 'id' | 'type'>>) => {
-            console.log('updateEdgeData: ', payload)
             const edge = state.diagramEdges.find(edge => edge.id === payload.id)
-            // graph.updateEdgeData(payload.id, payload)
-            console.log('updateEdgeData: ', edge)
+            graph.updateEdgeData(payload)
             if (edge && edge.data && edge.data.type === payload.type) {
-                console.log('updateEdgeData: ', JSON.stringify(edge.data, null, 2))
                 edge.data = {
                     ...edge.data,
                     ...payload
@@ -95,16 +91,21 @@ export const diagramEditorSlice = createSlice({
         addEdge: (state, {payload}: PayloadAction<EdgeChange[]>) => {
             state.diagramEdges = applyEdgeChanges(payload, state.diagramEdges)
         },
-        onConnect: (state, {payload}: PayloadAction<IReactFlowEdge | Connection>) => {
+        onConnect: (state, {payload}: PayloadAction<IReactFlowEdge | IReactFlowEdgeConnection>) => {
             state.diagramEdges = addEdge(payload, state.diagramEdges)
-
-            if (payload.target && payload.source) {
+            if (payload.target && payload.source && payload.data) {
                 graph.addEdge({
                     sourceId: payload.source,
-                    targetId: payload.target
+                    targetId: payload.target,
+                    edgeData: payload.data,
                 })
                 updateNodes(state.diagramNodes)
             }
+        },
+        invokeStep: (state) => {
+            graph.invokeStep()
+            updateNodes(state.diagramNodes)
+            console.log('invokeStep: ',graph)
         }
     }
 })

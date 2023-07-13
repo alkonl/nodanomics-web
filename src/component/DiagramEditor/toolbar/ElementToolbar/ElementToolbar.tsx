@@ -10,6 +10,8 @@ import {
 import {Box} from "@mui/material";
 import {EColor} from "../../../../constant";
 import {ElementToolbarSection} from "./ElementToolbarSection";
+import {useInvokeStep} from "../../../../hooks";
+import {MButton} from '../../../base';
 
 const mockDiagramNodes: DiagramElementPreviewToolbar = {
     [EElementType.Node]: [{
@@ -17,27 +19,27 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
         type: EDiagramNode.Variable,
         tooltip: 'Variable',
         toolbarName: 'V',
-    },{
+    }, {
         elementType: EElementType.Node,
         type: EDiagramNode.D,
         tooltip: 'no',
         toolbarName: 'D',
-    },{
+    }, {
         elementType: EElementType.Node,
         type: EDiagramNode.Source,
         tooltip: 'no',
         toolbarName: 'S',
-    },{
+    }, {
         elementType: EElementType.Node,
         type: EDiagramNode.Formula,
         tooltip: 'Formula',
         toolbarName: 'F',
-    },{
+    }, {
         elementType: EElementType.Node,
         type: EDiagramNode.DOWN,
         tooltip: 'Variable',
         toolbarName: 'Do',
-    },{
+    }, {
         elementType: EElementType.Node,
         type: EDiagramNode.Pool,
         tooltip: 'Pool',
@@ -48,7 +50,7 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
         type: ELogic.M,
         tooltip: 'M',
         toolbarName: 'M',
-    },{
+    }, {
         elementType: EElementType.Logic,
         type: ELogic.W,
         tooltip: 'W',
@@ -59,7 +61,7 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
         type: EEvent.T,
         tooltip: 'T',
         toolbarName: 'T',
-    },{
+    }, {
         elementType: EElementType.Event,
         type: EEvent.L,
         tooltip: 'L',
@@ -70,12 +72,12 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
         type: EDiagramNode.ConnectionNode,
         tooltip: 'Con',
         toolbarName: 'Con',
-    },{
+    }, {
         elementType: EElementType.Connection,
         type: EConnection.LogicConnection,
         tooltip: '2',
         toolbarName: '2',
-    },{
+    }, {
         elementType: EElementType.Connection,
         type: EConnection.thirdType,
         tooltip: '3',
@@ -86,8 +88,12 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
 
 export const ElementToolbar = () => {
     const formated = Object.entries(mockDiagramNodes);
+
+    const {runStepInterval, isRunning, runStep} = useInvokeStep();
+
     return (
         <Box sx={{
+            pointerEvents: 'auto',
             display: 'flex',
             gap: 1,
             borderColor: EColor.grey2,
@@ -106,6 +112,16 @@ export const ElementToolbar = () => {
                     }}
                 />
             })}
+            <MButton.Submit
+                onClick={runStep}
+            >
+                Step
+            </MButton.Submit>
+            <MButton.Submit
+                onClick={runStepInterval}
+            >
+                Play
+            </MButton.Submit>
         </Box>
     );
 };

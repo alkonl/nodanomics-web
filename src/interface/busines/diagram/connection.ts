@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/named
-import {Edge} from "reactflow";
+import {Connection, Edge} from "reactflow";
 import {EElementType, IDiagramBaseInteractiveElementData} from "./diagramElement";
 
 export enum EConnection {
@@ -8,7 +8,7 @@ export enum EConnection {
     thirdType = 'thirdType',
 }
 
-export interface IDiagramConnectionBaseData extends IDiagramBaseInteractiveElementData{
+export interface IDiagramConnectionBaseData extends IDiagramBaseInteractiveElementData {
     elementType: EElementType.Connection;
     type: EConnection;
 }
@@ -26,3 +26,8 @@ export interface ILogicConnectionData extends IDiagramConnectionBaseData {
 export type IDiagramConnectionData = IDataConnectionData | ILogicConnectionData;
 
 export type IReactFlowEdge = Edge<IDiagramConnectionData>;
+
+export type IReactFlowEdgeConnection = Connection & {
+    data: IDiagramConnectionData
+}
+

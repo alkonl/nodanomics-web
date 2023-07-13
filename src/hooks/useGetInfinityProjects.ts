@@ -26,7 +26,6 @@ export const useGetInfinityProjects = () => {
     // get projects until fill the screen
     useEffect(() => {
         if (allProjects && !isLoading && reachedBottom) {
-            console.log('get projects: ', isLoading)
             const lastProject = allProjects?.[allProjects.length - 1]
             const lastProjectRef = scrollRef.current?.lastElementChild
             if (lastProjectRef && lastProject) {

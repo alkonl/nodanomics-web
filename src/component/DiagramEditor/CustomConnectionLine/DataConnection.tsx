@@ -29,7 +29,6 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = ({
     const {setEditNode} = diagramEditorActions
 
     const onClick = () => {
-        console.log('EdgeLabelRenderer')
         dispatch(setEditNode({
             id,
             type: EElementType.Connection,

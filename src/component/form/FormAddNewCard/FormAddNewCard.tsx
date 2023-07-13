@@ -43,7 +43,6 @@ export const FormAddNewCard = () => {
     }, [])
 
     const onSubmit = (data: IValidationSchema) => {
-        console.log(data)
     }
     return (
         <Box sx={{

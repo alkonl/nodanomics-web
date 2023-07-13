@@ -6,7 +6,16 @@ export class GraphSourceNode extends GraphBaseNode<ISourceNodeData> {
         super(data);
     }
 
+    invoke() {
+        this.invokeOutgoingEdges()
+        console.log('invokes GraphSourceNode')
+    }
+
     onParentUpdate() {
+        //
+    }
+
+    onEdgeInvoke() {
         //
     }
 }

@@ -9,4 +9,8 @@ export class GraphVariableNode extends GraphBaseNode<IVariableNodeData> {
     onParentUpdate() {
         // this.updateOutgoingNodes();
     }
+
+    onEdgeInvoke() {
+        // this.updateOutgoingNodes();
+    }
 }

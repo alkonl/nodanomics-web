@@ -6,7 +6,6 @@ import {IFormulaNodeData} from "../../../../interface";
 
 export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectable, data}) => {
     const result = useMemo(()=>{
-        console.log('FormulaNode.data: ', data)
         if(data.result && data.result.type === 'number'){
             return data.result.value
         }

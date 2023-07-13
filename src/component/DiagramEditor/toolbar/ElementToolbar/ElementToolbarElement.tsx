@@ -1,13 +1,12 @@
 import React, {DragEvent} from 'react';
-import {EDiagramNode, IDiagramElement, IDiagramElementPreviewToolbarElement} from "../../../../interface";
-import {Box, Tooltip, Typography} from "@mui/material";
+import {IDiagramElement, IDiagramElementPreviewToolbarElement} from "../../../../interface";
+import {Tooltip, Typography} from "@mui/material";
 import {EColor} from "../../../../constant";
 
 export const ElementToolbarElement: React.FC<{
     element: IDiagramElementPreviewToolbarElement
 }> = ({element}) => {
     const onDragStart = (event: DragEvent<HTMLSpanElement>, nodeType: IDiagramElement) => {
-        console.log('onDragStart: ', nodeType)
         event.dataTransfer.setData('application/reactflow', nodeType);
         event.dataTransfer.effectAllowed = 'move';
     };

@@ -21,7 +21,7 @@ export const useOnDrop = ({flowWrapper, flowInstance}: {
 
                 // check if the dropped element is valid
                 if (typeof type === 'undefined' || !Object.values(EDiagramNode).includes(type)) {
-                    console.log(`Invalid element type: ${type}`)
+                    console.error(`Invalid element type: ${type}`)
                     return;
                 }
                 const newNode = createNode({
