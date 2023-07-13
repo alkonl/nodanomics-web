@@ -1,5 +1,5 @@
 import {
-    IDiagramConnectionData,
+    IDiagramConnectionData, IDiagramNodeBaseData,
     INodeData, IReactFlowNode,
 } from "../../interface";
 import {GraphBaseNode, GraphNodeFactory} from "./GraphNodes";
@@ -12,20 +12,66 @@ export class RunManager {
     private stepLimit = 100;
     private stepCount = 0;
     private graph: Graph
+
     constructor(graph: Graph) {
         this.graph = graph
     }
 
+    private structureStep() {
+        // const sortedEdge = this.graph.edges.sort((edge) => {
+        //     if (edge.source instanceof GraphSourceNode) {
+        //         return 1
+        //     }
+        //     return -1
+        // })
 
-   invokeStep() {
+        const edgesArrayOfSource = this.graph.edges.filter(edge => edge.source instanceof GraphSourceNode)
+        console.log('toLog: sortedEdge', this.graph.edges)
+
+        const sourceEdges = this.graph.edges.filter(edge => edge.source instanceof GraphSourceNode)
+        console.log('toLog: sourceEdges', sourceEdges)
+        const edgesArrayOfSourceChildEdges = sourceEdges.map(edge => {
+            return this.recusrsiveGetChildEdges(edge.target)
+        })
+        console.log('toLog', edgesArrayOfSourceChildEdges)
+
+        // const edgesArrayOfSourceChildNodes = sourceEdges.map(edge => {
+        //     return this.recursiveGetChildNodes(edge.target)
+        // })
+
+        return [...edgesArrayOfSourceChildEdges.flat().reverse(), ...edgesArrayOfSource.reverse() ]
+    }
+
+    recusrsiveGetChildEdges(node: GraphBaseNode<IDiagramNodeBaseData>, edges: GraphBaseEdge[] = []) {
+        console.log('toLog: recusrsiveGetChildEdges:', node.data.type)
+        edges.push(...node.outgoingEdges)
+        node.outgoingEdges.forEach(edge => {
+            this.recusrsiveGetChildEdges(edge.target, edges)
+        })
+        return edges
+    }
+
+    recursiveGetChildNodes(node: GraphBaseNode<IDiagramNodeBaseData>, nodes: GraphBaseNode<IDiagramNodeBaseData>[] = []) {
+        nodes.push(node)
+        node.outgoingEdges.forEach(edge => {
+            this.recursiveGetChildNodes(edge.target, nodes)
+        })
+        return nodes
+    }
+
+
+    invokeStep() {
         if (this.stepCount > this.stepLimit) {
             throw new Error('step limit reached')
         }
         this.stepCount++;
-        this.graph.edges.forEach(edge => {
+        const structuredEdges = this.structureStep()
+        const toLog = structuredEdges.map(edge => edge.source.data.type)
+        console.log('toLog: invokeStep:', toLog)
+        structuredEdges.forEach(edge => {
             edge.invokeStep()
         })
-   }
+    }
 
 }
 

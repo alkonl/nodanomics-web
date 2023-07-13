@@ -36,11 +36,11 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
         this.updateNode(data)
     }
 
-    updateOutgoingNodes() {
-        this._outgoingEdges.forEach(edge => {
-            edge.target.onParentUpdate();
-        })
-    }
+    // updateOutgoingNodes() {
+    //     this._outgoingEdges.forEach(edge => {
+    //         edge.target.onParentUpdate();
+    //     })
+    // }
 
     abstract onParentUpdate(): void
 
