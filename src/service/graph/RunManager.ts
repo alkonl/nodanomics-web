@@ -19,6 +19,7 @@ export class RunManager {
     }
 
     invokeStep() {
+        console.log('RunManager: ', this.graph)
         const nodes = this.sortedNodes()
         nodes.forEach(node => {
             node.invokeStepOutgoingEdges()

@@ -17,17 +17,19 @@ export class GraphPoolNode extends GraphBaseNode<IPoolNodeData> {
         return this.data.resources.length;
     }
 
+    invokeStepOutgoingEdges() {
+        if (this.resourcesCount >= this.countOfOutgoingRequiredResources) {
+            super.invokeStepOutgoingEdges();
+        }
+    }
+
     takeCountResources(count: number) {
-        console.log('takeCountResources', count)
-        // const requiredResources = this.countOfOutgoingRequiredResources();
-        // if (this.resourcesCount >= requiredResources) {
         const deletedResources = this.resources.slice(0, count);
         this._data = {
             ...this.data,
             resources: this.resources.slice(count)
         }
         return deletedResources
-        // }
     }
 
     addResource(resource?: IResource[]) {
@@ -39,7 +41,7 @@ export class GraphPoolNode extends GraphBaseNode<IPoolNodeData> {
         }
     }
 
-    private countOfOutgoingRequiredResources() {
+    private get countOfOutgoingRequiredResources() {
         return this.outgoingEdges.reduce((acc, edge) => {
             if (edge instanceof GraphDataEdge) {
                 return acc + edge.countOfResource
