@@ -28,7 +28,7 @@ export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionB
         return this._data;
     }
 
-    abstract invokeStep() : void
+    // abstract invokeStep() : void
 
     updateEdge(data: Partial<IDiagramConnectionData>) {
         this._data = {

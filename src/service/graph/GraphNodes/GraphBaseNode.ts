@@ -13,15 +13,12 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
         this._data = value;
     }
 
-    invokeStepOutgoingEdges() {
-        this._outgoingEdges.forEach(edge => {
-            edge.invokeStep()
-        })
-    }
 
     get data() {
         return this._data;
     }
+
+
 
     updateNode(data: Partial<INodeData>) {
         this._data = {
@@ -36,6 +33,10 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
 
     get outgoingEdges(): GraphBaseEdge[] {
         return this._outgoingEdges;
+    }
+
+    get incomingEdges(): GraphBaseEdge[] {
+        return this._incomingEdges;
     }
 
     addEdge(target: GraphBaseNode, edge: GraphBaseEdge) {

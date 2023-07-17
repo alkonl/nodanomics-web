@@ -1,13 +1,11 @@
 import {EDiagramNode, IDiagramNodeBaseData} from "./baseNode";
 import {IResource} from "../resource";
-import {ENodeAction} from "../nodeAction";
-import {ENodeTrigger} from "../nodeTrigger";
+import {ENodeAction, INodeWithAction} from "../nodeAction";
+import {INodeWithTrigger} from "../nodeTrigger";
 
 
-export interface IPoolNodeData extends IDiagramNodeBaseData {
+export interface IPoolNodeData extends IDiagramNodeBaseData, INodeWithTrigger, INodeWithAction{
     type: EDiagramNode.Pool
     resources: IResource[]
-    actionMode: ENodeAction
-    triggerMode: ENodeTrigger
 }
 

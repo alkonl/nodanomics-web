@@ -22,6 +22,9 @@ export const SourceNode: React.FC<NodeProps<ISourceNodeData>> = ({isConnectable,
                 <NodeText>
                     trigger: {data.triggerMode}
                 </NodeText>
+                <NodeText>
+                    action: {data.actionMode}
+                </NodeText>
             </Box>
             <Handle type="source" position={Position.Right} id="b" isConnectable={isConnectable}/>
         </Box>

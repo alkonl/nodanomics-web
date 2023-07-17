@@ -1,8 +1,8 @@
 import {EDiagramNode, IDiagramNodeBaseData} from "./baseNode";
-import {ENodeTrigger} from "../nodeTrigger";
+import {INodeWithTrigger} from "../nodeTrigger";
+import {INodeWithAction} from "../nodeAction";
 
 
-export interface ISourceNodeData extends IDiagramNodeBaseData {
+export interface ISourceNodeData extends IDiagramNodeBaseData, INodeWithTrigger, INodeWithAction {
     type: EDiagramNode.Source;
-    triggerMode: ENodeTrigger;
 }

@@ -1,6 +1,7 @@
 import {GraphSourceNode} from "./GraphNodes/GraphSourceNode";
 import {Graph} from "./Graph";
 import {GraphPoolNode} from "./GraphNodes/GraphPoolNode";
+import {GraphInteractiveNode} from "./GraphNodes/GraphInteractiveNode";
 
 export class RunManager {
     private graph: Graph
@@ -22,7 +23,9 @@ export class RunManager {
         console.log('RunManager: ', this.graph)
         const nodes = this.sortedNodes()
         nodes.forEach(node => {
-            node.invokeStepOutgoingEdges()
+            if(node instanceof GraphInteractiveNode) {
+                node.invokeStep()
+            }
         })
     }
 

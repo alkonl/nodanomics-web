@@ -4,3 +4,7 @@ export enum ENodeAction {
     pushAny = 'pushAny',
     pushAll = 'pushAll',
 }
+
+export interface INodeWithAction {
+    actionMode: ENodeAction
+}

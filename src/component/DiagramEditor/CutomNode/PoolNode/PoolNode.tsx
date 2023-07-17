@@ -25,6 +25,9 @@ export const PoolNode: React.FC<NodeProps<IPoolNodeData>> = ({isConnectable, dat
                     trigger: {data.triggerMode}
                 </NodeText>
                 <NodeText>
+                    action: {data.actionMode}
+                </NodeText>
+                <NodeText>
                     resources: {data.resources.length}
                 </NodeText>
             </Box>

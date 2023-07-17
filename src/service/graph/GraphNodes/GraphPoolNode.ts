@@ -1,8 +1,10 @@
-import {GraphBaseNode} from "./GraphBaseNode";
-import {IPoolNodeData, IResource} from "../../../interface";
+import {ENodeAction, ENodeTrigger, IDiagramNodeBaseData, IPoolNodeData, IResource} from "../../../interface";
 import {GraphDataEdge} from "../GraphEdge";
+import {GraphInteractiveNode} from "./GraphInteractiveNode";
+import {GraphBaseNode} from "./GraphBaseNode";
+import {GraphSourceNode} from "./GraphSourceNode";
 
-export class GraphPoolNode extends GraphBaseNode<IPoolNodeData> {
+export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
 
 
     constructor(data: IPoolNodeData) {
@@ -17,20 +19,25 @@ export class GraphPoolNode extends GraphBaseNode<IPoolNodeData> {
         return this.data.resources.length;
     }
 
-    invokeStepOutgoingEdges() {
-        if (this.resourcesCount >= this.countOfOutgoingRequiredResources) {
-            super.invokeStepOutgoingEdges();
+    get triggerMode() {
+        return this._data.triggerMode;
+    }
+
+    get edgesFromSources(): GraphDataEdge[] {
+        return this.incomingEdges
+            .filter(edge => edge.source instanceof GraphSourceNode)
+            .filter(edge => GraphDataEdge.baseEdgeIsData(edge)) as GraphDataEdge[];
+    }
+
+    invokeStep() {
+        if (this.triggerMode === ENodeTrigger.automatic) {
+            this.pullAllOrAnyResourcesFromSource()
+            this.pushAllResources()
+            this.pullAnyResourcesFromPool()
+            this.pullAllResourcesFromPool()
         }
     }
 
-    takeCountResources(count: number) {
-        const deletedResources = this.resources.slice(0, count);
-        this._data = {
-            ...this.data,
-            resources: this.resources.slice(count)
-        }
-        return deletedResources
-    }
 
     addResource(resource?: IResource[]) {
         if (resource) {
@@ -41,12 +48,76 @@ export class GraphPoolNode extends GraphBaseNode<IPoolNodeData> {
         }
     }
 
-    private get countOfOutgoingRequiredResources() {
+    private pullAnyResourcesFromPool() {
+        if (this.actionMode === ENodeAction.pullAny) {
+            this.incomingEdges.forEach(edge => {
+                if (edge instanceof GraphDataEdge && edge.source instanceof GraphPoolNode) {
+                    const resources = edge.source.takeCountResources(edge.countOfResource)
+                    this.addResource(resources)
+                }
+            })
+        }
+    }
+
+    private pullAllResourcesFromPool() {
+        if (this.actionMode === ENodeAction.pullAll) {
+            this.incomingEdges.forEach(edge => {
+                if (edge instanceof GraphDataEdge && edge.source instanceof GraphPoolNode) {
+                    if (edge.source.resourcesCount >= edge.countOfResource) {
+                        const resources = edge.source.takeCountResources(edge.countOfResource)
+                        this.addResource(resources)
+                    }
+                }
+            })
+        }
+    }
+
+    private get countOfRequiredOutgoingResources() {
         return this.outgoingEdges.reduce((acc, edge) => {
             if (edge instanceof GraphDataEdge) {
                 return acc + edge.countOfResource
             }
             return acc;
         }, 0)
+    }
+
+    private takeCountResources(count: number) {
+        const deletedResources = this.resources.slice(0, count);
+        this._data = {
+            ...this.data,
+            resources: this.resources.slice(count)
+        }
+        return deletedResources
+    }
+
+    private pushAllResources() {
+        if (this.actionMode === ENodeAction.pushAll) {
+            if (this.resourcesCount > this.countOfRequiredOutgoingResources) {
+                this.outgoingEdges.forEach(edge => {
+                    if (edge instanceof GraphDataEdge) {
+                        if (edge.target instanceof GraphPoolNode) {
+                            const resources = this.takeCountResources(edge.countOfResource)
+                            edge.target.addResource(resources)
+                        }
+                    }
+                })
+            }
+        }
+    }
+
+    private pullAllOrAnyResourcesFromSource() {
+        if (this.actionMode === ENodeAction.pullAll || this.actionMode === ENodeAction.pullAny) {
+            this.edgesFromSources.forEach(edge => {
+                const resources = edge.countOfResource
+                if (edge.source instanceof GraphSourceNode) {
+                    const generatedResources = edge.source.generateResourceFromSource(resources)
+                    this.addResource(generatedResources)
+                }
+            })
+        }
+    }
+
+    static baseNodeIsPool(baseNode: GraphBaseNode<IDiagramNodeBaseData>): baseNode is GraphPoolNode {
+        return baseNode instanceof GraphPoolNode;
     }
 }

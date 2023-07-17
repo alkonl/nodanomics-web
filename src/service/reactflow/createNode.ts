@@ -61,6 +61,7 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
                     ...baseData,
                     type,
                     triggerMode: ENodeTrigger.automatic,
+                    actionMode: ENodeAction.pushAny,
                 }
             }
         }
