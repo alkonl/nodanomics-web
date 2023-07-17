@@ -6,6 +6,7 @@ import {useCurrentEditElement, useUpdateElement} from "../../../../hooks";
 import {ParameterContainer, ParameterLabel, SectionTitle} from "./styledComponents";
 import {ElementSetupToolbarStyleSection} from "./ElementSetupToolbarStyleSection";
 import {FormulaParameter} from "./FormulaParameter";
+import {NodeActionParameter} from "./NodeActionParameter";
 
 
 export const ElementSetupToolbar = () => {
@@ -43,29 +44,37 @@ export const ElementSetupToolbar = () => {
                 backgroundColor: EColor.white,
             }}
         >
-            <Typography sx={{
-                color: EFontColor.grey4,
-            }}>
-                {selectedElementData?.type}
-            </Typography>
-            <SectionTitle>
-                Function
-            </SectionTitle>
-            {selectedElementData && <ParameterContainer>
-                <ParameterLabel>
-                    Name
-                </ParameterLabel>
-                <Input
-                    value={selectedElementData?.name || ''}
-                    onChange={onNameChange}
-                    type="text"
-                    sx={{
+            {selectedElementData ?
+                <>
+                    <Typography sx={{
                         color: EFontColor.grey4,
-                        width: '100%',
-                    }}/>
-            </ParameterContainer>}
-            {selectedElementData?.type === EConnection.DataConnection && <FormulaParameter/>}
-            {selectedElementData && <ElementSetupToolbarStyleSection element={selectedElementData}/>}
+                    }}>
+                        {selectedElementData?.type}
+                    </Typography>
+                    <SectionTitle>
+                        Function
+                    </SectionTitle>
+                    {selectedElementData && <ParameterContainer>
+                        <ParameterLabel>
+                            Name
+                        </ParameterLabel>
+                        <Input
+                            value={selectedElementData?.name || ''}
+                            onChange={onNameChange}
+                            type="text"
+                            sx={{
+                                color: EFontColor.grey4,
+                                width: '100%',
+                            }}/>
+                    </ParameterContainer>}
+                    {selectedElementData?.type === EConnection.DataConnection && <FormulaParameter/>}
+                    {'actionMode' in selectedElementData && <NodeActionParameter/>}
+                    {selectedElementData && <ElementSetupToolbarStyleSection element={selectedElementData}/>}
+                </>
+                : <Typography>
+                    Please select an element to edit
+                </Typography>
+            }
         </Box>
     );
 };

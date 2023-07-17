@@ -5,9 +5,9 @@ import ReactFlow, {
     // eslint-disable-next-line import/named
     ReactFlowInstance, NodeChange, EdgeChange, ConnectionMode,
 } from 'reactflow';
-
 import 'reactflow/dist/style.css';
-import {useOnDrop} from "../../../hooks";
+
+import {useOnDrop, useOnNodeDragStart} from "../../../hooks";
 import styles from './DiagramCanvas.module.scss'
 import {EConnection, EDiagramNode} from "../../../interface";
 import {FormulaNode, PoolNode, SourceNode, VariableNode} from "../CutomNode";
@@ -16,6 +16,7 @@ import {Box} from "@mui/material";
 import {DataConnection} from "../CustomConnectionLine/DataConnection";
 import {LogicConnection} from "../CustomConnectionLine/LogicConnection";
 import {useOnConnect} from "../../../hooks/useOnConnect";
+import {NodeDragHandler} from "@reactflow/core/dist/esm/types/nodes";
 
 
 const nodeTypes = {
@@ -49,6 +50,8 @@ export const DiagramCanvas = () => {
         event.dataTransfer.dropEffect = 'move';
     }, []);
 
+    const onNodeDragStart = useOnNodeDragStart()
+
     const onDrop = useOnDrop({
         flowInstance: reactFlowInstance,
         flowWrapper: reactFlowWrapper.current !== null ? reactFlowWrapper.current : undefined,
@@ -76,6 +79,7 @@ export const DiagramCanvas = () => {
                     onInit={setReactFlowInstance}
                     onDrop={onDrop}
                     onDragOver={onDragOver}
+                    onNodeDragStart={onNodeDragStart}
                     edgeTypes={edgeTypes}
                     connectionMode={ConnectionMode.Loose}
                 >

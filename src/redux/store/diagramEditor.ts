@@ -20,7 +20,7 @@ export interface IDiagramEditorState {
     diagramNodes: IReactFlowNode[]
     diagramEdges: IReactFlowEdge[],
     currentEditElement?: {
-        type: EElementType
+        elementType: EElementType
         id: string
     }
 }
@@ -65,8 +65,8 @@ export const diagramEditorSlice = createSlice({
         onNodesChange: (state, {payload}: PayloadAction<NodeChange[]>) => {
             state.diagramNodes = applyNodeChanges<INodeData>(payload, state.diagramNodes)
         },
-        setEditNode: (state, {payload}: PayloadAction<{
-            type: EElementType
+        setEditElement: (state, {payload}: PayloadAction<{
+            elementType: EElementType
             id: string
         }>) => {
             state.currentEditElement = payload

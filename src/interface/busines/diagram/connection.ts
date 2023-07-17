@@ -16,6 +16,7 @@ export interface IDiagramConnectionBaseData extends IDiagramBaseInteractiveEleme
 
 export interface IDataConnectionData extends IDiagramConnectionBaseData {
     type: EConnection.DataConnection;
+    interval?: number;
     formula?: string
 }
 

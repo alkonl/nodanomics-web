@@ -1,4 +1,4 @@
-import {EDiagramNode, EElementType, IDiagramNodeBaseData, IReactFlowNode} from "../../interface";
+import {EDiagramNode, EElementType, ENodeAction, IDiagramNodeBaseData, IReactFlowNode} from "../../interface";
 // eslint-disable-next-line import/named
 import {ReactFlowInstance} from "reactflow";
 import {DragEvent} from "react";
@@ -70,6 +70,7 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
                     ...baseData,
                     type,
                     resources: [],
+                    actionMode: ENodeAction.pullAny,
                 }
             }
         }
