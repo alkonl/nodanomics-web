@@ -60,7 +60,9 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
                 data: {
                     ...baseData,
                     type,
-                    triggerMode: ENodeTrigger.automatic,
+                    trigger: {
+                        mode: ENodeTrigger.automatic,
+                    },
                     actionMode: ENodeAction.pushAny,
                 }
             }
@@ -73,7 +75,9 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
                     type,
                     resources: [],
                     actionMode: ENodeAction.pullAny,
-                    triggerMode: ENodeTrigger.passive,
+                    trigger: {
+                        mode: ENodeTrigger.passive,
+                    },
                 }
             }
         }

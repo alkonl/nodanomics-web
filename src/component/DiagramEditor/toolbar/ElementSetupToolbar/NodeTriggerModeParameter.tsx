@@ -13,16 +13,16 @@ export const NodeTriggerModeParameter = () => {
 
     const selectedElementData = useCurrentEditElement()?.data
 
-    if (selectedElementData && !('triggerMode' in selectedElementData)) {
+    if (selectedElementData && !('trigger' in selectedElementData)) {
         throw new Error(`no triggerMode in selectedElementData ${JSON.stringify(selectedElementData)}`)
     }
-    const {updateNodeData} = useUpdateElement({
+    const {updateNodeTrigger} = useUpdateElement({
         elementType: selectedElementData?.elementType,
         elementId: selectedElementData?.id,
     })
     const changeNodeTriggerMode = (event: SelectChangeEvent) => {
-        updateNodeData({
-            triggerMode: event.target.value as ENodeTrigger,
+        updateNodeTrigger({
+            trigger: event.target.value as ENodeTrigger,
         })
     }
 
@@ -47,7 +47,7 @@ export const NodeTriggerModeParameter = () => {
                             }}
                         />
                         <Select
-                            value={selectedElementData.triggerMode}
+                            value={selectedElementData.trigger.mode}
                             onChange={changeNodeTriggerMode}
                             sx={{
                                 color: EFontColor.grey4,

@@ -20,7 +20,7 @@ export const SourceNode: React.FC<NodeProps<ISourceNodeData>> = ({isConnectable,
                     Source
                 </NodeText>
                 <NodeText>
-                    trigger: {data.triggerMode}
+                    trigger: {data.trigger.mode}
                 </NodeText>
                 <NodeText>
                     action: {data.actionMode}

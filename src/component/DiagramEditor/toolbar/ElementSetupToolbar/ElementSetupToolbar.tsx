@@ -69,7 +69,7 @@ export const ElementSetupToolbar = () => {
                             }}/>
                     </ParameterContainer>}
                     {selectedElementData?.type === EConnection.DataConnection && <FormulaParameter/>}
-                    {'triggerMode' in selectedElementData && <NodeTriggerModeParameter/>}
+                    {'trigger' in selectedElementData && <NodeTriggerModeParameter/>}
                     {'actionMode' in selectedElementData && <NodeActionParameter/>}
                     {selectedElementData && <ElementSetupToolbarStyleSection element={selectedElementData}/>}
                 </>

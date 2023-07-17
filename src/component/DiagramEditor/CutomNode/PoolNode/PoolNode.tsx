@@ -22,7 +22,7 @@ export const PoolNode: React.FC<NodeProps<IPoolNodeData>> = ({isConnectable, dat
                     Pool
                 </NodeText>
                 <NodeText>
-                    trigger: {data.triggerMode}
+                    trigger: {data.trigger.mode}
                 </NodeText>
                 <NodeText>
                     action: {data.actionMode}

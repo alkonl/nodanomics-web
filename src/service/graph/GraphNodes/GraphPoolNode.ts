@@ -20,9 +20,6 @@ export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
         return this.data.resources.length;
     }
 
-    get triggerMode() {
-        return this._data.triggerMode;
-    }
 
     get edgesFromSources(): GraphDataEdge[] {
         return this.incomingEdges

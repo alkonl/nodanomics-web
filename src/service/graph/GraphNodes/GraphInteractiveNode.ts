@@ -21,8 +21,8 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
 
     protected abstract runAction(): void;
 
-    get triggerMode() {
-        return this._data.triggerMode;
+    get triggerMode(): ENodeTrigger {
+        return this._data.trigger.mode;
     }
 
     get actionMode() {
