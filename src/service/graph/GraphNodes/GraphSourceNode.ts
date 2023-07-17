@@ -1,20 +1,19 @@
-import {ENodeTrigger, ISourceNodeData} from "../../../interface";
+import {ISourceNodeData} from "../../../interface";
 import {GraphInteractiveNode} from "./GraphInteractiveNode";
 import {GraphPoolNode} from "./GraphPoolNode";
 import {GraphDataEdge} from "../GraphEdge";
+import {RunManager} from "../RunManager";
 
 let resourceId = 0;
 const genResourceId = () => `resource_${resourceId++}`
 
 export class GraphSourceNode extends GraphInteractiveNode<ISourceNodeData> {
-    constructor(data: ISourceNodeData) {
-        super(data);
+    constructor(data: ISourceNodeData, runManager: RunManager) {
+        super(data, runManager);
     }
 
-    invokeStep() {
-        if (this.triggerMode === ENodeTrigger.automatic) {
-            this.pushAllOrAnyResources()
-        }
+    protected runAction() {
+        this.pushAllOrAnyResources()
     }
 
     pushAllOrAnyResources() {

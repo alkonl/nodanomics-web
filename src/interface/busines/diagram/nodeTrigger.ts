@@ -1,6 +1,7 @@
 export enum ENodeTrigger {
     passive = "passive",
     automatic = "automatic",
+    enabling = "enabling",
 }
 
 

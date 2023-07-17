@@ -1,13 +1,12 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {ParameterContainer, ParameterLabel} from "./styledComponents";
 import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 import {useCurrentEditElement, useUpdateElement} from "../../../../hooks";
-import {ENodeAction} from "../../../../interface";
+import {EDiagramNode, ENodeAction} from "../../../../interface";
 import {EFontColor} from "../../../../constant";
 // eslint-disable-next-line import/named
 import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
 
-const nodeActionModes = Object.keys(ENodeAction)
 
 export const NodeActionParameter = () => {
     const selectedElementData = useCurrentEditElement()?.data
@@ -25,6 +24,12 @@ export const NodeActionParameter = () => {
             actionMode: event.target.value as ENodeAction,
         })
     }
+    const nodeActionModes = useMemo(() => {
+        if (selectedElementData?.type === EDiagramNode.Source) {
+            return [ENodeAction.pushAll, ENodeAction.pushAny]
+        }
+        return Object.keys(ENodeAction)
+    }, [selectedElementData])
 
     return (
         <>

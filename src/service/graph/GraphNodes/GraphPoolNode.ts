@@ -1,14 +1,15 @@
-import {ENodeAction, ENodeTrigger, IDiagramNodeBaseData, IPoolNodeData, IResource} from "../../../interface";
+import {ENodeAction, IDiagramNodeBaseData, IPoolNodeData, IResource} from "../../../interface";
 import {GraphDataEdge} from "../GraphEdge";
 import {GraphInteractiveNode} from "./GraphInteractiveNode";
 import {GraphBaseNode} from "./GraphBaseNode";
 import {GraphSourceNode} from "./GraphSourceNode";
+import {RunManager} from "../RunManager";
 
 export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
 
 
-    constructor(data: IPoolNodeData) {
-        super(data);
+    constructor(data: IPoolNodeData, runManager: RunManager) {
+        super(data, runManager);
     }
 
     get resources() {
@@ -29,13 +30,12 @@ export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
             .filter(edge => GraphDataEdge.baseEdgeIsData(edge)) as GraphDataEdge[];
     }
 
-    invokeStep() {
-        if (this.triggerMode === ENodeTrigger.automatic) {
-            this.pullAllOrAnyResourcesFromSource()
-            this.pushAllResources()
-            this.pullAnyResourcesFromPool()
-            this.pullAllResourcesFromPool()
-        }
+
+    protected runAction() {
+        this.pullAllOrAnyResourcesFromSource()
+        this.pushAllResources()
+        this.pullAnyResourcesFromPool()
+        this.pullAllResourcesFromPool()
     }
 
 

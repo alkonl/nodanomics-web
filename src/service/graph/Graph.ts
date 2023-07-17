@@ -5,12 +5,13 @@ import {
 import {GraphBaseNode, GraphNodeFactory} from "./GraphNodes";
 import {GraphBaseEdge, GraphEdgeFactory} from "./GraphEdge";
 import {Optionalize} from "../../utils";
+import {RunManager} from "./RunManager";
 
 
 export class Graph {
     private _nodes: GraphBaseNode[] = [];
     private _edges: GraphBaseEdge[] = [];
-
+    private runManager?: RunManager;
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     constructor() {
@@ -24,11 +25,17 @@ export class Graph {
         return this._edges;
     }
 
+    attachRunManager(runManager: RunManager) {
+        this.runManager = runManager;
+    }
+
     addOrGetNode(value: INodeData) {
         let node: GraphBaseNode | undefined = this.findNode(value.id);
         if (!node) {
-            node = GraphNodeFactory.createNode(value);
-            this.nodes.push(node);
+            if(this.runManager) {
+                node = GraphNodeFactory.createNode(value, this.runManager);
+                this.nodes.push(node);
+            }
         }
         return node;
     }

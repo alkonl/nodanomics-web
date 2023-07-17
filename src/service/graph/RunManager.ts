@@ -5,11 +5,29 @@ import {GraphInteractiveNode} from "./GraphNodes/GraphInteractiveNode";
 
 export class RunManager {
     private graph: Graph
+    private _currentStep = 0
 
     constructor(graph: Graph) {
         this.graph = graph
     }
 
+    get currentStep() {
+        return this._currentStep
+    }
+
+    invokeStep() {
+        this.incrementStep()
+        const nodes = this.sortedNodes()
+        nodes.forEach(node => {
+           if (GraphInteractiveNode.baseNodeIsInteractive(node)){
+               node.invokeStep()
+           }
+        })
+    }
+
+    private incrementStep() {
+        this._currentStep++
+    }
 
     private sortedNodes() {
         const nodes = this.graph.nodes
@@ -17,16 +35,6 @@ export class RunManager {
         const poolNodes = nodes.filter(node => node instanceof GraphPoolNode)
         const otherNodes = nodes.filter(node => !(node instanceof GraphPoolNode) && !(node instanceof GraphSourceNode))
         return [...sourceNodes, ...poolNodes, ...otherNodes].reverse()
-    }
-
-    invokeStep() {
-        console.log('RunManager: ', this.graph)
-        const nodes = this.sortedNodes()
-        nodes.forEach(node => {
-            if(node instanceof GraphInteractiveNode) {
-                node.invokeStep()
-            }
-        })
     }
 
 }

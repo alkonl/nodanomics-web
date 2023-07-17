@@ -32,6 +32,7 @@ const initialState: IDiagramEditorState = {
 
 const graph = new Graph()
 const runManager = new RunManager(graph)
+graph.attachRunManager(runManager)
 
 const updateNodes = (diagramNodes: IReactFlowNode[]) => {
     diagramNodes.forEach(node => {

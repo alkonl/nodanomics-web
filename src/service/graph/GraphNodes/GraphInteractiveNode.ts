@@ -1,16 +1,25 @@
 import {GraphBaseNode} from "./GraphBaseNode";
-import {IDiagramNodeBaseData, INodeWithAction, INodeWithTrigger} from "../../../interface";
+import {
+    ENodeTrigger, IDiagramNodeBaseData,
+    INodeDataWithInteractivity,
+} from "../../../interface";
 
-type INodeDataWithTrigger = IDiagramNodeBaseData & INodeWithTrigger & INodeWithAction
 
-export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWithTrigger = INodeDataWithTrigger>
+export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWithInteractivity = INodeDataWithInteractivity>
     extends GraphBaseNode<IGenericNodeData> {
 
-    constructor(data: IGenericNodeData) {
-        super(data);
+
+    invokeStep() {
+        if (this.triggerMode === ENodeTrigger.automatic) {
+            this.runAction();
+        } else if (this.triggerMode === ENodeTrigger.enabling) {
+            if (this.currentStep <= 1) {
+                this.runAction();
+            }
+        }
     }
 
-    abstract invokeStep(): void
+    protected abstract runAction(): void;
 
     get triggerMode() {
         return this._data.triggerMode;
@@ -18,5 +27,9 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
 
     get actionMode() {
         return this._data.actionMode;
+    }
+
+    static baseNodeIsInteractive(node: GraphBaseNode<IDiagramNodeBaseData>): node is GraphInteractiveNode {
+        return node instanceof GraphInteractiveNode;
     }
 }
