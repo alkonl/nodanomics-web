@@ -19,19 +19,27 @@ export class GraphDataEdge extends GraphBaseEdge<IDataConnectionData> {
     }
 
     invokeStep() {
+        console.log('invokeStep', this)
         this.provideResources();
     }
 
     private provideResources() {
-        let resources: IResource[] = [];
+        let resources: IResource[] | undefined;
         if (this.source instanceof GraphSourceNode) {
             resources = this.generateResourceFromSource();
         } else if (this.source instanceof GraphPoolNode) {
-            resources = this.source.takeCountResources(this.countOfResource);
+            resources = this.provideResourceFromPool();
         }
         if (this.target instanceof GraphPoolNode) {
             this.target.addResource(resources)
         }
+    }
+
+    private provideResourceFromPool() {
+        if(this.source instanceof GraphPoolNode) {
+            return this.source.takeCountResources(this.countOfResource)
+        }
+        return [];
     }
 
     private generateResourceFromSource() {

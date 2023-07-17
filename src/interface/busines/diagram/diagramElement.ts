@@ -1,8 +1,8 @@
-import {EDiagramNode} from "./node/node";
 import {EConnection} from "./connection";
 import {EEvent} from "./event";
 import {ELogic} from "./logic";
 import {IDiagramNodeStyle} from "./elementStyle";
+import {EDiagramNode} from "./node";
 
 export enum EElementType {
     Node = 'Node',

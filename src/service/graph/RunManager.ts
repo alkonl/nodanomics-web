@@ -1,8 +1,6 @@
 import {GraphSourceNode} from "./GraphNodes/GraphSourceNode";
-import {GraphBaseNode} from "./GraphNodes";
-import {IDiagramNodeBaseData} from "../../interface";
-import {GraphBaseEdge} from "./GraphEdge";
 import {Graph} from "./Graph";
+import {GraphPoolNode} from "./GraphNodes/GraphPoolNode";
 
 export class RunManager {
     private graph: Graph
@@ -11,28 +9,19 @@ export class RunManager {
         this.graph = graph
     }
 
-    private structureStep() {
-        const edgesArrayOfSource = this.graph.edges.filter(edge => edge.source instanceof GraphSourceNode)
-        const sourceEdges = this.graph.edges.filter(edge => edge.source instanceof GraphSourceNode)
-        const edgesArrayOfSourceChildEdges = sourceEdges.map(edge => {
-            return this.recursiveGetChildEdges(edge.target)
-        })
-        return [...edgesArrayOfSourceChildEdges.flat().reverse(), ...edgesArrayOfSource.reverse() ]
-    }
 
-    recursiveGetChildEdges(node: GraphBaseNode<IDiagramNodeBaseData>, edges: GraphBaseEdge[] = []) {
-        edges.push(...node.outgoingEdges)
-        node.outgoingEdges.forEach(edge => {
-            this.recursiveGetChildEdges(edge.target, edges)
-        })
-        return edges
+    private sortedNodes() {
+        const nodes = this.graph.nodes
+        const sourceNodes = nodes.filter(node => node instanceof GraphSourceNode)
+        const poolNodes = nodes.filter(node => node instanceof GraphPoolNode)
+        const otherNodes = nodes.filter(node => !(node instanceof GraphPoolNode) && !(node instanceof GraphSourceNode))
+        return [...sourceNodes, ...poolNodes, ...otherNodes].reverse()
     }
-
 
     invokeStep() {
-        const structuredEdges = this.structureStep()
-        structuredEdges.forEach(edge => {
-            edge.invokeStep()
+        const nodes = this.sortedNodes()
+        nodes.forEach(node => {
+            node.invokeStepOutgoingEdges()
         })
     }
 
