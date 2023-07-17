@@ -1,10 +1,11 @@
 import React from 'react';
-import {Box, Typography} from "@mui/material";
+import {Box} from "@mui/material";
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from "reactflow";
 import {ISourceNodeData} from "../../../../interface";
+import {NodeText} from "../styledComponent";
 
-export const SourceNode: React.FC<NodeProps<ISourceNodeData>> = ({isConnectable}) => {
+export const SourceNode: React.FC<NodeProps<ISourceNodeData>> = ({isConnectable, data}) => {
     return (
         <Box>
             <Box sx={{
@@ -15,13 +16,12 @@ export const SourceNode: React.FC<NodeProps<ISourceNodeData>> = ({isConnectable}
                 justifyContent: 'center',
                 alignItems: 'center',
             }}>
-                <Typography
-                    sx={{
-                        fontSize: 10,
-                    }}
-                >
+                <NodeText>
                     Source
-                </Typography>
+                </NodeText>
+                <NodeText>
+                    trigger: {data.triggerMode}
+                </NodeText>
             </Box>
             <Handle type="source" position={Position.Right} id="b" isConnectable={isConnectable}/>
         </Box>

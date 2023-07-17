@@ -16,7 +16,6 @@ import {Box} from "@mui/material";
 import {DataConnection} from "../CustomConnectionLine/DataConnection";
 import {LogicConnection} from "../CustomConnectionLine/LogicConnection";
 import {useOnConnect} from "../../../hooks/useOnConnect";
-import {NodeDragHandler} from "@reactflow/core/dist/esm/types/nodes";
 
 
 const nodeTypes = {

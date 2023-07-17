@@ -7,6 +7,7 @@ import {ParameterContainer, ParameterLabel, SectionTitle} from "./styledComponen
 import {ElementSetupToolbarStyleSection} from "./ElementSetupToolbarStyleSection";
 import {FormulaParameter} from "./FormulaParameter";
 import {NodeActionParameter} from "./NodeActionParameter";
+import {NodeTriggerModeParameter} from "./NodeTriggerModeParameter";
 
 
 export const ElementSetupToolbar = () => {
@@ -68,6 +69,7 @@ export const ElementSetupToolbar = () => {
                             }}/>
                     </ParameterContainer>}
                     {selectedElementData?.type === EConnection.DataConnection && <FormulaParameter/>}
+                    {'triggerMode' in selectedElementData && <NodeTriggerModeParameter/>}
                     {'actionMode' in selectedElementData && <NodeActionParameter/>}
                     {selectedElementData && <ElementSetupToolbarStyleSection element={selectedElementData}/>}
                 </>
