@@ -77,11 +77,6 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
         type: EConnection.LogicConnection,
         tooltip: '2',
         toolbarName: '2',
-    }, {
-        elementType: EElementType.Connection,
-        type: EConnection.thirdType,
-        tooltip: '3',
-        toolbarName: '3',
     }],
 
 }

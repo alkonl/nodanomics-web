@@ -1,5 +1,13 @@
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
-import {EElementType, ENodeTrigger, IDiagramConnectionData, IDiagramNodeStyle, INodeData} from "../interface";
+import {
+    EConnection,
+    EElementType,
+    ENodeTrigger,
+    IDiagramConnectionData,
+    IDiagramNodeStyle,
+    INodeData
+} from "../interface";
+import {connectionInitialProps, connectionStyle} from "../service";
 
 export const useUpdateNode = ({nodeId}: {
     nodeId?: string
@@ -82,7 +90,7 @@ export const useUpdateEdgeData = ({edgeId}: {
     edgeId?: string
 }) => {
     const dispatch = useAppDispatch()
-    const {updateEdgeData} = diagramEditorActions
+    const {updateEdgeData, updateEdge} = diagramEditorActions
     const {diagramEdges} = useDiagramEditorState()
     const selectedEdge = diagramEdges.find(edge => edge.id === edgeId)
 
@@ -108,9 +116,27 @@ export const useUpdateEdgeData = ({edgeId}: {
         }
     }
 
+    const updateEdgeType = (edgeType: EConnection) => {
+        if (selectedEdge && selectedEdge.data) {
+            dispatch(updateEdge({
+                ...selectedEdge,
+                ...connectionStyle[edgeType],
+                id: selectedEdge.id,
+                source: selectedEdge.source,
+                target: selectedEdge.target,
+                type: edgeType,
+                data: {
+                    ...connectionInitialProps[edgeType],
+                    id: selectedEdge.id,
+                }
+            }))
+        }
+    }
+
     return {
         updateEdgeData: updateEdgeDataWrapper,
-        updateEdgeStyle
+        updateEdgeStyle,
+        updateEdgeType,
     }
 }
 
