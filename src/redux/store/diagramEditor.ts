@@ -94,7 +94,7 @@ export const diagramEditorSlice = createSlice({
             const edgeToUpdateIndex = state.diagramEdges.findIndex(edge => edge.id === payload.id)
             const oldEdge = state.diagramEdges[edgeToUpdateIndex]
             if (oldEdge && payload.data) {
-                graph.updateEdgeData(payload.data)
+                graph.replaceEdgeData(payload.data)
                 state.diagramEdges = [
                     ...state.diagramEdges.slice(0, edgeToUpdateIndex),
                     payload,
@@ -119,6 +119,7 @@ export const diagramEditorSlice = createSlice({
         invokeStep: (state) => {
             runManager.invokeStep()
             updateNodes(state.diagramNodes)
+            console.log('invokeStep.graph', graph)
         },
         resetDiagramRun: (state) => {
             graph.resetNodeValues()

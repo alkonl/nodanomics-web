@@ -9,20 +9,23 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
     extends GraphBaseNode<IGenericNodeData> {
 
 
+
     invokeStep() {
-        if (this.triggerMode === ENodeTrigger.automatic) {
-            this.runAction();
-        } else if (this.triggerMode === ENodeTrigger.enabling) {
-            if (this.currentStep <= 1) {
+            if (this.triggerMode === ENodeTrigger.automatic) {
                 this.runAction();
+            } else if (this.triggerMode === ENodeTrigger.enabling) {
+                if (this.currentStep <= 1) {
+                    this.runAction();
+                }
+            } else if (this.triggerMode === ENodeTrigger.interactive) {
+                if (this.isClicked) {
+                    this.runAction();
+                    this.clearClick()
+                }
             }
-        } else if (this.triggerMode === ENodeTrigger.interactive) {
-            if (this.isClicked) {
-                this.runAction();
-                this.clearClick()
-            }
-        }
     }
+
+
 
     private clearClick() {
         if (this._data.trigger.mode === ENodeTrigger.interactive) {

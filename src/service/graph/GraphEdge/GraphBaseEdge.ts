@@ -1,14 +1,14 @@
 import {GraphBaseNode} from "../GraphNodes";
-import {IDiagramConnectionBaseData, IDiagramConnectionData, IDiagramNodeBaseData} from "../../../interface";
+import {IDiagramConnectionBaseData, IDiagramConnectionData, IDiagramNodeBaseData, INodeData} from "../../../interface";
 
 export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionBaseData = IDiagramConnectionBaseData> {
-    private _source: GraphBaseNode<IDiagramNodeBaseData>;
-    private _target: GraphBaseNode<IDiagramNodeBaseData>;
+    private _source: GraphBaseNode<INodeData>;
+    private _target: GraphBaseNode<INodeData>;
     private _data: IGenericEdgeData;
 
     protected constructor(
-        source: GraphBaseNode<IDiagramNodeBaseData>,
-        target: GraphBaseNode<IDiagramNodeBaseData>,
+        source: GraphBaseNode<INodeData>,
+        target: GraphBaseNode<INodeData>,
         data: IGenericEdgeData,
     ) {
         this._source = source;
@@ -30,7 +30,7 @@ export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionB
 
     // abstract invokeStep() : void
 
-    updateEdge(data: Partial<IDiagramConnectionData>) {
+    updateEdge(data: Partial<IGenericEdgeData>) {
         this._data = {
             ...this._data,
             ...data,

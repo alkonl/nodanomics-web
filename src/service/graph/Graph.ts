@@ -32,7 +32,7 @@ export class Graph {
     addOrGetNode(value: INodeData) {
         let node: GraphBaseNode | undefined = this.findNode(value.id);
         if (!node) {
-            if(this.runManager) {
+            if (this.runManager) {
                 node = GraphNodeFactory.createNode(value, this.runManager);
                 this.nodes.push(node);
             }
@@ -55,6 +55,19 @@ export class Graph {
         const edge = this.findEdge(edgeData.id);
         if (edge) {
             edge.updateEdge(edgeData);
+        }
+    }
+
+    replaceEdgeData(edgeData: IDiagramConnectionData) {
+        const oldEdge = this.findEdge(edgeData.id);
+
+        if (oldEdge) {
+            const newEdge = GraphEdgeFactory.createEdge({
+                source: oldEdge.source,
+                target: oldEdge.target,
+                edgeData
+            });
+            oldEdge.source.replaceEdge({target: newEdge.target, newEdge, oldEdge});
         }
     }
 

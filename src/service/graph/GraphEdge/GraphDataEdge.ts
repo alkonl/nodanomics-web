@@ -1,5 +1,5 @@
 import {GraphBaseEdge} from "./GraphBaseEdge";
-import {IDataConnectionData, IDiagramNodeBaseData} from "../../../interface";
+import {IDataConnectionData} from "../../../interface";
 import {GraphBaseNode} from "../GraphNodes";
 
 
@@ -7,8 +7,8 @@ export class GraphDataEdge extends GraphBaseEdge<IDataConnectionData> {
 
 
     constructor(
-        source: GraphBaseNode<IDiagramNodeBaseData>,
-        target: GraphBaseNode<IDiagramNodeBaseData>,
+        source: GraphBaseNode,
+        target: GraphBaseNode,
         data: IDataConnectionData,
     ) {
         super(source, target, data);

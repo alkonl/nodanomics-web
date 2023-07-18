@@ -17,6 +17,7 @@ export class GraphSourceNode extends GraphInteractiveNode<ISourceNodeData> {
     }
 
     pushAllOrAnyResources() {
+        console.log(this.edgesToPools)
         this.edgesToPools.forEach(edge => {
             const resources = this.generateResourceFromSource(edge.countOfResource);
             if (GraphPoolNode.baseNodeIsPool(edge.target)) {
