@@ -12,8 +12,15 @@ export interface IFormulaResultNumber {
 
 export type IFormulaResult = IFormulaResultBoolean | IFormulaResultNumber
 
+
+export interface IFormulaNodeVariable  {
+    variableName: string
+    value: number
+}
+
 export interface IFormulaNodeData extends IDiagramNodeBaseData {
     type: EDiagramNode.Formula;
     formula?: string
+    variables?: IFormulaNodeVariable[]
     result?: IFormulaResult
 }

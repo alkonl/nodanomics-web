@@ -1,7 +1,7 @@
 import {useDiagramEditorState} from "../redux";
-import {EElementType} from "../interface";
+import {EElementType, IReactFlowNode} from "../interface";
 
-export const useCurrentEditElement = () => {
+export const useCurrentEditElement = ()=> {
     const {currentEditElement, diagramNodes, diagramEdges} = useDiagramEditorState()
     if (currentEditElement) {
         const elementId = currentEditElement.id

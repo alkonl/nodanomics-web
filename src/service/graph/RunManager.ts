@@ -1,7 +1,8 @@
 import {GraphSourceNode} from "./GraphNodes/GraphSourceNode";
 import {Graph} from "./Graph";
 import {GraphPoolNode} from "./GraphNodes/GraphPoolNode";
-import {GraphInteractiveNode} from "./GraphNodes/GraphInteractiveNode";
+import {GraphInvokableNode} from "./GraphNodes/GraphInvokable";
+import {GraphFormulaNode} from "./GraphNodes";
 
 export class RunManager {
     private graph: Graph
@@ -19,9 +20,18 @@ export class RunManager {
         this.incrementStep()
         const nodes = this.sortedNodes()
         nodes.forEach(node => {
-           if (GraphInteractiveNode.baseNodeIsInteractive(node)){
-               node.invokeStep()
-           }
+            if (node instanceof GraphInvokableNode) {
+                node.invokeStep()
+            }
+        })
+    }
+
+    updateState() {
+        const nodes = this.sortedNodes()
+        nodes.forEach(node => {
+            if (node instanceof GraphFormulaNode) {
+                node.updateState()
+            }
         })
     }
 
@@ -34,7 +44,7 @@ export class RunManager {
         const sourceNodes = nodes.filter(node => node instanceof GraphSourceNode)
         const poolNodes = nodes.filter(node => node instanceof GraphPoolNode)
         const otherNodes = nodes.filter(node => !(node instanceof GraphPoolNode) && !(node instanceof GraphSourceNode))
-        return [...sourceNodes, ...poolNodes, ...otherNodes].reverse()
+        return [...otherNodes, ...sourceNodes, ...poolNodes].reverse()
     }
 
 }

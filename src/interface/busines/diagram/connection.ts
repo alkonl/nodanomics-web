@@ -5,7 +5,6 @@ import {EElementType, IDiagramBaseInteractiveElementData} from "./diagramElement
 export enum EConnection {
     DataConnection = 'DataConnection',
     LogicConnection = 'LogicConnection',
-    thirdType = 'thirdType',
 }
 
 export interface IDiagramConnectionBaseData extends IDiagramBaseInteractiveElementData {
@@ -22,6 +21,7 @@ export interface IDataConnectionData extends IDiagramConnectionBaseData {
 
 export interface ILogicConnectionData extends IDiagramConnectionBaseData {
     type: EConnection.LogicConnection;
+    variableName?: string;
 }
 
 export type IDiagramConnectionData = IDataConnectionData | ILogicConnectionData;

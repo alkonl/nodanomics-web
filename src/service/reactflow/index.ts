@@ -1,2 +1,2 @@
 export * from './createNode'
-export * from './connectEdge'
+export * from './connection'

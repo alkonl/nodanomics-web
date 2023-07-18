@@ -1,13 +1,15 @@
 import React from 'react';
 import {Box, Input, Typography} from "@mui/material";
 import {EColor, EFontColor} from "../../../../constant";
-import {EConnection, EDiagramNode, EElementType} from "../../../../interface";
+import {EConnection, EDiagramNode, EElementType, IDiagramConnectionData} from "../../../../interface";
 import {useCurrentEditElement, useUpdateElement} from "../../../../hooks";
 import {ParameterContainer, ParameterLabel, SectionTitle} from "./styledComponents";
 import {ElementSetupToolbarStyleSection} from "./ElementSetupToolbarStyleSection";
-import {FormulaParameter} from "./FormulaParameter";
+import {ConnectionFormulaParameter} from "./ConnectionFormulaParameter";
 import {NodeActionParameter} from "./NodeActionParameter";
 import {NodeTriggerModeParameter} from "./NodeTriggerModeParameter";
+import {ConnectionTypeParameter} from "./ConnectionTypeParameter";
+import {ConnectionVariableParameter} from "./ConnectionVariableParameter";
 
 
 export const ElementSetupToolbar = () => {
@@ -68,9 +70,13 @@ export const ElementSetupToolbar = () => {
                                 width: '100%',
                             }}/>
                     </ParameterContainer>}
-                    {selectedElementData?.type === EConnection.DataConnection && <FormulaParameter/>}
+                    {selectedElementData?.type === EConnection.DataConnection && <ConnectionFormulaParameter/>}
                     {'trigger' in selectedElementData && <NodeTriggerModeParameter/>}
                     {'actionMode' in selectedElementData && <NodeActionParameter/>}
+                    {selectedElementData.elementType === EElementType.Connection
+                        && <ConnectionTypeParameter selectedElementData={selectedElementData as IDiagramConnectionData}/>}
+                    {selectedElementData.type === EConnection.LogicConnection
+                        && <ConnectionVariableParameter selectedElementData={selectedElementData}/>}
                     {selectedElementData && <ElementSetupToolbarStyleSection element={selectedElementData}/>}
                 </>
                 : <Typography>

@@ -3,10 +3,11 @@ import {
     ENodeTrigger, IDiagramNodeBaseData,
     INodeDataWithInteractivity,
 } from "../../../interface";
+import {GraphInvokableNode} from "./GraphInvokable";
 
 
 export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWithInteractivity = INodeDataWithInteractivity>
-    extends GraphBaseNode<IGenericNodeData> {
+    extends GraphInvokableNode<IGenericNodeData> {
 
 
     invokeStep() {
@@ -24,6 +25,9 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
         }
     }
 
+    protected abstract runAction(): void;
+
+
     private clearClick() {
         if (this._data.trigger.mode === ENodeTrigger.interactive) {
             this.updateNodeData({
@@ -35,7 +39,6 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
         }
     }
 
-    protected abstract runAction(): void;
 
     get triggerMode(): ENodeTrigger {
         return this._data.trigger.mode;

@@ -3,12 +3,15 @@ import {useCallback} from "react";
 import {Connection} from "reactflow";
 import {connectEdge} from "../service";
 import {diagramEditorActions, useAppDispatch} from "../redux";
+import {EConnection} from "../interface";
 
 export const useOnConnect = () => {
     const dispatch = useAppDispatch()
     const {onConnect} = diagramEditorActions
     return useCallback((params: Connection) => {
-        const edge = connectEdge(params)
+        const edge = connectEdge({
+            connection: params,
+        })
         dispatch(onConnect(edge))
     }, [dispatch])
 }

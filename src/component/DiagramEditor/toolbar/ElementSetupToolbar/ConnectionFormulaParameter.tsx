@@ -5,7 +5,7 @@ import {EFontColor} from "../../../../constant";
 import {useCurrentEditElement, useUpdateElement} from "../../../../hooks";
 import {EConnection} from "../../../../interface";
 
-export const FormulaParameter = () => {
+export const ConnectionFormulaParameter = () => {
     const selectedElementData = useCurrentEditElement()?.data
     const {updateEdgeData} = useUpdateElement({
         elementType: selectedElementData?.elementType,

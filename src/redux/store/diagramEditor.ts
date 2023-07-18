@@ -90,6 +90,19 @@ export const diagramEditorSlice = createSlice({
                 }
             }
         },
+        updateEdge: (state, {payload}: PayloadAction<IReactFlowEdge>) => {
+            const edgeToUpdateIndex = state.diagramEdges.findIndex(edge => edge.id === payload.id)
+            const oldEdge = state.diagramEdges[edgeToUpdateIndex]
+            if (oldEdge && payload.data) {
+                graph.replaceEdgeData(payload.data)
+                state.diagramEdges = [
+                    ...state.diagramEdges.slice(0, edgeToUpdateIndex),
+                    payload,
+                    ...state.diagramEdges.slice(edgeToUpdateIndex + 1)
+                ]
+            }
+        },
+
         addEdge: (state, {payload}: PayloadAction<EdgeChange[]>) => {
             state.diagramEdges = applyEdgeChanges(payload, state.diagramEdges)
         },
@@ -108,9 +121,15 @@ export const diagramEditorSlice = createSlice({
             runManager.invokeStep()
             updateNodes(state.diagramNodes)
         },
+
         resetDiagramRun: (state) => {
             graph.resetNodeValues()
-        }
+        },
+        // using this action to render new values like variableName
+        renderState: (state) => {
+            runManager.updateState()
+            updateNodes(state.diagramNodes)
+        },
     }
 })
 
