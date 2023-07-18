@@ -7,7 +7,7 @@ import {validation} from "../../../utils";
 import {MButton} from "../../base";
 import {Text} from "../../base/Text";
 import {FormText} from "../../base/FormInput";
-import {useCreateProjectMutation} from "../../../api";
+import {useCreateDiagramMutation, useCreateProjectMutation} from "../../../api";
 
 enum EFormFields {
     projectName = 'projectName',
@@ -20,24 +20,38 @@ const validationSchema = z.object({
 type IValidationSchema = z.infer<typeof validationSchema>;
 
 export const CreateProjectForm: React.FC<{
-    onSuccess: () => void;
+    onSuccess: (params: {
+        diagramId: string
+    }) => void;
 }> = ({onSuccess}) => {
-    const [createDiagram, {isSuccess}] = useCreateProjectMutation()
+    const [createProject, {data: resCreateProject}] = useCreateProjectMutation()
+    const [createDiagram, {data: resCreateDiagram}] = useCreateDiagramMutation()
     const form = useForm<IValidationSchema>({
         resolver: zodResolver(validationSchema),
     });
 
     const onSubmit = (data: IValidationSchema) => {
-        createDiagram({
+        createProject({
             name: data.projectName,
         });
     }
 
     useEffect(() => {
-        if (isSuccess) {
-            onSuccess()
+        if (resCreateDiagram) {
+            onSuccess({
+                diagramId: resCreateDiagram.id
+            })
         }
-    }, [isSuccess])
+    }, [resCreateDiagram])
+
+    useEffect(() => {
+        if (resCreateProject && resCreateProject.id) {
+            createDiagram({
+                diagramName: 'default',
+                projectId: resCreateProject.id,
+            })
+        }
+    }, [resCreateProject])
 
     return (
         <Box
@@ -52,7 +66,7 @@ export const CreateProjectForm: React.FC<{
             </Text.Label>
             <FormText name={EFormFields.projectName} form={form}/>
             <MButton.Submit type="submit">
-                Create project  
+                Create project
             </MButton.Submit>
         </Box>
     );

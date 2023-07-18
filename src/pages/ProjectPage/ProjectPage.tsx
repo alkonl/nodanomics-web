@@ -3,7 +3,7 @@ import {
     DashboardPageLayout,
     ProjectDetails,
     ProjectsList,
-    LandingScrollLayout, CreateProject
+    LandingScrollLayout, CreateProjectButton
 } from "../../component";
 import {useAutoSelectFirstProject, useGetInfinityProjects} from "../../hooks";
 
@@ -20,7 +20,7 @@ export const ProjectPage = () => {
     return (
         <DashboardPageLayout pageName="Projects">
             <LandingScrollLayout scrollRef={scrollRef}>
-                <CreateProject/>
+                <CreateProjectButton/>
                 <ProjectsList/>
             </LandingScrollLayout>
             <ProjectDetails/>

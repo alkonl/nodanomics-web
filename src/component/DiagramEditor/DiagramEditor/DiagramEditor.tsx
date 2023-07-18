@@ -3,16 +3,26 @@ import {DiagramCanvas} from "../DiagramCanvas";
 import style from './DiagramEditor.module.scss'
 import {ElementSetupToolbar, ElementsToolbarDeprecated, LeftToolbar, RightToolbarDeprecated} from "../toolbar";
 import {useWidthAndHeight} from "../../../hooks";
-import {Box} from "@mui/material";
+import {Box, Button} from "@mui/material";
 import {ElementToolbar} from "../toolbar/ElementToolbar/ElementToolbar";
+import {useSendMessageMutation} from "../../../api";
 
 export const DiagramEditor = () => {
+    const [sendMessage, { isLoading }] = useSendMessageMutation();
 
     const {elementSize: diagramCanvasContainerSize, elementRef: diagramCanvasContainerRef} = useWidthAndHeight()
     return (
         <Box
             className={style.container}
         >
+            <Button
+            onClick={() => {
+                console.log('click send message')
+              sendMessage('test message')
+            }}
+            >
+                Send message
+            </Button>
             <Box
                 ref={diagramCanvasContainerRef}
                 className={style.canvasContainer}>

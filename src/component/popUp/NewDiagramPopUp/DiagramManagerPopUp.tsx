@@ -1,7 +1,7 @@
 import React from 'react';
 import {Dialog} from "@headlessui/react";
 import {BasePopUp} from "../PopUp";
-import {DiagramManagerForm, EDiagramManagerType} from "../../form";
+import {DiagramManagerFormDeprecated, EDiagramManagerType} from "../../form";
 
 export const DiagramManagerPopUp: React.FC<{
     isShow: boolean;
@@ -17,7 +17,7 @@ export const DiagramManagerPopUp: React.FC<{
                         backgroundColor: 'white',
                         borderRadius: 8,
                     }}>
-                    <DiagramManagerForm type={type} onSave={onClose}/>
+                    <DiagramManagerFormDeprecated type={type} onSave={onClose}/>
                     </div>
                 </Dialog.Panel>
             </BasePopUp>

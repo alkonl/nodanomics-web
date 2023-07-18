@@ -15,7 +15,7 @@ import {
     IChangePasswordResponse,
     ICreateNewDiagramRequest,
     ICreateNewDiagramResponse,
-    ICreateProjectRequest,
+    ICreateProjectRequest, ICreateProjectResponse,
     IGetDiagramByIdResponse,
     IGetDiagramsByUserIdResponse,
     IGetDiagramTagsRequest,
@@ -31,11 +31,12 @@ import {
     IUpdateUserDataRequest,
     IUpdateUserDataResponse
 } from "../interface";
-import {CONFIG} from "../utils";
+import {CONFIG, getSocket} from "../utils";
 import {IServerErrorResponse} from "../interface/serverErrorResponse";
 
 import {ERTKTags} from "./requestTags";
 import moment from "moment";
+import {ChatEvent} from "../constant";
 
 
 const baseQuery = fetchBaseQuery(({
@@ -338,7 +339,7 @@ export const baseApi = createApi({
             },
             invalidatesTags: [ERTKTags.PersonalDashboard]
         }),
-        createProject: builder.mutation<unknown, ICreateProjectRequest>({
+        createProject: builder.mutation<ICreateProjectResponse, ICreateProjectRequest>({
             query: (body: ICreateProjectRequest) => {
                 return {
                     url: '/project',
@@ -370,6 +371,16 @@ export const baseApi = createApi({
             },
             providesTags: [ERTKTags.Projects, ERTKTags.User],
         }),
+        sendMessage: builder.mutation<any, string>({
+            queryFn: async (chatMessageContent: string) => {
+                const socket = await getSocket();
+                return new Promise(resolve => {
+                    socket.emit(ChatEvent.SendMessage, chatMessageContent, (message: any) => {
+                        resolve({data: message});
+                    });
+                })
+            },
+        }),
     }),
 })
 export const {
@@ -392,5 +403,6 @@ export const {
     useDeleteDiagramMutation,
     useCreateProjectMutation,
     useGetProjectsQuery,
+    useSendMessageMutation,
 } = baseApi;
 
