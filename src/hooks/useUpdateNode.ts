@@ -43,6 +43,20 @@ export const useUpdateNode = ({nodeId}: {
         }
     }
 
+    const unableInteractiveTrigger = () => {
+        if (selectedNode) {
+            dispatch(updateNodeData({
+                ...selectedNode.data,
+                id: selectedNode.id,
+                type: selectedNode?.data.type,
+                trigger: {
+                    mode: ENodeTrigger.interactive,
+                    isClicked: true
+                }
+            }))
+        }
+    }
+
     const updateNodeStyle = (nodeStyles: Partial<IDiagramNodeStyle>) => {
         if (selectedNode) {
             updateNodeDataWrapper({
@@ -59,6 +73,7 @@ export const useUpdateNode = ({nodeId}: {
         updateNodeData: updateNodeDataWrapper,
         updateNodeStyle,
         updateNodeTrigger,
+        unableInteractiveTrigger,
     }
 }
 

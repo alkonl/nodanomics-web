@@ -31,6 +31,7 @@ export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
     protected runAction() {
         this.pullAllOrAnyResourcesFromSource()
         this.pushAllResources()
+        this.pushAnyResources()
         this.pullAnyResourcesFromPool()
         this.pullAllResourcesFromPool()
     }
@@ -85,6 +86,19 @@ export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
             resources: this.resources.slice(count)
         }
         return deletedResources
+    }
+
+    private pushAnyResources() {
+        if (this.actionMode === ENodeAction.pushAny) {
+            this.outgoingEdges.forEach(edge => {
+                if (edge instanceof GraphDataEdge) {
+                    if (edge.target instanceof GraphPoolNode) {
+                        const resources = this.takeCountResources(edge.countOfResource)
+                        edge.target.addResource(resources)
+                    }
+                }
+            })
+        }
     }
 
     private pushAllResources() {

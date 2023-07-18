@@ -4,10 +4,11 @@ import {Box} from "@mui/material";
 import {Handle, NodeProps, Position} from "reactflow";
 import {ISourceNodeData} from "../../../../interface";
 import {NodeText} from "../styledComponent";
+import {InteractiveNodeContainer} from "../container";
 
 export const SourceNode: React.FC<NodeProps<ISourceNodeData>> = ({isConnectable, data}) => {
     return (
-        <Box>
+        <InteractiveNodeContainer data={data}>
             <Box sx={{
                 border: '1px solid #777',
                 padding: 1,
@@ -27,6 +28,6 @@ export const SourceNode: React.FC<NodeProps<ISourceNodeData>> = ({isConnectable,
                 </NodeText>
             </Box>
             <Handle type="source" position={Position.Right} id="b" isConnectable={isConnectable}/>
-        </Box>
+        </InteractiveNodeContainer>
     );
 };

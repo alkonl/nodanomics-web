@@ -16,6 +16,22 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
             if (this.currentStep <= 1) {
                 this.runAction();
             }
+        } else if (this.triggerMode === ENodeTrigger.interactive) {
+            if (this.isClicked) {
+                this.runAction();
+                this.clearClick()
+            }
+        }
+    }
+
+    private clearClick() {
+        if (this._data.trigger.mode === ENodeTrigger.interactive) {
+            this.updateNodeData({
+                trigger: {
+                    ...this._data.trigger,
+                    isClicked: false,
+                }
+            })
         }
     }
 
@@ -23,6 +39,13 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
 
     get triggerMode(): ENodeTrigger {
         return this._data.trigger.mode;
+    }
+
+    get isClicked(): boolean {
+        if (this._data.trigger.mode === ENodeTrigger.interactive) {
+            return this._data.trigger.isClicked;
+        }
+        return false;
     }
 
     get actionMode() {

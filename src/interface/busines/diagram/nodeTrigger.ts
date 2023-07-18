@@ -12,9 +12,11 @@ export type INodeDataWithInteractiveTrigger = {
 }
 
 export type INodeWithBaseTrigger = {
-    mode: ENodeTrigger
+    mode: Exclude<ENodeTrigger, ENodeTrigger.interactive>
 }
 
-export type INodeWithTrigger = {
-    trigger: INodeWithBaseTrigger | INodeDataWithInteractiveTrigger
+export type INodeTriggers = INodeWithBaseTrigger | INodeDataWithInteractiveTrigger;
+
+export interface INodeWithTrigger {
+    trigger: INodeTriggers
 }
