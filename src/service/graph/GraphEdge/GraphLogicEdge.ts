@@ -10,4 +10,8 @@ export class GraphLogicEdge extends GraphBaseEdge<ILogicConnectionData> {
     ) {
         super(source, target, data);
     }
+
+    get variableName() {
+        return this.data.variableName;
+    }
 }

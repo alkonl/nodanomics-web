@@ -9,6 +9,7 @@ import {ConnectionFormulaParameter} from "./ConnectionFormulaParameter";
 import {NodeActionParameter} from "./NodeActionParameter";
 import {NodeTriggerModeParameter} from "./NodeTriggerModeParameter";
 import {ConnectionTypeParameter} from "./ConnectionTypeParameter";
+import {ConnectionVariableParameter} from "./ConnectionVariableParameter";
 
 
 export const ElementSetupToolbar = () => {
@@ -74,6 +75,8 @@ export const ElementSetupToolbar = () => {
                     {'actionMode' in selectedElementData && <NodeActionParameter/>}
                     {selectedElementData.elementType === EElementType.Connection
                         && <ConnectionTypeParameter selectedElementData={selectedElementData as IDiagramConnectionData}/>}
+                    {selectedElementData.type === EConnection.LogicConnection
+                        && <ConnectionVariableParameter selectedElementData={selectedElementData}/>}
                     {selectedElementData && <ElementSetupToolbarStyleSection element={selectedElementData}/>}
                 </>
                 : <Typography>

@@ -36,7 +36,6 @@ export const connectEdge = ({connection}:
 
 
     const edgeId = getEdgeId();
-    console.log(connection)
     return {
         ...connectionStyle[type],
         ...connection,

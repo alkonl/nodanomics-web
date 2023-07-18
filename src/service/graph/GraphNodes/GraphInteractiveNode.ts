@@ -3,28 +3,29 @@ import {
     ENodeTrigger, IDiagramNodeBaseData,
     INodeDataWithInteractivity,
 } from "../../../interface";
+import {GraphInvokableNode} from "./GraphInvokable";
 
 
 export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWithInteractivity = INodeDataWithInteractivity>
-    extends GraphBaseNode<IGenericNodeData> {
-
+    extends GraphInvokableNode<IGenericNodeData> {
 
 
     invokeStep() {
-            if (this.triggerMode === ENodeTrigger.automatic) {
+        if (this.triggerMode === ENodeTrigger.automatic) {
+            this.runAction();
+        } else if (this.triggerMode === ENodeTrigger.enabling) {
+            if (this.currentStep <= 1) {
                 this.runAction();
-            } else if (this.triggerMode === ENodeTrigger.enabling) {
-                if (this.currentStep <= 1) {
-                    this.runAction();
-                }
-            } else if (this.triggerMode === ENodeTrigger.interactive) {
-                if (this.isClicked) {
-                    this.runAction();
-                    this.clearClick()
-                }
             }
+        } else if (this.triggerMode === ENodeTrigger.interactive) {
+            if (this.isClicked) {
+                this.runAction();
+                this.clearClick()
+            }
+        }
     }
 
+    protected abstract runAction(): void;
 
 
     private clearClick() {
@@ -38,7 +39,6 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
         }
     }
 
-    protected abstract runAction(): void;
 
     get triggerMode(): ENodeTrigger {
         return this._data.trigger.mode;
