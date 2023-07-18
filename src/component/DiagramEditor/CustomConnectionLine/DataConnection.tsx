@@ -6,18 +6,20 @@ import {EElementType, IDataConnectionData} from "../../../interface";
 import {diagramEditorActions, useAppDispatch} from "../../../redux";
 import {EColor} from "../../../constant";
 
-export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = ({
-                                                                             id,
-                                                                             sourceX,
-                                                                             sourceY,
-                                                                             targetX,
-                                                                             targetY,
-                                                                             sourcePosition,
-                                                                             targetPosition,
-                                                                             style = {},
-                                                                             markerEnd,
-                                                                             data
-                                                                         }) => {
+export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
+    {
+        id,
+        sourceX,
+        sourceY,
+        targetX,
+        targetY,
+        sourcePosition,
+        targetPosition,
+        style = {},
+        markerEnd,
+        data
+    }
+) => {
     const [edgePath, labelX, labelY] = getBezierPath({
         sourceX,
         sourceY,
@@ -26,8 +28,6 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = ({
         targetY,
         targetPosition,
     });
-
-
     const dispatch = useAppDispatch()
     const {setEditElement} = diagramEditorActions
 

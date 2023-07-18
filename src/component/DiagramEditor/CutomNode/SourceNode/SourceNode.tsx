@@ -2,7 +2,7 @@ import React from 'react';
 import {Box} from "@mui/material";
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from "reactflow";
-import {ISourceNodeData} from "../../../../interface";
+import {EConnection, ISourceNodeData} from "../../../../interface";
 import {NodeText} from "../styledComponent";
 import {InteractiveNodeContainer} from "../container";
 
@@ -27,7 +27,7 @@ export const SourceNode: React.FC<NodeProps<ISourceNodeData>> = ({isConnectable,
                     action: {data.actionMode}
                 </NodeText>
             </Box>
-            <Handle type="source" position={Position.Right} id="b" isConnectable={isConnectable}/>
+            <Handle type="source" position={Position.Right} id={EConnection.DataConnection} isConnectable={isConnectable}/>
         </InteractiveNodeContainer>
     );
 };

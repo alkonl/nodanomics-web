@@ -11,7 +11,6 @@ export const useOnConnect = () => {
     return useCallback((params: Connection) => {
         const edge = connectEdge({
             connection: params,
-            type: EConnection.DataConnection
         })
         dispatch(onConnect(edge))
     }, [dispatch])

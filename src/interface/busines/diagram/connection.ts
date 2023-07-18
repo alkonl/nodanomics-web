@@ -21,6 +21,7 @@ export interface IDataConnectionData extends IDiagramConnectionBaseData {
 
 export interface ILogicConnectionData extends IDiagramConnectionBaseData {
     type: EConnection.LogicConnection;
+    variableName?: string;
 }
 
 export type IDiagramConnectionData = IDataConnectionData | ILogicConnectionData;

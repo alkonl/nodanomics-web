@@ -7,14 +7,36 @@ import {connectionInitialProps} from "./connectionInitialProps";
 let id = 0;
 const getEdgeId = () => `edgeId_${id++}`;
 
+export const defineConnectionTypeBySourceAndTarget = ({source, target}: {
+    source: string,
+    target: string
+}): EConnection => {
+    if (target === EConnection.LogicConnection) {
+        return EConnection.LogicConnection
+    }
+    return EConnection.DataConnection
+}
 
-export const connectEdge = ({connection, type}:
+
+export const connectEdge = ({connection}:
                                 {
-                                    type: EConnection,
                                     connection: Connection
                                 }): Connection & { data: IDiagramConnectionData } &
     Pick<Edge, 'type' | 'id' | 'markerEnd'> => {
+
+    if (connection.sourceHandle === null || connection.targetHandle === null) {
+        throw new Error('sourceHandle and targetHandle null')
+    }
+
+
+    const type = defineConnectionTypeBySourceAndTarget({
+        source: connection.sourceHandle,
+        target: connection.targetHandle
+    });
+
+
     const edgeId = getEdgeId();
+    console.log(connection)
     return {
         ...connectionStyle[type],
         ...connection,
