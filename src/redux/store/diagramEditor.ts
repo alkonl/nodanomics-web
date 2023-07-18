@@ -102,6 +102,7 @@ export const diagramEditorSlice = createSlice({
                 ]
             }
         },
+
         addEdge: (state, {payload}: PayloadAction<EdgeChange[]>) => {
             state.diagramEdges = applyEdgeChanges(payload, state.diagramEdges)
         },
@@ -119,11 +120,16 @@ export const diagramEditorSlice = createSlice({
         invokeStep: (state) => {
             runManager.invokeStep()
             updateNodes(state.diagramNodes)
-            console.log('invokeStep.graph', graph)
         },
+
         resetDiagramRun: (state) => {
             graph.resetNodeValues()
-        }
+        },
+        // using this action to render new values like variableName
+        renderState: (state) => {
+            runManager.updateState()
+            updateNodes(state.diagramNodes)
+        },
     }
 })
 

@@ -19,7 +19,6 @@ export const NodeActionParameter = () => {
         elementId: selectedElementData?.id,
     })
     const changeNodeActionMode = (event: SelectChangeEvent) => {
-        console.log('changeNodeActionMode', event)
         updateNodeData({
             actionMode: event.target.value as ENodeAction,
         })

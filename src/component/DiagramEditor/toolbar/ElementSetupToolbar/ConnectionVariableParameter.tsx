@@ -9,14 +9,15 @@ export const ConnectionVariableParameter: React.FC<{
     selectedElementData: ILogicConnectionData,
 }> = ({selectedElementData}) => {
 
-    const {updateEdgeData} = useUpdateEdgeData({
+    const {updateVariableName, renderState} = useUpdateEdgeData({
         edgeId: selectedElementData.id,
     })
 
     const onVariableNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        updateEdgeData({
+        updateVariableName({
             variableName: event.target.value,
         })
+        renderState()
     }
 
 

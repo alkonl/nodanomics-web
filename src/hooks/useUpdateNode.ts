@@ -90,7 +90,7 @@ export const useUpdateEdgeData = ({edgeId}: {
     edgeId?: string
 }) => {
     const dispatch = useAppDispatch()
-    const {updateEdgeData, updateEdge} = diagramEditorActions
+    const {updateEdgeData, updateEdge, renderState} = diagramEditorActions
     const {diagramEdges} = useDiagramEditorState()
     const selectedEdge = diagramEdges.find(edge => edge.id === edgeId)
 
@@ -133,10 +133,23 @@ export const useUpdateEdgeData = ({edgeId}: {
         }
     }
 
+    const updateVariableName = (props: { variableName: string }) => {
+        updateEdgeDataWrapper({
+            variableName: props.variableName
+        })
+
+    }
+
+    const renderStateWrapper = () => {
+        dispatch(renderState())
+    }
+
     return {
         updateEdgeData: updateEdgeDataWrapper,
         updateEdgeStyle,
         updateEdgeType,
+        updateVariableName,
+        renderState: renderStateWrapper,
     }
 }
 
