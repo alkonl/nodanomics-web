@@ -1,5 +1,5 @@
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
-import {EElementType, IDiagramConnectionData, IDiagramNodeStyle, INodeData} from "../interface";
+import {EElementType, ENodeTrigger, IDiagramConnectionData, IDiagramNodeStyle, INodeData} from "../interface";
 
 export const useUpdateNode = ({nodeId}: {
     nodeId?: string
@@ -18,6 +18,45 @@ export const useUpdateNode = ({nodeId}: {
         }
     }
 
+    const updateNodeTrigger = ({trigger}: { trigger: ENodeTrigger }) => {
+        if (selectedNode) {
+            if (trigger === ENodeTrigger.interactive) {
+                dispatch(updateNodeData({
+                    ...selectedNode.data,
+                    id: selectedNode.id,
+                    type: selectedNode?.data.type,
+                    trigger: {
+                        mode: trigger,
+                        isClicked: false
+                    }
+                }))
+            } else {
+                dispatch(updateNodeData({
+                    ...selectedNode.data,
+                    id: selectedNode.id,
+                    type: selectedNode?.data.type,
+                    trigger: {
+                        mode: trigger
+                    }
+                }))
+            }
+        }
+    }
+
+    const unableInteractiveTrigger = () => {
+        if (selectedNode) {
+            dispatch(updateNodeData({
+                ...selectedNode.data,
+                id: selectedNode.id,
+                type: selectedNode?.data.type,
+                trigger: {
+                    mode: ENodeTrigger.interactive,
+                    isClicked: true
+                }
+            }))
+        }
+    }
+
     const updateNodeStyle = (nodeStyles: Partial<IDiagramNodeStyle>) => {
         if (selectedNode) {
             updateNodeDataWrapper({
@@ -32,7 +71,9 @@ export const useUpdateNode = ({nodeId}: {
     }
     return {
         updateNodeData: updateNodeDataWrapper,
-        updateNodeStyle
+        updateNodeStyle,
+        updateNodeTrigger,
+        unableInteractiveTrigger,
     }
 }
 

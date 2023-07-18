@@ -11,11 +11,11 @@ export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = ({data, id, 
 
     const {style} = data
     const {textStyles} = style
-    const {setEditNode} = diagramEditorActions
+    const {setEditElement} = diagramEditorActions
     const onClick = () => {
-        dispatch(setEditNode({
+        dispatch(setEditElement({
             id,
-            type: EElementType.Node,
+            elementType: EElementType.Node,
         }))
     }
 

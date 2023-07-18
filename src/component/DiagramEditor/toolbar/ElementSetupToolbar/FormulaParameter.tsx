@@ -3,7 +3,7 @@ import {ParameterContainer, ParameterLabel} from "./styledComponents";
 import {Input} from "@mui/material";
 import {EFontColor} from "../../../../constant";
 import {useCurrentEditElement, useUpdateElement} from "../../../../hooks";
-import {EConnection, EElementType} from "../../../../interface";
+import {EConnection} from "../../../../interface";
 
 export const FormulaParameter = () => {
     const selectedElementData = useCurrentEditElement()?.data

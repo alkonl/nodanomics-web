@@ -1,8 +1,9 @@
 import React from 'react';
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from "reactflow";
-import {Box, Typography} from "@mui/material";
+import {Box} from "@mui/material";
 import {IPoolNodeData} from "../../../../interface";
+import {NodeText} from "../styledComponent";
 
 export const PoolNode: React.FC<NodeProps<IPoolNodeData>> = ({isConnectable, data}) => {
     return (
@@ -11,23 +12,24 @@ export const PoolNode: React.FC<NodeProps<IPoolNodeData>> = ({isConnectable, dat
             <Handle type="source" position={Position.Right} isConnectable={isConnectable}/>
             <Box sx={{
                 border: '1px solid #777',
-                width: 40,
-                height: 40,
+                padding: 1,
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
             }}>
-                <Box>
-                    <Typography sx={{
-                        fontSize: 10,
-                    }}>
-                        Pool
-                    </Typography>
-                </Box>
-                <Typography>
-                    {data.resources.length}
-                </Typography>
+                <NodeText>
+                    Pool
+                </NodeText>
+                <NodeText>
+                    trigger: {data.trigger.mode}
+                </NodeText>
+                <NodeText>
+                    action: {data.actionMode}
+                </NodeText>
+                <NodeText>
+                    resources: {data.resources.length}
+                </NodeText>
             </Box>
 
         </Box>

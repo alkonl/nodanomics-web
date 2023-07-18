@@ -1,8 +1,8 @@
-import {EDiagramNode, EElementType, IDiagramNodeBaseData, IReactFlowNode} from "../../interface";
 // eslint-disable-next-line import/named
 import {ReactFlowInstance} from "reactflow";
 import {DragEvent} from "react";
 import {initialNodeDiagramElement} from "../../constant";
+import {EDiagramNode, EElementType, ENodeAction, IDiagramNodeBaseData, IReactFlowNode, ENodeTrigger} from "../../interface";
 
 let id = 0;
 const getId = () => `nodeId_${id++}`;
@@ -60,6 +60,10 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
                 data: {
                     ...baseData,
                     type,
+                    trigger: {
+                        mode: ENodeTrigger.automatic,
+                    },
+                    actionMode: ENodeAction.pushAny,
                 }
             }
         }
@@ -70,6 +74,10 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
                     ...baseData,
                     type,
                     resources: [],
+                    actionMode: ENodeAction.pullAny,
+                    trigger: {
+                        mode: ENodeTrigger.passive,
+                    },
                 }
             }
         }

@@ -3,25 +3,24 @@ import {
     INodeData
 } from "../../../interface";
 import {GraphBaseEdge} from "../GraphEdge";
+import {RunManager} from "../RunManager";
 
 export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseData = INodeData> {
     protected _data: IGenericNodeData;
     private _outgoingEdges: GraphBaseEdge[] = [];
     private _incomingEdges: GraphBaseEdge[] = [];
+    private readonly RunManager: RunManager;
 
-    constructor(value: IGenericNodeData) {
+    constructor(value: IGenericNodeData, runManager: RunManager) {
         this._data = value;
+        this.RunManager = runManager
     }
 
-    invokeStepOutgoingEdges() {
-        this._outgoingEdges.forEach(edge => {
-            edge.invokeStep()
-        })
-    }
 
     get data() {
         return this._data;
     }
+
 
     updateNode(data: Partial<INodeData>) {
         this._data = {
@@ -34,8 +33,20 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
         this.updateNode(data)
     }
 
+    get runManager() {
+        return this.RunManager;
+    }
+
+    get currentStep() {
+        return this.runManager.currentStep;
+    }
+
     get outgoingEdges(): GraphBaseEdge[] {
         return this._outgoingEdges;
+    }
+
+    get incomingEdges(): GraphBaseEdge[] {
+        return this._incomingEdges;
     }
 
     addEdge(target: GraphBaseNode, edge: GraphBaseEdge) {

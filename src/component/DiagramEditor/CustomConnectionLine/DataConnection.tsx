@@ -29,12 +29,12 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = ({
 
 
     const dispatch = useAppDispatch()
-    const {setEditNode} = diagramEditorActions
+    const {setEditElement} = diagramEditorActions
 
     const onClick = () => {
-        dispatch(setEditNode({
+        dispatch(setEditElement({
             id,
-            type: EElementType.Connection,
+            elementType: EElementType.Connection,
         }))
     }
     return (

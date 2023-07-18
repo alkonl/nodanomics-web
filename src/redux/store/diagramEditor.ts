@@ -20,7 +20,7 @@ export interface IDiagramEditorState {
     diagramNodes: IReactFlowNode[]
     diagramEdges: IReactFlowEdge[],
     currentEditElement?: {
-        type: EElementType
+        elementType: EElementType
         id: string
     }
 }
@@ -32,6 +32,7 @@ const initialState: IDiagramEditorState = {
 
 const graph = new Graph()
 const runManager = new RunManager(graph)
+graph.attachRunManager(runManager)
 
 const updateNodes = (diagramNodes: IReactFlowNode[]) => {
     diagramNodes.forEach(node => {
@@ -65,8 +66,8 @@ export const diagramEditorSlice = createSlice({
         onNodesChange: (state, {payload}: PayloadAction<NodeChange[]>) => {
             state.diagramNodes = applyNodeChanges<INodeData>(payload, state.diagramNodes)
         },
-        setEditNode: (state, {payload}: PayloadAction<{
-            type: EElementType
+        setEditElement: (state, {payload}: PayloadAction<{
+            elementType: EElementType
             id: string
         }>) => {
             state.currentEditElement = payload
@@ -104,10 +105,12 @@ export const diagramEditorSlice = createSlice({
             }
         },
         invokeStep: (state) => {
-
             runManager.invokeStep()
             updateNodes(state.diagramNodes)
         },
+        resetDiagramRun: (state) => {
+            graph.resetNodeValues()
+        }
     }
 })
 
