@@ -3,8 +3,8 @@ export interface IGetDiagramByIdResponse {
     userId: string
     elements: JSON
     name: string
-    description: string
-    updatedAt: Date
-    createdAt: Date
-    diagramTags?: { id: string, name: string }[]
+    // description: string
+    // updatedAt: Date
+    // createdAt: Date
+    // diagramTags?: { id: string, name: string }[]
 }

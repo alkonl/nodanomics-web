@@ -15,7 +15,7 @@ import {
     IChangePasswordResponse,
     ICreateNewDiagramRequest,
     ICreateNewDiagramResponse,
-    ICreateProjectRequest, ICreateProjectResponse,
+    ICreateProjectRequest, ICreateProjectResponse, IGetDiagramByIdResponse,
     IGetDiagramsByUserIdResponse,
     IGetDiagramTagsRequest,
     IGetDiagramTagsResponse, IGetProjectsRequest,
@@ -379,16 +379,45 @@ export const baseApi = createApi({
                 }
             }
         }),
-        sendMessage: builder.mutation<any, string>({
-            queryFn: async (chatMessageContent: string) => {
+
+        getMessages: builder.query<{ diagram?: IGetDiagramByIdResponse }, unknown>({
+            queryFn: async (diagramId: string) => {
                 const socket = await getSocket();
-                return new Promise(resolve => {
-                    socket.emit(ChatEvent.SendMessage, chatMessageContent, (message: any) => {
-                        resolve({data: message});
+                socket.emit(DiagramEvent.JoinDiagramRoom, diagramId);
+                return {data: {}}
+            },
+            async onCacheEntryAdded(
+                diagramId,
+                {cacheDataLoaded, cacheEntryRemoved, updateCachedData},
+            ) {
+                try {
+                    await cacheDataLoaded;
+
+                    const socket = await getSocket();
+                    console.log('diagramId: ', diagramId)
+                    socket.on('connect', () => {
+                        socket.emit(DiagramEvent.RequestDiagram, diagramId);
                     });
-                })
+
+                    socket.on(DiagramEvent.UpdateDiagramElements, (content: any) => {
+                        console.log('UpdateDiagramElements: ', content);
+                        // updateCachedData((draft) => {
+                        //     draft.splice(0, draft.length, ...messages);
+                        // });
+                    });
+                    await cacheEntryRemoved;
+                    socket.off('connect');
+                    socket.off(DiagramEvent.RequestDiagram);
+                    socket.off(DiagramEvent.UpdateDiagramElements);
+                } catch {
+                    // if cacheEntryRemoved resolved before cacheDataLoaded,
+                    // cacheDataLoaded throws
+                }
             },
         }),
+        // getDiagramById: builder.query<IGetDiagramByIdResponse, string>({
+        //
+        // }),
         updateDiagramElements: builder.mutation<{
             diagramId: string,
             elements: JSON
@@ -424,8 +453,8 @@ export const {
     useDeleteDiagramMutation,
     useCreateProjectMutation,
     useGetProjectsQuery,
-    useSendMessageMutation,
     useGetDiagramsByProjectIdQuery,
     useUpdateDiagramElementsMutation,
+    useGetMessagesQuery
 } = baseApi;
 

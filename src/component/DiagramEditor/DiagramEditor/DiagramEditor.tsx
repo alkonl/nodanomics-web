@@ -5,12 +5,15 @@ import {ElementSetupToolbar, LeftToolbar} from "../toolbar";
 import {useWidthAndHeight, useUploadDiagramOnServer} from "../../../hooks";
 import {Box, Button} from "@mui/material";
 import {ElementToolbar} from "../toolbar/ElementToolbar/ElementToolbar";
+import {useGetMessagesQuery} from "../../../api";
+import {useDiagramEditorState} from "../../../redux";
 
 
 export const DiagramEditor = () => {
 
     useUploadDiagramOnServer()
-
+    const {currentDiagramId} = useDiagramEditorState()
+    useGetMessagesQuery(currentDiagramId)
     const {elementSize: diagramCanvasContainerSize, elementRef: diagramCanvasContainerRef} = useWidthAndHeight()
     return (
         <Box
