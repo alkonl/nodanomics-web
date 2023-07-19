@@ -19,7 +19,7 @@ export interface IDiagramEditorState {
     diagramTags?: { id: string, name: string }[]
     diagramNodes: IReactFlowNode[]
     diagramEdges: IReactFlowEdge[],
-    stateLess:{
+    stateLess: {
         stateLessNodes: IReactFlowNode[]
         stateLessEdges: IReactFlowEdge[]
     }
@@ -32,7 +32,7 @@ export interface IDiagramEditorState {
 const initialState: IDiagramEditorState = {
     diagramNodes: [],
     diagramEdges: [],
-    stateLess:{
+    stateLess: {
         stateLessNodes: [],
         stateLessEdges: []
     }
@@ -59,6 +59,11 @@ export const diagramEditorSlice = createSlice({
             diagramId: string
         }>) => {
             state.currentDiagramId = payload.diagramId
+        },
+        setDiagramName: (state, {payload}: PayloadAction<{
+            name: string
+        }>) => {
+            state.name = payload.name
         },
         addNode: (state, {payload}: PayloadAction<IReactFlowNode>) => {
             const length = state.diagramNodes.push(payload)
@@ -134,6 +139,24 @@ export const diagramEditorSlice = createSlice({
                     ...state.stateLess.stateLessEdges.slice(stateLessEdgeToUpdateIndex + 1)
                 ]
             }
+        },
+        setDiagramElements: (state, {payload}: PayloadAction<{
+            diagramId: string,
+            nodes: IReactFlowNode[]
+            edges: IReactFlowEdge[]
+        }>) => {
+            state.currentDiagramId = payload.diagramId
+            state.diagramNodes = payload.nodes
+            state.diagramEdges = payload.edges
+            state.stateLess.stateLessNodes = payload.nodes
+            state.stateLess.stateLessEdges = payload.edges
+            const filteredEdges: IDiagramConnectionData[] = payload.edges
+                .map(edge => edge.data)
+                .filter(edgeData => edgeData !== undefined) as IDiagramConnectionData[]
+            graph.setDiagramElements({
+                nodes: payload.nodes.map(node => node.data),
+                edges: filteredEdges
+            })
         },
         invokeStep: (state) => {
             runManager.invokeStep()

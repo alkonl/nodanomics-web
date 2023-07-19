@@ -14,6 +14,7 @@ export const useGetInfinityProjects = () => {
     })
     const reachedBottom = useScrollToBottom(scrollRef)
 
+
     useEffect(() => {
         const lastProject = allProjects?.[allProjects.length - 1]
         if (reachedBottom && lastProject && lastProject.id !== prevProjectCursorId.current && !isLoading) {

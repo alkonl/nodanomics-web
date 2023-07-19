@@ -1,1 +1,1 @@
-export * from './getSocket'
+export * from './getSocketAsync'

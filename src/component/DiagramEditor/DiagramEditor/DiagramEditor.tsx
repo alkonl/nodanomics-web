@@ -1,35 +1,45 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {DiagramCanvas} from "../DiagramCanvas";
 import style from './DiagramEditor.module.scss'
 import {ElementSetupToolbar, LeftToolbar} from "../toolbar";
-import {useWidthAndHeight, useUploadDiagramOnServer} from "../../../hooks";
-import {Box, Button} from "@mui/material";
+import {useGetEditDiagramFromServer, useWidthAndHeight} from "../../../hooks";
+import {Box} from "@mui/material";
 import {ElementToolbar} from "../toolbar/ElementToolbar/ElementToolbar";
-import {useGetMessagesQuery} from "../../../api";
-import {useDiagramEditorState} from "../../../redux";
 
 
 export const DiagramEditor = () => {
 
-    useUploadDiagramOnServer()
-    const {currentDiagramId} = useDiagramEditorState()
-    useGetMessagesQuery(currentDiagramId)
+    const {isRequestLoaded} = useGetEditDiagramFromServer()
+    const [isCanvasShow, setIsCanvasShow] = useState(false)
+
+    // TODO after downloading the diagram from the server,
+    //  it takes some time to display new elements instead of the old ones.
+    //  Therefore, setTimeout is used
+    useEffect(() => {
+        let timeout: NodeJS.Timeout
+        if (isRequestLoaded) {
+            setTimeout(() => {
+                setIsCanvasShow(true)
+            }, 150)
+        } else {
+            setIsCanvasShow(false)
+        }
+        return () => {
+            clearTimeout(timeout)
+        }
+    }, [isRequestLoaded])
+
     const {elementSize: diagramCanvasContainerSize, elementRef: diagramCanvasContainerRef} = useWidthAndHeight()
+
+
     return (
         <Box
             className={style.container}
         >
-            <Button
-                onClick={() => {
-                    console.log('click send message')
-                }}
-            >
-                Send message
-            </Button>
             <Box
                 ref={diagramCanvasContainerRef}
                 className={style.canvasContainer}>
-                <DiagramCanvas/>
+                {isCanvasShow && <DiagramCanvas/>}
                 <Box sx={{
                     position: 'absolute',
                     width: diagramCanvasContainerSize.width,

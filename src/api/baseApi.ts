@@ -30,12 +30,12 @@ import {
     IUpdateUserDataRequest,
     IUpdateUserDataResponse
 } from "../interface";
-import {CONFIG, getSocket} from "../utils";
+import {CONFIG, getSocketAsync} from "../utils";
 import {IServerErrorResponse} from "../interface/serverErrorResponse";
 
 import {ERTKTags} from "./requestTags";
 import moment from "moment";
-import {ChatEvent, DiagramEvent} from "../constant";
+import {ChatEvent, EEventDiagramServer, EEventDiagramWeb} from "../constant";
 import {GetDiagramsByProjectIdResponse} from "../interface/api/project/getDiagramsByProjectId";
 
 
@@ -364,10 +364,16 @@ export const baseApi = createApi({
                 return endpointName
             },
             merge: (currentCache, newItems) => {
-                currentCache.push(...newItems)
-                currentCache.sort((a, b) => {
-                    return moment(b.updatedAt).diff(moment(a.updatedAt))
+                const filteredItems = newItems.filter((newItem) => {
+                    return !currentCache.some((currentItem) => {
+                        return currentItem.id === newItem.id
+                    })
                 })
+                currentCache.push(...filteredItems)
+                return currentCache
+                    .sort((a, b) => {
+                        return moment(b.updatedAt).diff(moment(a.updatedAt))
+                    })
             },
             providesTags: [ERTKTags.Projects, ERTKTags.User],
         }),
@@ -380,12 +386,18 @@ export const baseApi = createApi({
             }
         }),
 
-        getMessages: builder.query<{ diagram?: IGetDiagramByIdResponse }, unknown>({
+        getDiagramById: builder.query<{ diagram?: IGetDiagramByIdResponse }, string | undefined>({
             queryFn: async (diagramId: string) => {
-                const socket = await getSocket();
-                socket.emit(DiagramEvent.JoinDiagramRoom, diagramId);
-                return {data: {}}
+                const socket = await getSocketAsync();
+                socket.emit(EEventDiagramServer.JoinDiagramRoom, diagramId);
+                socket.emit(EEventDiagramServer.RequestDiagram, diagramId);
+                return {
+                    data: {
+                    }
+                }
             },
+
+
             async onCacheEntryAdded(
                 diagramId,
                 {cacheDataLoaded, cacheEntryRemoved, updateCachedData},
@@ -393,22 +405,25 @@ export const baseApi = createApi({
                 try {
                     await cacheDataLoaded;
 
-                    const socket = await getSocket();
-                    console.log('diagramId: ', diagramId)
-                    socket.on('connect', () => {
-                        socket.emit(DiagramEvent.RequestDiagram, diagramId);
-                    });
+                    const socket = await getSocketAsync();
 
-                    socket.on(DiagramEvent.UpdateDiagramElements, (content: any) => {
-                        console.log('UpdateDiagramElements: ', content);
-                        // updateCachedData((draft) => {
-                        //     draft.splice(0, draft.length, ...messages);
-                        // });
+
+                    socket.on(EEventDiagramWeb.UpdateDiagramElements, (content: IGetDiagramByIdResponse) => {
+                        updateCachedData((draft) => {
+                            draft = {
+                                diagram: {
+                                    id: content.id,
+                                    name: content.name,
+                                    elements: content.elements,
+                                },
+                            };
+                            return draft
+                        });
                     });
                     await cacheEntryRemoved;
                     socket.off('connect');
-                    socket.off(DiagramEvent.RequestDiagram);
-                    socket.off(DiagramEvent.UpdateDiagramElements);
+                    socket.off(EEventDiagramServer.RequestDiagram);
+                    socket.off(EEventDiagramWeb.UpdateDiagramElements);
                 } catch {
                     // if cacheEntryRemoved resolved before cacheDataLoaded,
                     // cacheDataLoaded throws
@@ -423,9 +438,9 @@ export const baseApi = createApi({
             elements: JSON
         }, unknown>({
             queryFn: async (chatMessageContent: string) => {
-                const socket = await getSocket();
+                const socket = await getSocketAsync();
                 return new Promise(resolve => {
-                    socket.emit(DiagramEvent.UpdateDiagramElements, chatMessageContent, (message: any) => {
+                    socket.emit(EEventDiagramServer.UpdateDiagramElements, chatMessageContent, (message: any) => {
                         resolve({data: message});
                     });
                 })
@@ -455,6 +470,6 @@ export const {
     useGetProjectsQuery,
     useGetDiagramsByProjectIdQuery,
     useUpdateDiagramElementsMutation,
-    useGetMessagesQuery
+    useGetDiagramByIdQuery
 } = baseApi;
 

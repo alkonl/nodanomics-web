@@ -16,7 +16,9 @@ export const DiagramEditorHeader = () => {
             }}
         >
             <DiagramEditorDropDownMenu/>
-            <Typography variant="h3">
+            <Typography sx={{
+                fontSize: 12
+            }}>
                 {name}
             </Typography>
         </Box>

@@ -19,7 +19,7 @@ export const useUploadDiagramOnServer = () => {
                 diagramEdges: stateLessEdges,
             }
         })
-    }, 1000), [])
+    }, 100), [])
 
 
     useEffect(() => {
@@ -30,6 +30,5 @@ export const useUploadDiagramOnServer = () => {
                 stateLessEdges: stateLess.stateLessEdges
             })
         }
-
     }, [stateLess, currentDiagramId])
 }

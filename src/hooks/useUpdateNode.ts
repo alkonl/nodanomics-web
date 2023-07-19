@@ -127,6 +127,8 @@ export const useUpdateEdgeData = ({edgeId}: {
                 type: edgeType,
                 data: {
                     ...connectionInitialProps[edgeType],
+                    sourceId: selectedEdge.source,
+                    targetId: selectedEdge.target,
                     id: selectedEdge.id,
                 }
             }))

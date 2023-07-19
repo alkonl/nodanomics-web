@@ -39,6 +39,7 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectabl
             <Box>
                 <Input
                     onChange={onFormulaChange}
+                    value={data.formula || ''}
                     sx={{
                     color: EFontColor.white,
                 }}/>

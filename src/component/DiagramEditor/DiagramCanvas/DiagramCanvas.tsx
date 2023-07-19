@@ -7,7 +7,7 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-import {useOnDrop, useOnNodeDragStart} from "../../../hooks";
+import {useOnDrop, useOnNodeDragStart, useUploadDiagramOnServer} from "../../../hooks";
 import styles from './DiagramCanvas.module.scss'
 import {EConnection, EDiagramNode} from "../../../interface";
 import {FormulaNode, PoolNode, SourceNode, VariableNode} from "../CutomNode";
@@ -56,7 +56,7 @@ export const DiagramCanvas = () => {
         flowWrapper: reactFlowWrapper.current !== null ? reactFlowWrapper.current : undefined,
     })
 
-
+    useUploadDiagramOnServer()
     return (
         <Box
             className={styles.canvasContainer}

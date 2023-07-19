@@ -3,9 +3,9 @@ import {EConnection, EElementType, IDiagramConnectionData} from "../../../interf
 import {Connection, Edge} from "reactflow";
 import {connectionStyle} from "./connectionStyle";
 import {connectionInitialProps} from "./connectionInitialProps";
+import {nanoid} from "nanoid";
 
-let id = 0;
-const getEdgeId = () => `edgeId_${id++}`;
+const getEdgeId = () => `edgeId_${nanoid()}`;
 
 export const defineConnectionTypeBySourceAndTarget = ({source, target}: {
     source: string,
@@ -27,13 +27,14 @@ export const connectEdge = ({connection}:
     if (connection.sourceHandle === null || connection.targetHandle === null) {
         throw new Error('sourceHandle and targetHandle null')
     }
-
+    if (connection.source === null || connection.target === null) {
+        throw new Error('source and target null')
+    }
 
     const type = defineConnectionTypeBySourceAndTarget({
         source: connection.sourceHandle,
         target: connection.targetHandle
     });
-
 
     const edgeId = getEdgeId();
     return {
@@ -43,6 +44,8 @@ export const connectEdge = ({connection}:
         id: edgeId,
         data: {
             ...connectionInitialProps[type],
+            sourceId: connection.source,
+            targetId: connection.target,
             id: edgeId,
         }
     }

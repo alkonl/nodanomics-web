@@ -85,6 +85,24 @@ export class Graph {
         }
     }
 
+    setDiagramElements({nodes, edges}: { nodes: INodeData[], edges: IDiagramConnectionData[] }) {
+        const runManager = this.runManager;
+        if (runManager) {
+            this._nodes = nodes.map(node => GraphNodeFactory.createNode(node, runManager));
+            edges.forEach(edge => {
+                if (edge.sourceId && edge.targetId) {
+                    const source = this.findNode(edge.sourceId);
+                    const target = this.findNode(edge.targetId);
+                    if (source && target) {
+                        const graphEdge = GraphEdgeFactory.createEdge({source, target, edgeData: edge});
+                        this._edges.push(graphEdge);
+                        source.addEdge(target, graphEdge);
+                    }
+                }
+            })
+        }
+    }
+
     resetNodeValues() {
         // this.nodes.forEach(node => node.resetValue());
     }
