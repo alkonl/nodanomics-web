@@ -8,6 +8,7 @@ import {MButton} from "../../base";
 import {Text} from "../../base/Text";
 import {FormText} from "../../base/FormInput";
 import {useCreateDiagramMutation, useCreateProjectMutation} from "../../../api";
+import {useNavigate} from "react-router-dom";
 
 enum EFormFields {
     projectName = 'projectName',
@@ -20,10 +21,10 @@ const validationSchema = z.object({
 type IValidationSchema = z.infer<typeof validationSchema>;
 
 export const CreateProjectForm: React.FC<{
-    onSuccess: (params: {
-        diagramId: string
-    }) => void;
+    onSuccess: () => void;
 }> = ({onSuccess}) => {
+    const navigate = useNavigate()
+
     const [createProject, {data: resCreateProject}] = useCreateProjectMutation()
     const [createDiagram, {data: resCreateDiagram}] = useCreateDiagramMutation()
     const form = useForm<IValidationSchema>({
@@ -38,9 +39,8 @@ export const CreateProjectForm: React.FC<{
 
     useEffect(() => {
         if (resCreateDiagram) {
-            onSuccess({
-                diagramId: resCreateDiagram.id
-            })
+            onSuccess()
+            navigate(`/diagram/${resCreateDiagram.id}`)
         }
     }, [resCreateDiagram])
 

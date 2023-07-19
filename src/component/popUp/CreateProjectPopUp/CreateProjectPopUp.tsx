@@ -7,9 +7,7 @@ import {EColor} from "../../../constant";
 
 export const CreateProjectPopUp: React.FC<{
     isShow: boolean;
-    onClose: ({
-                  diagramId: string
-              }) => void;
+    onClose: () => void;
 }> = ({isShow, onClose}) => {
     return (
         <Dialog open={isShow} onClose={onClose}>

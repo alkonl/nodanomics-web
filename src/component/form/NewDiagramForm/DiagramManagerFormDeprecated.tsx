@@ -96,8 +96,8 @@ export const DiagramManagerFormDeprecated: React.FC<{
         if (resUpdateDiagram) {
             dispatch(diagramEditorActions.setCurrentDiagram({
                 diagramId: resUpdateDiagram.id,
-                name: resUpdateDiagram.name,
-                description: resUpdateDiagram.description,
+                // name: resUpdateDiagram.name,
+                // description: resUpdateDiagram.description,
             }))
         }
     }, [resUpdateDiagram])

@@ -1,14 +1,15 @@
 import React from 'react';
 import {DiagramCanvas} from "../DiagramCanvas";
 import style from './DiagramEditor.module.scss'
-import {ElementSetupToolbar, ElementsToolbarDeprecated, LeftToolbar, RightToolbarDeprecated} from "../toolbar";
-import {useWidthAndHeight} from "../../../hooks";
+import {ElementSetupToolbar, LeftToolbar} from "../toolbar";
+import {useWidthAndHeight, useUploadDiagramOnServer} from "../../../hooks";
 import {Box, Button} from "@mui/material";
 import {ElementToolbar} from "../toolbar/ElementToolbar/ElementToolbar";
-import {useSendMessageMutation} from "../../../api";
+
 
 export const DiagramEditor = () => {
-    const [sendMessage, { isLoading }] = useSendMessageMutation();
+
+    useUploadDiagramOnServer()
 
     const {elementSize: diagramCanvasContainerSize, elementRef: diagramCanvasContainerRef} = useWidthAndHeight()
     return (
@@ -16,10 +17,9 @@ export const DiagramEditor = () => {
             className={style.container}
         >
             <Button
-            onClick={() => {
-                console.log('click send message')
-              sendMessage('test message')
-            }}
+                onClick={() => {
+                    console.log('click send message')
+                }}
             >
                 Send message
             </Button>
@@ -60,10 +60,8 @@ export const DiagramEditor = () => {
                         </Box>
                         <ElementSetupToolbar/>
                     </Box>
-
                 </Box>
             </Box>
-
         </Box>
     );
 };

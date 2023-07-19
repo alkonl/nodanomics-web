@@ -19,6 +19,10 @@ export interface IDiagramEditorState {
     diagramTags?: { id: string, name: string }[]
     diagramNodes: IReactFlowNode[]
     diagramEdges: IReactFlowEdge[],
+    stateLess:{
+        stateLessNodes: IReactFlowNode[]
+        stateLessEdges: IReactFlowEdge[]
+    }
     currentEditElement?: {
         elementType: EElementType
         id: string
@@ -27,7 +31,11 @@ export interface IDiagramEditorState {
 
 const initialState: IDiagramEditorState = {
     diagramNodes: [],
-    diagramEdges: []
+    diagramEdges: [],
+    stateLess:{
+        stateLessNodes: [],
+        stateLessEdges: []
+    }
 }
 
 const graph = new Graph()
@@ -49,22 +57,34 @@ export const diagramEditorSlice = createSlice({
     reducers: {
         setCurrentDiagram: (state, {payload}: PayloadAction<{
             diagramId: string
-            name: string
-            description: string
-            diagramTags?: { id: string, name: string }[]
         }>) => {
             state.currentDiagramId = payload.diagramId
-            state.name = payload.name
-            state.description = payload.description
-            state.description = payload.description
-            state.diagramTags = payload.diagramTags
         },
         addNode: (state, {payload}: PayloadAction<IReactFlowNode>) => {
             const length = state.diagramNodes.push(payload)
+            state.stateLess.stateLessNodes.push(payload)
             graph.addOrGetNode(state.diagramNodes[length - 1].data)
         },
         onNodesChange: (state, {payload}: PayloadAction<NodeChange[]>) => {
             state.diagramNodes = applyNodeChanges<INodeData>(payload, state.diagramNodes)
+            state.stateLess.stateLessNodes = applyNodeChanges<INodeData>(payload, state.stateLess.stateLessNodes)
+        },
+        addEdge: (state, {payload}: PayloadAction<EdgeChange[]>) => {
+            state.diagramEdges = applyEdgeChanges(payload, state.diagramEdges)
+            state.stateLess.stateLessEdges = applyEdgeChanges(payload, state.stateLess.stateLessEdges)
+        },
+        onConnect: (state, {payload}: PayloadAction<IReactFlowEdge | IReactFlowEdgeConnection>) => {
+            state.diagramEdges = addEdge(payload, state.diagramEdges)
+            state.stateLess.stateLessEdges = addEdge(payload, state.stateLess.stateLessEdges)
+            if (payload.target && payload.source && payload.data) {
+                graph.addEdge({
+                    sourceId: payload.source,
+                    targetId: payload.target,
+                    edgeData: payload.data,
+                })
+                updateNodes(state.diagramNodes)
+                updateNodes(state.stateLess.stateLessNodes)
+            }
         },
         setEditElement: (state, {payload}: PayloadAction<{
             elementType: EElementType
@@ -72,13 +92,10 @@ export const diagramEditorSlice = createSlice({
         }>) => {
             state.currentEditElement = payload
         },
-        updateNode: (state, {payload}: PayloadAction<IReactFlowNode>) => {
-            const index = state.diagramNodes.findIndex(node => node.id === payload.id)
-            state.diagramNodes[index] = payload
-        },
         updateNodeData: (state, {payload}: PayloadAction<Optionalize<INodeData, 'id'>>) => {
             graph.updateNodeData(payload.id, payload)
             updateNodes(state.diagramNodes)
+            updateNodes(state.stateLess.stateLessNodes)
         },
         updateEdgeData: (state, {payload}: PayloadAction<Optionalize<IDiagramConnectionData, 'id' | 'type'>>) => {
             const edge = state.diagramEdges.find(edge => edge.id === payload.id)
@@ -86,6 +103,13 @@ export const diagramEditorSlice = createSlice({
             if (edge && edge.data && edge.data.type === payload.type) {
                 edge.data = {
                     ...edge.data,
+                    ...payload
+                }
+            }
+            const stateLessEdge = state.stateLess.stateLessEdges.find(edge => edge.id === payload.id)
+            if (stateLessEdge && stateLessEdge.data && stateLessEdge.data.type === payload.type) {
+                stateLessEdge.data = {
+                    ...stateLessEdge.data,
                     ...payload
                 }
             }
@@ -101,27 +125,20 @@ export const diagramEditorSlice = createSlice({
                     ...state.diagramEdges.slice(edgeToUpdateIndex + 1)
                 ]
             }
-        },
-
-        addEdge: (state, {payload}: PayloadAction<EdgeChange[]>) => {
-            state.diagramEdges = applyEdgeChanges(payload, state.diagramEdges)
-        },
-        onConnect: (state, {payload}: PayloadAction<IReactFlowEdge | IReactFlowEdgeConnection>) => {
-            state.diagramEdges = addEdge(payload, state.diagramEdges)
-            if (payload.target && payload.source && payload.data) {
-                graph.addEdge({
-                    sourceId: payload.source,
-                    targetId: payload.target,
-                    edgeData: payload.data,
-                })
-                updateNodes(state.diagramNodes)
+            const stateLessEdgeToUpdateIndex = state.stateLess.stateLessEdges.findIndex(edge => edge.id === payload.id)
+            const oldStateLessEdge = state.stateLess.stateLessEdges[stateLessEdgeToUpdateIndex]
+            if (oldStateLessEdge && payload.data) {
+                state.stateLess.stateLessEdges = [
+                    ...state.stateLess.stateLessEdges.slice(0, stateLessEdgeToUpdateIndex),
+                    payload,
+                    ...state.stateLess.stateLessEdges.slice(stateLessEdgeToUpdateIndex + 1)
+                ]
             }
         },
         invokeStep: (state) => {
             runManager.invokeStep()
             updateNodes(state.diagramNodes)
         },
-
         resetDiagramRun: (state) => {
             graph.resetNodeValues()
         },

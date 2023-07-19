@@ -16,7 +16,6 @@ import {
     ICreateNewDiagramRequest,
     ICreateNewDiagramResponse,
     ICreateProjectRequest, ICreateProjectResponse,
-    IGetDiagramByIdResponse,
     IGetDiagramsByUserIdResponse,
     IGetDiagramTagsRequest,
     IGetDiagramTagsResponse, IGetProjectsRequest,
@@ -36,7 +35,8 @@ import {IServerErrorResponse} from "../interface/serverErrorResponse";
 
 import {ERTKTags} from "./requestTags";
 import moment from "moment";
-import {ChatEvent} from "../constant";
+import {ChatEvent, DiagramEvent} from "../constant";
+import {GetDiagramsByProjectIdResponse} from "../interface/api/project/getDiagramsByProjectId";
 
 
 const baseQuery = fetchBaseQuery(({
@@ -298,17 +298,17 @@ export const baseApi = createApi({
             },
             invalidatesTags: [ERTKTags.PersonalDashboard]
         }),
-        getDiagramById: builder.query<IGetDiagramByIdResponse, string>({
-            query: (id: string) => {
-                return {
-                    url: `/diagram?id=${id}`,
-                    method: 'GET',
-                }
-            },
-            providesTags: (result, error, diagramId) => {
-                return [{type: ERTKTags.EditedDiagram, id: diagramId}]
-            }
-        }),
+        // getDiagramById: builder.query<IGetDiagramByIdResponse, string>({
+        //     query: (id: string) => {
+        //         return {
+        //             url: `/diagram?id=${id}`,
+        //             method: 'GET',
+        //         }
+        //     },
+        //     providesTags: (result, error, diagramId) => {
+        //         return [{type: ERTKTags.EditedDiagram, id: diagramId}]
+        //     }
+        // }),
         updateDiagram: builder.mutation<IUpdateDiagramResponse, IUpdateDiagramRequest>({
             query: (body: IUpdateDiagramRequest) => {
                 return {
@@ -371,6 +371,14 @@ export const baseApi = createApi({
             },
             providesTags: [ERTKTags.Projects, ERTKTags.User],
         }),
+        getDiagramsByProjectId: builder.query<GetDiagramsByProjectIdResponse, string>({
+            query: (projectId: string) => {
+                return {
+                    url: `/project/diagrams/${projectId}`,
+                    method: 'GET',
+                }
+            }
+        }),
         sendMessage: builder.mutation<any, string>({
             queryFn: async (chatMessageContent: string) => {
                 const socket = await getSocket();
@@ -381,6 +389,19 @@ export const baseApi = createApi({
                 })
             },
         }),
+        updateDiagramElements: builder.mutation<{
+            diagramId: string,
+            elements: JSON
+        }, unknown>({
+            queryFn: async (chatMessageContent: string) => {
+                const socket = await getSocket();
+                return new Promise(resolve => {
+                    socket.emit(DiagramEvent.UpdateDiagramElements, chatMessageContent, (message: any) => {
+                        resolve({data: message});
+                    });
+                })
+            },
+        })
     }),
 })
 export const {
@@ -397,12 +418,14 @@ export const {
     useUpdateUserDataMutation,
     useGetDiagramTagsQuery,
     useCreateDiagramMutation,
-    useGetDiagramByIdQuery,
+    // useGetDiagramByIdQuery,
     useUpdateDiagramMutation,
     useGetDiagramsByUserIdQuery,
     useDeleteDiagramMutation,
     useCreateProjectMutation,
     useGetProjectsQuery,
     useSendMessageMutation,
+    useGetDiagramsByProjectIdQuery,
+    useUpdateDiagramElementsMutation,
 } = baseApi;
 

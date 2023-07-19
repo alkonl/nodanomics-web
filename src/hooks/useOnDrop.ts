@@ -11,7 +11,8 @@ export const useOnDrop = ({flowWrapper, flowInstance}: {
 }) => {
     const dispatch = useAppDispatch()
     const {addNode} = diagramEditorActions
-
+    // const uploadDiagram = useUploadDiagramOnServer()
+    // const {addNode} = useWrappedEditDiagram()
     return useCallback(
         (event: DragEvent<HTMLDivElement>) => {
             if (flowWrapper && flowInstance) {
@@ -35,6 +36,6 @@ export const useOnDrop = ({flowWrapper, flowInstance}: {
                 }
             }
         },
-        [flowInstance]
+        [flowInstance, dispatch]
     );
 }
