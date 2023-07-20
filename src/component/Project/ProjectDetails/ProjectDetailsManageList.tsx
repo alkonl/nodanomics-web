@@ -3,20 +3,29 @@ import {MButton} from "../../base";
 import {EColor} from "../../../constant";
 import {Box} from "@mui/material";
 import {useToggle} from "../../../hooks";
-import {InviteUserPopUp} from "../../popUp";
+import {InviteUserPopUp, ManageUserPopUp} from "../../popUp";
 import {useProjectDashboardState} from "../../../redux";
 
 export const ProjectDetailsManageList = () => {
     const inviteUserPopUp = useToggle()
+    const manageUserPopUp = useToggle()
     const projectDashboardState = useProjectDashboardState()
 
     return (
         <>
-            {projectDashboardState.selectedProjectId && <InviteUserPopUp
-                isShow={inviteUserPopUp.isOpened}
-                onClose={inviteUserPopUp.close}
-                projectId={projectDashboardState.selectedProjectId}
-            />}
+            {projectDashboardState.selectedProjectId &&
+                <>
+                    <ManageUserPopUp
+                        isShow={manageUserPopUp.isOpened}
+                        onClose={manageUserPopUp.close}
+                    />
+                    <InviteUserPopUp
+                        isShow={inviteUserPopUp.isOpened}
+                        onClose={inviteUserPopUp.close}
+                        projectId={projectDashboardState.selectedProjectId}
+                    />
+                </>
+            }
             <Box
                 sx={{
                     display: 'flex',
@@ -33,6 +42,12 @@ export const ProjectDetailsManageList = () => {
                     variant="border"
                 >
                     Invite user
+                </MButton.Submit>
+                <MButton.Submit
+                    onClick={manageUserPopUp.open}
+                    variant="border"
+                >
+                    Manage user
                 </MButton.Submit>
                 <MButton.Submit
                     sx={{
