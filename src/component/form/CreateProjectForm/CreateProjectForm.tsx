@@ -47,7 +47,7 @@ export const CreateProjectForm: React.FC<{
     useEffect(() => {
         if (resCreateProject && resCreateProject.id) {
             createDiagram({
-                diagramName: 'default',
+                diagramName: resCreateProject.name,
                 projectId: resCreateProject.id,
             })
         }

@@ -1,8 +1,6 @@
 export interface ICreateNewDiagramRequest {
     diagramName: string
     projectId: string
-    // diagramDescription: string
-    // diagramTags?: { id?: string, name: string }[]
     elements?: JSON
 }
 

@@ -1,7 +1,9 @@
-import { useSessionContext } from 'supertokens-auth-react/recipe/session';
+import { useSessionContext , SessionContextType} from 'supertokens-auth-react/recipe/session';
 
 
-export const useSession = () => {
+export const useSession = (): SessionContextType & {
+    userId: string;
+} | undefined=> {
     const session = useSessionContext();
     if (session.loading) {
         return undefined;

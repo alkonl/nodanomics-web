@@ -19,7 +19,7 @@ import {
     IGetDiagramsByUserIdResponse,
     IGetDiagramTagsRequest,
     IGetDiagramTagsResponse, IGetProjectsRequest,
-    IGetProjectsResponse,
+    IGetProjectsResponse, IInviteUserToProjectRequest,
     ILoginEmailPasswordRequest,
     ISendEmailToResetPasswordRequest,
     ISessionUserDataResponse,
@@ -28,14 +28,14 @@ import {
     IUpdateDiagramRequest,
     IUpdateDiagramResponse,
     IUpdateUserDataRequest,
-    IUpdateUserDataResponse
+    IUpdateUserDataResponse,
+    IServerErrorResponse, IGetProjectTeamMemberRequest, IGetProjectTeamMemberResponse
 } from "../interface";
 import {CONFIG, getSocketAsync} from "../utils";
-import {IServerErrorResponse} from "../interface/serverErrorResponse";
 
 import {ERTKTags} from "./requestTags";
 import moment from "moment";
-import {ChatEvent, EEventDiagramServer, EEventDiagramWeb} from "../constant";
+import {EEventDiagramServer, EEventDiagramWeb} from "../constant";
 import {GetDiagramsByProjectIdResponse} from "../interface/api/project/getDiagramsByProjectId";
 
 
@@ -81,7 +81,14 @@ const baseQueryWithReauth: BaseQueryFn<
 }
 
 export const baseApi = createApi({
-    tagTypes: [ERTKTags.User, ERTKTags.DiagramTags, ERTKTags.EditedDiagram, ERTKTags.PersonalDashboard, ERTKTags.Projects],
+    tagTypes: [
+        ERTKTags.User,
+        ERTKTags.DiagramTags,
+        ERTKTags.EditedDiagram,
+        ERTKTags.PersonalDashboard,
+        ERTKTags.Projects,
+        ERTKTags.ProjectTeamMember,
+    ],
     reducerPath: 'baseApi',
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
@@ -118,6 +125,7 @@ export const baseApi = createApi({
                     };
                 }
             },
+            invalidatesTags: [ERTKTags.User],
         })),
         loginEmailPassword: builder.mutation({
             queryFn: async (params: ILoginEmailPasswordRequest) => {
@@ -151,7 +159,8 @@ export const baseApi = createApi({
                 }
 
                 return {data: response.status};
-            }
+            },
+            invalidatesTags: [ERTKTags.User],
         }),
         sendEmailToResetPassword: builder.mutation({
             queryFn: async (params: ISendEmailToResetPasswordRequest) => {
@@ -162,7 +171,8 @@ export const baseApi = createApi({
                     }]
                 });
                 return {data: response.status}
-            }
+            },
+            invalidatesTags: [ERTKTags.User],
         }),
         submitNewPassword: builder.mutation({
             queryFn: async (params: ISubmitNewPasswordRequest) => {
@@ -184,19 +194,22 @@ export const baseApi = createApi({
                     }
                 }
                 return {data: response.status}
-            }
+            },
+            invalidatesTags: [ERTKTags.User],
         }),
         sendVerificationEmail: builder.mutation({
             queryFn: async () => {
                 const response = await sendVerificationEmail()
                 return {data: response.status}
-            }
+            },
+            invalidatesTags: [ERTKTags.User],
         }),
         consumeVerificationCode: builder.mutation({
             queryFn: async () => {
                 const response = await verifyEmail();
                 return {data: response.status}
-            }
+            },
+            invalidatesTags: [ERTKTags.User],
         }),
         singInUpGoogle: builder.mutation({
             queryFn: async () => {
@@ -209,7 +222,8 @@ export const baseApi = createApi({
                         authUrl
                     }
                 }
-            }
+            },
+            invalidatesTags: [ERTKTags.User],
         }),
         thirdPartySignInAndUp: builder.query({
             queryFn: async () => {
@@ -392,12 +406,9 @@ export const baseApi = createApi({
                 socket.emit(EEventDiagramServer.JoinDiagramRoom, diagramId);
                 socket.emit(EEventDiagramServer.RequestDiagram, diagramId);
                 return {
-                    data: {
-                    }
+                    data: {}
                 }
             },
-
-
             async onCacheEntryAdded(
                 diagramId,
                 {cacheDataLoaded, cacheEntryRemoved, updateCachedData},
@@ -430,9 +441,6 @@ export const baseApi = createApi({
                 }
             },
         }),
-        // getDiagramById: builder.query<IGetDiagramByIdResponse, string>({
-        //
-        // }),
         updateDiagramElements: builder.mutation<{
             diagramId: string,
             elements: JSON
@@ -440,11 +448,28 @@ export const baseApi = createApi({
             queryFn: async (chatMessageContent: string) => {
                 const socket = await getSocketAsync();
                 return new Promise(resolve => {
-                    socket.emit(EEventDiagramServer.UpdateDiagramElements, chatMessageContent, (message: any) => {
-                        resolve({data: message});
-                    });
+                    socket.emit(EEventDiagramServer.UpdateDiagramElements, chatMessageContent);
                 })
             },
+        }),
+        inviteUserToProject: builder.mutation<unknown, IInviteUserToProjectRequest>({
+            query: (body: IInviteUserToProjectRequest) => {
+                return {
+                    url: '/project/invite',
+                    method: 'POST',
+                    body: body
+                }
+            },
+            invalidatesTags: [ERTKTags.ProjectTeamMember]
+        }),
+        getProjectTeamMembersByDiagramId: builder.query<IGetProjectTeamMemberResponse, IGetProjectTeamMemberRequest>({
+            query: (params: IGetProjectTeamMemberRequest) => {
+                return {
+                    url: `/project/diagram/${params?.diagramId}/team-members`,
+                    method: 'GET',
+                }
+            },
+            providesTags: [ERTKTags.ProjectTeamMember]
         })
     }),
 })
@@ -470,6 +495,8 @@ export const {
     useGetProjectsQuery,
     useGetDiagramsByProjectIdQuery,
     useUpdateDiagramElementsMutation,
-    useGetDiagramByIdQuery
+    useGetDiagramByIdQuery,
+    useInviteUserToProjectMutation,
+    useGetProjectTeamMembersByDiagramIdQuery
 } = baseApi;
 

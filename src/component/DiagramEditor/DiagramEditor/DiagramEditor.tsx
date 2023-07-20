@@ -5,6 +5,7 @@ import {ElementSetupToolbar, LeftToolbar} from "../toolbar";
 import {useGetEditDiagramFromServer, useWidthAndHeight} from "../../../hooks";
 import {Box} from "@mui/material";
 import {ElementToolbar} from "../toolbar/ElementToolbar/ElementToolbar";
+import {DiagramEditorHeader} from "../DiagramEditorHeader";
 
 
 export const DiagramEditor = () => {
@@ -17,7 +18,7 @@ export const DiagramEditor = () => {
     //  Therefore, setTimeout is used
     useEffect(() => {
         let timeout: NodeJS.Timeout
-        if (isRequestLoaded) {
+        if (isRequestLoaded && !isCanvasShow) {
             setTimeout(() => {
                 setIsCanvasShow(true)
             }, 150)
@@ -34,8 +35,9 @@ export const DiagramEditor = () => {
 
     return (
         <Box
-            className={style.container}
+            className={style.diagramEditorContainer}
         >
+            <DiagramEditorHeader/>
             <Box
                 ref={diagramCanvasContainerRef}
                 className={style.canvasContainer}>
