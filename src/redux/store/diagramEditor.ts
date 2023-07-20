@@ -60,11 +60,7 @@ export const diagramEditorSlice = createSlice({
         }>) => {
             state.currentDiagramId = payload.diagramId
         },
-        setDiagramName: (state, {payload}: PayloadAction<{
-            name: string
-        }>) => {
-            state.name = payload.name
-        },
+
         addNode: (state, {payload}: PayloadAction<IReactFlowNode>) => {
             const length = state.diagramNodes.push(payload)
             state.stateLess.stateLessNodes.push(payload)
@@ -140,21 +136,31 @@ export const diagramEditorSlice = createSlice({
                 ]
             }
         },
-        setDiagramElements: (state, {payload}: PayloadAction<{
+        setDiagram: (state, {payload}: PayloadAction<{
             diagramId: string,
-            nodes: IReactFlowNode[]
-            edges: IReactFlowEdge[]
+            name: string
+            nodes?: IReactFlowNode[]
+            edges?: IReactFlowEdge[]
         }>) => {
             state.currentDiagramId = payload.diagramId
-            state.diagramNodes = payload.nodes
-            state.diagramEdges = payload.edges
-            state.stateLess.stateLessNodes = payload.nodes
-            state.stateLess.stateLessEdges = payload.edges
-            const filteredEdges: IDiagramConnectionData[] = payload.edges
-                .map(edge => edge.data)
-                .filter(edgeData => edgeData !== undefined) as IDiagramConnectionData[]
+            state.name = payload.name
+            state.diagramNodes = payload.nodes || []
+            state.diagramEdges = payload.edges || []
+            state.stateLess.stateLessNodes = payload.nodes || []
+            state.stateLess.stateLessEdges = payload.edges || []
+
+            let filteredEdges: IDiagramConnectionData[] = []
+            if (payload.edges) {
+                filteredEdges = payload.edges
+                    .map(edge => edge.data)
+                    .filter(edgeData => edgeData !== undefined) as IDiagramConnectionData[]
+            }
+            let formattedNodes: INodeData[] = []
+            if (payload.nodes) {
+                formattedNodes = payload.nodes.map(node => node.data)
+            }
             graph.setDiagramElements({
-                nodes: payload.nodes.map(node => node.data),
+                nodes: formattedNodes,
                 edges: filteredEdges
             })
         },

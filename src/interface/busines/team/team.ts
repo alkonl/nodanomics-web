@@ -3,8 +3,9 @@ export interface IBaseTeamMember {
 }
 
 export interface ITeamMemberInfo {
-    avatar: string;
+    id: string;
+    userId: string;
     firstName: string;
     lastName: string;
-    email: string;
+    avatar?: string;
 }

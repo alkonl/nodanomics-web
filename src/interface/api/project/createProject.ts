@@ -4,4 +4,5 @@ export interface ICreateProjectRequest {
 
 export interface ICreateProjectResponse {
     id: string;
+    name: string;
 }

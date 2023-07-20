@@ -1,4 +1,5 @@
 export interface IGetProjectsRequest {
+    userId?: string;
     cursorId?: string;
 }
 

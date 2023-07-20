@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from "react";
-import {useGetProjectsQuery} from "../api";
+import {useGetProjectsQuery, useSessionUserDataQuery} from "../api";
 import {useScrollToBottom} from "./usePageBottom";
 import {IBaseProject} from "../interface";
 import {projectDashboardAction, useAppDispatch} from "../redux";
@@ -9,8 +9,12 @@ export const useGetInfinityProjects = () => {
     const scrollRef = useRef<HTMLDivElement>(null);
     const [cursorId, setCursorId] = useState<string>();
     const prevProjectCursorId = useRef<string>();
+    const {data: sessionUser} = useSessionUserDataQuery(undefined)
     const {data: allProjects, isLoading} = useGetProjectsQuery({
+        userId: sessionUser?.id,
         cursorId: cursorId,
+    },{
+        skip: !sessionUser?.id
     })
     const reachedBottom = useScrollToBottom(scrollRef)
 

@@ -10,6 +10,7 @@ import {LandingRightPanelLayout} from "../../layout";
 import {Link} from "react-router-dom";
 import {ELinks} from "../../../service";
 import {useGetDiagramsByProjectIdQuery} from "../../../api";
+import {ProjectDetailsManageList} from "./ProjectDetailsManageList";
 
 export const ProjectDetails = () => {
     const projectDashboardState = useProjectDashboardState()
@@ -31,6 +32,10 @@ export const ProjectDetails = () => {
             prevProjectId.current = projectDashboardState.selectedProjectId
         }
     }, [projectInfo])
+
+    // const onInviteUser = () => {
+    //
+    // }
 
 
     return (
@@ -74,7 +79,6 @@ export const ProjectDetails = () => {
                         >
                             Preview Image
                         </Typography>
-
                     </Box>
                     <Box className={style.projectInfo}>
                         <Typography className={style.projectInfoKey}>
@@ -107,29 +111,10 @@ export const ProjectDetails = () => {
                     width: '100%',
                     display: 'flex',
                     gap: 2,
-                    flexDirection: 'row-reverse'
+                    flexDirection: 'row-reverse',
+                    alignItems: 'flex-end'
                 }}>
-                    {manageProjectTab.isOpened ? <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: 2,
-                        }}
-                    >
-                        <MButton.Submit
-                            onClick={manageProjectTab.open}
-                            variant="border">
-                            File Histroy
-                        </MButton.Submit>
-                        <MButton.Submit
-                            onClick={manageProjectTab.open}
-                            sx={{
-                                color: EColor.red,
-                            }}
-                            variant="border">
-                            Delete
-                        </MButton.Submit>
-                    </Box> : <MButton.Submit
+                    {manageProjectTab.isOpened ? <ProjectDetailsManageList/> : <MButton.Submit
                         onClick={manageProjectTab.open}
                         variant="border">
                         Manage

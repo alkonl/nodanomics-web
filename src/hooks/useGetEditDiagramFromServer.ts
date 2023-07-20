@@ -1,10 +1,12 @@
-import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
+import {diagramEditorActions, useAppDispatch} from "../redux";
 import {useGetDiagramByIdQuery} from "../api";
 import {useEffect, useRef, useState} from "react";
+import {useParams} from "react-router-dom";
 
 
 export const useGetEditDiagramFromServer = () => {
-    const {currentDiagramId} = useDiagramEditorState()
+    const {diagramId: currentDiagramId} = useParams() as { diagramId: string }
+
     const dispatch = useAppDispatch()
 
     const [isRequestLoaded, setIsRequestLoaded] = useState(false)
@@ -18,36 +20,31 @@ export const useGetEditDiagramFromServer = () => {
     }, [currentDiagramId])
 
 
-
     const {data: diagramRes} = useGetDiagramByIdQuery(currentDiagramId, {
         refetchOnMountOrArgChange: true,
     })
-    const {setDiagramElements, setDiagramName,renderState} = diagramEditorActions
-
+    const {setDiagram, renderState} = diagramEditorActions
 
 
     useEffect(() => {
         const diagramData = diagramRes?.diagram
         if (diagramData && diagramData.elements !== null) {
 
-            dispatch(setDiagramElements({
+            dispatch(setDiagram({
+                name: diagramData.name,
                 diagramId: diagramData.id,
-                nodes: diagramData.elements.diagramNodes || [],
-                edges: diagramData.elements.diagramEdges || [],
+                nodes: diagramData.elements.diagramNodes,
+                edges: diagramData.elements.diagramEdges,
             }))
-            dispatch(setDiagramName({
-                name: diagramData.name
-            }))
-            dispatch(renderState())
-        } else {
 
-            if (diagramData && diagramData.name) {
-                dispatch(setDiagramName({
-                    name: diagramData.name
-                }))
-            }
+            dispatch(renderState())
+        } else if (diagramData) {
+            dispatch(setDiagram({
+                name: diagramData.name,
+                diagramId: diagramData.id,
+            }))
         }
-        if (diagramRes?.diagram?.name) {
+        if (diagramRes?.diagram?.id) {
             setIsRequestLoaded(true)
         }
     }, [diagramRes, currentDiagramId])
