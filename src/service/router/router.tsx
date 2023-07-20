@@ -62,5 +62,8 @@ export const appRouter = createBrowserRouter([
     }, {
         path: ELinks.diagram,
         element: <DiagramEditorPage/>
+    },{
+        path: `${ELinks.diagram}/:diagramId`,
+        element: <DiagramEditorPage/>
     }
 ]);

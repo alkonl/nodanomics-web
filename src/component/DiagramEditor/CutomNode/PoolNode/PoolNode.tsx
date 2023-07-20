@@ -6,6 +6,7 @@ import {EConnection, IPoolNodeData} from "../../../../interface";
 import {NodeText} from "../styledComponent";
 
 export const PoolNode: React.FC<NodeProps<IPoolNodeData>> = ({isConnectable, data}) => {
+    
     return (
         <Box>
             <Handle type="target" position={Position.Left} id={EConnection.DataConnection}
@@ -24,7 +25,7 @@ export const PoolNode: React.FC<NodeProps<IPoolNodeData>> = ({isConnectable, dat
                     Pool
                 </NodeText>
                 <NodeText>
-                    trigger: {data.trigger.mode}
+                    trigger: {data?.trigger.mode}
                 </NodeText>
                 <NodeText>
                     action: {data.actionMode}

@@ -1,14 +1,37 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {DiagramCanvas} from "../DiagramCanvas";
 import style from './DiagramEditor.module.scss'
-import {ElementSetupToolbar, ElementsToolbarDeprecated, LeftToolbar, RightToolbarDeprecated} from "../toolbar";
-import {useWidthAndHeight} from "../../../hooks";
+import {ElementSetupToolbar, LeftToolbar} from "../toolbar";
+import {useGetEditDiagramFromServer, useWidthAndHeight} from "../../../hooks";
 import {Box} from "@mui/material";
 import {ElementToolbar} from "../toolbar/ElementToolbar/ElementToolbar";
 
+
 export const DiagramEditor = () => {
 
+    const {isRequestLoaded} = useGetEditDiagramFromServer()
+    const [isCanvasShow, setIsCanvasShow] = useState(false)
+
+    // TODO after downloading the diagram from the server,
+    //  it takes some time to display new elements instead of the old ones.
+    //  Therefore, setTimeout is used
+    useEffect(() => {
+        let timeout: NodeJS.Timeout
+        if (isRequestLoaded) {
+            setTimeout(() => {
+                setIsCanvasShow(true)
+            }, 150)
+        } else {
+            setIsCanvasShow(false)
+        }
+        return () => {
+            clearTimeout(timeout)
+        }
+    }, [isRequestLoaded])
+
     const {elementSize: diagramCanvasContainerSize, elementRef: diagramCanvasContainerRef} = useWidthAndHeight()
+
+
     return (
         <Box
             className={style.container}
@@ -16,7 +39,7 @@ export const DiagramEditor = () => {
             <Box
                 ref={diagramCanvasContainerRef}
                 className={style.canvasContainer}>
-                <DiagramCanvas/>
+                {isCanvasShow && <DiagramCanvas/>}
                 <Box sx={{
                     position: 'absolute',
                     width: diagramCanvasContainerSize.width,
@@ -50,10 +73,8 @@ export const DiagramEditor = () => {
                         </Box>
                         <ElementSetupToolbar/>
                     </Box>
-
                 </Box>
             </Box>
-
         </Box>
     );
 };

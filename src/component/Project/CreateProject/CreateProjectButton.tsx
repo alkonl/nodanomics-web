@@ -3,8 +3,7 @@ import {MButton} from "../../base";
 import {CreateProjectPopUp} from "../../popUp";
 import {useToggle} from "../../../hooks";
 
-export const CreateProject = () => {
-
+export const CreateProjectButton = () => {
     const createProjectPopUp = useToggle()
 
     return (

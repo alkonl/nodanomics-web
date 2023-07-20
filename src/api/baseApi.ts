@@ -15,8 +15,7 @@ import {
     IChangePasswordResponse,
     ICreateNewDiagramRequest,
     ICreateNewDiagramResponse,
-    ICreateProjectRequest,
-    IGetDiagramByIdResponse,
+    ICreateProjectRequest, ICreateProjectResponse, IGetDiagramByIdResponse,
     IGetDiagramsByUserIdResponse,
     IGetDiagramTagsRequest,
     IGetDiagramTagsResponse, IGetProjectsRequest,
@@ -31,11 +30,13 @@ import {
     IUpdateUserDataRequest,
     IUpdateUserDataResponse
 } from "../interface";
-import {CONFIG} from "../utils";
+import {CONFIG, getSocketAsync} from "../utils";
 import {IServerErrorResponse} from "../interface/serverErrorResponse";
 
 import {ERTKTags} from "./requestTags";
 import moment from "moment";
+import {ChatEvent, EEventDiagramServer, EEventDiagramWeb} from "../constant";
+import {GetDiagramsByProjectIdResponse} from "../interface/api/project/getDiagramsByProjectId";
 
 
 const baseQuery = fetchBaseQuery(({
@@ -297,17 +298,17 @@ export const baseApi = createApi({
             },
             invalidatesTags: [ERTKTags.PersonalDashboard]
         }),
-        getDiagramById: builder.query<IGetDiagramByIdResponse, string>({
-            query: (id: string) => {
-                return {
-                    url: `/diagram?id=${id}`,
-                    method: 'GET',
-                }
-            },
-            providesTags: (result, error, diagramId) => {
-                return [{type: ERTKTags.EditedDiagram, id: diagramId}]
-            }
-        }),
+        // getDiagramById: builder.query<IGetDiagramByIdResponse, string>({
+        //     query: (id: string) => {
+        //         return {
+        //             url: `/diagram?id=${id}`,
+        //             method: 'GET',
+        //         }
+        //     },
+        //     providesTags: (result, error, diagramId) => {
+        //         return [{type: ERTKTags.EditedDiagram, id: diagramId}]
+        //     }
+        // }),
         updateDiagram: builder.mutation<IUpdateDiagramResponse, IUpdateDiagramRequest>({
             query: (body: IUpdateDiagramRequest) => {
                 return {
@@ -338,7 +339,7 @@ export const baseApi = createApi({
             },
             invalidatesTags: [ERTKTags.PersonalDashboard]
         }),
-        createProject: builder.mutation<unknown, ICreateProjectRequest>({
+        createProject: builder.mutation<ICreateProjectResponse, ICreateProjectRequest>({
             query: (body: ICreateProjectRequest) => {
                 return {
                     url: '/project',
@@ -363,13 +364,88 @@ export const baseApi = createApi({
                 return endpointName
             },
             merge: (currentCache, newItems) => {
-                currentCache.push(...newItems)
-                currentCache.sort((a, b) => {
-                    return moment(b.updatedAt).diff(moment(a.updatedAt))
+                const filteredItems = newItems.filter((newItem) => {
+                    return !currentCache.some((currentItem) => {
+                        return currentItem.id === newItem.id
+                    })
                 })
+                currentCache.push(...filteredItems)
+                return currentCache
+                    .sort((a, b) => {
+                        return moment(b.updatedAt).diff(moment(a.updatedAt))
+                    })
             },
             providesTags: [ERTKTags.Projects, ERTKTags.User],
         }),
+        getDiagramsByProjectId: builder.query<GetDiagramsByProjectIdResponse, string>({
+            query: (projectId: string) => {
+                return {
+                    url: `/project/diagrams/${projectId}`,
+                    method: 'GET',
+                }
+            }
+        }),
+
+        getDiagramById: builder.query<{ diagram?: IGetDiagramByIdResponse }, string | undefined>({
+            queryFn: async (diagramId: string) => {
+                const socket = await getSocketAsync();
+                socket.emit(EEventDiagramServer.JoinDiagramRoom, diagramId);
+                socket.emit(EEventDiagramServer.RequestDiagram, diagramId);
+                return {
+                    data: {
+                    }
+                }
+            },
+
+
+            async onCacheEntryAdded(
+                diagramId,
+                {cacheDataLoaded, cacheEntryRemoved, updateCachedData},
+            ) {
+                try {
+                    await cacheDataLoaded;
+
+                    const socket = await getSocketAsync();
+
+
+                    socket.on(EEventDiagramWeb.UpdateDiagramElements, (content: IGetDiagramByIdResponse) => {
+                        updateCachedData((draft) => {
+                            draft = {
+                                diagram: {
+                                    id: content.id,
+                                    name: content.name,
+                                    elements: content.elements,
+                                },
+                            };
+                            return draft
+                        });
+                    });
+                    await cacheEntryRemoved;
+                    socket.off('connect');
+                    socket.off(EEventDiagramServer.RequestDiagram);
+                    socket.off(EEventDiagramWeb.UpdateDiagramElements);
+                } catch {
+                    // if cacheEntryRemoved resolved before cacheDataLoaded,
+                    // cacheDataLoaded throws
+                }
+            },
+        }),
+        // getDiagramById: builder.query<IGetDiagramByIdResponse, string>({
+        //
+        // }),
+        updateDiagramElements: builder.mutation<{
+            diagramId: string,
+            elements: JSON
+        }, unknown>({
+            queryFn: async (chatMessageContent: string) => {
+                const socket = await getSocketAsync();
+                return new Promise(resolve => {
+                    socket.emit(EEventDiagramServer.UpdateDiagramElements, chatMessageContent, (message: any) => {
+                        resolve({data: message});
+                    });
+                })
+            },
+        })
     }),
 })
 export const {
@@ -386,11 +462,14 @@ export const {
     useUpdateUserDataMutation,
     useGetDiagramTagsQuery,
     useCreateDiagramMutation,
-    useGetDiagramByIdQuery,
+    // useGetDiagramByIdQuery,
     useUpdateDiagramMutation,
     useGetDiagramsByUserIdQuery,
     useDeleteDiagramMutation,
     useCreateProjectMutation,
     useGetProjectsQuery,
+    useGetDiagramsByProjectIdQuery,
+    useUpdateDiagramElementsMutation,
+    useGetDiagramByIdQuery
 } = baseApi;
 

@@ -4,8 +4,9 @@ import {DragEvent} from "react";
 import {initialNodeDiagramElement} from "../../constant";
 import {EDiagramNode, EElementType, ENodeAction, IDiagramNodeBaseData, IReactFlowNode, ENodeTrigger} from "../../interface";
 
-let id = 0;
-const getId = () => `nodeId_${id++}`;
+import { nanoid } from 'nanoid'
+
+const getId = () => `nodeId_${nanoid()}`;
 
 
 

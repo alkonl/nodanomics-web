@@ -7,7 +7,7 @@ import {
 } from "../../../interface";
 import {initialNodeDiagramElement} from "../../../constant";
 
-const dataConnection: Omit<IDataConnectionData, 'id'> = {
+const dataConnection: Omit<IDataConnectionData, 'id' | 'targetId' | 'sourceId'> = {
     elementType: EElementType.Connection,
     name: 'data connection',
     type: EConnection.DataConnection,
@@ -16,7 +16,7 @@ const dataConnection: Omit<IDataConnectionData, 'id'> = {
     style: initialNodeDiagramElement
 }
 
-const logicConnection: Omit<ILogicConnectionData, 'id'> = {
+const logicConnection: Omit<ILogicConnectionData, 'id' | 'targetId' | 'sourceId'> = {
     elementType: EElementType.Connection,
     name: 'logic connection',
     type: EConnection.LogicConnection,
@@ -25,12 +25,12 @@ const logicConnection: Omit<ILogicConnectionData, 'id'> = {
 }
 
 
-export const connectionInitialProps:{
-    [key in EConnection]: Omit<IDiagramConnectionData, 'id'>
+export const connectionInitialProps: {
+    [key in EConnection]: Omit<IDiagramConnectionData, 'id' | 'targetId' | 'sourceId'>
 } = {
     [EConnection.DataConnection]: dataConnection,
     [EConnection.LogicConnection]: logicConnection
 } satisfies {
-    [EConnection.DataConnection]: Omit<IDataConnectionData, 'id'>,
-    [EConnection.LogicConnection]: Omit<ILogicConnectionData, 'id'>
+    [EConnection.DataConnection]: Omit<IDataConnectionData, 'id' | 'targetId' | 'sourceId'>,
+    [EConnection.LogicConnection]: Omit<ILogicConnectionData, 'id' | 'targetId' | 'sourceId'>
 }

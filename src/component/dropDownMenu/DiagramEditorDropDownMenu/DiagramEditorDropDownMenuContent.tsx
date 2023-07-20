@@ -44,7 +44,7 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
         openManagerDiagramPopUp()
     }
 
-    const onOpen = () => {
+    const onProjects = () => {
         navigate(ELinks.projects)
     }
 
@@ -54,30 +54,25 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
             deleteDiagram(diagramState.currentDiagramId)
         }
     }
-    // useEffect(() => {
-    //     if (isDiagramDeleted) {
-    //         navigate(ELinks.projects)
-    //     }
-    // }, [isDiagramDeleted])
 
     const buttons = [{
-        name: 'New',
+        name: 'New-',
         onClick: onNewDiagram
     }, {
-        name: 'Open',
-        onClick: onOpen
+        name: 'Projects',
+        onClick: onProjects
     }, {
-        name: 'Save-',
+        name: 'Save (auto save)',
         onClick: () => {
         }
     }, {
-        name: 'Rename',
+        name: 'Rename-',
         onClick: onRenameDiagram
     }, {
-        name: 'Make a copy',
+        name: 'Make a copy-',
         onClick: onCopyDiagram
     }, {
-        name: 'Delete',
+        name: 'Delete-',
         onClick: onDelete
     }]
     return (

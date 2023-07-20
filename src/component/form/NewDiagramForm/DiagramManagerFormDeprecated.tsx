@@ -10,9 +10,7 @@ import {TagsPopUp} from "../../popUp/TagsPopUp";
 import {TagListSmall} from "../../list";
 import {useCreateDiagramMutation, useUpdateDiagramMutation} from "../../../api";
 import {useNavigate} from "react-router-dom";
-import {ELinks} from "../../../service/router";
-import {useAppDispatch, useDiagramEditorState} from "../../../redux";
-import {diagramEditorActions} from "../../../redux/store";
+import {useAppDispatch, useDiagramEditorState, diagramEditorActions} from "../../../redux";
 
 
 export enum EDiagramManagerType {
@@ -35,7 +33,7 @@ const validationSchema = z.object({
 
 type IValidationSchema = z.infer<typeof validationSchema>;
 
-export const DiagramManagerForm: React.FC<{
+export const DiagramManagerFormDeprecated: React.FC<{
     onSave: () => void;
     type: EDiagramManagerType
 }> = ({onSave, type}) => {
@@ -76,30 +74,30 @@ export const DiagramManagerForm: React.FC<{
 
     useEffect(() => {
         if (resCreateDiagram && resCreateDiagram !== null) {
-            dispatch(diagramEditorActions.setCurrentDiagram({
-                diagramId: resCreateDiagram.id,
-                name: resCreateDiagram.name,
-                description: resCreateDiagram.description,
-            }))
-            navigate(`${ELinks.diagram}/${resCreateDiagram.id}`, {replace: true})
+            // dispatch(diagramEditorActions.setCurrentDiagram({
+            //     diagramId: resCreateDiagram.id,
+            //     name: resCreateDiagram.name,
+            //     description: resCreateDiagram.description,
+            // }))
+            // navigate(`${ELinks.diagram}/${resCreateDiagram.id}`, {replace: true})
         }
     }, [resCreateDiagram])
 
 
     const onCreateNewDiagram = async (data: IValidationSchema) => {
-        await createDiagram({
-            diagramName: data.diagramName,
-            diagramDescription: data.diagramDescription,
-            diagramTags: data.diagramTags,
-        })
+        // await createDiagram({
+        //     diagramName: data.diagramName,
+        //     diagramDescription: data.diagramDescription,
+        //     diagramTags: data.diagramTags,
+        // })
     }
 
     useEffect(() => {
         if (resUpdateDiagram) {
             dispatch(diagramEditorActions.setCurrentDiagram({
                 diagramId: resUpdateDiagram.id,
-                name: resUpdateDiagram.name,
-                description: resUpdateDiagram.description,
+                // name: resUpdateDiagram.name,
+                // description: resUpdateDiagram.description,
             }))
         }
     }, [resUpdateDiagram])
@@ -138,6 +136,7 @@ export const DiagramManagerForm: React.FC<{
 
             }}
         >
+            Deprecated
             <form onSubmit={(e) => {
                 e.preventDefault()
                 form.handleSubmit(onSubmit)();

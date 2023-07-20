@@ -2,25 +2,21 @@ import React, {useEffect} from 'react';
 import {DiagramEditor, DiagramEditorHeader} from "../../component";
 import style from './DiagramEditorPage.module.scss'
 import {useAppDispatch,diagramEditorActions} from "../../redux";
-import {useGetDiagramByIdQuery} from "../../api";
 
 import {useParams} from "react-router-dom";
 
 export const DiagramEditorPage = () => {
     const dispatch = useAppDispatch()
     const {diagramId} = useParams() as { diagramId: string }
-    const {data: diagram} = useGetDiagramByIdQuery(diagramId)
+    // const {data: diagram} = useGetDiagramByIdQuery(diagramId)
 
     useEffect(() => {
-        if(diagram) {
+        if(diagramId) {
             dispatch(diagramEditorActions.setCurrentDiagram({
-                diagramId: diagram.id,
-                name: diagram.name,
-                description: diagram.description,
-                diagramTags: diagram.diagramTags,
+                diagramId: diagramId,
             }))
         }
-    }, [dispatch, diagram])
+    }, [dispatch, diagramId])
 
     return (
         <div className={style.container}>

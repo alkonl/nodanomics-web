@@ -8,6 +8,8 @@ export enum EConnection {
 }
 
 export interface IDiagramConnectionBaseData extends IDiagramBaseInteractiveElementData {
+    sourceId: string;
+    targetId: string;
     elementType: EElementType.Connection;
     type: EConnection;
 }

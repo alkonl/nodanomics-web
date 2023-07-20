@@ -1,1 +1,1 @@
-export * from './DiagramManagerForm'
+export * from './DiagramManagerFormDeprecated'
