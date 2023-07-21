@@ -23,15 +23,13 @@ export const useDeleteProject = (params: {
 
     if (!currentUser || !projectInfo) {
         return {
-            isLoading: true,
+            isUserCanDeleteProject: false,
         }
     }
 
     if (currentUser.id !== projectInfo.creator.id) {
         return {
-            isLoading: false,
             isUserCanDeleteProject: false,
-            errorMessage: "Only the creator of the project can delete it"
         }
     }
     const deleteProject = () => {
@@ -40,7 +38,6 @@ export const useDeleteProject = (params: {
 
 
     return {
-        isLoading: false,
         isUserCanDeleteProject: true,
         deleteProject: deleteProject,
         resDeleteProject: resDeleteProject,

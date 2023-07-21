@@ -3,13 +3,13 @@ import {Box, Typography} from "@mui/material";
 import {useDiagramEditorState} from "../../../redux";
 import {DiagramEditorDropDownMenu} from "../../dropDownMenu";
 import {TeamInlineListItem, TeamMembersInlineList} from "../../Team";
-import {useGetProjectTeamMembersByDiagramIdQuery, useSessionUserDataQuery} from "../../../api";
+import {useGetProjectTeamMembersQuery, useSessionUserDataQuery} from "../../../api";
 import {ITeamMemberInfo} from "../../../interface";
 import {Optionalize} from "../../../utils";
 
 export const DiagramEditorHeader = () => {
     const {name, currentDiagramId} = useDiagramEditorState()
-    const {data: resTeamMembers} = useGetProjectTeamMembersByDiagramIdQuery({
+    const {data: resTeamMembers} = useGetProjectTeamMembersQuery({
         diagramId: currentDiagramId
     }, {
         skip: !currentDiagramId

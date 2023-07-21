@@ -6,7 +6,17 @@ import {MButton} from "../../base";
 
 export const ManageTeamMemberCard: React.FC<{
     teamMember: ITeamMemberInfo
-}> = ({teamMember}) => {
+    deleteTeamMember: (params: {
+        teamMemberId: string;
+    }) => void
+}> = ({teamMember, deleteTeamMember}) => {
+
+    const onDeleteTeamMember = () => {
+        deleteTeamMember({
+            teamMemberId: teamMember.id
+        })
+    }
+
     return (
         <Box sx={{
             display: 'flex',
@@ -30,7 +40,9 @@ export const ManageTeamMemberCard: React.FC<{
                     {teamMember.firstName} {teamMember.lastName}
                 </Typography>
             </Box>
-            <MButton.Submit>
+            <MButton.Submit
+                onClick={onDeleteTeamMember}
+            >
                 Remove
             </MButton.Submit>
         </Box>

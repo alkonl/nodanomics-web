@@ -6,12 +6,13 @@ import {ManageTeamMembers} from "../../Team";
 export const ManageUserPopUp: React.FC<{
     isShow: boolean;
     onClose: () => void;
-}> = ({isShow, onClose}) => {
+    projectId: string;
+}> = ({isShow, onClose, projectId}) => {
     return (
         <Dialog open={isShow} onClose={onClose}>
             <BasePopUp>
                 <Dialog.Panel>
-                    <ManageTeamMembers/>
+                    <ManageTeamMembers projectId={projectId}/>
                 </Dialog.Panel>
             </BasePopUp>
         </Dialog>

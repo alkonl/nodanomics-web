@@ -1,2 +1,2 @@
 export * from './inviteUserToProject'
-export * from './getProjectTeamMember'
+export * from './getProjectTeamMembers'

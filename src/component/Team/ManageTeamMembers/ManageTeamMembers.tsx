@@ -1,15 +1,30 @@
-import React from 'react';
-import {Box, List} from "@mui/material";
+import React, {useMemo} from 'react';
+import {Box} from "@mui/material";
 import {Text} from "../../base/Text";
+import {useDeleteTeamMemberFromProjectTeam} from "../../../hooks";
+import {useGetProjectTeamMembersQuery} from "../../../api";
 import {ManageTeamMemberCard} from "./ManageTeamMemberCard";
 import {ITeamMemberInfo} from "../../../interface";
-import {MOCK_TEAM_MEMBERS} from "../../../mock/MOCK_TEAM_MEMBERS";
 
-export const ManageTeamMembers = () => {
+export const ManageTeamMembers: React.FC<{
+    projectId: string;
+}> = ({projectId}) => {
 
 
-    const projectTeamMembers: ITeamMemberInfo[] | undefined = MOCK_TEAM_MEMBERS
+    const {data: resProjectTeamMembersData} = useGetProjectTeamMembersQuery({
+        projectId
+    })
 
+    const projectTeamMembers: ITeamMemberInfo[] = useMemo(() => {
+        if (resProjectTeamMembersData) {
+            return resProjectTeamMembersData.members
+        }
+        return []
+    }, [resProjectTeamMembersData])
+
+    const {deleteTeamMember} = useDeleteTeamMemberFromProjectTeam({
+        projectId
+    })
 
     return (
         <Box
@@ -31,14 +46,18 @@ export const ManageTeamMembers = () => {
                 Manage User
             </Text.Label>
             <Box
-            sx={{
-                display:'flex',
-                flexDirection: 'column',
-                gap: 1,
-            }}
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1,
+                }}
             >
-                {projectTeamMembers && projectTeamMembers.map((teamMember) => (
-                    <ManageTeamMemberCard teamMember={teamMember} key={teamMember.id}/>
+                {projectTeamMembers && deleteTeamMember && projectTeamMembers.map((teamMember) => (
+                    <ManageTeamMemberCard
+                        deleteTeamMember={deleteTeamMember}
+                        teamMember={teamMember}
+                        key={teamMember.id}
+                    />
                 ))}
             </Box>
 

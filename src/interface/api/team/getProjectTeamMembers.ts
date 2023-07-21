@@ -1,8 +1,10 @@
-export interface IGetProjectTeamMemberRequest {
+export type IGetProjectTeamMembersRequest = {
     diagramId?: string
+} | {
+    projectId?: string
 }
 
-export interface IGetProjectTeamMemberResponse {
+export interface IGetProjectTeamMembersResponse {
     projectId: string
     members: {
         userId: string
@@ -11,5 +13,4 @@ export interface IGetProjectTeamMemberResponse {
         lastName: string
         email: string
     }[]
-
 }

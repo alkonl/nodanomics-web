@@ -2,7 +2,7 @@ import React from 'react';
 import {MButton} from "../../base";
 import {EColor} from "../../../constant";
 import {Box} from "@mui/material";
-import {useDeleteProject, useToggle} from "../../../hooks";
+import {useDeleteProject, useDeleteTeamMemberFromProjectTeam, useToggle} from "../../../hooks";
 import {InviteUserPopUp, ManageUserPopUp} from "../../popUp";
 import {IBaseProject} from "../../../interface";
 
@@ -15,16 +15,20 @@ export const ProjectDetailsManageList: React.FC<{
 
     const {isUserCanDeleteProject, deleteProject} = useDeleteProject({
         projectId: projectInfo.id,
-        // creatorId: projectInfo.lastEditedBy,
+    })
+
+    const {
+        isUserCanDeleteTeamMember
+    } = useDeleteTeamMemberFromProjectTeam({
+        projectId: projectInfo.id,
     })
 
     return (
         <>
-
-
             <ManageUserPopUp
                 isShow={manageUserPopUp.isOpened}
                 onClose={manageUserPopUp.close}
+                projectId={projectInfo.id}
             />
             <InviteUserPopUp
                 isShow={inviteUserPopUp.isOpened}
@@ -49,12 +53,12 @@ export const ProjectDetailsManageList: React.FC<{
                 >
                     Invite user
                 </MButton.Submit>
-                <MButton.Submit
+                {isUserCanDeleteTeamMember && <MButton.Submit
                     onClick={manageUserPopUp.open}
                     variant="border"
                 >
                     Manage user
-                </MButton.Submit>
+                </MButton.Submit>}
                 {isUserCanDeleteProject && <MButton.Submit
                     sx={{
                         color: EColor.red,
