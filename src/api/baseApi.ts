@@ -15,11 +15,15 @@ import {
     IChangePasswordResponse,
     ICreateNewDiagramRequest,
     ICreateNewDiagramResponse,
-    ICreateProjectRequest, ICreateProjectResponse, IGetDiagramByIdResponse,
+    ICreateProjectRequest,
+    ICreateProjectResponse,
+    IGetDiagramByIdResponse,
     IGetDiagramsByUserIdResponse,
     IGetDiagramTagsRequest,
-    IGetDiagramTagsResponse, IGetProjectsRequest,
-    IGetProjectsResponse, IInviteUserToProjectRequest,
+    IGetDiagramTagsResponse,
+    IGetProjectsRequest,
+    IGetProjectsResponse,
+    IInviteUserToProjectRequest,
     ILoginEmailPasswordRequest,
     ISendEmailToResetPasswordRequest,
     ISessionUserDataResponse,
@@ -29,7 +33,11 @@ import {
     IUpdateDiagramResponse,
     IUpdateUserDataRequest,
     IUpdateUserDataResponse,
-    IServerErrorResponse, IGetProjectTeamMemberRequest, IGetProjectTeamMemberResponse
+    IServerErrorResponse,
+    IGetProjectTeamMemberRequest,
+    IGetProjectTeamMemberResponse,
+    IGetProjectInfoResponse,
+    IGetProjectInfoRequest
 } from "../interface";
 import {CONFIG, getSocketAsync} from "../utils";
 
@@ -37,6 +45,7 @@ import {ERTKTags} from "./requestTags";
 import moment from "moment";
 import {EEventDiagramServer, EEventDiagramWeb} from "../constant";
 import {GetDiagramsByProjectIdResponse} from "../interface/api/project/getDiagramsByProjectId";
+import {IDeleteProjectRequest} from "../interface/api/project/deleteProject";
 
 
 const baseQuery = fetchBaseQuery(({
@@ -323,27 +332,27 @@ export const baseApi = createApi({
         //         return [{type: ERTKTags.EditedDiagram, id: diagramId}]
         //     }
         // }),
-        updateDiagram: builder.mutation<IUpdateDiagramResponse, IUpdateDiagramRequest>({
-            query: (body: IUpdateDiagramRequest) => {
-                return {
-                    url: '/diagram/update',
-                    method: 'POST',
-                    body: body
-                }
-            },
-            invalidatesTags: (result, error, diagram) => {
-                return [{type: ERTKTags.EditedDiagram, id: diagram.diagramId}, ERTKTags.PersonalDashboard]
-            }
-        }),
-        getDiagramsByUserId: builder.query<IGetDiagramsByUserIdResponse, unknown>({
-            query: () => {
-                return {
-                    url: '/diagram/own',
-                    method: 'GET',
-                }
-            },
-            providesTags: [ERTKTags.PersonalDashboard]
-        }),
+        // updateDiagram: builder.mutation<IUpdateDiagramResponse, IUpdateDiagramRequest>({
+        //     query: (body: IUpdateDiagramRequest) => {
+        //         return {
+        //             url: '/diagram/update',
+        //             method: 'POST',
+        //             body: body
+        //         }
+        //     },
+        //     invalidatesTags: (result, error, diagram) => {
+        //         return [{type: ERTKTags.EditedDiagram, id: diagram.diagramId}, ERTKTags.PersonalDashboard]
+        //     }
+        // }),
+        // getDiagramsByUserId: builder.query<IGetDiagramsByUserIdResponse, unknown>({
+        //     query: () => {
+        //         return {
+        //             url: '/diagram/own',
+        //             method: 'GET',
+        //         }
+        //     },
+        //     providesTags: [ERTKTags.PersonalDashboard]
+        // }),
         deleteDiagram: builder.mutation({
             query: (id: string) => {
                 return {
@@ -470,7 +479,27 @@ export const baseApi = createApi({
                 }
             },
             providesTags: [ERTKTags.ProjectTeamMember]
-        })
+        }),
+        deleteProject: builder.mutation<unknown, IDeleteProjectRequest>({
+            query: (params: IDeleteProjectRequest) => {
+                return {
+                    url: `/project/${params.projectId}`,
+                    method: 'DELETE',
+                }
+            },
+            invalidatesTags: [ERTKTags.Projects]
+        }),
+        getProjectInfo: builder.query<IGetProjectInfoResponse, IGetProjectInfoRequest>({
+            query: (params: IGetProjectInfoRequest) => {
+                return {
+                    url: `/project/info/${params.projectId}`,
+                    method: 'GET',
+                }
+            },
+            providesTags: (result, error, arg) => {
+                return [{type: ERTKTags.Projects, id: arg?.projectId}]
+            }
+        }),
     }),
 })
 export const {
@@ -488,8 +517,8 @@ export const {
     useGetDiagramTagsQuery,
     useCreateDiagramMutation,
     // useGetDiagramByIdQuery,
-    useUpdateDiagramMutation,
-    useGetDiagramsByUserIdQuery,
+    // useUpdateDiagramMutation,
+    // useGetDiagramsByUserIdQuery,
     useDeleteDiagramMutation,
     useCreateProjectMutation,
     useGetProjectsQuery,
@@ -497,6 +526,8 @@ export const {
     useUpdateDiagramElementsMutation,
     useGetDiagramByIdQuery,
     useInviteUserToProjectMutation,
-    useGetProjectTeamMembersByDiagramIdQuery
+    useGetProjectTeamMembersByDiagramIdQuery,
+    useDeleteProjectMutation,
+    useGetProjectInfoQuery,
 } = baseApi;
 

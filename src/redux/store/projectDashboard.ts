@@ -4,6 +4,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 export interface IProjectDashboardState {
     projects: IBaseProject[];
+    deleteProjectIds?: string[];
     selectedProjectId?: string;
 }
 
@@ -24,6 +25,14 @@ export const projectDashboardSlice = createSlice({
             projectId: string
         }>) => {
             state.selectedProjectId = action.payload.projectId
+        },
+        addDeleteProjectId: (state, action: PayloadAction<{
+            projectId: string
+        }>) => {
+            if (!state.deleteProjectIds) {
+                state.deleteProjectIds = []
+            }
+            state.deleteProjectIds.push(action.payload.projectId)
         }
     }
 })

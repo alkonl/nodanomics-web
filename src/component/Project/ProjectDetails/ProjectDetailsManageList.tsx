@@ -2,30 +2,36 @@ import React from 'react';
 import {MButton} from "../../base";
 import {EColor} from "../../../constant";
 import {Box} from "@mui/material";
-import {useToggle} from "../../../hooks";
+import {useDeleteProject, useToggle} from "../../../hooks";
 import {InviteUserPopUp, ManageUserPopUp} from "../../popUp";
-import {useProjectDashboardState} from "../../../redux";
+import {IBaseProject} from "../../../interface";
 
-export const ProjectDetailsManageList = () => {
+export const ProjectDetailsManageList: React.FC<{
+    projectInfo: IBaseProject
+}> = ({projectInfo}) => {
     const inviteUserPopUp = useToggle()
     const manageUserPopUp = useToggle()
-    const projectDashboardState = useProjectDashboardState()
+    // const projectDashboardState = useProjectDashboardState()
+
+    const {isUserCanDeleteProject, deleteProject} = useDeleteProject({
+        projectId: projectInfo.id,
+        // creatorId: projectInfo.lastEditedBy,
+    })
 
     return (
         <>
-            {projectDashboardState.selectedProjectId &&
-                <>
-                    <ManageUserPopUp
-                        isShow={manageUserPopUp.isOpened}
-                        onClose={manageUserPopUp.close}
-                    />
-                    <InviteUserPopUp
-                        isShow={inviteUserPopUp.isOpened}
-                        onClose={inviteUserPopUp.close}
-                        projectId={projectDashboardState.selectedProjectId}
-                    />
-                </>
-            }
+
+
+            <ManageUserPopUp
+                isShow={manageUserPopUp.isOpened}
+                onClose={manageUserPopUp.close}
+            />
+            <InviteUserPopUp
+                isShow={inviteUserPopUp.isOpened}
+                onClose={inviteUserPopUp.close}
+                projectId={projectInfo.id}
+            />
+
             <Box
                 sx={{
                     display: 'flex',
@@ -49,13 +55,14 @@ export const ProjectDetailsManageList = () => {
                 >
                     Manage user
                 </MButton.Submit>
-                <MButton.Submit
+                {isUserCanDeleteProject && <MButton.Submit
                     sx={{
                         color: EColor.red,
                     }}
+                    onClick={deleteProject}
                     variant="border">
                     Delete
-                </MButton.Submit>
+                </MButton.Submit>}
             </Box>
         </>
     );

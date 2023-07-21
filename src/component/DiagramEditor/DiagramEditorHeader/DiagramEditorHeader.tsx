@@ -11,6 +11,8 @@ export const DiagramEditorHeader = () => {
     const {name, currentDiagramId} = useDiagramEditorState()
     const {data: resTeamMembers} = useGetProjectTeamMembersByDiagramIdQuery({
         diagramId: currentDiagramId
+    }, {
+        skip: !currentDiagramId
     })
     const {data: currentUser} = useSessionUserDataQuery(undefined)
     const owner: Optionalize<ITeamMemberInfo, 'avatar'| 'firstName'| 'lastName'>| undefined = currentUser && {

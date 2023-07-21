@@ -7,7 +7,7 @@ export const useShouldLoadRoute = () => {
         if (!session) {
             return {isLoading: true}
         }
-        if (session.invalidClaims.length === 0) {
+        if (!session.loading && session.invalidClaims.length === 0) {
             return {isLoading: false, hasInvalidClaims: false}
         }
         return {isLoading: false, hasInvalidClaims: true}

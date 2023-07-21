@@ -9,6 +9,7 @@ export interface IGetProjectTeamMemberResponse {
         id: string
         firstName: string
         lastName: string
+        email: string
     }[]
 
 }

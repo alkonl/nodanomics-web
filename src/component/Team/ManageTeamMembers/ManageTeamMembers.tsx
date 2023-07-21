@@ -19,6 +19,7 @@ export const ManageTeamMembers = () => {
                 borderRadius: 2,
                 display: 'flex',
                 flexDirection: 'column',
+                width: 400,
                 gap: 2,
             }}
             onSubmit={(e) => {
