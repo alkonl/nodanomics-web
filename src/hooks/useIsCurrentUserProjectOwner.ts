@@ -13,17 +13,20 @@ export const useIsCurrentUserProjectOwner = (params: {
 
     if (!currentUser || !projectInfo) {
         return {
+            isLoading: true,
             isCurrentUserProjectOwner: false,
         }
     }
 
     if (currentUser.id !== projectInfo.creator.id) {
         return {
+            isLoading: false,
             isCurrentUserProjectOwner: false,
         }
     }
 
     return  {
+        isLoading: false,
         isCurrentUserProjectOwner: true,
     }
 }

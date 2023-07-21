@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Box, Typography} from "@mui/material";
 import {useDiagramEditorState} from "../../../redux";
 import {DiagramEditorDropDownMenu} from "../../dropDownMenu";
 import {TeamInlineListItem, TeamMembersInlineList} from "../../Team";
-import {useGetProjectTeamMembersQuery, useSessionUserDataQuery} from "../../../api";
+import {useGetProjectTeamMembersQuery} from "../../../api";
 import {ITeamMemberInfo} from "../../../interface";
 import {Optionalize} from "../../../utils";
+import {useCurrentUser} from "../../../hooks";
 
 export const DiagramEditorHeader = () => {
     const {name, currentDiagramId} = useDiagramEditorState()
@@ -14,12 +15,20 @@ export const DiagramEditorHeader = () => {
     }, {
         skip: !currentDiagramId
     })
-    const {data: currentUser} = useSessionUserDataQuery(undefined)
-    const owner: Optionalize<ITeamMemberInfo, 'avatar'| 'firstName'| 'lastName'>| undefined = currentUser && {
+    const {currentUser} = useCurrentUser()
+
+    const owner: Optionalize<ITeamMemberInfo, 'avatar' | 'firstName' | 'lastName'> | undefined = currentUser && {
         avatar: currentUser.avatar,
         firstName: currentUser.firstName,
         lastName: currentUser.lastName,
     }
+
+    const teamMembers: ITeamMemberInfo[] = useMemo(() => {
+        if (resTeamMembers && currentUser) {
+            return resTeamMembers.members.filter((teamMember) => teamMember.userId !== currentUser.id)
+        }
+        return []
+    }, [resTeamMembers, currentUser])
 
     return (
         <Box
@@ -49,7 +58,7 @@ export const DiagramEditorHeader = () => {
                 gap: 0.8,
                 alignItems: 'flex-end'
             }}>
-                <TeamMembersInlineList teamMembers={resTeamMembers?.members}/>
+                <TeamMembersInlineList teamMembers={teamMembers}/>
                 {owner && <TeamInlineListItem teamMember={owner} size="medium"/>}
             </Box>
         </Box>

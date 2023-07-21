@@ -2,7 +2,7 @@ import React from 'react';
 import {MButton} from "../../base";
 import {EColor} from "../../../constant";
 import {Box} from "@mui/material";
-import {useDeleteProject, useDeleteTeamMemberFromProjectTeam, useToggle} from "../../../hooks";
+import {useDeleteProject, useDeleteTeamMemberFromProjectTeam, useLeaveProject, useToggle} from "../../../hooks";
 import {InviteUserPopUp, ManageUserPopUp} from "../../popUp";
 import {IBaseProject} from "../../../interface";
 
@@ -22,6 +22,11 @@ export const ProjectDetailsManageList: React.FC<{
     } = useDeleteTeamMemberFromProjectTeam({
         projectId: projectInfo.id,
     })
+
+    const {leaveProject} = useLeaveProject({
+        projectId: projectInfo.id,
+    })
+
 
     return (
         <>
@@ -58,6 +63,11 @@ export const ProjectDetailsManageList: React.FC<{
                     variant="border"
                 >
                     Manage user
+                </MButton.Submit>}
+                {leaveProject &&  <MButton.Submit
+                    onClick={leaveProject}
+                    variant="border">
+                    Leave project
                 </MButton.Submit>}
                 {isUserCanDeleteProject && <MButton.Submit
                     sx={{

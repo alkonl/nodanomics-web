@@ -7,6 +7,7 @@ export const useDeleteProject = (params: {
 }) => {
     const dispatch = useAppDispatch()
     const {addDeleteProjectId} = projectDashboardAction
+
     const {data: projectInfo} = useGetProjectInfoQuery({
         projectId: params.projectId,
     })

@@ -35,7 +35,7 @@ import {
     IGetProjectInfoRequest,
     IGetProjectTeamMembersResponse,
     IGetProjectTeamMembersRequest,
-    IDeleteProjectRequest,
+    IDeleteProjectRequest, ILeaveProjectTeamRequest
 } from "../interface";
 import {CONFIG, getSocketAsync} from "../utils";
 
@@ -471,10 +471,10 @@ export const baseApi = createApi({
         }),
         getProjectTeamMembers: builder.query<IGetProjectTeamMembersResponse, IGetProjectTeamMembersRequest>({
             query: (params: IGetProjectTeamMembersRequest) => {
-                const entries = Object.entries(params)
                 return {
-                    url: `/project/team-members/?${entries[0]}=${entries[1]}`,
+                    url: `/project/team-members`,
                     method: 'GET',
+                    params: params,
                 }
             },
             providesTags: [ERTKTags.ProjectTeamMember]
@@ -484,6 +484,16 @@ export const baseApi = createApi({
                 return {
                     url: `/team/member/${params.teamMemberId}`,
                     method: 'DELETE',
+                }
+            },
+            invalidatesTags: [ERTKTags.ProjectTeamMember]
+        }),
+        leaveProjectTeam: builder.mutation<unknown, ILeaveProjectTeamRequest>({
+            query: (params: ILeaveProjectTeamRequest) => {
+                return {
+                    url: `/team/leave`,
+                    method: 'DELETE',
+                    body: params,
                 }
             },
             invalidatesTags: [ERTKTags.ProjectTeamMember]
@@ -508,7 +518,6 @@ export const baseApi = createApi({
                 return [{type: ERTKTags.Projects, id: arg?.projectId}]
             }
         }),
-
     }),
 })
 export const {
@@ -539,5 +548,6 @@ export const {
     useDeleteProjectMutation,
     useGetProjectInfoQuery,
     useDeleteTeamMemberFromProjectTeamMutation,
+    useLeaveProjectTeamMutation,
 } = baseApi;
 
