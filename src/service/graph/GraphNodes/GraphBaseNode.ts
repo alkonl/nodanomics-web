@@ -62,6 +62,11 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
         target._incomingEdges = target._incomingEdges.filter(e => e !== oldEdge);
     }
 
+    deleteEdge(edge: GraphBaseEdge) {
+        this._outgoingEdges = this._outgoingEdges.filter(e => e !== edge);
+        this._incomingEdges = this._incomingEdges.filter(e => e !== edge);
+    }
+
     findIncomingEdges() {
         return this._incomingEdges;
     }

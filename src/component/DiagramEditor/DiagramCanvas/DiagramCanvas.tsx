@@ -3,19 +3,20 @@ import ReactFlow, {
     Background,
     Controls,
     // eslint-disable-next-line import/named
-    ReactFlowInstance, NodeChange, EdgeChange, ConnectionMode,
+    ReactFlowInstance, NodeChange, EdgeChange, ConnectionMode, updateEdge, Edge,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-import {useOnDrop, useOnNodeDragStart, useUploadDiagramOnServer} from "../../../hooks";
+import {useEdgeUpdateManager, useOnDrop, useOnNodeDragStart, useUploadDiagramOnServer} from "../../../hooks";
 import styles from './DiagramCanvas.module.scss'
-import {EConnection, EDiagramNode} from "../../../interface";
+import {EConnection, EDiagramNode, IReactFlowEdge} from "../../../interface";
 import {FormulaNode, PoolNode, SourceNode, VariableNode} from "../CutomNode";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../redux";
 import {Box} from "@mui/material";
 import {DataConnection} from "../CustomConnectionLine/DataConnection";
 import {LogicConnection} from "../CustomConnectionLine/LogicConnection";
 import {useOnConnect} from "../../../hooks/useOnConnect";
+import {Connection} from "@reactflow/core/dist/esm/types";
 
 
 const nodeTypes = {
@@ -57,6 +58,14 @@ export const DiagramCanvas = () => {
     })
 
     useUploadDiagramOnServer()
+
+    const {
+        onEdgeUpdateStartHandler,
+        onEdgeUpdateHandler,
+        onEdgeUpdateEndHandler
+    } = useEdgeUpdateManager()
+
+
     return (
         <Box
             className={styles.canvasContainer}
@@ -72,6 +81,9 @@ export const DiagramCanvas = () => {
                     edges={diagramEdges}
                     onNodesChange={onNodesChangeHandler}
                     onEdgesChange={onEgeChangeHandler}
+                    onEdgeUpdateStart={onEdgeUpdateStartHandler}
+                    onEdgeUpdate={onEdgeUpdateHandler}
+                    onEdgeUpdateEnd={onEdgeUpdateEndHandler}
                     onConnect={onConnectHandler}
                     nodeTypes={nodeTypes}
                     fitView

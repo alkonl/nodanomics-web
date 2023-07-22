@@ -28,6 +28,11 @@ export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionB
         return this._data;
     }
 
+    deleteFromNodes() {
+        this._source.deleteEdge(this);
+        this._target.deleteEdge(this);
+    }
+
     // abstract invokeStep() : void
 
     updateEdge(data: Partial<IGenericEdgeData>) {

@@ -86,6 +86,7 @@ export class Graph {
     }
 
     setDiagramElements({nodes, edges}: { nodes: INodeData[], edges: IDiagramConnectionData[] }) {
+        this._edges = [];
         const runManager = this.runManager;
         if (runManager) {
             this._nodes = nodes.map(node => GraphNodeFactory.createNode(node, runManager));
@@ -100,6 +101,14 @@ export class Graph {
                     }
                 }
             })
+        }
+    }
+
+    deleteEdge(id: string) {
+        const edge = this.findEdge(id);
+        if (edge) {
+            edge.deleteFromNodes();
+            this._edges = this._edges.filter(edge => edge.data.id !== id);
         }
     }
 
