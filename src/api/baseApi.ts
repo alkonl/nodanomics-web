@@ -15,21 +15,27 @@ import {
     IChangePasswordResponse,
     ICreateNewDiagramRequest,
     ICreateNewDiagramResponse,
-    ICreateProjectRequest, ICreateProjectResponse, IGetDiagramByIdResponse,
-    IGetDiagramsByUserIdResponse,
+    ICreateProjectRequest,
+    ICreateProjectResponse,
+    IGetDiagramByIdResponse,
     IGetDiagramTagsRequest,
-    IGetDiagramTagsResponse, IGetProjectsRequest,
-    IGetProjectsResponse, IInviteUserToProjectRequest,
+    IGetDiagramTagsResponse,
+    IGetProjectsRequest,
+    IGetProjectsResponse,
+    IInviteUserToProjectRequest,
     ILoginEmailPasswordRequest,
     ISendEmailToResetPasswordRequest,
     ISessionUserDataResponse,
     ISignUpRequest,
     ISubmitNewPasswordRequest,
-    IUpdateDiagramRequest,
-    IUpdateDiagramResponse,
     IUpdateUserDataRequest,
     IUpdateUserDataResponse,
-    IServerErrorResponse, IGetProjectTeamMemberRequest, IGetProjectTeamMemberResponse
+    IServerErrorResponse,
+    IGetProjectInfoResponse,
+    IGetProjectInfoRequest,
+    IGetProjectTeamMembersResponse,
+    IGetProjectTeamMembersRequest,
+    IDeleteProjectRequest, ILeaveProjectTeamRequest
 } from "../interface";
 import {CONFIG, getSocketAsync} from "../utils";
 
@@ -37,6 +43,7 @@ import {ERTKTags} from "./requestTags";
 import moment from "moment";
 import {EEventDiagramServer, EEventDiagramWeb} from "../constant";
 import {GetDiagramsByProjectIdResponse} from "../interface/api/project/getDiagramsByProjectId";
+import {IDeleteTeamMemberFromProjectTeamRequest} from "../interface/api/team/deleteTeamMember";
 
 
 const baseQuery = fetchBaseQuery(({
@@ -323,27 +330,27 @@ export const baseApi = createApi({
         //         return [{type: ERTKTags.EditedDiagram, id: diagramId}]
         //     }
         // }),
-        updateDiagram: builder.mutation<IUpdateDiagramResponse, IUpdateDiagramRequest>({
-            query: (body: IUpdateDiagramRequest) => {
-                return {
-                    url: '/diagram/update',
-                    method: 'POST',
-                    body: body
-                }
-            },
-            invalidatesTags: (result, error, diagram) => {
-                return [{type: ERTKTags.EditedDiagram, id: diagram.diagramId}, ERTKTags.PersonalDashboard]
-            }
-        }),
-        getDiagramsByUserId: builder.query<IGetDiagramsByUserIdResponse, unknown>({
-            query: () => {
-                return {
-                    url: '/diagram/own',
-                    method: 'GET',
-                }
-            },
-            providesTags: [ERTKTags.PersonalDashboard]
-        }),
+        // updateDiagram: builder.mutation<IUpdateDiagramResponse, IUpdateDiagramRequest>({
+        //     query: (body: IUpdateDiagramRequest) => {
+        //         return {
+        //             url: '/diagram/update',
+        //             method: 'POST',
+        //             body: body
+        //         }
+        //     },
+        //     invalidatesTags: (result, error, diagram) => {
+        //         return [{type: ERTKTags.EditedDiagram, id: diagram.diagramId}, ERTKTags.PersonalDashboard]
+        //     }
+        // }),
+        // getDiagramsByUserId: builder.query<IGetDiagramsByUserIdResponse, unknown>({
+        //     query: () => {
+        //         return {
+        //             url: '/diagram/own',
+        //             method: 'GET',
+        //         }
+        //     },
+        //     providesTags: [ERTKTags.PersonalDashboard]
+        // }),
         deleteDiagram: builder.mutation({
             query: (id: string) => {
                 return {
@@ -447,7 +454,7 @@ export const baseApi = createApi({
         }, unknown>({
             queryFn: async (chatMessageContent: string) => {
                 const socket = await getSocketAsync();
-                return new Promise(resolve => {
+                return new Promise(() => {
                     socket.emit(EEventDiagramServer.UpdateDiagramElements, chatMessageContent);
                 })
             },
@@ -462,15 +469,55 @@ export const baseApi = createApi({
             },
             invalidatesTags: [ERTKTags.ProjectTeamMember]
         }),
-        getProjectTeamMembersByDiagramId: builder.query<IGetProjectTeamMemberResponse, IGetProjectTeamMemberRequest>({
-            query: (params: IGetProjectTeamMemberRequest) => {
+        getProjectTeamMembers: builder.query<IGetProjectTeamMembersResponse, IGetProjectTeamMembersRequest>({
+            query: (params: IGetProjectTeamMembersRequest) => {
                 return {
-                    url: `/project/diagram/${params?.diagramId}/team-members`,
+                    url: `/project/team-members`,
                     method: 'GET',
+                    params: params,
                 }
             },
             providesTags: [ERTKTags.ProjectTeamMember]
-        })
+        }),
+        deleteTeamMemberFromProjectTeam: builder.mutation<unknown, IDeleteTeamMemberFromProjectTeamRequest>({
+            query: (params: IDeleteTeamMemberFromProjectTeamRequest) => {
+                return {
+                    url: `/team/member/${params.teamMemberId}`,
+                    method: 'DELETE',
+                }
+            },
+            invalidatesTags: [ERTKTags.ProjectTeamMember]
+        }),
+        leaveProjectTeam: builder.mutation<unknown, ILeaveProjectTeamRequest>({
+            query: (params: ILeaveProjectTeamRequest) => {
+                return {
+                    url: `/team/leave`,
+                    method: 'DELETE',
+                    body: params,
+                }
+            },
+            invalidatesTags: [ERTKTags.ProjectTeamMember]
+        }),
+        deleteProject: builder.mutation<unknown, IDeleteProjectRequest>({
+            query: (params: IDeleteProjectRequest) => {
+                return {
+                    url: `/project/${params.projectId}`,
+                    method: 'DELETE',
+                }
+            },
+            invalidatesTags: [ERTKTags.Projects]
+        }),
+        getProjectInfo: builder.query<IGetProjectInfoResponse, IGetProjectInfoRequest>({
+            query: (params: IGetProjectInfoRequest) => {
+                return {
+                    url: `/project/info/${params.projectId}`,
+                    method: 'GET',
+                }
+            },
+            providesTags: (result, error, arg) => {
+                return [{type: ERTKTags.Projects, id: arg?.projectId}]
+            }
+        }),
     }),
 })
 export const {
@@ -488,8 +535,8 @@ export const {
     useGetDiagramTagsQuery,
     useCreateDiagramMutation,
     // useGetDiagramByIdQuery,
-    useUpdateDiagramMutation,
-    useGetDiagramsByUserIdQuery,
+    // useUpdateDiagramMutation,
+    // useGetDiagramsByUserIdQuery,
     useDeleteDiagramMutation,
     useCreateProjectMutation,
     useGetProjectsQuery,
@@ -497,6 +544,10 @@ export const {
     useUpdateDiagramElementsMutation,
     useGetDiagramByIdQuery,
     useInviteUserToProjectMutation,
-    useGetProjectTeamMembersByDiagramIdQuery
+    useGetProjectTeamMembersQuery,
+    useDeleteProjectMutation,
+    useGetProjectInfoQuery,
+    useDeleteTeamMemberFromProjectTeamMutation,
+    useLeaveProjectTeamMutation,
 } = baseApi;
 

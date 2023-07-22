@@ -1,2 +1,4 @@
 export * from './inviteUserToProject'
-export * from './getProjectTeamMember'
+export * from './getProjectTeamMembers'
+export * from './leaveProjectTeam'
+export * from './getTeamMember'

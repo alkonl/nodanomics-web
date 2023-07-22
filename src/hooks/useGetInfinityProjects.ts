@@ -1,8 +1,8 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {useGetProjectsQuery, useSessionUserDataQuery} from "../api";
 import {useScrollToBottom} from "./usePageBottom";
 import {IBaseProject} from "../interface";
-import {projectDashboardAction, useAppDispatch} from "../redux";
+import {projectDashboardAction, useAppDispatch, useProjectDashboardState} from "../redux";
 
 export const useGetInfinityProjects = () => {
     const dispatch = useAppDispatch()
@@ -10,12 +10,21 @@ export const useGetInfinityProjects = () => {
     const [cursorId, setCursorId] = useState<string>();
     const prevProjectCursorId = useRef<string>();
     const {data: sessionUser} = useSessionUserDataQuery(undefined)
-    const {data: allProjects, isLoading} = useGetProjectsQuery({
+    const {deleteProjectIds} = useProjectDashboardState()
+    const {data: resProjects, isLoading} = useGetProjectsQuery({
         userId: sessionUser?.id,
         cursorId: cursorId,
-    },{
-        skip: !sessionUser?.id
+    }, {
+        skip: !sessionUser?.id,
     })
+
+    // filter deleted projects. Ofcourse we deleted them from the server, but we need to keep them in the cache
+    const allProjects = useMemo(() => {
+        return deleteProjectIds
+            ? resProjects?.filter((project) => !deleteProjectIds.includes(project.id))
+            : resProjects
+    }, [resProjects, deleteProjectIds])
+
     const reachedBottom = useScrollToBottom(scrollRef)
 
 

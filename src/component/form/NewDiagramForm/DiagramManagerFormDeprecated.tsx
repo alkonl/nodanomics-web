@@ -8,9 +8,9 @@ import {Box, Button, Typography} from "@mui/material";
 import AddIcon from '@mui/icons-material/AddBoxTwoTone';
 import {TagsPopUp} from "../../popUp/TagsPopUp";
 import {TagListSmall} from "../../list";
-import {useCreateDiagramMutation, useUpdateDiagramMutation} from "../../../api";
+// import {useCreateDiagramMutation, useUpdateDiagramMutation} from "../../../api";
 import {useNavigate} from "react-router-dom";
-import {useAppDispatch, useDiagramEditorState, diagramEditorActions} from "../../../redux";
+import {useAppDispatch, useDiagramEditorState} from "../../../redux";
 
 
 export enum EDiagramManagerType {
@@ -44,8 +44,8 @@ export const DiagramManagerFormDeprecated: React.FC<{
     const navigate = useNavigate()
     const [isTagsPopUpShow, setTagsPopUpShow] = useState(false)
 
-    const [createDiagram, {data: resCreateDiagram}] = useCreateDiagramMutation()
-    const [updateDiagram, {data: resUpdateDiagram}] = useUpdateDiagramMutation()
+    // const [createDiagram, {data: resCreateDiagram}] = useCreateDiagramMutation()
+    // const [updateDiagram, {data: resUpdateDiagram}] = useUpdateDiagramMutation()
 
 
     const form = useForm<IValidationSchema>({
@@ -71,57 +71,57 @@ export const DiagramManagerFormDeprecated: React.FC<{
         }
     }, [diagramState])
 
-
-    useEffect(() => {
-        if (resCreateDiagram && resCreateDiagram !== null) {
-            // dispatch(diagramEditorActions.setCurrentDiagram({
-            //     diagramId: resCreateDiagram.id,
-            //     name: resCreateDiagram.name,
-            //     description: resCreateDiagram.description,
-            // }))
-            // navigate(`${ELinks.diagram}/${resCreateDiagram.id}`, {replace: true})
-        }
-    }, [resCreateDiagram])
-
-
-    const onCreateNewDiagram = async (data: IValidationSchema) => {
-        // await createDiagram({
-        //     diagramName: data.diagramName,
-        //     diagramDescription: data.diagramDescription,
-        //     diagramTags: data.diagramTags,
-        // })
-    }
-
-    useEffect(() => {
-        if (resUpdateDiagram) {
-            dispatch(diagramEditorActions.setCurrentDiagram({
-                diagramId: resUpdateDiagram.id,
-                // name: resUpdateDiagram.name,
-                // description: resUpdateDiagram.description,
-            }))
-        }
-    }, [resUpdateDiagram])
-
-    const onRenameDiagram = async (data: IValidationSchema) => {
-
-        if (diagramState.currentDiagramId) {
-            await updateDiagram({
-                diagramId: diagramState.currentDiagramId,
-                diagramName: data.diagramName,
-                diagramDescription: data.diagramDescription,
-                diagramTags: data.diagramTags,
-                // diagramDescription: data.diagramDescription,
-            })
-        }
-    }
+    //
+    // useEffect(() => {
+    //     if (resCreateDiagram && resCreateDiagram !== null) {
+    //         // dispatch(diagramEditorActions.setCurrentDiagram({
+    //         //     diagramId: resCreateDiagram.id,
+    //         //     name: resCreateDiagram.name,
+    //         //     description: resCreateDiagram.description,
+    //         // }))
+    //         // navigate(`${ELinks.diagram}/${resCreateDiagram.id}`, {replace: true})
+    //     }
+    // }, [resCreateDiagram])
+    //
+    //
+    // const onCreateNewDiagram = async (data: IValidationSchema) => {
+    //     // await createDiagram({
+    //     //     diagramName: data.diagramName,
+    //     //     diagramDescription: data.diagramDescription,
+    //     //     diagramTags: data.diagramTags,
+    //     // })
+    // }
+    //
+    // useEffect(() => {
+    //     if (resUpdateDiagram) {
+    //         dispatch(diagramEditorActions.setCurrentDiagram({
+    //             diagramId: resUpdateDiagram.id,
+    //             // name: resUpdateDiagram.name,
+    //             // description: resUpdateDiagram.description,
+    //         }))
+    //     }
+    // }, [resUpdateDiagram])
+    //
+    // const onRenameDiagram = async (data: IValidationSchema) => {
+    //
+    //     if (diagramState.currentDiagramId) {
+    //         await updateDiagram({
+    //             diagramId: diagramState.currentDiagramId,
+    //             diagramName: data.diagramName,
+    //             diagramDescription: data.diagramDescription,
+    //             diagramTags: data.diagramTags,
+    //             // diagramDescription: data.diagramDescription,
+    //         })
+    //     }
+    // }
 
     const onSubmit = async (data: IValidationSchema) => {
-        if (type === EDiagramManagerType.new || type === EDiagramManagerType.makeACopy) {
-            await onCreateNewDiagram(data)
-        } else if (type === EDiagramManagerType.rename) {
-            await onRenameDiagram(data)
-        }
-        onSave()
+        // if (type === EDiagramManagerType.new || type === EDiagramManagerType.makeACopy) {
+        //     await onCreateNewDiagram(data)
+        // } else if (type === EDiagramManagerType.rename) {
+        //     await onRenameDiagram(data)
+        // }
+        // onSave()
     }
 
     const closeTagsPopUp = () => {
