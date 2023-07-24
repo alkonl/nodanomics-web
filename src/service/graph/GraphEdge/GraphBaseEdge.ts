@@ -54,5 +54,4 @@ export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionB
         this._target = target;
         this._source.addEdge(this._target, this);
     }
-
 }

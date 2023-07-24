@@ -86,7 +86,7 @@ export const diagramEditorSlice = createSlice({
                     targetId: payload.newConnection.target,
                     sourceId: payload.newConnection.source,
                 }
-            }, payload.newConnection, state.diagramEdges,{
+            }, payload.newConnection, state.diagramEdges, {
                 shouldReplaceId: false,
             })
             const {source, target} = payload.newConnection
@@ -126,6 +126,13 @@ export const diagramEditorSlice = createSlice({
             graph.updateNodeData(payload.id, payload)
             updateNodes(state.diagramNodes)
             updateNodes(state.stateLess.stateLessNodes)
+        },
+        deleteNode: (state, {payload}: PayloadAction<{ nodeId: string }>) => {
+            state.diagramNodes = state.diagramNodes.filter(node => node.id !== payload.nodeId)
+            state.stateLess.stateLessNodes = state.stateLess.stateLessNodes.filter(node => node.id !== payload.nodeId)
+            graph.deleteNode({
+                nodeId: payload.nodeId
+            })
         },
         updateEdgeData: (state, {payload}: PayloadAction<Optionalize<IDiagramConnectionData, 'id' | 'type'>>) => {
             const edge = state.diagramEdges.find(edge => edge.id === payload.id)

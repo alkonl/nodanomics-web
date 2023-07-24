@@ -1,2 +1,2 @@
-export * from './createNode'
+export * from './node'
 export * from './connection'

@@ -123,6 +123,17 @@ export class Graph {
         }
     }
 
+    deleteNode({nodeId}: {
+        nodeId: string
+    }) {
+        const node = this.findNode(nodeId);
+        if (node) {
+            this._nodes = this._nodes.filter(node => node.data.id !== nodeId);
+            node.delete();
+            this._edges = this._edges.filter(edge => edge.source.data.id !== nodeId && edge.target.data.id !== nodeId);
+        }
+    }
+
     resetNodeValues() {
         // this.nodes.forEach(node => node.resetValue());
     }
