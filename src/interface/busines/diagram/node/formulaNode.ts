@@ -1,4 +1,4 @@
-import {EDiagramNode, IDiagramNodeBaseData} from "./baseNode";
+import {EDiagramNode, IDiagramNodeBaseData} from "./structures";
 
 export interface IFormulaResultBoolean {
     type: 'boolean'
@@ -13,7 +13,7 @@ export interface IFormulaResultNumber {
 export type IFormulaResult = IFormulaResultBoolean | IFormulaResultNumber
 
 
-export interface IFormulaNodeVariable  {
+export interface IFormulaNodeVariable {
     variableName: string
     value: number
 }

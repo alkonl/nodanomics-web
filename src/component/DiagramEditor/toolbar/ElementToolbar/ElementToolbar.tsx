@@ -4,7 +4,6 @@ import {
     EConnection,
     EDiagramNode,
     EElementType,
-    EEvent,
     ELogic
 } from "../../../../interface";
 import {Box} from "@mui/material";
@@ -62,13 +61,13 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
     }],
     [EElementType.Event]: [{
         elementType: EElementType.Event,
-        type: EEvent.T,
-        tooltip: 'T',
+        type: EDiagramNode.EventTrigger,
+        tooltip: 'Trigger',
         toolbarName: 'T',
     }, {
         elementType: EElementType.Event,
-        type: EEvent.L,
-        tooltip: 'L',
+        type: EDiagramNode.EventListener,
+        tooltip: 'Listener',
         toolbarName: 'L',
     }],
     [EElementType.Connection]: [

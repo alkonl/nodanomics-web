@@ -1,8 +1,5 @@
-import {GraphSourceNode} from "./GraphNodes/GraphSourceNode";
 import {Graph} from "./Graph";
-import {GraphPoolNode} from "./GraphNodes/GraphPoolNode";
-import {GraphInvokableNode} from "./GraphNodes/GraphInvokable";
-import {GraphFormulaNode} from "./GraphNodes";
+import {GraphFormulaNode, GraphInvokableNode, GraphPoolNode, GraphSourceNode} from "./GraphNodes";
 
 export class RunManager {
     private graph: Graph
@@ -24,7 +21,6 @@ export class RunManager {
                 node.invokeStep()
             }
         })
-        console.log('invokeStep', this.graph)
     }
 
     updateState() {

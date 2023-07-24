@@ -1,4 +1,4 @@
-import {EConnection, EElementType, IDiagramConnectionData} from "../../../interface";
+import {EConnection, IDiagramConnectionData} from "../../../interface";
 // eslint-disable-next-line import/named
 import {Connection, Edge} from "reactflow";
 import {connectionStyle} from "./connectionStyle";
@@ -7,12 +7,14 @@ import {nanoid} from "nanoid";
 
 const getEdgeId = () => `edgeId_${nanoid()}`;
 
-export const defineConnectionTypeBySourceAndTarget = ({source, target}: {
+export const defineConnectionTypeBySourceAndTarget = ({target}: {
     source: string,
     target: string
 }): EConnection => {
     if (target === EConnection.LogicConnection) {
         return EConnection.LogicConnection
+    } else if (target === EConnection.EventConnection) {
+        return EConnection.EventConnection
     }
     return EConnection.DataConnection
 }

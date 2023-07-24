@@ -1,5 +1,5 @@
-import {GraphBaseNode} from "../GraphNodes";
-import {IDiagramConnectionBaseData, INodeData} from "../../../interface";
+import {GraphBaseNode} from "../../GraphNodes";
+import {IDiagramConnectionBaseData, INodeData} from "../../../../interface";
 
 export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionBaseData = IDiagramConnectionBaseData> {
     private _source: GraphBaseNode<INodeData>;

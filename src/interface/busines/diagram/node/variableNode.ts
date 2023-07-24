@@ -1,4 +1,4 @@
-import {EDiagramNode, IDiagramNodeBaseData} from "./baseNode";
+import {EDiagramNode, IDiagramNodeBaseData} from "./structures";
 
 export interface IVariableNodeData extends IDiagramNodeBaseData {
     type: EDiagramNode.Variable;

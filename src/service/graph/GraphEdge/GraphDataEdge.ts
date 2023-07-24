@@ -1,4 +1,4 @@
-import {GraphBaseEdge} from "./GraphBaseEdge";
+import {GraphBaseEdge} from "./abstracts";
 import {IDataConnectionData} from "../../../interface";
 import {GraphBaseNode} from "../GraphNodes";
 

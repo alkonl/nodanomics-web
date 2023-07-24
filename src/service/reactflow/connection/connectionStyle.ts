@@ -1,5 +1,6 @@
 import {MarkerType} from "reactflow";
 import {EConnection} from "../../../interface";
+import {EColor} from "../../../constant";
 
 const dataConnection = {
     markerEnd: {
@@ -19,10 +20,19 @@ const logicConnection = {
     },
 }
 
+const eventConnection = {
+    markerEnd: {
+        type: MarkerType.ArrowClosed,
+        width: 20,
+        height: 20,
+        color: EColor.orange,
+    }
+}
 
 export const connectionStyle: {
     [key in EConnection]: typeof dataConnection
 } = {
     [EConnection.DataConnection]: dataConnection,
-    [EConnection.LogicConnection]: logicConnection
+    [EConnection.LogicConnection]: logicConnection,
+    [EConnection.EventConnection]: eventConnection
 }

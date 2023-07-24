@@ -2,13 +2,18 @@
 import {ReactFlowInstance} from "reactflow";
 import {DragEvent} from "react";
 import {initialNodeDiagramElement} from "../../../constant";
-import {EDiagramNode, EElementType, ENodeAction, IDiagramNodeBaseData, IReactFlowNode, ENodeTrigger} from "../../../interface";
+import {
+    EDiagramNode,
+    EElementType,
+    ENodeAction,
+    ENodeTrigger,
+    IDiagramNodeBaseData,
+    IReactFlowNode
+} from "../../../interface";
 
-import { nanoid } from 'nanoid'
+import {nanoid} from 'nanoid'
 
 const getId = () => `nodeId_${nanoid()}`;
-
-
 
 
 export const createNode = ({type, flowInstance, wrapperNode, event}: {
@@ -79,6 +84,24 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
                     trigger: {
                         mode: ENodeTrigger.passive,
                     },
+                }
+            }
+        }
+        case EDiagramNode.EventTrigger: {
+            return {
+                ...baseParams,
+                data: {
+                    ...baseData,
+                    type,
+                }
+            }
+        }
+        case EDiagramNode.EventListener: {
+            return {
+                ...baseParams,
+                data: {
+                    ...baseData,
+                    type,
                 }
             }
         }

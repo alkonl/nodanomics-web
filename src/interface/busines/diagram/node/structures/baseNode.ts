@@ -1,13 +1,12 @@
-import {IDiagramBaseInteractiveElementData} from "../diagramElement";
+import {IDiagramBaseInteractiveElementData} from "../../diagramElement";
 
 export enum EDiagramNode {
     Variable = 'Variable',
-    // D = 'D',
     Source = 'Source',
     Formula = 'Formula',
     Pool = 'Pool',
-    // DOWN = 'DOWN',
-    // ConnectionNode = 'ConnectionNode',
+    EventTrigger = 'EventTrigger',
+    EventListener = 'EventListener',
 }
 
 

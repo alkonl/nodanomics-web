@@ -1,9 +1,9 @@
 import {
     IDiagramNodeBaseData,
     INodeData
-} from "../../../interface";
-import {GraphBaseEdge} from "../GraphEdge";
-import {RunManager} from "../RunManager";
+} from "../../../../interface";
+import {GraphBaseEdge} from "../../GraphEdge";
+import {RunManager} from "../../RunManager";
 
 export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseData = INodeData> {
     protected _data: IGenericNodeData;

@@ -1,5 +1,5 @@
 import {ISourceNodeData} from "../../../interface";
-import {GraphInteractiveNode} from "./GraphInteractiveNode";
+import {GraphInteractiveNode} from "./abstracts";
 import {GraphPoolNode} from "./GraphPoolNode";
 import {GraphDataEdge} from "../GraphEdge";
 import {RunManager} from "../RunManager";

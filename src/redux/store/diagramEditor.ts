@@ -65,7 +65,6 @@ export const diagramEditorSlice = createSlice({
             state.autoSaveCalled++
         },
         onEdgeUpdateEnd: (state, {payload}: PayloadAction<IReactFlowEdge>) => {
-            console.log('onEdgeUpdateEnd1', payload)
             state.diagramEdges = state.diagramEdges.filter(edge => edge.id !== payload.id)
             state.autoSaveCalled++
             graph.deleteEdge(payload.id)
