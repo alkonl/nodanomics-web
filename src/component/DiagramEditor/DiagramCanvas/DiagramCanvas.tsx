@@ -3,20 +3,24 @@ import ReactFlow, {
     Background,
     Controls,
     // eslint-disable-next-line import/named
-    ReactFlowInstance, NodeChange, EdgeChange, ConnectionMode, updateEdge, Edge,
+    ReactFlowInstance, NodeChange, EdgeChange, ConnectionMode
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-import {useEdgeUpdateManager, useOnDrop, useOnNodeDragStart, useUploadDiagramOnServer} from "../../../hooks";
+import {
+    useEdgeUpdateManager,
+    useOnDrop,
+    useOnNodeDragStart,
+    useUploadDiagramOnServer
+} from "../../../hooks";
 import styles from './DiagramCanvas.module.scss'
-import {EConnection, EDiagramNode, IReactFlowEdge} from "../../../interface";
+import {EConnection, EDiagramNode} from "../../../interface";
 import {FormulaNode, PoolNode, SourceNode, VariableNode} from "../CutomNode";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../redux";
 import {Box} from "@mui/material";
 import {DataConnection} from "../CustomConnectionLine/DataConnection";
 import {LogicConnection} from "../CustomConnectionLine/LogicConnection";
 import {useOnConnect} from "../../../hooks/useOnConnect";
-import {Connection} from "@reactflow/core/dist/esm/types";
 
 
 const nodeTypes = {

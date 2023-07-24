@@ -34,3 +34,6 @@ export type IReactFlowEdgeConnection = Connection & {
     data: IDiagramConnectionData
 }
 
+export const isIReactFlowEdgeConnection = (connection: Connection): connection is IReactFlowEdgeConnection => {
+    return 'data' in connection
+}

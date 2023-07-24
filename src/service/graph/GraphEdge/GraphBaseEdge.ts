@@ -41,4 +41,18 @@ export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionB
             ...data,
         }
     }
+
+    updateSourceAndTarget({source, target}: { source: GraphBaseNode<INodeData>, target: GraphBaseNode<INodeData> }) {
+        this._data ={
+            ...this._data,
+            sourceId: source.data.id,
+            targetId: target.data.id,
+        }
+        this._source.deleteEdge(this);
+        this._target.deleteEdge(this);
+        this._source = source;
+        this._target = target;
+        this._source.addEdge(this._target, this);
+    }
+
 }

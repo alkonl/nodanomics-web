@@ -1,7 +1,7 @@
 import {useCallback, useRef} from "react";
 // eslint-disable-next-line import/named
 import {Edge, Connection} from "reactflow";
-import {IReactFlowEdge, IReactFlowEdgeConnection} from "../interface";
+import {IReactFlowEdge, IReactFlowEdgeConnection, isIReactFlowEdgeConnection} from "../interface";
 import {diagramEditorActions, useAppDispatch} from "../redux";
 
 export const useEdgeUpdateManager = () => {
@@ -13,17 +13,21 @@ export const useEdgeUpdateManager = () => {
     }, []);
 
 
-    const onEdgeUpdateHandler = useCallback((oldEdge: IReactFlowEdge, newConnection: IReactFlowEdgeConnection) => {
+    const {onEdgeUpdate,onEdgeUpdateEnd, renderState} = diagramEditorActions
+
+    const onEdgeUpdateHandler = useCallback((oldEdge: IReactFlowEdge, newConnection: Connection) => {
         edgeUpdateSuccessful.current = true;
-        dispatch(diagramEditorActions.onEdgeUpdate({
+        dispatch(onEdgeUpdate({
             oldEdge,
             newConnection
         }))
+        dispatch(renderState())
     }, [dispatch]);
 
     const onEdgeUpdateEndHandler = useCallback((e: MouseEvent | TouchEvent, edge: Edge) => {
         if (!edgeUpdateSuccessful.current) {
-            dispatch(diagramEditorActions.onEdgeUpdateEnd(edge))
+            dispatch(onEdgeUpdateEnd(edge))
+            dispatch(renderState())
         }
 
         edgeUpdateSuccessful.current = true;

@@ -1,7 +1,4 @@
-import {
-    IDiagramConnectionData,
-    INodeData,
-} from "../../interface";
+import {IDiagramConnectionData, INodeData,} from "../../interface";
 import {GraphBaseNode, GraphNodeFactory} from "./GraphNodes";
 import {GraphBaseEdge, GraphEdgeFactory} from "./GraphEdge";
 import {Optionalize} from "../../utils";
@@ -106,9 +103,23 @@ export class Graph {
 
     deleteEdge(id: string) {
         const edge = this.findEdge(id);
+        console.log(`delete edge: ${id}`, edge)
         if (edge) {
             edge.deleteFromNodes();
             this._edges = this._edges.filter(edge => edge.data.id !== id);
+        }
+    }
+
+    updateConnectionSourceAndTarget({edgeId, newSourceId, newTargetId}: {
+        edgeId: string,
+        newSourceId: string,
+        newTargetId: string
+    }) {
+        const edge = this.findEdge(edgeId);
+        const source = this.findNode(newSourceId);
+        const target = this.findNode(newTargetId);
+        if (edge && source && target) {
+            edge.updateSourceAndTarget({source, target});
         }
     }
 

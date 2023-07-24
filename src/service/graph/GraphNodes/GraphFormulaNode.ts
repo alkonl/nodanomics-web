@@ -24,17 +24,22 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData> {
 
 
     calculateFormula() {
-        if (this.formula) {
-            const compiledFormula = Match.compile(this.formula)
-            const variables = this.getVariables().reduce((acc: {
-                [key: string]: number
-            }, variable) => {
-                const variableName = variable.variableName || '-'
-                acc[variableName] = variable.value
-                return acc
-            }, {})
-            return compiledFormula.evaluate(variables)
+        try {
+            if (this.formula) {
+                const compiledFormula = Match.compile(this.formula)
+                const variables = this.getVariables().reduce((acc: {
+                    [key: string]: number
+                }, variable) => {
+                    const variableName = variable.variableName || '-'
+                    acc[variableName] = variable.value
+                    return acc
+                }, {})
+                return compiledFormula.evaluate(variables)
+            }
+        }catch (e) {
+            console.error(e)
         }
+
     }
 
     updateResult() {
