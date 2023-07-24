@@ -1,9 +1,8 @@
 import {IDiagramConnectionData, INodeData,} from "../../interface";
-import {GraphBaseNode, GraphNodeFactory, isGraphNodeResetState} from "./GraphNodes";
+import {GraphBaseNode, GraphNodeFactory} from "./GraphNodes";
 import {GraphBaseEdge, GraphEdgeFactory} from "./GraphEdge";
 import {Optionalize} from "../../utils";
 import {RunManager} from "./RunManager";
-import {resetNodeStates} from "../reactflow";
 
 
 export class Graph {

@@ -3,20 +3,22 @@ import {useDiagramEditorState} from "../redux";
 import {debounce} from "../utils";
 import {useCallback, useEffect} from "react";
 import {IReactFlowEdge, IReactFlowNode} from "../interface";
+import {resetNodeStates} from "../service";
 
 export const useUploadDiagramOnServer = () => {
     const [updateDiagram] = useUpdateDiagramElementsMutation();
-    const {stateLess, currentDiagramId} = useDiagramEditorState()
+    const {diagramNodes,diagramEdges, currentDiagramId,autoSaveCalled} = useDiagramEditorState()
 
     const uploadDiagram = useCallback(debounce((params: {
-        diagramId: string, stateLessNodes: IReactFlowNode[], stateLessEdges: IReactFlowEdge[]
+        diagramId: string, nodes: IReactFlowNode[], edges: IReactFlowEdge[]
     }) => {
-        const {diagramId, stateLessNodes, stateLessEdges} = params
+        const {diagramId, nodes, edges} = params
+        const withoutStateNodes = resetNodeStates(nodes)
         updateDiagram({
             diagramId: diagramId,
             elements: {
-                diagramNodes: stateLessNodes,
-                diagramEdges: stateLessEdges,
+                diagramNodes: withoutStateNodes,
+                diagramEdges: edges,
             }
         })
     }, 100), [])
@@ -26,9 +28,9 @@ export const useUploadDiagramOnServer = () => {
         if (currentDiagramId) {
             uploadDiagram({
                 diagramId: currentDiagramId,
-                stateLessNodes: stateLess.stateLessNodes,
-                stateLessEdges: stateLess.stateLessEdges
+                nodes: diagramNodes,
+                edges: diagramEdges
             })
         }
-    }, [stateLess, currentDiagramId])
+    }, [autoSaveCalled, currentDiagramId])
 }

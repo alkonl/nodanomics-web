@@ -5,7 +5,7 @@ import {
     INodeData,
     IReactFlowEdge,
     IDiagramConnectionData,
-    EElementType, IReactFlowEdgeConnection, EDiagramNode
+    EElementType, IReactFlowEdgeConnection
 } from "../../interface";
 // eslint-disable-next-line import/named
 import {addEdge, applyEdgeChanges, applyNodeChanges, NodeChange, EdgeChange, updateEdge, Connection} from "reactflow";
@@ -19,10 +19,7 @@ export interface IDiagramEditorState {
     diagramTags?: { id: string, name: string }[]
     diagramNodes: IReactFlowNode[]
     diagramEdges: IReactFlowEdge[],
-    stateLess: {
-        stateLessNodes: IReactFlowNode[]
-        stateLessEdges: IReactFlowEdge[]
-    }
+    autoSaveCalled: number
     currentEditElement?: {
         elementType: EElementType
         id: string
@@ -32,10 +29,7 @@ export interface IDiagramEditorState {
 const initialState: IDiagramEditorState = {
     diagramNodes: [],
     diagramEdges: [],
-    stateLess: {
-        stateLessNodes: [],
-        stateLessEdges: []
-    }
+    autoSaveCalled: 0,
 }
 
 const graph = new Graph()
@@ -63,17 +57,17 @@ export const diagramEditorSlice = createSlice({
 
         addNode: (state, {payload}: PayloadAction<IReactFlowNode>) => {
             const length = state.diagramNodes.push(payload)
-            state.stateLess.stateLessNodes.push(payload)
+            state.autoSaveCalled++
             graph.addOrGetNode(state.diagramNodes[length - 1].data)
         },
         onNodesChange: (state, {payload}: PayloadAction<NodeChange[]>) => {
             state.diagramNodes = applyNodeChanges<INodeData>(payload, state.diagramNodes)
-            state.stateLess.stateLessNodes = applyNodeChanges<INodeData>(payload, state.stateLess.stateLessNodes)
+            state.autoSaveCalled++
         },
         onEdgeUpdateEnd: (state, {payload}: PayloadAction<IReactFlowEdge>) => {
             console.log('onEdgeUpdateEnd1', payload)
             state.diagramEdges = state.diagramEdges.filter(edge => edge.id !== payload.id)
-            state.stateLess.stateLessEdges = state.stateLess.stateLessEdges.filter(edge => edge.id !== payload.id)
+            state.autoSaveCalled++
             graph.deleteEdge(payload.id)
         },
         onEdgeUpdate: (state, {payload}: PayloadAction<{
@@ -96,16 +90,16 @@ export const diagramEditorSlice = createSlice({
                     newSourceId: source,
                     newTargetId: target,
                 })
-                state.stateLess.stateLessEdges = state.diagramEdges
+                state.autoSaveCalled++
             }
         },
         addEdge: (state, {payload}: PayloadAction<EdgeChange[]>) => {
             state.diagramEdges = applyEdgeChanges(payload, state.diagramEdges)
-            state.stateLess.stateLessEdges = applyEdgeChanges(payload, state.stateLess.stateLessEdges)
+            state.autoSaveCalled++
         },
         onConnect: (state, {payload}: PayloadAction<IReactFlowEdge | IReactFlowEdgeConnection>) => {
             state.diagramEdges = addEdge(payload, state.diagramEdges)
-            state.stateLess.stateLessEdges = addEdge(payload, state.stateLess.stateLessEdges)
+            state.autoSaveCalled++
             if (payload.target && payload.source && payload.data) {
                 graph.addEdge({
                     sourceId: payload.source,
@@ -113,7 +107,7 @@ export const diagramEditorSlice = createSlice({
                     edgeData: payload.data,
                 })
                 updateNodes(state.diagramNodes)
-                updateNodes(state.stateLess.stateLessNodes)
+                state.autoSaveCalled++
             }
         },
         setEditElement: (state, {payload}: PayloadAction<{
@@ -125,11 +119,11 @@ export const diagramEditorSlice = createSlice({
         updateNodeData: (state, {payload}: PayloadAction<Optionalize<INodeData, 'id'>>) => {
             graph.updateNodeData(payload.id, payload)
             updateNodes(state.diagramNodes)
-            updateNodes(state.stateLess.stateLessNodes)
+            state.autoSaveCalled++
         },
         deleteNode: (state, {payload}: PayloadAction<{ nodeId: string }>) => {
             state.diagramNodes = state.diagramNodes.filter(node => node.id !== payload.nodeId)
-            state.stateLess.stateLessNodes = state.stateLess.stateLessNodes.filter(node => node.id !== payload.nodeId)
+            state.autoSaveCalled++
             graph.deleteNode({
                 nodeId: payload.nodeId
             })
@@ -143,13 +137,7 @@ export const diagramEditorSlice = createSlice({
                     ...payload
                 }
             }
-            const stateLessEdge = state.stateLess.stateLessEdges.find(edge => edge.id === payload.id)
-            if (stateLessEdge && stateLessEdge.data && stateLessEdge.data.type === payload.type) {
-                stateLessEdge.data = {
-                    ...stateLessEdge.data,
-                    ...payload
-                }
-            }
+            state.autoSaveCalled++
         },
         updateEdge: (state, {payload}: PayloadAction<IReactFlowEdge>) => {
             const edgeToUpdateIndex = state.diagramEdges.findIndex(edge => edge.id === payload.id)
@@ -162,15 +150,7 @@ export const diagramEditorSlice = createSlice({
                     ...state.diagramEdges.slice(edgeToUpdateIndex + 1)
                 ]
             }
-            const stateLessEdgeToUpdateIndex = state.stateLess.stateLessEdges.findIndex(edge => edge.id === payload.id)
-            const oldStateLessEdge = state.stateLess.stateLessEdges[stateLessEdgeToUpdateIndex]
-            if (oldStateLessEdge && payload.data) {
-                state.stateLess.stateLessEdges = [
-                    ...state.stateLess.stateLessEdges.slice(0, stateLessEdgeToUpdateIndex),
-                    payload,
-                    ...state.stateLess.stateLessEdges.slice(stateLessEdgeToUpdateIndex + 1)
-                ]
-            }
+            state.autoSaveCalled++
         },
         setDiagram: (state, {payload}: PayloadAction<{
             diagramId: string,
@@ -182,8 +162,6 @@ export const diagramEditorSlice = createSlice({
             state.name = payload.name
             state.diagramNodes = payload.nodes || []
             state.diagramEdges = payload.edges || []
-            state.stateLess.stateLessNodes = payload.nodes || []
-            state.stateLess.stateLessEdges = payload.edges || []
             let filteredEdges: IDiagramConnectionData[] = []
             if (payload.edges) {
                 filteredEdges = payload.edges

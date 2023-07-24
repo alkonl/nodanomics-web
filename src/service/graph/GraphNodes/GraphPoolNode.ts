@@ -4,9 +4,8 @@ import {GraphInteractiveNode} from "./GraphInteractiveNode";
 import {GraphBaseNode} from "./GraphBaseNode";
 import {GraphSourceNode} from "./GraphSourceNode";
 import {RunManager} from "../RunManager";
-import {IGraphNodeResetState} from "./interface";
 
-export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> implements IGraphNodeResetState {
+export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
 
 
     constructor(data: IPoolNodeData, runManager: RunManager) {
