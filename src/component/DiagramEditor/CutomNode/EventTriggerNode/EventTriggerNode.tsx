@@ -4,15 +4,25 @@ import {EColor, EFontColor} from "../../../../constant";
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from "reactflow";
 import {EConnection, IEventTriggerNodeData} from "../../../../interface";
+import {useUpdateNode} from "../../../../hooks";
 
-export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({isConnectable}) => {
+export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({isConnectable, data}) => {
 
-    const onEventNameChange = () => {
-//
+
+    const {updateNodeData} = useUpdateNode({
+        nodeId: data.id,
+    })
+
+    const onEventNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        updateNodeData({
+            eventName: event.target.value,
+        })
     }
 
-    const onConditionChange = () => {
-//
+    const onConditionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        updateNodeData({
+            eventCondition: event.target.value,
+        })
     }
 
     return (
@@ -31,7 +41,7 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({is
                 type="target"
                 position={Position.Left}
                 isConnectable={isConnectable}
-                id={EConnection.EventConnection}
+                id={EConnection.LogicConnection}
                 style={{
                     background: EColor.darkRed,
                 }}
@@ -52,6 +62,11 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({is
                 sx={{
                     color: EFontColor.white,
                 }}/>
+            vars: {data.variables?.map((variable, index) => (
+            <span key={index}>
+                    {variable.variableName} = {variable.value}
+                </span>
+        ))}
         </Box>
     );
 };

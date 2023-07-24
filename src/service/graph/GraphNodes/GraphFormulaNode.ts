@@ -1,11 +1,14 @@
 import * as Match from "mathjs";
-import {IFormulaNodeData, IFormulaNodeVariable, IFormulaResult} from "../../../interface";
+import {IFormulaNodeData, IFormulaNodeVariable, IFormulaResult, IUpdateGraphNodeState} from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphInvokableNode} from "./abstracts";
-import {GraphLogicEdge} from "../GraphEdge";
-import {GraphPoolNode} from "./GraphPoolNode";
+import {GraphVariableManager} from "./helper";
 
-export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData> {
+export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
+    implements IUpdateGraphNodeState {
+
+    private readonly variableManager: GraphVariableManager = new GraphVariableManager(this.incomingEdges)
+
     constructor(value: IFormulaNodeData, runManager: RunManager) {
         super(value, runManager);
     }
@@ -22,12 +25,16 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData> {
         this.updateState()
     }
 
+    updateState() {
+        this.updateVariables()
+        this.updateResult()
+    }
 
-    calculateFormula() {
+    private calculateFormula() {
         try {
             if (this.formula) {
                 const compiledFormula = Match.compile(this.formula)
-                const variables = this.getVariables().reduce((acc: {
+                const variables = this.variableManager.getVariables().reduce((acc: {
                     [key: string]: number
                 }, variable) => {
                     const variableName = variable.variableName || '-'
@@ -36,13 +43,13 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData> {
                 }, {})
                 return compiledFormula.evaluate(variables)
             }
-        }catch (e) {
+        } catch (e) {
             console.error(e)
         }
 
     }
 
-    updateResult() {
+    private updateResult() {
         const result = this.calculateFormula()
         if (typeof result === 'boolean') {
             this.setResult({
@@ -54,52 +61,28 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData> {
                 type: 'number',
                 value: result,
             })
-        } else if(result !== undefined) {
+        } else if (result !== undefined) {
             throw new Error(`Unknown result type ${JSON.stringify(this.data)} result: ${JSON.stringify(result)}`)
         }
     }
 
-    updateVariables() {
-        const variables = this.getVariables()
+    private updateVariables() {
+        const variables = this.variableManager.getVariables()
         this.setVariables(variables)
     }
 
-    updateState() {
-        this.updateVariables()
-        this.updateResult()
-    }
 
-    setResult(result: IFormulaResult) {
+    private setResult(result: IFormulaResult) {
         this._data = {
             ...this.data,
             result,
         }
     }
 
-    setVariables(variables: IFormulaNodeVariable[]) {
+    private setVariables(variables: IFormulaNodeVariable[]) {
         this._data = {
             ...this.data,
             variables,
         }
     }
-
-    private get getIncomingLogicEdge(): GraphLogicEdge[] {
-        return this.incomingEdges.filter((edge) => {
-            if (edge instanceof GraphLogicEdge) {
-                return edge
-            }
-        }) as GraphLogicEdge[]
-    }
-
-    private getVariables(): IFormulaNodeVariable[] {
-        return this.getIncomingLogicEdge.map((edge) => {
-            if (edge.source instanceof GraphPoolNode) {
-                return {
-                    variableName: edge.variableName,
-                    value: edge.source.resourcesCount,
-                }
-            }
-        }).filter((variable) => variable !== undefined) as IFormulaNodeVariable[]
-    }
-
 }

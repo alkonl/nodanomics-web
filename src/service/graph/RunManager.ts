@@ -1,5 +1,6 @@
 import {Graph} from "./Graph";
 import {GraphFormulaNode, GraphInvokableNode, GraphPoolNode, GraphSourceNode} from "./GraphNodes";
+import {isUpdateGraphNodeState} from "../../interface";
 
 export class RunManager {
     private graph: Graph
@@ -26,7 +27,7 @@ export class RunManager {
     updateState() {
         const nodes = this.sortedNodes()
         nodes.forEach(node => {
-            if (node instanceof GraphFormulaNode) {
+            if (isUpdateGraphNodeState(node)) {
                 node.updateState()
             }
         })
