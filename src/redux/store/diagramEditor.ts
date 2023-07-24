@@ -5,12 +5,12 @@ import {
     INodeData,
     IReactFlowEdge,
     IDiagramConnectionData,
-    EElementType, IReactFlowEdgeConnection
+    EElementType, IReactFlowEdgeConnection, EDiagramNode
 } from "../../interface";
 // eslint-disable-next-line import/named
 import {addEdge, applyEdgeChanges, applyNodeChanges, NodeChange, EdgeChange, updateEdge, Connection} from "reactflow";
 import {Optionalize} from "../../utils";
-import {Graph, RunManager} from "../../service";
+import {Graph, resetNodeStates, RunManager} from "../../service";
 
 export interface IDiagramEditorState {
     currentDiagramId?: string
@@ -204,7 +204,10 @@ export const diagramEditorSlice = createSlice({
             updateNodes(state.diagramNodes)
         },
         resetDiagramRun: (state) => {
-            graph.resetNodeValues()
+            const resetNode = resetNodeStates(state.diagramNodes)
+            graph.updateNodesState(resetNode.map(node => node.data))
+            runManager.updateState()
+            updateNodes(state.diagramNodes)
         },
         // using this action to render new values like variableName
         renderState: (state) => {

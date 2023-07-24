@@ -4,8 +4,9 @@ import {GraphInteractiveNode} from "./GraphInteractiveNode";
 import {GraphBaseNode} from "./GraphBaseNode";
 import {GraphSourceNode} from "./GraphSourceNode";
 import {RunManager} from "../RunManager";
+import {IGraphNodeResetState} from "./interface";
 
-export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
+export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> implements IGraphNodeResetState {
 
 
     constructor(data: IPoolNodeData, runManager: RunManager) {
@@ -28,13 +29,6 @@ export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
     }
 
 
-    protected runAction() {
-        this.pullAllOrAnyResourcesFromSource()
-        this.pushAllResources()
-        this.pushAnyResources()
-        this.pullAnyResourcesFromPool()
-        this.pullAllResourcesFromPool()
-    }
 
 
     addResource(resource?: IResource[]) {
@@ -45,6 +39,22 @@ export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
             }
         }
     }
+
+    resetState() {
+        this._data = {
+            ...this.data,
+            resources: []
+        }
+    }
+
+    protected runAction() {
+        this.pullAllOrAnyResourcesFromSource()
+        this.pushAllResources()
+        this.pushAnyResources()
+        this.pullAnyResourcesFromPool()
+        this.pullAllResourcesFromPool()
+    }
+
 
     private pullAnyResourcesFromPool() {
         if (this.actionMode === ENodeAction.pullAny) {

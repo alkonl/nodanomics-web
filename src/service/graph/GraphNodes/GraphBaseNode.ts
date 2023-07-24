@@ -29,10 +29,6 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
         }
     }
 
-    updateNodeData(data: Partial<INodeData>) {
-        this.updateNode(data)
-    }
-
     get runManager() {
         return this.RunManager;
     }

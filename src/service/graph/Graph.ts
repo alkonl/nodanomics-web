@@ -1,8 +1,9 @@
 import {IDiagramConnectionData, INodeData,} from "../../interface";
-import {GraphBaseNode, GraphNodeFactory} from "./GraphNodes";
+import {GraphBaseNode, GraphNodeFactory, isGraphNodeResetState} from "./GraphNodes";
 import {GraphBaseEdge, GraphEdgeFactory} from "./GraphEdge";
 import {Optionalize} from "../../utils";
 import {RunManager} from "./RunManager";
+import {resetNodeStates} from "../reactflow";
 
 
 export class Graph {
@@ -44,7 +45,7 @@ export class Graph {
     updateNodeData(id: string, data: Partial<INodeData>) {
         const node = this.findNode(id);
         if (node) {
-            node.updateNodeData(data);
+            node.updateNode(data);
         }
     }
 
@@ -134,7 +135,15 @@ export class Graph {
         }
     }
 
-    resetNodeValues() {
-        // this.nodes.forEach(node => node.resetValue());
+
+    updateNodesState(nodeData: INodeData[]) {
+        nodeData.forEach(node => {
+            const graphNode = this.findNode(node.id);
+            if (graphNode) {
+                graphNode.updateNode(node)
+            }
+        })
     }
+
+
 }

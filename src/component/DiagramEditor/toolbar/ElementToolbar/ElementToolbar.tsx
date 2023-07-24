@@ -19,12 +19,14 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
         type: EDiagramNode.Variable,
         tooltip: 'Variable',
         toolbarName: 'V',
-    }, {
-        elementType: EElementType.Node,
-        type: EDiagramNode.D,
-        tooltip: 'no',
-        toolbarName: 'D',
-    }, {
+    },
+    //     {
+    //     elementType: EElementType.Node,
+    //     type: EDiagramNode.D,
+    //     tooltip: 'no',
+    //     toolbarName: 'D',
+    // },
+        {
         elementType: EElementType.Node,
         type: EDiagramNode.Source,
         tooltip: 'no',
@@ -34,12 +36,14 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
         type: EDiagramNode.Formula,
         tooltip: 'Formula',
         toolbarName: 'F',
-    }, {
-        elementType: EElementType.Node,
-        type: EDiagramNode.DOWN,
-        tooltip: 'Variable',
-        toolbarName: 'Do',
-    }, {
+    },
+    //     {
+    //     elementType: EElementType.Node,
+    //     type: EDiagramNode.DOWN,
+    //     tooltip: 'Variable',
+    //     toolbarName: 'Do',
+    // },
+        {
         elementType: EElementType.Node,
         type: EDiagramNode.Pool,
         tooltip: 'Pool',
@@ -67,12 +71,14 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
         tooltip: 'L',
         toolbarName: 'L',
     }],
-    [EElementType.Connection]: [{
-        elementType: EElementType.Connection,
-        type: EDiagramNode.ConnectionNode,
-        tooltip: 'Con',
-        toolbarName: 'Con',
-    }, {
+    [EElementType.Connection]: [
+    //     {
+    //     elementType: EElementType.Connection,
+    //     type: EDiagramNode.ConnectionNode,
+    //     tooltip: 'Con',
+    //     toolbarName: 'Con',
+    // },
+        {
         elementType: EElementType.Connection,
         type: EConnection.LogicConnection,
         tooltip: '2',
@@ -85,7 +91,7 @@ export const ElementToolbar = () => {
     const formated = Object.entries(mockDiagramNodes);
 
     const {toggleStepInterval, isRunning, runStep} = useInvokeStep();
-    const reset = useResetDiagramRun();
+    const {resetDiagramRun} = useResetDiagramRun();
 
     return (
         <Box sx={{
@@ -118,7 +124,7 @@ export const ElementToolbar = () => {
             >
                 {isRunning ? 'Stop' : 'Start'}
             </MButton.Submit>
-            <MButton.Submit onClick={reset}>
+            <MButton.Submit onClick={resetDiagramRun}>
                 Reset
             </MButton.Submit>
         </Box>
