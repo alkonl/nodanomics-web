@@ -13,7 +13,7 @@ export const LandingPage = () => {
         if (path === '/') {
             navigate(ELinks.projects)
         }
-    }, [navigate])
+    }, [navigate, path])
 
     return (
         <>

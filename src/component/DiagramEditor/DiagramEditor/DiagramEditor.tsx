@@ -6,6 +6,7 @@ import {useGetEditDiagramFromServer, useWidthAndHeight} from "../../../hooks";
 import {Box} from "@mui/material";
 import {ElementToolbar} from "../toolbar/ElementToolbar/ElementToolbar";
 import {DiagramEditorHeader} from "../DiagramEditorHeader";
+import {CONFIG} from "../../../utils";
 
 
 export const DiagramEditor = () => {
@@ -17,16 +18,20 @@ export const DiagramEditor = () => {
     //  it takes some time to display new elements instead of the old ones.
     //  Therefore, setTimeout is used
     useEffect(() => {
-        let timeout: NodeJS.Timeout
-        if (isRequestLoaded && !isCanvasShow) {
-            setTimeout(() => {
-                setIsCanvasShow(true)
-            }, 150)
+        if (!CONFIG.IS_OFFLINE) {
+            let timeout: NodeJS.Timeout
+            if (isRequestLoaded && !isCanvasShow) {
+                setTimeout(() => {
+                    setIsCanvasShow(true)
+                }, 150)
+            } else {
+                setIsCanvasShow(false)
+            }
+            return () => {
+                clearTimeout(timeout)
+            }
         } else {
-            setIsCanvasShow(false)
-        }
-        return () => {
-            clearTimeout(timeout)
+            setIsCanvasShow(true)
         }
     }, [isRequestLoaded])
 
