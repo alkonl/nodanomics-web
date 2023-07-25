@@ -1,7 +1,6 @@
 import {Graph} from "./Graph";
 import {GraphInteractiveNode, GraphInvokableNode, GraphPoolNode} from "./GraphNodes";
 import {EDiagramNode, ENodeTrigger, isUpdateGraphNodeState} from "../../interface";
-import {GraphEventListenerNode} from "./GraphNodes/GraphEventListenerNode";
 
 export class RunManager {
     private graph: Graph
@@ -21,14 +20,27 @@ export class RunManager {
 
     invokeStep() {
         this.incrementStep()
-        this.updateState()
-        const listener: GraphEventListenerNode | undefined = this.graph.nodesManager.nodes.find(node => node instanceof GraphEventListenerNode)
-        const nodes = this.sortedNodes()
-        console.log('RunManager.graph:', listener?.isEventTriggered)
-        console.log('RunManager.graph.nodes.order:', nodes.map(node => node.data.type))
-        nodes.forEach(node => {
+        const sortedNodes = this.sortedNodes()
+        sortedNodes.forEach(node => {
             if (node instanceof GraphInvokableNode) {
                 node.invokeStep()
+            }
+        })
+        const newTriggeredNodes = this.triggeredNodes.filter(node => !sortedNodes.includes(node))
+        console.log('newTriggeredNodes:', newTriggeredNodes.map(node => node.data.type))
+        newTriggeredNodes.forEach(node => {
+            if (node instanceof GraphInvokableNode) {
+                node.invokeStep()
+            }
+        })
+    }
+
+
+    get triggeredNodes() {
+        const nodes = this.sortedNodes()
+        return nodes.filter(node => {
+            if (node instanceof GraphInteractiveNode && node.triggerMode === ENodeTrigger.enabling) {
+                return node.isTriggeredIncomingNodes
             }
         })
     }
@@ -50,9 +62,9 @@ export class RunManager {
     private readonly executedOrder: {
         [key in EDiagramNode]?: number
     } = {
-        [EDiagramNode.Source]: 0,
-        [EDiagramNode.EventTrigger]: 1,
-        [EDiagramNode.EventListener]: 2,
+        [EDiagramNode.Source]: 1,
+        [EDiagramNode.EventTrigger]: 2,
+        [EDiagramNode.EventListener]: 3,
 
     }
 
@@ -61,25 +73,32 @@ export class RunManager {
         const nodes = this.graph.nodes
         const sortedNodes = nodes.filter(node => {
             return !(node instanceof GraphPoolNode)
+        }).filter(node => {
+            return !(node instanceof GraphInteractiveNode && node.triggerMode === ENodeTrigger.enabling && !node.isTriggeredIncomingNodes)
         }).sort((a, b) => {
             const aOrder = this.executedOrder[a.data.type] || 10
             const bOrder = this.executedOrder[b.data.type] || 10
             return aOrder - bOrder
-        }).filter(node => {
-            if(node instanceof GraphInteractiveNode) {
-                return node.triggerMode !== ENodeTrigger.enabling
-            }
         })
+        const poolNodes = this.sortedPoolNodes
+        return [...poolNodes, ...sortedNodes]
+    }
+
+    get sortedPoolNodes() {
+        const nodes = this.graph.nodes
         const poolNodes = nodes.filter(node => node instanceof GraphPoolNode)
-        const triggeredNodes = nodes.filter(node => {
-            if (node instanceof GraphInteractiveNode) {
-                console.log(`triggered ${node.data.type}: ${node.isTriggeredIncomingNodes} `, node)
-                return node.isTriggeredIncomingNodes
-            } else {
-                return true
-            }
-        })
-        return [...poolNodes, ...sortedNodes, ...triggeredNodes]
+        return poolNodes
     }
 
 }
+
+//[
+//     "Pool",
+//     "Pool",
+//     "EventTrigger",
+//     "EventListener",
+//     "Source",
+//     "Source",
+//     "EventTrigger",
+//     "EventListener"
+// ]

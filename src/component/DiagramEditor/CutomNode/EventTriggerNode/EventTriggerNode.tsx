@@ -69,6 +69,11 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({is
                 sx={{
                     color: EFontColor.white,
                 }}/>
+            <Typography sx={{
+                color: EColor.orange
+            }}>
+                {data.isEventConditionMet && 'condition met'}
+            </Typography>
             <Box sx={{
                 color: EFontColor.white,
                 display: 'flex',

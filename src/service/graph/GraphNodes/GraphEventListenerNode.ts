@@ -45,8 +45,8 @@ export class GraphEventListenerNode extends GraphInvokableNode<IEventListenerNod
 
     checkIsEventTriggered() {
         const isEventTriggered = this.triggeredNodes.length > 0
-        console.log(`GraphEventListenerNode.triggeredNodes ${isEventTriggered}:`, this.graphNodes)
         this.setIsEventTriggered(isEventTriggered)
+        return isEventTriggered
     }
 
 

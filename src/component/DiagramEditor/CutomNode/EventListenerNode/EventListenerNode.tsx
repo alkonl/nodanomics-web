@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Input} from "@mui/material";
+import {Box, Input, Typography} from "@mui/material";
 import {EColor, EFontColor} from "../../../../constant";
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from "reactflow";
@@ -47,6 +47,11 @@ export const EventListenerNode: React.FC<NodeProps<IEventListenerNodeData>> = ({
                 sx={{
                     color: EFontColor.white,
                 }}/>
+            <Typography sx={{
+                color: EColor.orange
+            }}>
+                {data.isEventTriggered && 'triggered'}
+            </Typography>
         </Box>
     );
 };

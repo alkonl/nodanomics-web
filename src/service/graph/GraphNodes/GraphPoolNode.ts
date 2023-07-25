@@ -111,7 +111,7 @@ export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
 
     private pushAllResources() {
         if (this.actionMode === ENodeAction.pushAll) {
-            if (this.resourcesCount > this.countOfRequiredOutgoingResources) {
+            if (this.resourcesCount >= this.countOfRequiredOutgoingResources) {
                 this.outgoingEdges.forEach(edge => {
                     if (edge instanceof GraphDataEdge) {
                         if (edge.target instanceof GraphPoolNode) {
