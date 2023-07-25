@@ -1,10 +1,11 @@
 import {IFormulaNodeVariable} from "../../../../interface";
 import {GraphPoolNode} from "../GraphPoolNode";
 import {GraphBaseEdge, GraphLogicEdge} from "../../GraphEdge";
+import * as Match from "mathjs";
 
-export class GraphVariableManager {
+export class GraphMatchManager {
 
-    incomingEdges: GraphBaseEdge[]
+    private readonly incomingEdges: GraphBaseEdge[]
 
     constructor(incomingEdges: GraphBaseEdge[]) {
         this.incomingEdges = incomingEdges
@@ -27,5 +28,24 @@ export class GraphVariableManager {
                 return edge
             }
         }) as GraphLogicEdge[]
+    }
+
+    calculateFormula({formula}:{formula: string}) {
+        try {
+            if (formula) {
+                const compiledFormula = Match.compile(formula)
+                const variables = this.getVariables().reduce((acc: {
+                    [key: string]: number
+                }, variable) => {
+                    const variableName = variable.variableName || '-'
+                    acc[variableName] = variable.value
+                    return acc
+                }, {})
+                return compiledFormula.evaluate(variables)
+            }
+        } catch (e) {
+            console.error(e)
+        }
+
     }
 }

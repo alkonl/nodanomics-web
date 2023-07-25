@@ -4,11 +4,18 @@ import {EColor, EFontColor} from "../../../../constant";
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from "reactflow";
 import {EConnection, IEventListenerNodeData} from "../../../../interface";
+import {useUpdateNode} from "../../../../hooks";
 
-export const EventListenerNode: React.FC<NodeProps<IEventListenerNodeData>> = ({isConnectable}) => {
+export const EventListenerNode: React.FC<NodeProps<IEventListenerNodeData>> = ({isConnectable,data}) => {
 
-    const onEventNameChange = () => {
-//
+    const {updateNodeData} = useUpdateNode({
+        nodeId: data.id,
+    })
+
+    const onEventNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        updateNodeData({
+            eventName: event.target.value,
+        })
     }
 
     return (
@@ -35,7 +42,7 @@ export const EventListenerNode: React.FC<NodeProps<IEventListenerNodeData>> = ({
             <Input
                 onChange={onEventNameChange}
                 placeholder="Insert event name"
-                // value={data.formula || ''}
+                value={data.eventName || ''}
                 size="small"
                 sx={{
                     color: EFontColor.white,

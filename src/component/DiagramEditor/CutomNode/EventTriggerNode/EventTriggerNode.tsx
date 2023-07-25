@@ -49,7 +49,7 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({is
             <Input
                 onChange={onEventNameChange}
                 placeholder="Insert event name"
-                // value={data.formula || ''}
+                value={data.eventName || ''}
                 size="small"
                 sx={{
                     color: EFontColor.white,
@@ -57,7 +57,7 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({is
             <Input
                 onChange={onConditionChange}
                 placeholder="Condition"
-                // value={data.formula || ''}
+                value={data.eventCondition || ''}
                 size="small"
                 sx={{
                     color: EFontColor.white,

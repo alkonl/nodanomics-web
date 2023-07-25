@@ -30,7 +30,7 @@ export class Graph {
         let node: GraphBaseNode | undefined = this.findNode(value.id);
         if (!node) {
             if (this.runManager) {
-                node = GraphNodeFactory.createNode(value, this.runManager);
+                node = GraphNodeFactory.createNode(value, this.runManager, this);
                 this.nodes.push(node);
             }
         }
@@ -61,12 +61,6 @@ export class Graph {
         if (oldEdge) {
             this.deleteEdge(oldEdge.data.id);
             this.addEdge({sourceId: oldEdge.source.data.id, targetId: oldEdge.target.data.id, edgeData});
-            // const newEdge = GraphEdgeFactory.createEdge({
-            //     source: oldEdge.source,
-            //     target: oldEdge.target,
-            //     edgeData
-            // });
-            // oldEdge.source.replaceEdge({target: newEdge.target, newEdge, oldEdge});
         }
     }
 
@@ -88,7 +82,7 @@ export class Graph {
         this._edges = [];
         const runManager = this.runManager;
         if (runManager) {
-            this._nodes = nodes.map(node => GraphNodeFactory.createNode(node, runManager));
+            this._nodes = nodes.map(node => GraphNodeFactory.createNode(node, runManager, this));
             edges.forEach(edge => {
                 if (edge.sourceId && edge.targetId) {
                     const source = this.findNode(edge.sourceId);
@@ -107,7 +101,11 @@ export class Graph {
         const edge = this.findEdge(id);
         if (edge) {
             edge.deleteFromNodes();
-            this._edges = this._edges.filter(edge => edge.data.id !== id);
+            const edgeToDeleteIndex = this._edges.findIndex(edge => edge.data.id === id);
+            if (edgeToDeleteIndex !== -1) {
+                this._edges.splice(edgeToDeleteIndex, 1);
+            }
+            // this._edges = this._edges.filter(edge => edge.data.id !== id);
         }
     }
 
@@ -129,9 +127,16 @@ export class Graph {
     }) {
         const node = this.findNode(nodeId);
         if (node) {
-            this._nodes = this._nodes.filter(node => node.data.id !== nodeId);
-            node.delete();
-            this._edges = this._edges.filter(edge => edge.source.data.id !== nodeId && edge.target.data.id !== nodeId);
+            const nodeToDeleteIndex = this._nodes.findIndex(node => node.data.id === nodeId);
+            if (nodeToDeleteIndex !== -1) {
+                this._nodes.splice(nodeToDeleteIndex, 1);
+                node.delete();
+                for (const edge of this._edges) {
+                    if(edge.source.data.id !== nodeId && edge.target.data.id !== nodeId){
+                        this.deleteEdge(edge.data.id);
+                    }
+                }
+            }
         }
     }
 
@@ -144,6 +149,4 @@ export class Graph {
             }
         })
     }
-
-
 }

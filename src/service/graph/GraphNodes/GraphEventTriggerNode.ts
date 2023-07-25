@@ -1,29 +1,63 @@
-import {GraphBaseNode} from "./abstracts";
+import {GraphInvokableNode} from "./abstracts";
 import {IEventTriggerNodeData, IFormulaNodeVariable, IUpdateGraphNodeState} from "../../../interface";
 import {RunManager} from "../RunManager";
-import {GraphVariableManager} from "./helper";
+import {GraphMatchManager} from "./helper";
 
-export class GraphEventTriggerNode extends GraphBaseNode<IEventTriggerNodeData>
+export class GraphEventTriggerNode extends GraphInvokableNode<IEventTriggerNodeData>
     implements IUpdateGraphNodeState {
-    private readonly variableManager: GraphVariableManager = new GraphVariableManager(this.incomingEdges)
+    private readonly matchManager: GraphMatchManager = new GraphMatchManager(this.incomingEdges)
 
     constructor(value: IEventTriggerNodeData, runManager: RunManager) {
         super(value, runManager);
     }
 
+    get eventName() {
+        return this.data.eventName;
+    }
+
+    get eventCondition() {
+        return this.data.eventCondition;
+    }
+
+
+    invokeStep() {
+        this.updateState()
+    }
+
     updateState() {
         this.updateVariables()
+        this.updateResult()
     }
 
     private updateVariables() {
-        const variables = this.variableManager.getVariables()
+        const variables = this.matchManager.getVariables()
         this.setVariables(variables)
+    }
+
+    private updateResult() {
+        if (this.eventCondition) {
+            const result = this.matchManager.calculateFormula({
+                formula: this.eventCondition,
+            })
+            if (typeof result === 'boolean') {
+                this.setResult(result)
+            } else if (result !== undefined) {
+                throw new Error(`Unknown result type ${JSON.stringify(this.data)} result: ${JSON.stringify(result)}`)
+            }
+        }
     }
 
     private setVariables(variables: IFormulaNodeVariable[]) {
         this._data = {
             ...this.data,
             variables,
+        }
+    }
+
+    private setResult(result: boolean) {
+        this._data = {
+            ...this.data,
+            isEventConditionMet: result,
         }
     }
 }
