@@ -1,8 +1,8 @@
 import * as Match from "mathjs";
 import {IFormulaNodeData, IFormulaNodeVariable, IFormulaResult} from "../../../interface";
 import {RunManager} from "../RunManager";
-import {GraphInvokableNode} from "./GraphInvokable";
-import {GraphLogicEdge} from "../GraphEdge/GraphLogicEdge";
+import {GraphInvokableNode} from "./abstracts";
+import {GraphLogicEdge} from "../GraphEdge";
 import {GraphPoolNode} from "./GraphPoolNode";
 
 export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData> {

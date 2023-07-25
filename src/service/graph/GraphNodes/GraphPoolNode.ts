@@ -1,7 +1,6 @@
 import {ENodeAction, IDiagramNodeBaseData, IPoolNodeData, IResource} from "../../../interface";
 import {GraphDataEdge} from "../GraphEdge";
-import {GraphInteractiveNode} from "./GraphInteractiveNode";
-import {GraphBaseNode} from "./GraphBaseNode";
+import {GraphInteractiveNode, GraphBaseNode} from "./abstracts";
 import {GraphSourceNode} from "./GraphSourceNode";
 import {RunManager} from "../RunManager";
 

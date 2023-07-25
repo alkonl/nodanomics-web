@@ -15,12 +15,13 @@ import {
 } from "../../../hooks";
 import styles from './DiagramCanvas.module.scss'
 import {EConnection, EDiagramNode} from "../../../interface";
-import {FormulaNode, PoolNode, SourceNode, VariableNode} from "../CutomNode";
+import {EventListenerNode, EventTriggerNode, FormulaNode, PoolNode, SourceNode, VariableNode} from "../CutomNode";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../redux";
 import {Box} from "@mui/material";
 import {DataConnection} from "../CustomConnectionLine/DataConnection";
 import {LogicConnection} from "../CustomConnectionLine/LogicConnection";
 import {useOnConnect} from "../../../hooks/useOnConnect";
+import {EventConnection} from "../CustomConnectionLine/EventConnection";
 
 
 const nodeTypes = {
@@ -28,11 +29,14 @@ const nodeTypes = {
     [EDiagramNode.Formula]: FormulaNode,
     [EDiagramNode.Source]: SourceNode,
     [EDiagramNode.Pool]: PoolNode,
+    [EDiagramNode.EventTrigger]: EventTriggerNode,
+    [EDiagramNode.EventListener]: EventListenerNode,
 };
 
 const edgeTypes = {
     [EConnection.DataConnection]: DataConnection,
     [EConnection.LogicConnection]: LogicConnection,
+    [EConnection.EventConnection]: EventConnection,
 }
 
 

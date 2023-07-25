@@ -26,7 +26,6 @@ export const ManageTeamMembers: React.FC<{
         projectId
     })
 
-    console.log('deleteTeamMember: ', projectTeamMembers)
 
     return (
         <Box

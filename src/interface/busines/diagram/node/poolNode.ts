@@ -1,4 +1,4 @@
-import {EDiagramNode, IDiagramNodeBaseData} from "./baseNode";
+import {EDiagramNode, IDiagramNodeBaseData} from "./structures";
 import {IResource} from "../resource";
 import {INodeWithAction} from "../nodeAction";
 import {INodeWithTrigger} from "../nodeTrigger";

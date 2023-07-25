@@ -103,7 +103,6 @@ export class Graph {
 
     deleteEdge(id: string) {
         const edge = this.findEdge(id);
-        console.log(`delete edge: ${id}`, edge)
         if (edge) {
             edge.deleteFromNodes();
             this._edges = this._edges.filter(edge => edge.data.id !== id);

@@ -1,8 +1,7 @@
-import {EConnection} from "./connection";
-import {EEvent} from "./event";
 import {ELogic} from "./logic";
 import {IDiagramNodeStyle} from "./elementStyle";
 import {EDiagramNode} from "./node";
+import {EConnection} from "./connection";
 
 export enum EElementType {
     Node = 'Node',
@@ -11,7 +10,7 @@ export enum EElementType {
     Logic = 'Logic',
 }
 
-export type IDiagramElement = EDiagramNode | EConnection | EEvent | ELogic;
+export type IDiagramElement = EDiagramNode | EConnection | ELogic;
 
 export interface IBaseDiagramElement {
     elementType: EElementType;

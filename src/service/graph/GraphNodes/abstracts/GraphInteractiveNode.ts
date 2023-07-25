@@ -2,7 +2,7 @@ import {GraphBaseNode} from "./GraphBaseNode";
 import {
     ENodeTrigger, IDiagramNodeBaseData,
     INodeDataWithInteractivity,
-} from "../../../interface";
+} from "../../../../interface";
 import {GraphInvokableNode} from "./GraphInvokable";
 
 

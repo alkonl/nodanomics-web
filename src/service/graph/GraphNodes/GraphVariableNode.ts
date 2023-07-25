@@ -1,5 +1,5 @@
 import {IVariableNodeData} from "../../../interface";
-import {GraphBaseNode} from "./GraphBaseNode";
+import {GraphBaseNode} from "./abstracts";
 import {RunManager} from "../RunManager";
 
 export class GraphVariableNode extends GraphBaseNode<IVariableNodeData> {
