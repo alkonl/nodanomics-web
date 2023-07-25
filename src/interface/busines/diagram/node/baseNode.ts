@@ -2,12 +2,12 @@ import {IDiagramBaseInteractiveElementData} from "../diagramElement";
 
 export enum EDiagramNode {
     Variable = 'Variable',
-    D = 'D',
+    // D = 'D',
     Source = 'Source',
     Formula = 'Formula',
     Pool = 'Pool',
-    DOWN = 'DOWN',
-    ConnectionNode = 'ConnectionNode',
+    // DOWN = 'DOWN',
+    // ConnectionNode = 'ConnectionNode',
 }
 
 

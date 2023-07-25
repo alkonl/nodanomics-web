@@ -24,6 +24,7 @@ export class RunManager {
                 node.invokeStep()
             }
         })
+        console.log('invokeStep', this.graph)
     }
 
     updateState() {

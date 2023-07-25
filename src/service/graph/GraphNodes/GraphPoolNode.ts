@@ -28,13 +28,6 @@ export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
     }
 
 
-    protected runAction() {
-        this.pullAllOrAnyResourcesFromSource()
-        this.pushAllResources()
-        this.pushAnyResources()
-        this.pullAnyResourcesFromPool()
-        this.pullAllResourcesFromPool()
-    }
 
 
     addResource(resource?: IResource[]) {
@@ -45,6 +38,22 @@ export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
             }
         }
     }
+
+    resetState() {
+        this._data = {
+            ...this.data,
+            resources: []
+        }
+    }
+
+    protected runAction() {
+        this.pullAllOrAnyResourcesFromSource()
+        this.pushAllResources()
+        this.pushAnyResources()
+        this.pullAnyResourcesFromPool()
+        this.pullAllResourcesFromPool()
+    }
+
 
     private pullAnyResourcesFromPool() {
         if (this.actionMode === ENodeAction.pullAny) {

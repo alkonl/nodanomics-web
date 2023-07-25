@@ -29,10 +29,6 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
         }
     }
 
-    updateNodeData(data: Partial<INodeData>) {
-        this.updateNode(data)
-    }
-
     get runManager() {
         return this.RunManager;
     }
@@ -50,8 +46,14 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
     }
 
     addEdge(target: GraphBaseNode, edge: GraphBaseEdge) {
-        this._outgoingEdges.push(edge);
-        target._incomingEdges.push(edge);
+        if (!this.checkIfEdgeConnectedFromThisNodeToTargetNode(edge, target)) {
+            this._outgoingEdges.push(edge);
+            target._incomingEdges.push(edge);
+        }
+    }
+
+    private checkIfEdgeConnectedFromThisNodeToTargetNode(edge: GraphBaseEdge, target: GraphBaseNode): boolean {
+        return this._outgoingEdges.some(e => e.target === edge.target) && target._incomingEdges.some(e => e.source === edge.source);
     }
 
     replaceEdge({target, newEdge, oldEdge}: {
@@ -62,8 +64,16 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
         target._incomingEdges = target._incomingEdges.filter(e => e !== oldEdge);
     }
 
+    deleteEdge(edge: GraphBaseEdge) {
+        this._outgoingEdges = this._outgoingEdges.filter(e => e !== edge);
+        this._incomingEdges = this._incomingEdges.filter(e => e !== edge);
+    }
+
+    delete(){
+        this._outgoingEdges.forEach(e => e.deleteFromNodes());
+    }
+
     findIncomingEdges() {
         return this._incomingEdges;
     }
-
 }

@@ -1,5 +1,5 @@
 import {GraphBaseNode} from "../GraphNodes";
-import {IDiagramConnectionBaseData, IDiagramConnectionData, IDiagramNodeBaseData, INodeData} from "../../../interface";
+import {IDiagramConnectionBaseData, INodeData} from "../../../interface";
 
 export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionBaseData = IDiagramConnectionBaseData> {
     private _source: GraphBaseNode<INodeData>;
@@ -28,6 +28,11 @@ export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionB
         return this._data;
     }
 
+    deleteFromNodes() {
+        this._source.deleteEdge(this);
+        this._target.deleteEdge(this);
+    }
+
     // abstract invokeStep() : void
 
     updateEdge(data: Partial<IGenericEdgeData>) {
@@ -35,5 +40,18 @@ export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionB
             ...this._data,
             ...data,
         }
+    }
+
+    updateSourceAndTarget({source, target}: { source: GraphBaseNode<INodeData>, target: GraphBaseNode<INodeData> }) {
+        this._data ={
+            ...this._data,
+            sourceId: source.data.id,
+            targetId: target.data.id,
+        }
+        this._source.deleteEdge(this);
+        this._target.deleteEdge(this);
+        this._source = source;
+        this._target = target;
+        this._source.addEdge(this._target, this);
     }
 }

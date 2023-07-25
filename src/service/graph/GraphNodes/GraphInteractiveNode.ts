@@ -30,7 +30,7 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
 
     private clearClick() {
         if (this._data.trigger.mode === ENodeTrigger.interactive) {
-            this.updateNodeData({
+            this.updateNode({
                 trigger: {
                     ...this._data.trigger,
                     isClicked: false,

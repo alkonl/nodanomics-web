@@ -10,6 +10,7 @@ import {NodeActionParameter} from "./NodeActionParameter";
 import {NodeTriggerModeParameter} from "./NodeTriggerModeParameter";
 import {ConnectionTypeParameter} from "./ConnectionTypeParameter";
 import {ConnectionVariableParameter} from "./ConnectionVariableParameter";
+import {NodeDeleteButton} from "./NodeDeleteButton";
 
 
 export const ElementSetupToolbar = () => {
@@ -74,10 +75,21 @@ export const ElementSetupToolbar = () => {
                     {'trigger' in selectedElementData && <NodeTriggerModeParameter/>}
                     {'actionMode' in selectedElementData && <NodeActionParameter/>}
                     {selectedElementData.elementType === EElementType.Connection
-                        && <ConnectionTypeParameter selectedElementData={selectedElementData as IDiagramConnectionData}/>}
+                        &&
+                        <ConnectionTypeParameter selectedElementData={selectedElementData as IDiagramConnectionData}/>}
                     {selectedElementData.type === EConnection.LogicConnection
                         && <ConnectionVariableParameter selectedElementData={selectedElementData}/>}
-                    {selectedElementData && <ElementSetupToolbarStyleSection element={selectedElementData}/>}
+                    <ElementSetupToolbarStyleSection element={selectedElementData}/>
+                    {selectedElementData.elementType === EElementType.Node && <Box
+                        sx={{
+                            mt: 2,
+                            flex: 1,
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                        }}
+                    >
+                        <NodeDeleteButton nodeId={selectedElementData.id}/>
+                    </Box>}
                 </>
                 : <Typography>
                     Please select an element to edit

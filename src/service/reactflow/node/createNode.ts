@@ -1,8 +1,8 @@
 // eslint-disable-next-line import/named
 import {ReactFlowInstance} from "reactflow";
 import {DragEvent} from "react";
-import {initialNodeDiagramElement} from "../../constant";
-import {EDiagramNode, EElementType, ENodeAction, IDiagramNodeBaseData, IReactFlowNode, ENodeTrigger} from "../../interface";
+import {initialNodeDiagramElement} from "../../../constant";
+import {EDiagramNode, EElementType, ENodeAction, IDiagramNodeBaseData, IReactFlowNode, ENodeTrigger} from "../../../interface";
 
 import { nanoid } from 'nanoid'
 

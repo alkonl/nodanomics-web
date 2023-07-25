@@ -1,7 +1,4 @@
-import {
-    IDiagramConnectionData,
-    INodeData,
-} from "../../interface";
+import {IDiagramConnectionData, INodeData,} from "../../interface";
 import {GraphBaseNode, GraphNodeFactory} from "./GraphNodes";
 import {GraphBaseEdge, GraphEdgeFactory} from "./GraphEdge";
 import {Optionalize} from "../../utils";
@@ -47,7 +44,7 @@ export class Graph {
     updateNodeData(id: string, data: Partial<INodeData>) {
         const node = this.findNode(id);
         if (node) {
-            node.updateNodeData(data);
+            node.updateNode(data);
         }
     }
 
@@ -86,6 +83,7 @@ export class Graph {
     }
 
     setDiagramElements({nodes, edges}: { nodes: INodeData[], edges: IDiagramConnectionData[] }) {
+        this._edges = [];
         const runManager = this.runManager;
         if (runManager) {
             this._nodes = nodes.map(node => GraphNodeFactory.createNode(node, runManager));
@@ -103,7 +101,48 @@ export class Graph {
         }
     }
 
-    resetNodeValues() {
-        // this.nodes.forEach(node => node.resetValue());
+    deleteEdge(id: string) {
+        const edge = this.findEdge(id);
+        console.log(`delete edge: ${id}`, edge)
+        if (edge) {
+            edge.deleteFromNodes();
+            this._edges = this._edges.filter(edge => edge.data.id !== id);
+        }
     }
+
+    updateConnectionSourceAndTarget({edgeId, newSourceId, newTargetId}: {
+        edgeId: string,
+        newSourceId: string,
+        newTargetId: string
+    }) {
+        const edge = this.findEdge(edgeId);
+        const source = this.findNode(newSourceId);
+        const target = this.findNode(newTargetId);
+        if (edge && source && target) {
+            edge.updateSourceAndTarget({source, target});
+        }
+    }
+
+    deleteNode({nodeId}: {
+        nodeId: string
+    }) {
+        const node = this.findNode(nodeId);
+        if (node) {
+            this._nodes = this._nodes.filter(node => node.data.id !== nodeId);
+            node.delete();
+            this._edges = this._edges.filter(edge => edge.source.data.id !== nodeId && edge.target.data.id !== nodeId);
+        }
+    }
+
+
+    updateNodesState(nodeData: INodeData[]) {
+        nodeData.forEach(node => {
+            const graphNode = this.findNode(node.id);
+            if (graphNode) {
+                graphNode.updateNode(node)
+            }
+        })
+    }
+
+
 }
