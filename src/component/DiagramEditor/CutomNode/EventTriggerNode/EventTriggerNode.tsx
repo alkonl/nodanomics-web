@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Input} from "@mui/material";
+import {Box, Input, Typography} from "@mui/material";
 import {EColor, EFontColor} from "../../../../constant";
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from "reactflow";
@@ -62,11 +62,20 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({is
                 sx={{
                     color: EFontColor.white,
                 }}/>
-            vars: {data.variables?.map((variable, index) => (
-            <span key={index}>
+            <Box sx={{
+                color: EFontColor.white,
+                display: 'flex',
+            }}>
+                vars: {data.variables?.map((variable, index) => (
+                <Typography
+                    sx={{
+                        color: EFontColor.white,
+                    }}
+                    key={index}>
                     {variable.variableName} = {variable.value}
-                </span>
-        ))}
+                </Typography>
+            ))}
+            </Box>
         </Box>
-    );
-};
+    )
+}

@@ -7,8 +7,8 @@ import {RunManager} from "../../RunManager";
 
 export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseData = INodeData> {
     protected _data: IGenericNodeData;
-    private _outgoingEdges: GraphBaseEdge[] = [];
-    private _incomingEdges: GraphBaseEdge[] = [];
+    private readonly _outgoingEdges: GraphBaseEdge[] = [];
+    private readonly _incomingEdges: GraphBaseEdge[] = [];
     private readonly RunManager: RunManager;
 
     constructor(value: IGenericNodeData, runManager: RunManager) {
@@ -56,17 +56,23 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
         return this._outgoingEdges.some(e => e.target === edge.target) && target._incomingEdges.some(e => e.source === edge.source);
     }
 
-    replaceEdge({target, newEdge, oldEdge}: {
-        target: GraphBaseNode, newEdge: GraphBaseEdge, oldEdge: GraphBaseEdge
-    }) {
-        this.addEdge(target, newEdge);
-        this._outgoingEdges = this._outgoingEdges.filter(e => e !== oldEdge);
-        target._incomingEdges = target._incomingEdges.filter(e => e !== oldEdge);
-    }
+    // replaceEdge({target, newEdge, oldEdge}: {
+    //     target: GraphBaseNode, newEdge: GraphBaseEdge, oldEdge: GraphBaseEdge
+    // }) {
+    //     this.addEdge(target, newEdge);
+    //     this._outgoingEdges = this._outgoingEdges.filter(e => e !== oldEdge);
+    //     target._incomingEdges = target._incomingEdges.filter(e => e !== oldEdge);
+    // }
 
     deleteEdge(edge: GraphBaseEdge) {
-        this._outgoingEdges = this._outgoingEdges.filter(e => e !== edge);
-        this._incomingEdges = this._incomingEdges.filter(e => e !== edge);
+        const outgoingEdgeIndex = this._outgoingEdges.findIndex(e => e === edge);
+       const incomingEdgeIndex = this._incomingEdges.findIndex(e => e === edge);
+         if (incomingEdgeIndex !== -1) {
+             this._incomingEdges.splice(incomingEdgeIndex, 1);
+         }
+         if (outgoingEdgeIndex !== -1) {
+             this._outgoingEdges.splice(outgoingEdgeIndex, 1);
+         }
     }
 
     delete(){

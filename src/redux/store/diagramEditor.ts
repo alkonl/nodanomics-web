@@ -138,7 +138,7 @@ export const diagramEditorSlice = createSlice({
             }
             state.autoSaveCalled++
         },
-        updateEdge: (state, {payload}: PayloadAction<IReactFlowEdge>) => {
+        replaceEdge: (state, {payload}: PayloadAction<IReactFlowEdge>) => {
             const edgeToUpdateIndex = state.diagramEdges.findIndex(edge => edge.id === payload.id)
             const oldEdge = state.diagramEdges[edgeToUpdateIndex]
             if (oldEdge && payload.data) {
@@ -178,6 +178,7 @@ export const diagramEditorSlice = createSlice({
         },
         invokeStep: (state) => {
             runManager.invokeStep()
+            console.log('invoked step', graph)
             updateNodes(state.diagramNodes)
         },
         resetDiagramRun: (state) => {

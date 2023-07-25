@@ -68,6 +68,7 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
 
     private updateVariables() {
         const variables = this.variableManager.getVariables()
+        console.log('variables', variables)
         this.setVariables(variables)
     }
 

@@ -59,12 +59,14 @@ export class Graph {
         const oldEdge = this.findEdge(edgeData.id);
 
         if (oldEdge) {
-            const newEdge = GraphEdgeFactory.createEdge({
-                source: oldEdge.source,
-                target: oldEdge.target,
-                edgeData
-            });
-            oldEdge.source.replaceEdge({target: newEdge.target, newEdge, oldEdge});
+            this.deleteEdge(oldEdge.data.id);
+            this.addEdge({sourceId: oldEdge.source.data.id, targetId: oldEdge.target.data.id, edgeData});
+            // const newEdge = GraphEdgeFactory.createEdge({
+            //     source: oldEdge.source,
+            //     target: oldEdge.target,
+            //     edgeData
+            // });
+            // oldEdge.source.replaceEdge({target: newEdge.target, newEdge, oldEdge});
         }
     }
 
