@@ -93,6 +93,7 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
                 data: {
                     ...baseData,
                     type,
+                    eventName: '',
                 }
             }
         }

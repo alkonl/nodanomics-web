@@ -8,7 +8,7 @@ export interface IEventTriggerNodeVariable {
 
 export interface IEventTriggerNodeData extends IDiagramNodeBaseData {
     type: EDiagramNode.EventTrigger;
-    eventName?: string;
+    eventName: string;
     eventCondition?: string;
     isEventConditionMet?: boolean;
     variables?: IEventTriggerNodeVariable[]

@@ -185,6 +185,7 @@ export const diagramEditorSlice = createSlice({
             const resetNode = resetNodeStates(state.diagramNodes)
             graph.updateNodesState(resetNode.map(node => node.data))
             runManager.updateState()
+            runManager.resetCurrentStep()
             updateNodes(state.diagramNodes)
         },
         // using this action to render new values like variableName

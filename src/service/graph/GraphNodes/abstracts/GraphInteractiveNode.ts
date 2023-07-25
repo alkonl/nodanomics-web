@@ -1,20 +1,18 @@
-import {GraphBaseNode} from "./GraphBaseNode";
-import {
-    ENodeTrigger, IDiagramNodeBaseData,
-    INodeDataWithInteractivity,
-} from "../../../../interface";
+import {ENodeTrigger, INodeDataWithInteractivity,} from "../../../../interface";
 import {GraphInvokableNode} from "./GraphInvokable";
+import {isIIsEventTriggered} from "../../../../interface/busines/graph/isEventTriggered";
 
 
 export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWithInteractivity = INodeDataWithInteractivity>
     extends GraphInvokableNode<IGenericNodeData> {
-
 
     invokeStep() {
         if (this.triggerMode === ENodeTrigger.automatic) {
             this.runAction();
         } else if (this.triggerMode === ENodeTrigger.enabling) {
             if (this.currentStep <= 1) {
+                this.runAction();
+            } else if (this.isTriggeredIncomingNodes) {
                 this.runAction();
             }
         } else if (this.triggerMode === ENodeTrigger.interactive) {
@@ -27,6 +25,17 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
 
     protected abstract runAction(): void;
 
+
+    get isTriggeredIncomingNodes(): boolean {
+        return this.incomingEdges.some(edge => {
+            const source = edge.source;
+            if (isIIsEventTriggered(source)) {
+                // console.log('GraphInteractiveNode.isTriggeredIncomingNodes', source)
+                return source.isEventTriggered
+            }
+            return false
+        })
+    }
 
     private clearClick() {
         if (this._data.trigger.mode === ENodeTrigger.interactive) {
@@ -53,9 +62,5 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
 
     get actionMode() {
         return this._data.actionMode;
-    }
-
-    static baseNodeIsInteractive(node: GraphBaseNode<IDiagramNodeBaseData>): node is GraphInteractiveNode {
-        return node instanceof GraphInteractiveNode;
     }
 }

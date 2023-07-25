@@ -1,12 +1,12 @@
 import {IDiagramConnectionData, INodeData,} from "../../interface";
-import {GraphBaseNode, GraphNodeFactory} from "./GraphNodes";
+import {GraphBaseNode, GraphNodeFactory, GraphNodeManager} from "./GraphNodes";
 import {GraphBaseEdge, GraphEdgeFactory} from "./GraphEdge";
 import {Optionalize} from "../../utils";
 import {RunManager} from "./RunManager";
 
 
 export class Graph {
-    private _nodes: GraphBaseNode[] = [];
+    private readonly _nodeManager: GraphNodeManager = new GraphNodeManager();
     private _edges: GraphBaseEdge[] = [];
     private runManager?: RunManager;
 
@@ -15,7 +15,11 @@ export class Graph {
     }
 
     get nodes() {
-        return this._nodes;
+        return this._nodeManager.nodes;
+    }
+
+    get nodesManager() {
+        return this._nodeManager
     }
 
     get edges() {
@@ -31,14 +35,14 @@ export class Graph {
         if (!node) {
             if (this.runManager) {
                 node = GraphNodeFactory.createNode(value, this.runManager, this);
-                this.nodes.push(node);
+                this.nodesManager.add(node);
             }
         }
         return node;
     }
 
-    findNode(id: string) {
-        return this.nodes.find(node => node.data.id === id);
+    findNode(nodeId: string) {
+        return this.nodesManager.findById({nodeId});
     }
 
     updateNodeData(id: string, data: Partial<INodeData>) {
@@ -82,7 +86,10 @@ export class Graph {
         this._edges = [];
         const runManager = this.runManager;
         if (runManager) {
-            this._nodes = nodes.map(node => GraphNodeFactory.createNode(node, runManager, this));
+            const newNodes = nodes.map(node =>
+                GraphNodeFactory.createNode(node, runManager, this)
+            )
+            this.nodesManager.setNewNodes(newNodes);
             edges.forEach(edge => {
                 if (edge.sourceId && edge.targetId) {
                     const source = this.findNode(edge.sourceId);
@@ -125,19 +132,11 @@ export class Graph {
     deleteNode({nodeId}: {
         nodeId: string
     }) {
-        const node = this.findNode(nodeId);
-        if (node) {
-            const nodeToDeleteIndex = this._nodes.findIndex(node => node.data.id === nodeId);
-            if (nodeToDeleteIndex !== -1) {
-                this._nodes.splice(nodeToDeleteIndex, 1);
-                node.delete();
-                for (const edge of this._edges) {
-                    if(edge.source.data.id !== nodeId && edge.target.data.id !== nodeId){
-                        this.deleteEdge(edge.data.id);
-                    }
-                }
-            }
-        }
+        this.nodesManager.delete({nodeId});
+        const edgesToDelete = this._edges.filter(edge => edge.source.data.id === nodeId || edge.target.data.id === nodeId);
+        edgesToDelete.forEach(edge => {
+            this.deleteEdge(edge.data.id);
+        })
     }
 
 

@@ -23,7 +23,7 @@ export class GraphNodeFactory {
             case EDiagramNode.EventTrigger:
                 return new GraphEventTriggerNode(value, runManager);
             case EDiagramNode.EventListener:
-                return new GraphEventListenerNode(value, runManager, graph.nodes);
+                return new GraphEventListenerNode(value, runManager, graph.nodesManager);
             default:
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore

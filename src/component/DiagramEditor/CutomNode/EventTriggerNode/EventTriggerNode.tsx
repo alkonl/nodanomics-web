@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box, Input, Typography} from "@mui/material";
 import {EColor, EFontColor} from "../../../../constant";
 // eslint-disable-next-line import/named
@@ -8,21 +8,28 @@ import {useUpdateNode} from "../../../../hooks";
 
 export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({isConnectable, data}) => {
 
+    const [eventName, setEventName] = useState<string>(data.eventName)
+    const [eventCondition, setEventCondition] = useState<string>(data.eventCondition || '')
 
     const {updateNodeData} = useUpdateNode({
         nodeId: data.id,
     })
 
+
+    useEffect(() => {
+        updateNodeData({eventName})
+    }, [eventName])
+
+    useEffect(() => {
+        updateNodeData({eventCondition})
+    }, [eventCondition])
+
     const onEventNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        updateNodeData({
-            eventName: event.target.value,
-        })
+        setEventName(event.target.value)
     }
 
     const onConditionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        updateNodeData({
-            eventCondition: event.target.value,
-        })
+        setEventCondition(event.target.value)
     }
 
     return (
@@ -49,7 +56,7 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({is
             <Input
                 onChange={onEventNameChange}
                 placeholder="Insert event name"
-                value={data.eventName || ''}
+                value={eventName}
                 size="small"
                 sx={{
                     color: EFontColor.white,
@@ -57,7 +64,7 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({is
             <Input
                 onChange={onConditionChange}
                 placeholder="Condition"
-                value={data.eventCondition || ''}
+                value={eventCondition}
                 size="small"
                 sx={{
                     color: EFontColor.white,
