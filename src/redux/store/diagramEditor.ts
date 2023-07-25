@@ -178,7 +178,6 @@ export const diagramEditorSlice = createSlice({
         },
         invokeStep: (state) => {
             runManager.invokeStep()
-            console.log('invoked step', graph)
             updateNodes(state.diagramNodes)
         },
         resetDiagramRun: (state) => {

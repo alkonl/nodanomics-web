@@ -29,10 +29,8 @@ export class GraphEventTriggerNode extends GraphInvokableNode<IEventTriggerNodeD
     }
 
     updateState() {
-        console.log('GraphEventTriggerNode.updateState')
         this.updateVariables()
         this.updateResult()
-        console.log('isEventConditionMet.GraphEventTriggerNode.updateResult', this.isEventConditionMet)
     }
 
     private updateVariables() {

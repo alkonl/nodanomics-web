@@ -27,7 +27,6 @@ export class RunManager {
             }
         })
         const newTriggeredNodes = this.triggeredNodes.filter(node => !sortedNodes.includes(node))
-        console.log('newTriggeredNodes:', newTriggeredNodes.map(node => node.data.type))
         newTriggeredNodes.forEach(node => {
             if (node instanceof GraphInvokableNode) {
                 node.invokeStep()
@@ -49,7 +48,6 @@ export class RunManager {
         const nodes = this.sortedNodes()
         nodes.forEach(node => {
             if (isUpdateGraphNodeState(node)) {
-                console.log('RunManager.updateState:', node)
                 node.updateState()
             }
         })
@@ -84,21 +82,42 @@ export class RunManager {
         return [...poolNodes, ...sortedNodes]
     }
 
-    get sortedPoolNodes() {
+    private get sortedPoolNodes() {
         const nodes = this.graph.nodes
-        const poolNodes = nodes.filter(node => node instanceof GraphPoolNode)
-        return poolNodes
+        const startedPoolNodes: GraphPoolNode[] = nodes.filter(node => {
+            if (node instanceof GraphPoolNode) {
+                return node.isSourceInIncomingEdges
+            }
+        }) as GraphPoolNode[]
+        const allPoolNodes: GraphPoolNode[] = []
+        startedPoolNodes.forEach(poolNode => {
+            if (!allPoolNodes.includes(poolNode)) {
+                allPoolNodes.unshift(poolNode)
+            }
+        })
+        startedPoolNodes.map(poolNode => {
+            return this.getPoolNodesChildrenRecursive(poolNode, allPoolNodes)
+        })
+        return allPoolNodes.flat()
     }
 
-}
+    private getPoolNodesChildren(poolNode: GraphPoolNode) {
+        const children = poolNode.outgoingEdges.map(edge => edge.target)
+        return children as GraphPoolNode[]
+    }
 
-//[
-//     "Pool",
-//     "Pool",
-//     "EventTrigger",
-//     "EventListener",
-//     "Source",
-//     "Source",
-//     "EventTrigger",
-//     "EventListener"
-// ]
+    private getPoolNodesChildrenRecursive(poolNode: GraphPoolNode, children: GraphPoolNode[]) {
+        const childrenOfPoolNode = this.getPoolNodesChildren(poolNode)
+        childrenOfPoolNode.forEach(child => {
+            if (!children.includes(child)) {
+                children.unshift(child)
+            }
+        })
+        childrenOfPoolNode.forEach(child => {
+            if (child instanceof GraphPoolNode) {
+                this.getPoolNodesChildrenRecursive(child, children)
+            }
+        })
+        return children
+    }
+}

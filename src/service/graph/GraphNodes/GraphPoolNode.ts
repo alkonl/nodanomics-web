@@ -38,11 +38,15 @@ export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
         }
     }
 
-    resetState() {
-        this._data = {
-            ...this.data,
-            resources: []
-        }
+    // resetState() {
+    //     this._data = {
+    //         ...this.data,
+    //         resources: []
+    //     }
+    // }
+
+    get isSourceInIncomingEdges(): boolean {
+        return this.incomingEdges.some(edge => edge.source instanceof GraphSourceNode);
     }
 
     protected runAction() {
