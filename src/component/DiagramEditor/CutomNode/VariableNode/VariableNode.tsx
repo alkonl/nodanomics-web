@@ -8,9 +8,9 @@ import {EColor} from "../../../../constant";
 
 export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = ({isConnectable, data}) => {
 
-    const currentResourcesValue = data?.resources?.length.toFixed(1) || 0
-    const maxRegisteredValue = 0
-    const minRegisteredValue = 0
+    const currentResourcesValue = data.resources?.length.toFixed(1) || 0
+    const maxRegisteredValue = data.maxResources
+    const minRegisteredValue = data.minResources
 
     return (
         <Box>

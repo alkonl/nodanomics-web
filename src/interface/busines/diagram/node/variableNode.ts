@@ -7,5 +7,7 @@ import {INodeWithTrigger} from "../nodeTrigger";
 export interface IVariableNodeData extends IDiagramNodeBaseData, INodeWithTrigger, INodeWithAction {
     type: EDiagramNode.Variable
     resources: IResource[]
+    minResources?: number
+    maxResources?: number
 }
 

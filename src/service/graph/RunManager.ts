@@ -25,11 +25,17 @@ export class RunManager {
             if (node instanceof GraphInvokableNode) {
                 node.invokeStep()
             }
+            if (isUpdateGraphNodeState(node)) {
+                node.updateState()
+            }
         })
         const newTriggeredNodes = this.triggeredNodes.filter(node => !sortedNodes.includes(node))
         newTriggeredNodes.forEach(node => {
             if (node instanceof GraphInvokableNode) {
                 node.invokeStep()
+            }
+            if (isUpdateGraphNodeState(node)) {
+                node.updateState()
             }
         })
     }

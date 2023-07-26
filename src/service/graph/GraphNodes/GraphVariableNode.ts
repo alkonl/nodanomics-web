@@ -1,14 +1,33 @@
-import {ENodeAction, IDiagramNodeBaseData, IVariableNodeData, IResource} from "../../../interface";
+import {
+    ENodeAction,
+    IDiagramNodeBaseData,
+    IResource,
+    IUpdateGraphNodeState,
+    IVariableNodeData
+} from "../../../interface";
 import {GraphDataEdge} from "../GraphEdge";
-import {GraphInteractiveNode, GraphBaseNode} from "./abstracts";
+import {GraphBaseNode, GraphInteractiveNode} from "./abstracts";
 import {GraphSourceNode} from "./GraphSourceNode";
 import {RunManager} from "../RunManager";
 
-export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData> {
+export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
+    implements IUpdateGraphNodeState {
 
 
     constructor(data: IVariableNodeData, runManager: RunManager) {
         super(data, runManager);
+    }
+
+    get maxResources() {
+        return this.data.maxResources;
+    }
+
+    get minResources() {
+        return this.data.minResources;
+    }
+
+    get currentResources() {
+        return this.data.resources.length;
     }
 
     get resources() {
@@ -26,8 +45,13 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData> {
             .filter(edge => GraphDataEdge.baseEdgeIsData(edge)) as GraphDataEdge[];
     }
 
+    get isSourceInIncomingEdges(): boolean {
+        return this.incomingEdges.some(edge => edge.source instanceof GraphSourceNode);
+    }
 
-
+    updateState() {
+        this.reCalculateMaxMinValue()
+    }
 
     addResource(resource?: IResource[]) {
         if (resource) {
@@ -38,16 +62,6 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData> {
         }
     }
 
-    // resetState() {
-    //     this._data = {
-    //         ...this.data,
-    //         resources: []
-    //     }
-    // }
-
-    get isSourceInIncomingEdges(): boolean {
-        return this.incomingEdges.some(edge => edge.source instanceof GraphSourceNode);
-    }
 
     protected runAction() {
         this.pullAllOrAnyResourcesFromSource()
@@ -55,6 +69,22 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData> {
         this.pushAnyResources()
         this.pullAnyResourcesFromVariable()
         this.pullAllResourcesFromVariable()
+    }
+
+    private reCalculateMaxMinValue() {
+        console.log(this.maxResources, this.minResources, this.currentResources)
+        if (this.maxResources === undefined || this.maxResources <= this.currentResources) {
+            this._data = {
+                ...this.data,
+                maxResources: this.currentResources
+            }
+        }
+        if (this.minResources === undefined || this.minResources >= this.currentResources) {
+            this._data = {
+                ...this.data,
+                minResources: this.currentResources
+            }
+        }
     }
 
 

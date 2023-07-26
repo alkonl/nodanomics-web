@@ -8,6 +8,8 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                 data: {
                     ...node.data,
                     resources: [],
+                    maxResources: undefined,
+                    minResources: undefined,
                 }
             }
         default:
