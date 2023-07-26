@@ -12,6 +12,22 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                     minResources: undefined,
                 }
             }
+        case EDiagramNode.EventListener:
+            return {
+                ...node,
+                data: {
+                    ...node.data,
+                    isEventTriggered: undefined,
+                }
+            }
+        case EDiagramNode.EventTrigger:
+            return {
+                ...node,
+                data: {
+                    ...node.data,
+                    isEventConditionMet: undefined,
+                }
+            }
         default:
             return node
     }

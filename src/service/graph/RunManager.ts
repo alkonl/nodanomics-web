@@ -1,6 +1,7 @@
 import {Graph} from "./Graph";
-import {GraphInteractiveNode, GraphInvokableNode, GraphVariableNode} from "./GraphNodes";
+import {GraphBaseNode, GraphInteractiveNode, GraphInvokableNode, GraphSourceNode} from "./GraphNodes";
 import {EDiagramNode, ENodeTrigger, isUpdateGraphNodeState} from "../../interface";
+import {GraphEventListenerNode} from "./GraphNodes/GraphEventListenerNode";
 
 export class RunManager {
     private graph: Graph
@@ -25,8 +26,11 @@ export class RunManager {
             if (node instanceof GraphInvokableNode) {
                 node.invokeStep()
             }
-            if (isUpdateGraphNodeState(node)) {
-                node.updateState()
+        })
+
+        this.triggerListeners.forEach(node => {
+            if (node instanceof GraphEventListenerNode) {
+                node.invokeStep()
             }
         })
         const newTriggeredNodes = this.triggeredNodes.filter(node => !sortedNodes.includes(node))
@@ -34,10 +38,8 @@ export class RunManager {
             if (node instanceof GraphInvokableNode) {
                 node.invokeStep()
             }
-            if (isUpdateGraphNodeState(node)) {
-                node.updateState()
-            }
         })
+        this.updateState()
     }
 
 
@@ -48,6 +50,10 @@ export class RunManager {
                 return node.isTriggeredIncomingNodes
             }
         })
+    }
+
+    get triggerListeners() {
+        return this.graph.nodes.filter(node => node instanceof GraphEventListenerNode)
     }
 
     updateState() {
@@ -73,57 +79,39 @@ export class RunManager {
     }
 
     private sortedNodes() {
-        // sort by executedOrder
-        const nodes = this.graph.nodes
-        const sortedNodes = nodes.filter(node => {
-            return !(node instanceof GraphVariableNode)
-        }).filter(node => {
-            return !(node instanceof GraphInteractiveNode && node.triggerMode === ENodeTrigger.enabling && !node.isTriggeredIncomingNodes)
-        }).sort((a, b) => {
-            const aOrder = this.executedOrder[a.data.type] || 10
-            const bOrder = this.executedOrder[b.data.type] || 10
-            return aOrder - bOrder
-        })
-        const variableNodes = this.sortedVariableNodes
-        return [...variableNodes, ...sortedNodes]
-    }
-
-    private get sortedVariableNodes() {
-        const nodes = this.graph.nodes
-        const startedVariableNodes: GraphVariableNode[] = nodes.filter(node => {
-            if (node instanceof GraphVariableNode) {
-                return node.isSourceInIncomingEdges
+        const startedSources = this.graph.nodes.filter(node => {
+            if (node instanceof GraphSourceNode) {
+                if (node.triggerMode === ENodeTrigger.enabling) {
+                    return node.isTriggeredIncomingNodes
+                }
+                return node
             }
-        }) as GraphVariableNode[]
-        const allVariableNodes: GraphVariableNode[] = []
-        startedVariableNodes.forEach(variableNode => {
-            if (!allVariableNodes.includes(variableNode)) {
-                allVariableNodes.unshift(variableNode)
-            }
+        }) as GraphSourceNode[]
+
+        const sortedNodes = startedSources.map(source => {
+            return this.getNodesChildrenRecursive(source)
         })
-        startedVariableNodes.map(variableNode => {
-            return this.getVariableNodesChildrenRecursive(variableNode, allVariableNodes)
-        })
-        return allVariableNodes.flat()
+        return sortedNodes.flat()
     }
 
-    private getVariableNodesChildren(variableNode: GraphVariableNode) {
-        const children = variableNode.outgoingEdges.map(edge => edge.target)
-        return children as GraphVariableNode[]
-    }
-
-    private getVariableNodesChildrenRecursive(variableNode: GraphVariableNode, children: GraphVariableNode[]) {
-        const variableNodes = this.getVariableNodesChildren(variableNode)
-        variableNodes.forEach(child => {
+    private getNodesChildrenRecursive(node: GraphBaseNode, children: GraphBaseNode[] = [node]) {
+        const nodes = this.getNodesChildren(node)
+        nodes.forEach(child => {
             if (!children.includes(child)) {
-                children.unshift(child)
+                children.push(child)
             }
         })
-        variableNodes.forEach(child => {
-            if (child instanceof GraphVariableNode) {
-                this.getVariableNodesChildrenRecursive(child, children)
+        nodes.forEach(child => {
+            if (child.outgoingEdges.length > 0) {
+                this.getNodesChildrenRecursive(child, children)
             }
         })
         return children
     }
+
+    private getNodesChildren(node: GraphBaseNode) {
+        const children = node.outgoingEdges.map(edge => edge.target)
+        return children as GraphBaseNode[]
+    }
+
 }

@@ -13,14 +13,26 @@ import {RunManager} from "../RunManager";
 export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
     implements IUpdateGraphNodeState {
 
+    private _resourcesToProvide: IResource[] = [];
+
 
     constructor(data: IVariableNodeData, runManager: RunManager) {
         super(data, runManager);
     }
 
+
+    get resourcesToProvide() {
+        return this._resourcesToProvide;
+    }
+
+    get resourcesToProvideCount() {
+        return this._resourcesToProvide.length;
+    }
+
     get maxResources() {
         return this.data.maxResources;
     }
+
 
     get minResources() {
         return this.data.minResources;
@@ -53,22 +65,26 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
         this.reCalculateMaxMinValue()
     }
 
-    addResource(resource?: IResource[]) {
-        if (resource) {
+    addResource(resources?: IResource[]) {
+        this._resourcesToProvide = [...this.data.resources];
+        if (resources) {
             this._data = {
                 ...this.data,
-                resources: [...this.data.resources, ...resource]
+                resources: [...this.data.resources, ...resources]
             }
         }
     }
 
 
     protected runAction() {
+        console.log('runAction.before', this.resourcesToProvide)
         this.pullAllOrAnyResourcesFromSource()
         this.pushAllResources()
         this.pushAnyResources()
         this.pullAnyResourcesFromVariable()
         this.pullAllResourcesFromVariable()
+        console.log('runAction.after', this.resourcesToProvide)
+
     }
 
     private reCalculateMaxMinValue() {
@@ -103,7 +119,7 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
         if (this.actionMode === ENodeAction.pullAll) {
             this.incomingEdges.forEach(edge => {
                 if (edge instanceof GraphDataEdge && edge.source instanceof GraphVariableNode) {
-                    if (edge.source.resourcesCount >= edge.countOfResource) {
+                    if (edge.source.resourcesToProvideCount >= edge.countOfResource) {
                         const resources = edge.source.takeCountResources(edge.countOfResource)
                         this.addResource(resources)
                     }
@@ -122,13 +138,16 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
     }
 
     private takeCountResources(count: number) {
-        const deletedResources = this.resources.slice(0, count);
+        const deletedResourcesToProvide = this.resourcesToProvide.splice(0, count);
         this._data = {
             ...this.data,
-            resources: this.resources.slice(count)
+            resources: this.resources.filter(resource => {
+                return !deletedResourcesToProvide.some(deletedResource => deletedResource.id === resource.id)
+            })
         }
-        return deletedResources
+        return deletedResourcesToProvide
     }
+
 
     private pushAnyResources() {
         if (this.actionMode === ENodeAction.pushAny) {
@@ -145,7 +164,7 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
 
     private pushAllResources() {
         if (this.actionMode === ENodeAction.pushAll) {
-            if (this.resourcesCount >= this.countOfRequiredOutgoingResources) {
+            if (this.resourcesToProvideCount >= this.countOfRequiredOutgoingResources) {
                 this.outgoingEdges.forEach(edge => {
                     if (edge instanceof GraphDataEdge) {
                         if (edge.target instanceof GraphVariableNode) {
@@ -156,6 +175,7 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
                 })
             }
         }
+
     }
 
     private pullAllOrAnyResourcesFromSource() {
