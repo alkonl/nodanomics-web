@@ -18,7 +18,7 @@ export const SuperTokensInit = () => {
             Session.init({
                 tokenTransferMethod: "header" // or "cookie"
             }),
-            EmailVerification.init(),
+            EmailVerification.init({}),
             ThirdPartyEmailPassword.init({}),
         ]
     });
