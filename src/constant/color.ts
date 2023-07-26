@@ -15,7 +15,9 @@ export enum EColor {
     grey4 = '#4D4D4D',
     black = '#000000d6',
     red = '#f44336',
+    purple = '#c64bff',
     darkRed = '#b71c1c',
     blue = '#3f51b5',
     orange = '#ff9800',
+    green = '#4caf50',
 }

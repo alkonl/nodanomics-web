@@ -3,7 +3,7 @@ import {Box} from "@mui/material";
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from "reactflow";
 import {EConnection, ISourceNodeData} from "../../../../interface";
-import {NodeText} from "../styledComponent";
+import {NodeTextName} from "../styledComponent";
 import {InteractiveNodeContainer} from "../container";
 import {EColor} from "../../../../constant";
 
@@ -18,15 +18,15 @@ export const SourceNode: React.FC<NodeProps<ISourceNodeData>> = ({isConnectable,
                 justifyContent: 'center',
                 alignItems: 'center',
             }}>
-                <NodeText>
+                <NodeTextName>
                     Source
-                </NodeText>
-                <NodeText>
+                </NodeTextName>
+                <NodeTextName>
                     trigger: {data.trigger.mode}
-                </NodeText>
-                <NodeText>
+                </NodeTextName>
+                <NodeTextName>
                     action: {data.actionMode}
-                </NodeText>
+                </NodeTextName>
             </Box>
             <Handle type="source" position={Position.Right} id={EConnection.DataConnection} isConnectable={isConnectable}/>
             <Handle
