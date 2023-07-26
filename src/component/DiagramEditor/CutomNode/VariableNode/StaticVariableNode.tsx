@@ -2,11 +2,11 @@ import React from 'react';
 import {Box, Input, Typography} from "@mui/material";
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from 'reactflow';
-import {EElementType, IVariableNodeData} from "../../../../interface";
+import {EElementType, IStaticVariableNodeData} from "../../../../interface";
 import {diagramEditorActions, useAppDispatch} from "../../../../redux";
 import {useUpdateNode} from "../../../../hooks";
 
-export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = ({data, id, isConnectable}) => {
+export const StaticVariableNode: React.FC<NodeProps<IStaticVariableNodeData>> = ({data, id, isConnectable}) => {
     const dispatch = useAppDispatch()
 
     const {style} = data

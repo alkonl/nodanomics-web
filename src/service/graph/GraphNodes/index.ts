@@ -1,4 +1,4 @@
-export * from './GraphVariableNode'
+export * from './GraphStaticVariableNode'
 export * from './GraphFormulaNode'
 export * from './GraphPoolNode'
 export * from './GraphEventTriggerNode'

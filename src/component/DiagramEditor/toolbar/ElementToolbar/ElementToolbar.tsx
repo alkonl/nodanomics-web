@@ -15,9 +15,9 @@ import {MButton} from '../../../base';
 const mockDiagramNodes: DiagramElementPreviewToolbar = {
     [EElementType.Node]: [{
         elementType: EElementType.Node,
-        type: EDiagramNode.Variable,
-        tooltip: 'Variable',
-        toolbarName: 'V',
+        type: EDiagramNode.StaticVariable,
+        tooltip: 'Static Variable',
+        toolbarName: 'SV',
     },
     //     {
     //     elementType: EElementType.Node,

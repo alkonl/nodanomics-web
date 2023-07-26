@@ -1,1 +1,1 @@
-export * from './VariableNode'
+export * from './StaticVariableNode'

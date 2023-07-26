@@ -1,7 +1,7 @@
 import {IDiagramBaseInteractiveElementData} from "../../diagramElement";
 
 export enum EDiagramNode {
-    Variable = 'Variable',
+    StaticVariable = 'StaticVariable',
     Source = 'Source',
     Formula = 'Formula',
     Pool = 'Pool',
