@@ -9,5 +9,6 @@ export interface IVariableNodeData extends IDiagramNodeBaseData, INodeWithTrigge
     resources: IResource[]
     minResources?: number
     maxResources?: number
+    resourcesCountHistory?: number[]
 }
 

@@ -3,7 +3,7 @@ import {Box, Input, Typography} from "@mui/material";
 import {EColor, EFontColor} from "../../../../constant";
 import {EConnection, EDiagramNode, EElementType, IDiagramConnectionData} from "../../../../interface";
 import {useCurrentEditElement, useUpdateElement} from "../../../../hooks";
-import {ParameterContainer, ParameterLabel, SectionTitle} from "./styledComponents";
+import {ParameterContainer, ParameterLabel, ElementSetupToolbarSectionTitle} from "./styledComponents";
 import {ElementSetupToolbarStyleSection} from "./ElementSetupToolbarStyleSection";
 import {ConnectionFormulaParameter} from "./ConnectionFormulaParameter";
 import {NodeActionParameter} from "./NodeActionParameter";
@@ -11,7 +11,7 @@ import {NodeTriggerModeParameter} from "./NodeTriggerModeParameter";
 import {ConnectionTypeParameter} from "./ConnectionTypeParameter";
 import {ConnectionVariableParameter} from "./ConnectionVariableParameter";
 import {NodeDeleteButton} from "./NodeDeleteButton";
-import {VariableStatisticsParameter} from "./VariableStatisticsParameter";
+import {VariableStatisticSection} from "./section";
 
 
 export const ElementSetupToolbar = () => {
@@ -55,9 +55,9 @@ export const ElementSetupToolbar = () => {
                     }}>
                         {selectedElementData?.type}
                     </Typography>
-                    <SectionTitle>
+                    <ElementSetupToolbarSectionTitle>
                         Function
-                    </SectionTitle>
+                    </ElementSetupToolbarSectionTitle>
                     {selectedElementData && <ParameterContainer>
                         <ParameterLabel>
                             Name
@@ -90,7 +90,7 @@ export const ElementSetupToolbar = () => {
                     >
                         <NodeDeleteButton nodeId={selectedElementData.id}/>
                     </Box>}
-                    {selectedElementData?.type === EDiagramNode.Variable && <VariableStatisticsParameter/>}
+                    {selectedElementData?.type === EDiagramNode.Variable && <VariableStatisticSection/>}
                 </>
                 : <Typography>
                     Please select an element to edit

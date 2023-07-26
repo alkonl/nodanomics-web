@@ -62,7 +62,8 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
     }
 
     updateState() {
-        this.reCalculateMaxMinValue()
+        this.reCalculateMaxMinAvgValue()
+        this.updateResourcesCountHistory()
     }
 
     addResource(resources?: IResource[]) {
@@ -75,20 +76,25 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
         }
     }
 
+    private updateResourcesCountHistory() {
+        this._data = {
+            ...this.data,
+            resourcesCountHistory: this.data.resourcesCountHistory
+                ? [...this.data.resourcesCountHistory, this.currentResources]
+                : [this.currentResources]
+        }
+    }
+
 
     protected runAction() {
-        console.log('runAction.before', this.resourcesToProvide)
         this.pullAllOrAnyResourcesFromSource()
         this.pushAllResources()
         this.pushAnyResources()
         this.pullAnyResourcesFromVariable()
         this.pullAllResourcesFromVariable()
-        console.log('runAction.after', this.resourcesToProvide)
-
     }
 
-    private reCalculateMaxMinValue() {
-        console.log(this.maxResources, this.minResources, this.currentResources)
+    private reCalculateMaxMinAvgValue() {
         if (this.maxResources === undefined || this.maxResources <= this.currentResources) {
             this._data = {
                 ...this.data,
