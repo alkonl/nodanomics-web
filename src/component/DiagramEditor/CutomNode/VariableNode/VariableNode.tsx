@@ -2,11 +2,11 @@ import React from 'react';
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from "reactflow";
 import {Box} from "@mui/material";
-import {EConnection, IPoolNodeData} from "../../../../interface";
+import {EConnection, IVariableNodeData} from "../../../../interface";
 import {NodeText} from "../styledComponent";
 
-export const PoolNode: React.FC<NodeProps<IPoolNodeData>> = ({isConnectable, data}) => {
-    
+export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = ({isConnectable, data}) => {
+
     return (
         <Box>
             <Handle type="target" position={Position.Left} id={EConnection.DataConnection}
@@ -22,7 +22,7 @@ export const PoolNode: React.FC<NodeProps<IPoolNodeData>> = ({isConnectable, dat
                 alignItems: 'center',
             }}>
                 <NodeText>
-                    Pool
+                    Variable Node
                 </NodeText>
                 <NodeText>
                     trigger: {data?.trigger.mode}

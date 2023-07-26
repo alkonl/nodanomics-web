@@ -2,7 +2,7 @@ import {EDiagramNode, IReactFlowNode} from "../../interface";
 
 const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
     switch (node.data.type) {
-        case EDiagramNode.Pool:
+        case EDiagramNode.Variable:
             return {
                 ...node,
                 data: {

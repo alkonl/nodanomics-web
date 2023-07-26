@@ -73,7 +73,7 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
                 }
             }
         }
-        case EDiagramNode.Pool: {
+        case EDiagramNode.Variable: {
             return {
                 ...baseParams,
                 data: {

@@ -1,13 +1,13 @@
-import {ENodeAction, IDiagramNodeBaseData, IPoolNodeData, IResource} from "../../../interface";
+import {ENodeAction, IDiagramNodeBaseData, IVariableNodeData, IResource} from "../../../interface";
 import {GraphDataEdge} from "../GraphEdge";
 import {GraphInteractiveNode, GraphBaseNode} from "./abstracts";
 import {GraphSourceNode} from "./GraphSourceNode";
 import {RunManager} from "../RunManager";
 
-export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
+export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData> {
 
 
-    constructor(data: IPoolNodeData, runManager: RunManager) {
+    constructor(data: IVariableNodeData, runManager: RunManager) {
         super(data, runManager);
     }
 
@@ -53,15 +53,15 @@ export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
         this.pullAllOrAnyResourcesFromSource()
         this.pushAllResources()
         this.pushAnyResources()
-        this.pullAnyResourcesFromPool()
-        this.pullAllResourcesFromPool()
+        this.pullAnyResourcesFromVariable()
+        this.pullAllResourcesFromVariable()
     }
 
 
-    private pullAnyResourcesFromPool() {
+    private pullAnyResourcesFromVariable() {
         if (this.actionMode === ENodeAction.pullAny) {
             this.incomingEdges.forEach(edge => {
-                if (edge instanceof GraphDataEdge && edge.source instanceof GraphPoolNode) {
+                if (edge instanceof GraphDataEdge && edge.source instanceof GraphVariableNode) {
                     const resources = edge.source.takeCountResources(edge.countOfResource)
                     this.addResource(resources)
                 }
@@ -69,10 +69,10 @@ export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
         }
     }
 
-    private pullAllResourcesFromPool() {
+    private pullAllResourcesFromVariable() {
         if (this.actionMode === ENodeAction.pullAll) {
             this.incomingEdges.forEach(edge => {
-                if (edge instanceof GraphDataEdge && edge.source instanceof GraphPoolNode) {
+                if (edge instanceof GraphDataEdge && edge.source instanceof GraphVariableNode) {
                     if (edge.source.resourcesCount >= edge.countOfResource) {
                         const resources = edge.source.takeCountResources(edge.countOfResource)
                         this.addResource(resources)
@@ -104,7 +104,7 @@ export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
         if (this.actionMode === ENodeAction.pushAny) {
             this.outgoingEdges.forEach(edge => {
                 if (edge instanceof GraphDataEdge) {
-                    if (edge.target instanceof GraphPoolNode) {
+                    if (edge.target instanceof GraphVariableNode) {
                         const resources = this.takeCountResources(edge.countOfResource)
                         edge.target.addResource(resources)
                     }
@@ -118,7 +118,7 @@ export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
             if (this.resourcesCount >= this.countOfRequiredOutgoingResources) {
                 this.outgoingEdges.forEach(edge => {
                     if (edge instanceof GraphDataEdge) {
-                        if (edge.target instanceof GraphPoolNode) {
+                        if (edge.target instanceof GraphVariableNode) {
                             const resources = this.takeCountResources(edge.countOfResource)
                             edge.target.addResource(resources)
                         }
@@ -140,7 +140,7 @@ export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
         }
     }
 
-    static baseNodeIsPool(baseNode: GraphBaseNode<IDiagramNodeBaseData>): baseNode is GraphPoolNode {
-        return baseNode instanceof GraphPoolNode;
+    static baseNodeIsVariable(baseNode: GraphBaseNode<IDiagramNodeBaseData>): baseNode is GraphVariableNode {
+        return baseNode instanceof GraphVariableNode;
     }
 }

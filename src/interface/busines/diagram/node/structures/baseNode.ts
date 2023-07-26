@@ -4,7 +4,7 @@ export enum EDiagramNode {
     StaticVariable = 'StaticVariable',
     Source = 'Source',
     Formula = 'Formula',
-    Pool = 'Pool',
+    Variable = 'Variable',
     EventTrigger = 'EventTrigger',
     EventListener = 'EventListener',
 }

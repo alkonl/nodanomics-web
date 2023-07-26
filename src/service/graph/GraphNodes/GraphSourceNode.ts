@@ -1,6 +1,6 @@
 import {ISourceNodeData} from "../../../interface";
 import {GraphInteractiveNode} from "./abstracts";
-import {GraphPoolNode} from "./GraphPoolNode";
+import {GraphVariableNode} from "./GraphVariableNode";
 import {GraphDataEdge} from "../GraphEdge";
 import {RunManager} from "../RunManager";
 
@@ -17,17 +17,17 @@ export class GraphSourceNode extends GraphInteractiveNode<ISourceNodeData> {
     }
 
     pushAllOrAnyResources() {
-        this.edgesToPools.forEach(edge => {
+        this.edgesToVariables.forEach(edge => {
             const resources = this.generateResourceFromSource(edge.countOfResource);
-            if (GraphPoolNode.baseNodeIsPool(edge.target)) {
+            if (GraphVariableNode.baseNodeIsVariable(edge.target)) {
                 edge.target.addResource(resources);
             }
         })
     }
 
-    get edgesToPools(): GraphDataEdge[] {
+    get edgesToVariables(): GraphDataEdge[] {
         return this.outgoingEdges
-            .filter(edge => GraphPoolNode.baseNodeIsPool(edge.target))
+            .filter(edge => GraphVariableNode.baseNodeIsVariable(edge.target))
             .filter(edge => GraphDataEdge.baseEdgeIsData(edge)) as GraphDataEdge[];
     }
 

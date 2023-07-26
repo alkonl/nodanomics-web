@@ -1,5 +1,5 @@
 import {Graph} from "./Graph";
-import {GraphInteractiveNode, GraphInvokableNode, GraphPoolNode} from "./GraphNodes";
+import {GraphInteractiveNode, GraphInvokableNode, GraphVariableNode} from "./GraphNodes";
 import {EDiagramNode, ENodeTrigger, isUpdateGraphNodeState} from "../../interface";
 
 export class RunManager {
@@ -70,7 +70,7 @@ export class RunManager {
         // sort by executedOrder
         const nodes = this.graph.nodes
         const sortedNodes = nodes.filter(node => {
-            return !(node instanceof GraphPoolNode)
+            return !(node instanceof GraphVariableNode)
         }).filter(node => {
             return !(node instanceof GraphInteractiveNode && node.triggerMode === ENodeTrigger.enabling && !node.isTriggeredIncomingNodes)
         }).sort((a, b) => {
@@ -78,44 +78,44 @@ export class RunManager {
             const bOrder = this.executedOrder[b.data.type] || 10
             return aOrder - bOrder
         })
-        const poolNodes = this.sortedPoolNodes
-        return [...poolNodes, ...sortedNodes]
+        const variableNodes = this.sortedVariableNodes
+        return [...variableNodes, ...sortedNodes]
     }
 
-    private get sortedPoolNodes() {
+    private get sortedVariableNodes() {
         const nodes = this.graph.nodes
-        const startedPoolNodes: GraphPoolNode[] = nodes.filter(node => {
-            if (node instanceof GraphPoolNode) {
+        const startedVariableNodes: GraphVariableNode[] = nodes.filter(node => {
+            if (node instanceof GraphVariableNode) {
                 return node.isSourceInIncomingEdges
             }
-        }) as GraphPoolNode[]
-        const allPoolNodes: GraphPoolNode[] = []
-        startedPoolNodes.forEach(poolNode => {
-            if (!allPoolNodes.includes(poolNode)) {
-                allPoolNodes.unshift(poolNode)
+        }) as GraphVariableNode[]
+        const allVariableNodes: GraphVariableNode[] = []
+        startedVariableNodes.forEach(variableNode => {
+            if (!allVariableNodes.includes(variableNode)) {
+                allVariableNodes.unshift(variableNode)
             }
         })
-        startedPoolNodes.map(poolNode => {
-            return this.getPoolNodesChildrenRecursive(poolNode, allPoolNodes)
+        startedVariableNodes.map(variableNode => {
+            return this.getVariableNodesChildrenRecursive(variableNode, allVariableNodes)
         })
-        return allPoolNodes.flat()
+        return allVariableNodes.flat()
     }
 
-    private getPoolNodesChildren(poolNode: GraphPoolNode) {
-        const children = poolNode.outgoingEdges.map(edge => edge.target)
-        return children as GraphPoolNode[]
+    private getVariableNodesChildren(variableNode: GraphVariableNode) {
+        const children = variableNode.outgoingEdges.map(edge => edge.target)
+        return children as GraphVariableNode[]
     }
 
-    private getPoolNodesChildrenRecursive(poolNode: GraphPoolNode, children: GraphPoolNode[]) {
-        const childrenOfPoolNode = this.getPoolNodesChildren(poolNode)
-        childrenOfPoolNode.forEach(child => {
+    private getVariableNodesChildrenRecursive(variableNode: GraphVariableNode, children: GraphVariableNode[]) {
+        const variableNodes = this.getVariableNodesChildren(variableNode)
+        variableNodes.forEach(child => {
             if (!children.includes(child)) {
                 children.unshift(child)
             }
         })
-        childrenOfPoolNode.forEach(child => {
-            if (child instanceof GraphPoolNode) {
-                this.getPoolNodesChildrenRecursive(child, children)
+        variableNodes.forEach(child => {
+            if (child instanceof GraphVariableNode) {
+                this.getVariableNodesChildrenRecursive(child, children)
             }
         })
         return children

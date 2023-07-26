@@ -1,5 +1,5 @@
 export * from './structures/node'
-export * from './poolNode'
+export * from './variableNode'
 export * from './formulaNode'
 export * from './staticVariableNode'
 export * from './sourceNode'

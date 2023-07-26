@@ -44,9 +44,9 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
     // },
         {
         elementType: EElementType.Node,
-        type: EDiagramNode.Pool,
-        tooltip: 'Pool',
-        toolbarName: 'P',
+        type: EDiagramNode.Variable,
+        tooltip: 'Variable',
+        toolbarName: 'V',
     }],
     [EElementType.Logic]: [{
         elementType: EElementType.Logic,
