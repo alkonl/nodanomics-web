@@ -7,8 +7,8 @@ import {
     sendPasswordResetEmail,
     submitNewPassword,
     thirdPartySignInAndUp,
-} from "supertokens-web-js/recipe/thirdpartyemailpassword";
-import {sendVerificationEmail, verifyEmail} from "supertokens-web-js/recipe/emailverification";
+} from "supertokens-auth-react/recipe/thirdpartyemailpassword";
+import {sendVerificationEmail, verifyEmail} from "supertokens-auth-react/recipe/emailverification";
 
 import {
     IChangePasswordRequest,
