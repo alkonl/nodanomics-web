@@ -3,15 +3,12 @@ import {Box, Input} from "@mui/material";
 import {ColorPicker} from "../../../ColorPicker";
 import {EColor, EFontColor} from "../../../../constant";
 import {ParameterContainer, ParameterLabel, SectionTitle} from "./styledComponents";
-import {EDiagramNode, EElementType, IDiagramBaseInteractiveElementData} from "../../../../interface";
+import {EElementType, IDiagramBaseInteractiveElementData} from "../../../../interface";
 import {useUpdateElement} from "../../../../hooks";
 
 export const ElementSetupToolbarStyleSection: React.FC<{
     element: IDiagramBaseInteractiveElementData
 }> = ({element}) => {
-    // const {updateNodeData, updateNodeStyle} = useUpdateNode({
-    //     nodeId: element?.id,
-    // })
     const {updateEdgeStyle, updateEdgeData, updateNodeData, updateNodeStyle} = useUpdateElement({
         elementId: element?.id,
         elementType: element?.elementType,
@@ -19,7 +16,6 @@ export const ElementSetupToolbarStyleSection: React.FC<{
     const onTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (element.elementType === EElementType.Node) {
             updateNodeData({
-                type: EDiagramNode.Variable,
                 label: event.target.value,
             })
         } else if (element.elementType === EElementType.Connection) {

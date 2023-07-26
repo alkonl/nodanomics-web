@@ -7,13 +7,13 @@ import {nanoid} from "nanoid";
 
 const getEdgeId = () => `edgeId_${nanoid()}`;
 
-export const defineConnectionTypeBySourceAndTarget = ({target}: {
+export const defineConnectionTypeBySourceAndTarget = ({target, source}: {
     source: string,
     target: string
 }): EConnection => {
     if (target === EConnection.LogicConnection) {
         return EConnection.LogicConnection
-    } else if (target === EConnection.EventConnection) {
+    } else if (target === EConnection.EventConnection || source === EConnection.EventConnection) {
         return EConnection.EventConnection
     }
     return EConnection.DataConnection

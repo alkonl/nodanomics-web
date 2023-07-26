@@ -90,7 +90,7 @@ export const useUpdateEdgeData = ({edgeId}: {
     edgeId?: string
 }) => {
     const dispatch = useAppDispatch()
-    const {updateEdgeData, updateEdge, renderState} = diagramEditorActions
+    const {updateEdgeData, replaceEdge, renderState} = diagramEditorActions
     const {diagramEdges} = useDiagramEditorState()
     const selectedEdge = diagramEdges.find(edge => edge.id === edgeId)
 
@@ -118,7 +118,7 @@ export const useUpdateEdgeData = ({edgeId}: {
 
     const updateEdgeType = (edgeType: EConnection) => {
         if (selectedEdge && selectedEdge.data) {
-            dispatch(updateEdge({
+            dispatch(replaceEdge({
                 ...selectedEdge,
                 ...connectionStyle[edgeType],
                 id: selectedEdge.id,

@@ -138,7 +138,7 @@ export const diagramEditorSlice = createSlice({
             }
             state.autoSaveCalled++
         },
-        updateEdge: (state, {payload}: PayloadAction<IReactFlowEdge>) => {
+        replaceEdge: (state, {payload}: PayloadAction<IReactFlowEdge>) => {
             const edgeToUpdateIndex = state.diagramEdges.findIndex(edge => edge.id === payload.id)
             const oldEdge = state.diagramEdges[edgeToUpdateIndex]
             if (oldEdge && payload.data) {
@@ -184,6 +184,7 @@ export const diagramEditorSlice = createSlice({
             const resetNode = resetNodeStates(state.diagramNodes)
             graph.updateNodesState(resetNode.map(node => node.data))
             runManager.updateState()
+            runManager.resetCurrentStep()
             updateNodes(state.diagramNodes)
         },
         // using this action to render new values like variableName

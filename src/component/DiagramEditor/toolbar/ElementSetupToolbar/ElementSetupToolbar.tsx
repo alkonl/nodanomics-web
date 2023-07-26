@@ -1,7 +1,7 @@
 import React from 'react';
 import {Box, Input, Typography} from "@mui/material";
 import {EColor, EFontColor} from "../../../../constant";
-import {EConnection, EDiagramNode, EElementType, IDiagramConnectionData} from "../../../../interface";
+import {EConnection, EElementType, IDiagramConnectionData} from "../../../../interface";
 import {useCurrentEditElement, useUpdateElement} from "../../../../hooks";
 import {ParameterContainer, ParameterLabel, SectionTitle} from "./styledComponents";
 import {ElementSetupToolbarStyleSection} from "./ElementSetupToolbarStyleSection";
@@ -24,7 +24,6 @@ export const ElementSetupToolbar = () => {
     const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (selectedElementData?.elementType === EElementType.Node) {
             updateNodeData({
-                type: EDiagramNode.Variable,
                 name: event.target.value,
             })
         } else if (selectedElementData?.elementType === EElementType.Connection) {

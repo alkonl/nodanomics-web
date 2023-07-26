@@ -7,9 +7,10 @@ import {GraphPoolNode} from "../GraphPoolNode";
 import {RunManager} from "../../RunManager";
 import {GraphEventTriggerNode} from "../GraphEventTriggerNode";
 import {GraphEventListenerNode} from "../GraphEventListenerNode";
+import {Graph} from "../../Graph";
 
 export class GraphNodeFactory {
-    static createNode(value: INodeData, runManager: RunManager): GraphBaseNode {
+    static createNode(value: INodeData, runManager: RunManager, graph: Graph): GraphBaseNode {
         switch (value.type) {
             case EDiagramNode.Formula:
                 return new GraphFormulaNode(value, runManager);
@@ -22,7 +23,7 @@ export class GraphNodeFactory {
             case EDiagramNode.EventTrigger:
                 return new GraphEventTriggerNode(value, runManager);
             case EDiagramNode.EventListener:
-                return new GraphEventListenerNode(value, runManager);
+                return new GraphEventListenerNode(value, runManager, graph.nodesManager);
             default:
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore

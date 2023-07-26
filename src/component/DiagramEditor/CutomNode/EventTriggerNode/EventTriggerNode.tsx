@@ -1,18 +1,35 @@
-import React from 'react';
-import {Box, Input} from "@mui/material";
+import React, {useEffect, useState} from 'react';
+import {Box, Input, Typography} from "@mui/material";
 import {EColor, EFontColor} from "../../../../constant";
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from "reactflow";
 import {EConnection, IEventTriggerNodeData} from "../../../../interface";
+import {useUpdateNode} from "../../../../hooks";
 
-export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({isConnectable}) => {
+export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({isConnectable, data}) => {
 
-    const onEventNameChange = () => {
-//
+    const [eventName, setEventName] = useState<string>(data.eventName)
+    const [eventCondition, setEventCondition] = useState<string>(data.eventCondition || '')
+
+    const {updateNodeData} = useUpdateNode({
+        nodeId: data.id,
+    })
+
+
+    useEffect(() => {
+        updateNodeData({eventName})
+    }, [eventName])
+
+    useEffect(() => {
+        updateNodeData({eventCondition})
+    }, [eventCondition])
+
+    const onEventNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setEventName(event.target.value)
     }
 
-    const onConditionChange = () => {
-//
+    const onConditionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setEventCondition(event.target.value)
     }
 
     return (
@@ -31,7 +48,7 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({is
                 type="target"
                 position={Position.Left}
                 isConnectable={isConnectable}
-                id={EConnection.EventConnection}
+                id={EConnection.LogicConnection}
                 style={{
                     background: EColor.darkRed,
                 }}
@@ -39,7 +56,7 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({is
             <Input
                 onChange={onEventNameChange}
                 placeholder="Insert event name"
-                // value={data.formula || ''}
+                value={eventName}
                 size="small"
                 sx={{
                     color: EFontColor.white,
@@ -47,11 +64,30 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({is
             <Input
                 onChange={onConditionChange}
                 placeholder="Condition"
-                // value={data.formula || ''}
+                value={eventCondition}
                 size="small"
                 sx={{
                     color: EFontColor.white,
                 }}/>
+            <Typography sx={{
+                color: EColor.orange
+            }}>
+                {data.isEventConditionMet && 'condition met'}
+            </Typography>
+            <Box sx={{
+                color: EFontColor.white,
+                display: 'flex',
+            }}>
+                vars: {data.variables?.map((variable, index) => (
+                <Typography
+                    sx={{
+                        color: EFontColor.white,
+                    }}
+                    key={index}>
+                    {variable.variableName} = {variable.value}
+                </Typography>
+            ))}
+            </Box>
         </Box>
-    );
-};
+    )
+}

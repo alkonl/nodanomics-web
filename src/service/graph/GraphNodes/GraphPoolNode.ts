@@ -38,11 +38,15 @@ export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
         }
     }
 
-    resetState() {
-        this._data = {
-            ...this.data,
-            resources: []
-        }
+    // resetState() {
+    //     this._data = {
+    //         ...this.data,
+    //         resources: []
+    //     }
+    // }
+
+    get isSourceInIncomingEdges(): boolean {
+        return this.incomingEdges.some(edge => edge.source instanceof GraphSourceNode);
     }
 
     protected runAction() {
@@ -111,7 +115,7 @@ export class GraphPoolNode extends GraphInteractiveNode<IPoolNodeData> {
 
     private pushAllResources() {
         if (this.actionMode === ENodeAction.pushAll) {
-            if (this.resourcesCount > this.countOfRequiredOutgoingResources) {
+            if (this.resourcesCount >= this.countOfRequiredOutgoingResources) {
                 this.outgoingEdges.forEach(edge => {
                     if (edge instanceof GraphDataEdge) {
                         if (edge.target instanceof GraphPoolNode) {
