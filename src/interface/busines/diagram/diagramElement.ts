@@ -6,8 +6,8 @@ import {EConnection} from "./connection";
 export enum EElementType {
     Node = 'Node',
     Connection = 'Connection',
-    Event = 'Event',
-    Logic = 'Logic',
+    // Event = 'Event',
+    // Logic = 'Logic',
 }
 
 export type IDiagramElement = EDiagramNode | EConnection | ELogic;

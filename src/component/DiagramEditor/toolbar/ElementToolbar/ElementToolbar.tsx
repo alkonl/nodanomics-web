@@ -12,8 +12,15 @@ import {ElementToolbarSection} from "./ElementToolbarSection";
 import {useInvokeStep, useResetDiagramRun} from "../../../../hooks";
 import {MButton} from '../../../base';
 
+
+export enum EElementShow {
+    Node = 'Node',
+    Connection = 'Connection',
+    Event = 'Event',
+    Logic = 'Logic',
+}
 const mockDiagramNodes: DiagramElementPreviewToolbar = {
-    [EElementType.Node]: [{
+    [EElementShow.Node]: [{
         elementType: EElementType.Node,
         type: EDiagramNode.StaticVariable,
         tooltip: 'Static Variable',
@@ -48,24 +55,24 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
         tooltip: 'Variable',
         toolbarName: 'V',
     }],
-    [EElementType.Logic]: [{
-        elementType: EElementType.Logic,
+    [EElementShow.Logic]: [{
+        elementType: EElementType.Node,
         type: ELogic.M,
         tooltip: 'M',
         toolbarName: 'M',
     }, {
-        elementType: EElementType.Logic,
+        elementType: EElementType.Node,
         type: ELogic.W,
         tooltip: 'W',
         toolbarName: 'W',
     }],
-    [EElementType.Event]: [{
-        elementType: EElementType.Event,
+    [EElementShow.Event]: [{
+        elementType: EElementType.Node,
         type: EDiagramNode.EventTrigger,
         tooltip: 'Trigger',
         toolbarName: 'T',
     }, {
-        elementType: EElementType.Event,
+        elementType: EElementType.Node,
         type: EDiagramNode.EventListener,
         tooltip: 'Listener',
         toolbarName: 'L',

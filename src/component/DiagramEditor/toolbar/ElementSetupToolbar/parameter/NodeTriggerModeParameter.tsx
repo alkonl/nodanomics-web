@@ -4,20 +4,22 @@ import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
 import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 import {ParameterContainer, ParameterLabel} from "../styledComponents";
 import {EFontColor} from "../../../../../constant";
-import {ENodeTrigger} from "../../../../../interface";
+import {ENodeTrigger, IDiagramConnectionData, INodeData} from "../../../../../interface";
 import {useCurrentEditElement, useUpdateElement} from "../../../../../hooks";
 
 const nodeTriggerModes = Object.keys(ENodeTrigger)
 
-export const NodeTriggerModeParameter = () => {
+export const NodeTriggerModeParameter: React.FC<{
+    node:  INodeData | IDiagramConnectionData
+}> = ({node}) => {
 
-    const selectedElementData = useCurrentEditElement()?.data
+    const selectedElementData = node
 
     if (selectedElementData && !('trigger' in selectedElementData)) {
         throw new Error(`no triggerMode in selectedElementData ${JSON.stringify(selectedElementData)}`)
     }
     const {updateNodeTrigger} = useUpdateElement({
-        elementType: selectedElementData?.elementType,
+        elementType: selectedElementData.elementType,
         elementId: selectedElementData?.id,
     })
     const changeNodeTriggerMode = (event: SelectChangeEvent) => {

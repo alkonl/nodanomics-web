@@ -3,26 +3,9 @@ import {Accordion, AccordionDetails, AccordionSummary, Box, Grid, Typography} fr
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {EditBillingInformationForm} from "../../form";
 import {MButton} from "../../base";
+import {MOCK_BILLING_ADDRESS} from "../../../mock/MOCK_BILLING_ADDRESS";
 
-const MOCK_BILLING_ADDRESS: {
-    name: string,
-    value: string
-}[] = [{
-    name: 'Name',
-    value: 'Jhon Doe'
-}, {
-    name: 'Address',
-    value: 'Okta'
-}, {
-    name: 'City',
-    value: 'Okta'
-}, {
-    name: 'Postal Code',
-    value: '000000'
-}, {
-    name: 'Country',
-    value: '000000'
-}]
+
 
 export const BillingAddressAccordion = () => {
 

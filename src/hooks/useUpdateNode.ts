@@ -158,12 +158,21 @@ export const useUpdateEdgeData = ({edgeId}: {
 
 export const useUpdateElement = ({elementId, elementType}: {
     elementId?: string,
-    elementType?: EElementType
+    elementType: EElementType
 }) => {
     const updateNode = useUpdateNode({nodeId: elementType === EElementType.Node ? elementId : undefined})
     const updateEdgeData = useUpdateEdgeData({edgeId: elementType === EElementType.Connection ? elementId : undefined})
+
+    const updateElement = () => {
+        if (elementType === EElementType.Node) {
+            return updateNode.updateNodeData
+        }
+        return updateEdgeData.updateEdgeData
+    }
+
     return {
         ...updateNode,
-        ...updateEdgeData
+        ...updateEdgeData,
+        updateElement: updateElement(),
     }
 }

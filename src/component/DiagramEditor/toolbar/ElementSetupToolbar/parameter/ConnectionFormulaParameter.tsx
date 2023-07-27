@@ -8,7 +8,7 @@ import {EConnection} from "../../../../../interface";
 export const ConnectionFormulaParameter = () => {
     const selectedElementData = useCurrentEditElement()?.data
     const {updateEdgeData} = useUpdateElement({
-        elementType: selectedElementData?.elementType,
+        elementType: selectedElementData!.elementType,
         elementId: selectedElementData?.id,
     })
 

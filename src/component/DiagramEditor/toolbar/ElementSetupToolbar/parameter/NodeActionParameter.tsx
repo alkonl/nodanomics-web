@@ -2,20 +2,22 @@ import React, {useMemo} from 'react';
 import {ParameterContainer, ParameterLabel} from "../styledComponents";
 import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 import {useCurrentEditElement, useUpdateElement} from "../../../../../hooks";
-import {EDiagramNode, ENodeAction} from "../../../../../interface";
+import {EDiagramNode, ENodeAction, INodeData} from "../../../../../interface";
 import {EFontColor} from "../../../../../constant";
 // eslint-disable-next-line import/named
 import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
 
 
-export const NodeActionParameter = () => {
-    const selectedElementData = useCurrentEditElement()?.data
+export const NodeActionParameter: React.FC<{
+    node: INodeData
+}> = ({node}) => {
+    const selectedElementData = node
 
     if (selectedElementData && !('actionMode' in selectedElementData)) {
         throw new Error(`no actionMode in selectedElementData ${JSON.stringify(selectedElementData)}`)
     }
     const {updateNodeData} = useUpdateElement({
-        elementType: selectedElementData?.elementType,
+        elementType: selectedElementData!.elementType,
         elementId: selectedElementData?.id,
     })
     const changeNodeActionMode = (event: SelectChangeEvent) => {
