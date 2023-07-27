@@ -2,18 +2,19 @@ import React from 'react';
 // eslint-disable-next-line import/named
 import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
 import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
-import {ParameterContainer, ParameterLabel} from "../styledComponents";
-import {EFontColor} from "../../../../../constant";
-import {ENodeTrigger, IDiagramConnectionData, INodeData} from "../../../../../interface";
-import {useCurrentEditElement, useUpdateElement} from "../../../../../hooks";
+import {EColor, EFontColor} from "../../../../../constant";
+import {ENodeTrigger, INodeData} from "../../../../../interface";
+import {useUpdateElement} from "../../../../../hooks";
+import {ElementParameter} from "./ElementParameter";
+import {MSelect} from "../../../../base";
 
 const nodeTriggerModes = Object.keys(ENodeTrigger)
 
 export const NodeTriggerModeParameter: React.FC<{
-    node:  INodeData | IDiagramConnectionData
-}> = ({node}) => {
+    nodeData: INodeData
+}> = ({nodeData}) => {
 
-    const selectedElementData = node
+    const selectedElementData = nodeData
 
     if (selectedElementData && !('trigger' in selectedElementData)) {
         throw new Error(`no triggerMode in selectedElementData ${JSON.stringify(selectedElementData)}`)
@@ -29,47 +30,12 @@ export const NodeTriggerModeParameter: React.FC<{
     }
 
     return (
-        <>
-            {
-                selectedElementData &&
-                <ParameterContainer>
-                    <ParameterLabel>
-                        Trigger
-                    </ParameterLabel>
-                    <FormControl
-                        sx={{
-                            color: EFontColor.grey4,
-                        }}
-                        fullWidth
-                        size="small"
-                    >
-                        <InputLabel
-                            sx={{
-                                color: EFontColor.grey4,
-                            }}
-                        />
-                        <Select
-                            value={selectedElementData.trigger.mode}
-                            onChange={changeNodeTriggerMode}
-                            sx={{
-                                color: EFontColor.grey4,
-                            }}
-                        >
-                            {nodeTriggerModes.map((mode) => (
-                                <MenuItem
-                                    key={mode}
-                                    value={mode}
-                                    sx={{
-                                        color: EFontColor.grey4,
-                                    }}
-                                >
-                                    {mode}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </ParameterContainer>
-            }
-        </>
+        <ElementParameter label="Trigger">
+            <MSelect.Parameters
+                currentValue={selectedElementData.trigger.mode}
+                onChange={changeNodeTriggerMode}
+                values={nodeTriggerModes}
+            />
+        </ElementParameter>
     );
 };

@@ -4,6 +4,7 @@ import {EColor, EFontColor} from "../../../../constant";
 import {EDiagramNode} from "../../../../interface";
 import {useCurrentEditElement} from "../../../../hooks";
 import {PropertiesSection, VariableStatisticSection} from "./section";
+import {ElementSetupToolbarStyleSection} from "./ElementSetupToolbarStyleSection";
 
 
 export const ElementSetupToolbar = () => {
@@ -23,15 +24,20 @@ export const ElementSetupToolbar = () => {
             }}
         >
             {selectedElementData ?
-                <>
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 2,
+                }}>
                     <Typography sx={{
                         color: EFontColor.grey4,
                     }}>
                         {selectedElementData?.type}
                     </Typography>
                     <PropertiesSection selectedElementData={selectedElementData}/>
+                    <ElementSetupToolbarStyleSection element={selectedElementData}/>
                     {selectedElementData?.type === EDiagramNode.Variable && <VariableStatisticSection/>}
-                </>
+                </Box>
                 : <Typography>
                     Please select an element to edit
                 </Typography>

@@ -1,11 +1,10 @@
 import React, {useMemo} from 'react';
-import {ParameterContainer, ParameterLabel} from "../styledComponents";
-import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
-import {useCurrentEditElement, useUpdateElement} from "../../../../../hooks";
+import {useUpdateElement} from "../../../../../hooks";
 import {EDiagramNode, ENodeAction, INodeData} from "../../../../../interface";
-import {EFontColor} from "../../../../../constant";
 // eslint-disable-next-line import/named
 import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
+import {ElementParameter} from "./ElementParameter";
+import {MSelect} from "../../../../base";
 
 
 export const NodeActionParameter: React.FC<{
@@ -17,7 +16,7 @@ export const NodeActionParameter: React.FC<{
         throw new Error(`no actionMode in selectedElementData ${JSON.stringify(selectedElementData)}`)
     }
     const {updateNodeData} = useUpdateElement({
-        elementType: selectedElementData!.elementType,
+        elementType: selectedElementData.elementType,
         elementId: selectedElementData?.id,
     })
     const changeNodeActionMode = (event: SelectChangeEvent) => {
@@ -33,47 +32,12 @@ export const NodeActionParameter: React.FC<{
     }, [selectedElementData])
 
     return (
-        <>
-            {
-                selectedElementData &&
-                <ParameterContainer>
-                    <ParameterLabel>
-                        Action
-                    </ParameterLabel>
-                    <FormControl
-                        sx={{
-                            color: EFontColor.grey4,
-                        }}
-                        fullWidth
-                        size="small"
-                    >
-                        <InputLabel
-                            sx={{
-                                color: EFontColor.grey4,
-                            }}
-                        />
-                        <Select
-                            value={selectedElementData.actionMode}
-                            onChange={changeNodeActionMode}
-                            sx={{
-                                color: EFontColor.grey4,
-                            }}
-                        >
-                            {nodeActionModes.map((mode) => (
-                                <MenuItem
-                                    key={mode}
-                                    value={mode}
-                                    sx={{
-                                        color: EFontColor.grey4,
-                                    }}
-                                >
-                                    {mode}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </ParameterContainer>
-            }
-        </>
+        <ElementParameter label="Action">
+            <MSelect.Parameters
+                values={nodeActionModes}
+                currentValue={selectedElementData.actionMode}
+                onChange={changeNodeActionMode}
+            />
+        </ElementParameter>
     );
 };
