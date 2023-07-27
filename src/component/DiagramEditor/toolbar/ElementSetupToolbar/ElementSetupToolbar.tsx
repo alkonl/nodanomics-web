@@ -1,17 +1,13 @@
 import React from 'react';
 import {Box, Typography} from "@mui/material";
 import {EColor, EFontColor} from "../../../../constant";
-import {EDiagramNode, EElementType} from "../../../../interface";
-import {useCurrentEditElement, useUpdateElement} from "../../../../hooks";
+import {EDiagramNode} from "../../../../interface";
+import {useCurrentEditElement} from "../../../../hooks";
 import {PropertiesSection, VariableStatisticSection} from "./section";
 
 
 export const ElementSetupToolbar = () => {
     const selectedElementData = useCurrentEditElement()?.data
-    const {updateNodeData, updateEdgeData} = useUpdateElement({
-        elementType: selectedElementData?.elementType,
-        elementId: selectedElementData?.id,
-    })
 
     return (
         <Box

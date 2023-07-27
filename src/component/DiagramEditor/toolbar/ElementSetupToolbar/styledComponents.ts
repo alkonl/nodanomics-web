@@ -1,7 +1,7 @@
 import {Box, styled, Typography} from "@mui/material";
 import {EColor, EFontColor} from "../../../../constant";
 
-export const ElementSetupToolbarSectionTitle = styled(Typography)({
+export const ElementSetupToolbarSectionTitle = styled(Box)({
     display: 'block',
     backgroundColor: EColor.grey1,
     paddingLeft: 1,
@@ -29,8 +29,14 @@ export const ParameterText = styled(Typography)({
     fontWeight: 'bold',
 })
 
+const Input = styled('input')({
+    color: EFontColor.grey4,
+    width: '100%',
+})
+
 export const Parameter = {
     Container: ParameterContainer,
     Label: ParameterLabel,
     Text: ParameterText,
+    Input: Input,
 }

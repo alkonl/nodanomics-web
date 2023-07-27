@@ -28,7 +28,13 @@ const menuOptions: {
             type: 'Component',
             Component: Svg.Variable
         }
-    },
+    }, {
+        name: ELeftToolbarSideMenu.GroupedNodes,
+        preview: {
+            type: 'Component',
+            Component: () => <div>G</div>
+        }
+    }
 ]
 
 export function LeftToolbar() {
@@ -57,14 +63,14 @@ export function LeftToolbar() {
             >
                 {menuOptions.map((option) => {
                     const isSelected = option.name === selectedSideMenu;
-                   return (
-                    <LeftToolbarItem
-                        isSelected={isSelected}
-                        onClick={onSelectSideMenu}
-                        name={option.name}
-                        Component={option.preview.Component}
-                        key={option.name}
-                    />)
+                    return (
+                        <LeftToolbarItem
+                            isSelected={isSelected}
+                            onClick={onSelectSideMenu}
+                            name={option.name}
+                            Component={option.preview.Component}
+                            key={option.name}
+                        />)
                 })}
             </Box>
             <BaseSideMenu isOpen={isSideMenuOpen}>

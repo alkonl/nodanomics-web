@@ -68,7 +68,7 @@ export const VariableStatisticsParameter: React.FC<{
     max?: number,
 }> = ({resourcesCountHistory, min, max}) => {
 
-    const {series, isShowChart} = useMemo(() => {
+    const {series} = useMemo(() => {
         const chartData = [{
             name: 'Resources',
             data: resourcesCountHistory || [],

@@ -1,19 +1,18 @@
 import React from 'react';
 import {Parameter} from "../styledComponents";
-import {useUpdateElement, useUpdateNode} from "../../../../../hooks";
-import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
-import {ENodeTrigger} from "../../../../../interface";
+import {useUpdateNode} from "../../../../../hooks";
+import {ENodeTrigger, INodeData} from "../../../../../interface";
 
 export const NodeTagParameter: React.FC<{
+    nodeData: INodeData
+}> = ({nodeData}) => {
 
-}> = ({}) => {
-
-    const {updateNodeTrigger} = useUpdateNode({
-        elementId: selectedElementData?.id,
+    const {updateNodeData} = useUpdateNode({
+        nodeId: nodeData.id,
     })
-    const changeNodeTriggerMode = (event: SelectChangeEvent) => {
-        updateNodeTrigger({
-            trigger: event.target.value as ENodeTrigger,
+    const onTagChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        updateNodeData({
+            tag: event.target.value as ENodeTrigger,
         })
     }
 
@@ -22,7 +21,10 @@ export const NodeTagParameter: React.FC<{
             <Parameter.Label>
                 Tag
             </Parameter.Label>
-            <Parameter.Input/>
+            <Parameter.Input
+                value={nodeData.tag || ''}
+                onChange={onTagChange}
+            />
         </Parameter.Container>
     );
 };
