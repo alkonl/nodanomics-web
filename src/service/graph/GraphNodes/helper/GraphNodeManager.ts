@@ -1,4 +1,5 @@
 import {GraphBaseNode} from "../abstracts";
+import {GraphVariableNode} from "../GraphVariableNode";
 
 export class GraphNodeManager {
     private _nodes: GraphBaseNode[] = [];
@@ -28,5 +29,13 @@ export class GraphNodeManager {
             node.delete();
         }
         this._nodes = this._nodes.filter(node => node.data.id !== nodeId);
+    }
+
+    resetResourcesToProvide() {
+        this._nodes.forEach(node => {
+            if (node instanceof GraphVariableNode) {
+                node.resetResourcesToProvide();
+            }
+        });
     }
 }

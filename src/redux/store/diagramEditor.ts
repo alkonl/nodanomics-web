@@ -182,6 +182,7 @@ export const diagramEditorSlice = createSlice({
         },
         resetDiagramRun: (state) => {
             const resetNode = resetNodeStates(state.diagramNodes)
+            graph.resetResourcesToProvide()
             graph.updateNodesState(resetNode.map(node => node.data))
             runManager.updateState()
             runManager.resetCurrentStep()

@@ -61,6 +61,10 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
         return this.incomingEdges.some(edge => edge.source instanceof GraphSourceNode);
     }
 
+    resetResourcesToProvide() {
+        this._resourcesToProvide = [];
+    }
+
     updateState() {
         this.reCalculateMaxMinAvgValue()
         this.updateResourcesCountHistory()
@@ -92,6 +96,10 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
         this.pushAnyResources()
         this.pullAnyResourcesFromVariable()
         this.pullAllResourcesFromVariable()
+    }
+
+    updateRecoursesProvide() {
+        this._resourcesToProvide = [...this.data.resources];
     }
 
     private reCalculateMaxMinAvgValue() {

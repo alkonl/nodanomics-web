@@ -9,6 +9,7 @@ import {NodeActionParameter} from "../parameter/NodeActionParameter";
 import {ConnectionTypeParameter} from "../parameter/ConnectionTypeParameter";
 import {NodeTagParameter} from "../parameter/NodeTagParameter";
 import {ElementNameParameter} from "../parameter/ElementNameParameter";
+import {ConnectionVariableParameter} from "../parameter/ConnectionVariableParameter";
 
 
 export const PropertiesSection: React.FC<{
@@ -37,6 +38,7 @@ export const PropertiesSection: React.FC<{
                 {selectedElementData.elementType === EElementType.Connection
                     &&
                     <ConnectionTypeParameter selectedElementData={selectedElementData as IDiagramConnectionData}/>}
+                {selectedElementData?.type === EConnection.LogicConnection && <ConnectionVariableParameter selectedElementData={selectedElementData}/>}
             </Grid>
         </BaseSection>
     );

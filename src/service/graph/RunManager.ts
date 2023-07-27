@@ -1,6 +1,12 @@
 import {Graph} from "./Graph";
-import {GraphBaseNode, GraphInteractiveNode, GraphInvokableNode, GraphSourceNode} from "./GraphNodes";
-import {EDiagramNode, ENodeTrigger, isUpdateGraphNodeState} from "../../interface";
+import {
+    GraphBaseNode,
+    GraphInteractiveNode,
+    GraphInvokableNode,
+    GraphSourceNode,
+    GraphVariableNode
+} from "./GraphNodes";
+import {ENodeTrigger, isUpdateGraphNodeState} from "../../interface";
 import {GraphEventListenerNode} from "./GraphNodes/GraphEventListenerNode";
 
 export class RunManager {
@@ -21,7 +27,17 @@ export class RunManager {
 
     invokeStep() {
         this.incrementStep()
-        const sortedNodes = this.sortedNodes()
+        // const sortedNodes = this.sortedNodes()
+        const sortedNodes = this.graph.nodes.filter(node => {
+            if (node instanceof GraphInteractiveNode) {
+                if (node.triggerMode === ENodeTrigger.enabling) {
+                    return node.isTriggeredIncomingNodes
+                }
+                return true
+            }
+            return true
+        })
+
         sortedNodes.forEach(node => {
             if (node instanceof GraphInvokableNode) {
                 node.invokeStep()
@@ -40,11 +56,17 @@ export class RunManager {
             }
         })
         this.updateState()
+        this.graph.nodes.forEach(node => {
+            if (node instanceof GraphVariableNode) {
+                node.updateRecoursesProvide()
+            }
+        })
     }
 
 
     get triggeredNodes() {
-        const nodes = this.sortedNodes()
+        // const nodes = this.sortedNodes()
+        const nodes = this.graph.nodes
         return nodes.filter(node => {
             if (node instanceof GraphInteractiveNode && node.triggerMode === ENodeTrigger.enabling) {
                 return node.isTriggeredIncomingNodes
@@ -57,7 +79,8 @@ export class RunManager {
     }
 
     updateState() {
-        const nodes = this.sortedNodes()
+        // const nodes = this.sortedNodes()
+        const nodes = this.graph.nodes
         nodes.forEach(node => {
             if (isUpdateGraphNodeState(node)) {
                 node.updateState()
@@ -67,15 +90,6 @@ export class RunManager {
 
     private incrementStep() {
         this._currentStep++
-    }
-
-    private readonly executedOrder: {
-        [key in EDiagramNode]?: number
-    } = {
-        [EDiagramNode.Source]: 1,
-        [EDiagramNode.EventTrigger]: 2,
-        [EDiagramNode.EventListener]: 3,
-
     }
 
     private sortedNodes() {

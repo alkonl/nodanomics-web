@@ -1,10 +1,9 @@
 import React from 'react';
-import {Input} from "@mui/material";
-import {ParameterContainer, ParameterLabel} from "../styledComponents";
 import {EFontColor} from "../../../../../constant";
 import {ILogicConnectionData} from "../../../../../interface";
 import {useUpdateEdgeData} from "../../../../../hooks";
-
+import {ElementParameter} from "./ElementParameter";
+import {Parameter} from "../styledComponents";
 export const ConnectionVariableParameter: React.FC<{
     selectedElementData: ILogicConnectionData,
 }> = ({selectedElementData}) => {
@@ -22,11 +21,8 @@ export const ConnectionVariableParameter: React.FC<{
 
 
     return (
-        <ParameterContainer>
-            <ParameterLabel>
-                Variable
-            </ParameterLabel>
-            <Input
+        <ElementParameter label="Variable">
+            <Parameter.Input
                 value={selectedElementData.variableName || ''}
                 onChange={onVariableNameChange}
                 type="text"
@@ -34,6 +30,6 @@ export const ConnectionVariableParameter: React.FC<{
                     color: EFontColor.grey4,
                     width: '100%',
                 }}/>
-        </ParameterContainer>
+        </ElementParameter>
     );
 };
