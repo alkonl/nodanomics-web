@@ -15,7 +15,7 @@ import {
 } from "../../../hooks";
 import styles from './DiagramCanvas.module.scss'
 import {EConnection, EDiagramNode} from "../../../interface";
-import {EventListenerNode, EventTriggerNode, FormulaNode, PoolNode, SourceNode, VariableNode} from "../CutomNode";
+import {EventListenerNode, EventTriggerNode, FormulaNode, VariableNode, SourceNode, StaticVariableNode} from "../CutomNode";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../redux";
 import {Box} from "@mui/material";
 import {DataConnection} from "../CustomConnectionLine/DataConnection";
@@ -25,10 +25,10 @@ import {EventConnection} from "../CustomConnectionLine/EventConnection";
 
 
 const nodeTypes = {
-    [EDiagramNode.Variable]: VariableNode,
+    [EDiagramNode.StaticVariable]: StaticVariableNode,
     [EDiagramNode.Formula]: FormulaNode,
     [EDiagramNode.Source]: SourceNode,
-    [EDiagramNode.Pool]: PoolNode,
+    [EDiagramNode.Variable]: VariableNode,
     [EDiagramNode.EventTrigger]: EventTriggerNode,
     [EDiagramNode.EventListener]: EventListenerNode,
 };

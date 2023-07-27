@@ -1,5 +1,5 @@
 import {IFormulaNodeVariable} from "../../../../interface";
-import {GraphPoolNode} from "../GraphPoolNode";
+import {GraphVariableNode} from "../GraphVariableNode";
 import {GraphBaseEdge, GraphLogicEdge} from "../../GraphEdge";
 import * as Match from "mathjs";
 
@@ -13,7 +13,7 @@ export class GraphMatchManager {
 
     getVariables(): IFormulaNodeVariable[] {
         return this.getIncomingLogicEdge.map((edge) => {
-            if (edge.source instanceof GraphPoolNode) {
+            if (edge.source instanceof GraphVariableNode) {
                 return {
                     variableName: edge.variableName,
                     value: edge.source.resourcesCount,

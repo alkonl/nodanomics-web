@@ -42,7 +42,7 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
         name: `node name ${nodeId}`,
     }
     switch (type) {
-        case EDiagramNode.Variable: {
+        case EDiagramNode.StaticVariable: {
             return {
                 ...baseParams,
                 data: {
@@ -73,7 +73,7 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
                 }
             }
         }
-        case EDiagramNode.Pool: {
+        case EDiagramNode.Variable: {
             return {
                 ...baseParams,
                 data: {

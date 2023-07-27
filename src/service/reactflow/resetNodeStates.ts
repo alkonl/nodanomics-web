@@ -2,12 +2,31 @@ import {EDiagramNode, IReactFlowNode} from "../../interface";
 
 const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
     switch (node.data.type) {
-        case EDiagramNode.Pool:
+        case EDiagramNode.Variable:
             return {
                 ...node,
                 data: {
                     ...node.data,
                     resources: [],
+                    maxResources: undefined,
+                    minResources: undefined,
+                    resourcesCountHistory: undefined,
+                }
+            }
+        case EDiagramNode.EventListener:
+            return {
+                ...node,
+                data: {
+                    ...node.data,
+                    isEventTriggered: undefined,
+                }
+            }
+        case EDiagramNode.EventTrigger:
+            return {
+                ...node,
+                data: {
+                    ...node.data,
+                    isEventConditionMet: undefined,
                 }
             }
         default:

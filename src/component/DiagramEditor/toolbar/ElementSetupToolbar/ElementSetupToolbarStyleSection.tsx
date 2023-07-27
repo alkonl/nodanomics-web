@@ -2,7 +2,7 @@ import React from 'react';
 import {Box, Input} from "@mui/material";
 import {ColorPicker} from "../../../ColorPicker";
 import {EColor, EFontColor} from "../../../../constant";
-import {ParameterContainer, ParameterLabel, SectionTitle} from "./styledComponents";
+import {ParameterContainer, ParameterLabel, ElementSetupToolbarSectionTitle} from "./styledComponents";
 import {EElementType, IDiagramBaseInteractiveElementData} from "../../../../interface";
 import {useUpdateElement} from "../../../../hooks";
 
@@ -38,9 +38,9 @@ export const ElementSetupToolbarStyleSection: React.FC<{
     }
     return (
         <Box>
-            <SectionTitle>
+            <ElementSetupToolbarSectionTitle>
                 Style
-            </SectionTitle>
+            </ElementSetupToolbarSectionTitle>
             <Box sx={{
                 paddingLeft: 1,
                 display: 'flex',

@@ -1,9 +1,9 @@
 import {EDiagramNode, INodeData} from "../../../../interface";
 import {GraphBaseNode} from "../abstracts";
 import {GraphFormulaNode} from "../GraphFormulaNode";
-import {GraphVariableNode} from "../GraphVariableNode";
+import {GraphStaticVariableNode} from "../GraphStaticVariableNode";
 import {GraphSourceNode} from "../GraphSourceNode";
-import {GraphPoolNode} from "../GraphPoolNode";
+import {GraphVariableNode} from "../GraphVariableNode";
 import {RunManager} from "../../RunManager";
 import {GraphEventTriggerNode} from "../GraphEventTriggerNode";
 import {GraphEventListenerNode} from "../GraphEventListenerNode";
@@ -14,12 +14,12 @@ export class GraphNodeFactory {
         switch (value.type) {
             case EDiagramNode.Formula:
                 return new GraphFormulaNode(value, runManager);
-            case EDiagramNode.Variable:
-                return new GraphVariableNode(value, runManager);
+            case EDiagramNode.StaticVariable:
+                return new GraphStaticVariableNode(value, runManager);
             case EDiagramNode.Source:
                 return new GraphSourceNode(value, runManager);
-            case EDiagramNode.Pool:
-                return new GraphPoolNode(value, runManager);
+            case EDiagramNode.Variable:
+                return new GraphVariableNode(value, runManager);
             case EDiagramNode.EventTrigger:
                 return new GraphEventTriggerNode(value, runManager);
             case EDiagramNode.EventListener:

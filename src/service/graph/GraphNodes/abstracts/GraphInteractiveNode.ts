@@ -30,7 +30,6 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
         return this.incomingEdges.some(edge => {
             const source = edge.source;
             if (isIIsEventTriggered(source)) {
-                // console.log('GraphInteractiveNode.isTriggeredIncomingNodes', source)
                 return source.isEventTriggered
             }
             return false

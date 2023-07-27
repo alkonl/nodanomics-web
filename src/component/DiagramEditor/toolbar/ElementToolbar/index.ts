@@ -1,1 +1,1 @@
-export * from './ElementsToolbarDeprecated'
+export * from './ElementToolbar'

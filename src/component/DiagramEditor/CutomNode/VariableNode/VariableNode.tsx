@@ -1,75 +1,89 @@
 import React from 'react';
-import {Box, Input, Typography} from "@mui/material";
 // eslint-disable-next-line import/named
-import {Handle, NodeProps, Position} from 'reactflow';
-import {EElementType, IVariableNodeData} from "../../../../interface";
-import {diagramEditorActions, useAppDispatch} from "../../../../redux";
-import {useUpdateNode} from "../../../../hooks";
+import {Handle, NodeProps, Position} from "reactflow";
+import {Box} from "@mui/material";
+import {EConnection, IVariableNodeData} from "../../../../interface";
+import {NodeText} from "../styledComponent";
+import {EColor} from "../../../../constant";
 
-export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = ({data, id, isConnectable}) => {
-    const dispatch = useAppDispatch()
+export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = ({isConnectable, data}) => {
 
-    const {style} = data
-    const {textStyles} = style
-    const {setEditElement} = diagramEditorActions
-    const onClick = () => {
-        dispatch(setEditElement({
-            id,
-            elementType: EElementType.Node,
-        }))
-    }
-
-    const {updateNodeData} = useUpdateNode({nodeId: id})
-
-    const onChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const number = Number(event.target.value)
-        if (!isNaN(number)) {
-            updateNodeData({
-                value: number,
-            })
-        }
-
-    }
-
+    const currentResourcesValue = data.resources?.length.toFixed(1) || 0
+    const maxRegisteredValue = data.maxResources
+    const minRegisteredValue = data.minResources
 
     return (
-        <Box onClick={onClick}>
-            <Handle type="source" position={Position.Right} id="b" isConnectable={isConnectable}/>
+        <Box>
+            <Handle type="target" position={Position.Left} id={EConnection.DataConnection}
+                    isConnectable={isConnectable}
+                    style={{
+                        background: EColor.green,
+                    }}
+            />
+            <Handle type="source" position={Position.Right} id={EConnection.DataConnection}
+                    isConnectable={isConnectable}
+                    style={{
+                        background: EColor.green,
+                    }}
+            />
             <Box sx={{
-                position: 'relative',
-
-                backgroundColor: style.fillColor,
-                color: textStyles.fontColor,
-                borderWidth: style.borderWidth,
-                borderColor: style.borderColor,
+                borderWidth: 1,
+                borderColor: EColor.purple,
                 borderStyle: 'solid',
-                padding: '1px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: 150,
+                backgroundColor: EColor.black,
             }}>
-                <Typography sx={{
-                    fontSize: 10,
-                    fontWeight: 'bold',
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: 1,
+                    justifyItems: 'center',
+                    flex: 2,
                 }}>
-                    Variable: {data.name}
-                </Typography>
-                <Input
-                    type="text"
-                    value={data.value || ''}
-                    onChange={onChangeValue}
-                />
-            </Box>
-            <Box sx={{
-                height: '100%',
-                bottom: '-100%',
-                left: 0,
-            }}>
-                <Typography sx={{
-                    textAlign: textStyles.fontAlign,
-                    fontSize: 14,
-                    maxWidth: '140px',
+                    <NodeText.Name sx={{
+                        maxWidth: '100%',
+                        overflow: 'hidden',
+                        inlineSize: 100,
+                        textAlign: 'center',
+                        overflowWrap: 'break-word',
+                    }}>
+                        {data.name}
+                    </NodeText.Name>
+                    <NodeText.Value>
+                        {currentResourcesValue}
+                    </NodeText.Value>
+                </Box>
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '2px',
                 }}>
-                    {data.label}
-                </Typography>
+                    <Box>
+                        <NodeText.Name>
+                            Max
+                        </NodeText.Name>
+                        <NodeText.Value>
+                            {maxRegisteredValue}
+                        </NodeText.Value>
+                    </Box>
+                    <Box>
+                        <NodeText.Name>
+                            Min
+                        </NodeText.Name>
+                        <NodeText.Value>
+                            {minRegisteredValue}
+                        </NodeText.Value>
+                    </Box>
+                </Box>
             </Box>
+
         </Box>
     );
 };
