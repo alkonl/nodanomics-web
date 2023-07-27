@@ -1,15 +1,15 @@
 import React from 'react';
-import {ParameterContainer, ParameterLabel} from "../styledComponents";
-import {Input} from "@mui/material";
-import {EFontColor} from "../../../../../constant";
-import {useCurrentEditElement, useUpdateElement} from "../../../../../hooks";
-import {EConnection} from "../../../../../interface";
+import {useUpdateEdgeData} from "../../../../../hooks";
+import {IDataConnectionData} from "../../../../../interface";
+import {ElementParameter} from "./ElementParameter";
+import {Parameter} from "../styledComponents";
 
-export const ConnectionFormulaParameter = () => {
-    const selectedElementData = useCurrentEditElement()?.data
-    const {updateEdgeData} = useUpdateElement({
-        elementType: selectedElementData!.elementType,
-        elementId: selectedElementData?.id,
+export const ConnectionFormulaParameter: React.FC<{
+    connection: IDataConnectionData
+}> = ({connection}) => {
+
+    const {updateEdgeData} = useUpdateEdgeData({
+        edgeId: connection.id,
     })
 
     const onFormulaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,23 +18,14 @@ export const ConnectionFormulaParameter = () => {
         })
     }
 
-    if (selectedElementData?.type !== EConnection.DataConnection) {
-        throw new Error('FormulaParameter should only be used for DataConnection')
-    }
+
 
     return (
-        <ParameterContainer>
-            <ParameterLabel>
-                Formula
-            </ParameterLabel>
-            <Input
-                value={selectedElementData.formula || ''}
+        <ElementParameter label="Formula">
+            <Parameter.Input
+                value={connection.formula || ''}
                 onChange={onFormulaChange}
-                type="text"
-                sx={{
-                    color: EFontColor.grey4,
-                    width: '100%',
-                }}/>
-        </ParameterContainer>
+            />
+        </ElementParameter>
     );
 };

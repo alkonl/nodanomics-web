@@ -1,6 +1,7 @@
 import React from 'react';
 import {Box, Button, Popover} from "@mui/material";
 import {HexColorPicker} from "react-colorful";
+import {EColor} from "../../constant";
 
 export const ColorPicker: React.FC<{
     onChange?: (newColor: string) => void
@@ -24,16 +25,23 @@ export const ColorPicker: React.FC<{
     const id = open ? 'ColorPicker' : undefined;
     return (
         <Box>
-
-            <Button
+            <Box
                 sx={{
-                    width: '40px',
-                    border: '1px solid gray',
-                    height: '20px',
-                    borderRadius: 5,
-                    padding: '4px',
+                    width: '100%',
+                    height: '100%',
+                    minHeight: 30,
+                    flex: 1,
+                    borderColor: EColor.grey2,
+                    borderWidth: 3,
+                    borderRadius: 0,
+                    borderStyle: 'solid',
+                    padding: 0,
+                }}
+                style={{
+                    backgroundColor: value,
                 }}
                 onClick={handleClick}
+                component={Button}
             >
                 <Box
                     sx={{
@@ -42,7 +50,7 @@ export const ColorPicker: React.FC<{
                         backgroundColor: value,
                     }}
                 />
-            </Button>
+            </Box>
 
             <Popover
                 id={id}
@@ -54,7 +62,10 @@ export const ColorPicker: React.FC<{
                     horizontal: 'left',
                 }}
             >
-                <HexColorPicker color={value} onChange={onChange}/>
+                <HexColorPicker
+                    color={value}
+                    onChange={onChange}
+                />
             </Popover>
         </Box>
     );

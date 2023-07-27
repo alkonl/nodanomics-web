@@ -6,10 +6,10 @@ import {VariableStatisticsParameter} from "../parameter/VariableStatisticsParame
 
 export const VariableStatisticSection = () => {
     const selectedElementData = useCurrentEditElement()?.data
-    const accardionController = useToggle()
+    const accordionController = useToggle()
 
     useEffect(() => {
-        accardionController.open()
+        accordionController.open()
     }, [selectedElementData])
 
     if (selectedElementData?.type !== EDiagramNode.Variable) {
@@ -17,8 +17,8 @@ export const VariableStatisticSection = () => {
     }
     return (
         <BaseSection
-            isOpen={accardionController.isOpened}
-            toggle={accardionController.toggle}
+            isOpen={accordionController.isOpened}
+            toggle={accordionController.toggle}
             title="Statistic"
                     >
             <VariableStatisticsParameter

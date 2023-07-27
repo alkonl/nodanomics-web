@@ -1,8 +1,6 @@
 import React from 'react';
 // eslint-disable-next-line import/named
 import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
-import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
-import {EColor, EFontColor} from "../../../../../constant";
 import {ENodeTrigger, INodeData} from "../../../../../interface";
 import {useUpdateElement} from "../../../../../hooks";
 import {ElementParameter} from "./ElementParameter";

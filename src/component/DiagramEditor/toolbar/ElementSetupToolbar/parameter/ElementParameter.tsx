@@ -8,12 +8,12 @@ export const ElementParameter: React.FC<{
 }> = ({label, children}) => {
     return (
         <>
-            <Grid item xs={2.5}>
+            <Grid item xs={2.7}>
                 <Parameter.Label>
                     {label}
                 </Parameter.Label>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={5.8}>
                 {children}
             </Grid>
         </>

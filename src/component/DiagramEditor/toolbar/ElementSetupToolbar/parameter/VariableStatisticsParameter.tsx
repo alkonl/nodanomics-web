@@ -94,6 +94,10 @@ export const VariableStatisticsParameter: React.FC<{
                     width: '100%',
                     height: 120,
                     overflow: 'hidden',
+                    borderColor: EColor.black,
+                    borderWidth: 1,
+                    borderStyle: 'solid',
+                    boxSizing: 'border-box',
                 }}
                 ref={elementRef}
             >
