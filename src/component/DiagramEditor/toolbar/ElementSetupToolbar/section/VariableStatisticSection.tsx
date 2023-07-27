@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {BaseSection} from "./BaseSection";
 import {useCurrentEditElement, useToggle} from "../../../../../hooks";
 import {EDiagramNode} from "../../../../../interface";
-import {VariableStatisticsParameter} from "../VariableStatisticsParameter";
+import {VariableStatisticsParameter} from "../parameter/VariableStatisticsParameter";
 
 export const VariableStatisticSection = () => {
     const selectedElementData = useCurrentEditElement()?.data

@@ -1,11 +1,11 @@
 import React from 'react';
-import {ParameterContainer, ParameterLabel} from "./styledComponents";
-import {EConnection, IDiagramConnectionData} from "../../../../interface";
-import {useUpdateEdgeData} from "../../../../hooks";
+import {ParameterContainer, ParameterLabel} from "../styledComponents";
+import {EConnection, IDiagramConnectionData} from "../../../../../interface";
+import {useUpdateEdgeData} from "../../../../../hooks";
 // eslint-disable-next-line import/named
 import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
 import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
-import {EFontColor} from "../../../../constant";
+import {EFontColor} from "../../../../../constant";
 
 const nodeTriggerModes = Object.keys(EConnection)
 

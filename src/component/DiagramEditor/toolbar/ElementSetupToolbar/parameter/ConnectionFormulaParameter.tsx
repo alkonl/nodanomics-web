@@ -1,9 +1,9 @@
 import React from 'react';
-import {ParameterContainer, ParameterLabel} from "./styledComponents";
+import {ParameterContainer, ParameterLabel} from "../styledComponents";
 import {Input} from "@mui/material";
-import {EFontColor} from "../../../../constant";
-import {useCurrentEditElement, useUpdateElement} from "../../../../hooks";
-import {EConnection} from "../../../../interface";
+import {EFontColor} from "../../../../../constant";
+import {useCurrentEditElement, useUpdateElement} from "../../../../../hooks";
+import {EConnection} from "../../../../../interface";
 
 export const ConnectionFormulaParameter = () => {
     const selectedElementData = useCurrentEditElement()?.data

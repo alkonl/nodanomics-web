@@ -1,34 +1,30 @@
-import React, {useMemo} from 'react';
-import {ParameterContainer, ParameterLabel} from "./styledComponents";
-import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
-import {useCurrentEditElement, useUpdateElement} from "../../../../hooks";
-import {EDiagramNode, ENodeAction} from "../../../../interface";
-import {EFontColor} from "../../../../constant";
+import React from 'react';
 // eslint-disable-next-line import/named
 import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
+import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
+import {ParameterContainer, ParameterLabel} from "../styledComponents";
+import {EFontColor} from "../../../../../constant";
+import {ENodeTrigger} from "../../../../../interface";
+import {useCurrentEditElement, useUpdateElement} from "../../../../../hooks";
 
+const nodeTriggerModes = Object.keys(ENodeTrigger)
 
-export const NodeActionParameter = () => {
+export const NodeTriggerModeParameter = () => {
+
     const selectedElementData = useCurrentEditElement()?.data
 
-    if (selectedElementData && !('actionMode' in selectedElementData)) {
-        throw new Error(`no actionMode in selectedElementData ${JSON.stringify(selectedElementData)}`)
+    if (selectedElementData && !('trigger' in selectedElementData)) {
+        throw new Error(`no triggerMode in selectedElementData ${JSON.stringify(selectedElementData)}`)
     }
-    const {updateNodeData} = useUpdateElement({
+    const {updateNodeTrigger} = useUpdateElement({
         elementType: selectedElementData?.elementType,
         elementId: selectedElementData?.id,
     })
-    const changeNodeActionMode = (event: SelectChangeEvent) => {
-        updateNodeData({
-            actionMode: event.target.value as ENodeAction,
+    const changeNodeTriggerMode = (event: SelectChangeEvent) => {
+        updateNodeTrigger({
+            trigger: event.target.value as ENodeTrigger,
         })
     }
-    const nodeActionModes = useMemo(() => {
-        if (selectedElementData?.type === EDiagramNode.Source) {
-            return [ENodeAction.pushAll, ENodeAction.pushAny]
-        }
-        return Object.keys(ENodeAction)
-    }, [selectedElementData])
 
     return (
         <>
@@ -36,7 +32,7 @@ export const NodeActionParameter = () => {
                 selectedElementData &&
                 <ParameterContainer>
                     <ParameterLabel>
-                        Action
+                        Trigger
                     </ParameterLabel>
                     <FormControl
                         sx={{
@@ -51,13 +47,13 @@ export const NodeActionParameter = () => {
                             }}
                         />
                         <Select
-                            value={selectedElementData.actionMode}
-                            onChange={changeNodeActionMode}
+                            value={selectedElementData.trigger.mode}
+                            onChange={changeNodeTriggerMode}
                             sx={{
                                 color: EFontColor.grey4,
                             }}
                         >
-                            {nodeActionModes.map((mode) => (
+                            {nodeTriggerModes.map((mode) => (
                                 <MenuItem
                                     key={mode}
                                     value={mode}

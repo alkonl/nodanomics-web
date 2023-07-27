@@ -1,9 +1,9 @@
 import React from 'react';
 import {Input} from "@mui/material";
-import {ParameterContainer, ParameterLabel} from "./styledComponents";
-import {EFontColor} from "../../../../constant";
-import {ILogicConnectionData} from "../../../../interface";
-import {useUpdateEdgeData} from "../../../../hooks";
+import {ParameterContainer, ParameterLabel} from "../styledComponents";
+import {EFontColor} from "../../../../../constant";
+import {ILogicConnectionData} from "../../../../../interface";
+import {useUpdateEdgeData} from "../../../../../hooks";
 
 export const ConnectionVariableParameter: React.FC<{
     selectedElementData: ILogicConnectionData,

@@ -1,17 +1,9 @@
 import React from 'react';
-import {Box, Input, Typography} from "@mui/material";
+import {Box, Typography} from "@mui/material";
 import {EColor, EFontColor} from "../../../../constant";
-import {EConnection, EDiagramNode, EElementType, IDiagramConnectionData} from "../../../../interface";
+import {EDiagramNode, EElementType} from "../../../../interface";
 import {useCurrentEditElement, useUpdateElement} from "../../../../hooks";
-import {ParameterContainer, ParameterLabel, ElementSetupToolbarSectionTitle} from "./styledComponents";
-import {ElementSetupToolbarStyleSection} from "./ElementSetupToolbarStyleSection";
-import {ConnectionFormulaParameter} from "./ConnectionFormulaParameter";
-import {NodeActionParameter} from "./NodeActionParameter";
-import {NodeTriggerModeParameter} from "./NodeTriggerModeParameter";
-import {ConnectionTypeParameter} from "./ConnectionTypeParameter";
-import {ConnectionVariableParameter} from "./ConnectionVariableParameter";
-import {NodeDeleteButton} from "./NodeDeleteButton";
-import {VariableStatisticSection} from "./section";
+import {PropertiesSection, VariableStatisticSection} from "./section";
 
 
 export const ElementSetupToolbar = () => {
@@ -20,20 +12,6 @@ export const ElementSetupToolbar = () => {
         elementType: selectedElementData?.elementType,
         elementId: selectedElementData?.id,
     })
-
-
-    const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (selectedElementData?.elementType === EElementType.Node) {
-            updateNodeData({
-                name: event.target.value,
-            })
-        } else if (selectedElementData?.elementType === EElementType.Connection) {
-            updateEdgeData({
-                name: event.target.value,
-            })
-        }
-    }
-
 
     return (
         <Box
@@ -55,41 +33,7 @@ export const ElementSetupToolbar = () => {
                     }}>
                         {selectedElementData?.type}
                     </Typography>
-                    <ElementSetupToolbarSectionTitle>
-                        Function
-                    </ElementSetupToolbarSectionTitle>
-                    {selectedElementData && <ParameterContainer>
-                        <ParameterLabel>
-                            Name
-                        </ParameterLabel>
-                        <Input
-                            value={selectedElementData?.name || ''}
-                            onChange={onNameChange}
-                            type="text"
-                            sx={{
-                                color: EFontColor.grey4,
-                                width: '100%',
-                            }}/>
-                    </ParameterContainer>}
-                    {selectedElementData?.type === EConnection.DataConnection && <ConnectionFormulaParameter/>}
-                    {'trigger' in selectedElementData && <NodeTriggerModeParameter/>}
-                    {'actionMode' in selectedElementData && <NodeActionParameter/>}
-                    {selectedElementData.elementType === EElementType.Connection
-                        &&
-                        <ConnectionTypeParameter selectedElementData={selectedElementData as IDiagramConnectionData}/>}
-                    {selectedElementData.type === EConnection.LogicConnection
-                        && <ConnectionVariableParameter selectedElementData={selectedElementData}/>}
-                    <ElementSetupToolbarStyleSection element={selectedElementData}/>
-                    {selectedElementData.elementType === EElementType.Node && <Box
-                        sx={{
-                            mt: 2,
-                            flex: 1,
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                        }}
-                    >
-                        <NodeDeleteButton nodeId={selectedElementData.id}/>
-                    </Box>}
+                    <PropertiesSection selectedElementData={selectedElementData}/>
                     {selectedElementData?.type === EDiagramNode.Variable && <VariableStatisticSection/>}
                 </>
                 : <Typography>
