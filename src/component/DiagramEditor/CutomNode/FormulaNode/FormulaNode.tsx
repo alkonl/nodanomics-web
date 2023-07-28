@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Box, Input, Typography} from "@mui/material";
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from "reactflow";
@@ -7,20 +7,27 @@ import {EColor, EFontColor} from "../../../../constant";
 import {useUpdateNode} from "../../../../hooks";
 
 export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectable, data}) => {
+
+    const [formula, setFormula] = useState<string>(data.formula || '')
+
     const result = useMemo(() => {
         if (data.result && data.result.type === 'number') {
             return data.result.value
         }
     }, [data])
 
-    const {updateNodeData} = useUpdateNode({
+    const {updateNodeData} = useUpdateNode<IFormulaNodeData>({
         nodeId: data.id,
     })
     const onFormulaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        updateNodeData({
-            formula: event.target.value,
-        })
+        setFormula(event.target.value)
     }
+
+    useEffect(() => {
+        updateNodeData({
+            formula
+        })
+    }, [formula])
 
     return (
         <Box sx={{
@@ -39,7 +46,7 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectabl
             <Box>
                 <Input
                     onChange={onFormulaChange}
-                    value={data.formula || ''}
+                    value={formula}
                     sx={{
                     color: EFontColor.white,
                 }}/>

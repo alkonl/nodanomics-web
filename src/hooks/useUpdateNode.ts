@@ -3,20 +3,20 @@ import {
     EConnection,
     EElementType,
     ENodeTrigger,
-    IDiagramConnectionData,
+    IDiagramConnectionData, IDiagramNodeBaseData,
     IDiagramNodeStyle,
     INodeData
 } from "../interface";
 import {connectionInitialProps, connectionStyle} from "../service";
 
-export const useUpdateNode = ({nodeId}: {
+export const useUpdateNode = <IGenericNode extends IDiagramNodeBaseData = INodeData>({nodeId}: {
     nodeId?: string
 }) => {
     const dispatch = useAppDispatch()
     const {updateNodeData} = diagramEditorActions
     const {diagramNodes} = useDiagramEditorState()
     const selectedNode = diagramNodes.find(node => node.id === nodeId)
-    const updateNodeDataWrapper = (data: Partial<INodeData>) => {
+    const updateNodeDataWrapper = <R extends  IGenericNode, P = R>(data: Partial<P>) => {
         if (selectedNode) {
             dispatch(updateNodeData({
                 id: selectedNode.id,
