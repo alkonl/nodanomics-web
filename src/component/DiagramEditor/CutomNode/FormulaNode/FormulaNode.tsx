@@ -16,7 +16,7 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectabl
         }
     }, [data])
 
-    const {updateNodeData} = useUpdateNode<IFormulaNodeData>({
+    const {updateNodeData} = useUpdateNode({
         nodeId: data.id,
     })
     const onFormulaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +43,15 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectabl
                 isConnectable={isConnectable}
                 id={EConnection.LogicConnection}
             />
+            <Handle
+                type="source"
+                position={Position.Right}
+                isConnectable={isConnectable}
+                id={EConnection.EventConnection}
+                style={{
+                    background: EColor.blue,
+                }}
+            />
             <Box>
                 <Input
                     onChange={onFormulaChange}
@@ -57,7 +66,9 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectabl
                     <Box sx={{
                         overflow: 'auto',
                     }}>
-                        list of inputs
+                        <Typography>
+                            list of inputs
+                        </Typography>
                         {data.variables?.map((variable, index) => (
                             <Typography key={index}>
                                 {variable.variableName} = {variable.value}
