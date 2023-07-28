@@ -24,6 +24,7 @@ export interface IDiagramEditorState {
         elementType: EElementType
         id: string
     }
+    currentRunningDiagramStep?: number
 }
 
 const initialState: IDiagramEditorState = {
@@ -179,6 +180,7 @@ export const diagramEditorSlice = createSlice({
         invokeStep: (state) => {
             runManager.invokeStep()
             updateNodes(state.diagramNodes)
+            state.currentRunningDiagramStep = runManager.currentStep
         },
         resetDiagramRun: (state) => {
             const resetNode = resetNodeStates(state.diagramNodes)
@@ -187,6 +189,7 @@ export const diagramEditorSlice = createSlice({
             runManager.updateState()
             runManager.resetCurrentStep()
             updateNodes(state.diagramNodes)
+            state.currentRunningDiagramStep = runManager.currentStep
         },
         // using this action to render new values like variableName
         renderState: (state) => {

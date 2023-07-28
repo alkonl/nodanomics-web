@@ -3,6 +3,7 @@ import {
     GraphBaseNode,
     GraphInteractiveNode,
     GraphInvokableNode,
+    GraphNodeManager,
     GraphSourceNode,
     GraphVariableNode
 } from "./GraphNodes";
@@ -12,6 +13,7 @@ import {GraphEventListenerNode} from "./GraphNodes/GraphEventListenerNode";
 export class RunManager {
     private graph: Graph
     private _currentStep = 0
+    private invokedNodes: GraphNodeManager = new GraphNodeManager()
 
     constructor(graph: Graph) {
         this.graph = graph
@@ -27,45 +29,63 @@ export class RunManager {
 
     invokeStep() {
         this.incrementStep()
-        // const sortedNodes = this.sortedNodes()
+        this.invokeInitialStep()
+        while (this.triggerNotExecutedNodes.length > 0) {
+            this.invokeTriggeredNodes()
+        }
+        this.graph.nodes.forEach(node => {
+            if (node instanceof GraphVariableNode) {
+                node.updateRecoursesProvide()
+            }
+        })
+        console.log('invokedNodes', this.invokedNodes.nodes.filter(node => node instanceof GraphEventListenerNode))
+        this.invokedNodes.clear()
+    }
+
+    private invokeInitialStep() {
         const sortedNodes = this.graph.nodes.filter(node => {
             if (node instanceof GraphInteractiveNode) {
                 if (node.triggerMode === ENodeTrigger.enabling) {
                     return node.isTriggeredIncomingNodes
                 }
                 return true
+            } else if (node instanceof GraphEventListenerNode) {
+                return  false
             }
             return true
         })
-
         sortedNodes.forEach(node => {
             if (node instanceof GraphInvokableNode) {
                 node.invokeStep()
+                this.invokedNodes.add(node)
             }
         })
+        this.invokeTriggerEventListeners()
+    }
 
-        this.triggerListeners.forEach(node => {
-            if (node instanceof GraphEventListenerNode) {
-                node.invokeStep()
-            }
-        })
-        const newTriggeredNodes = this.triggeredNodes.filter(node => !sortedNodes.includes(node))
+    invokeTriggeredNodes() {
+        const newTriggeredNodes = this.triggeredNodes.filter(node => !this.invokedNodes.nodes.includes(node))
         newTriggeredNodes.forEach(node => {
-            if (node instanceof GraphInvokableNode) {
+            if (node instanceof GraphInvokableNode && !this.invokedNodes.nodes.includes(node)) {
+                this.invokedNodes.add(node)
                 node.invokeStep()
             }
         })
         this.updateState()
-        this.graph.nodes.forEach(node => {
-            if (node instanceof GraphVariableNode) {
-                node.updateRecoursesProvide()
+        this.invokeTriggerEventListeners()
+    }
+
+    private invokeTriggerEventListeners() {
+        this.triggerEventListeners.forEach(node => {
+            if(node.checkIsEventTriggered() && !this.invokedNodes.nodes.includes(node)){
+                node.invokeStep()
+                this.invokedNodes.add(node)
             }
         })
     }
 
 
     get triggeredNodes() {
-        // const nodes = this.sortedNodes()
         const nodes = this.graph.nodes
         return nodes.filter(node => {
             if (node instanceof GraphInteractiveNode && node.triggerMode === ENodeTrigger.enabling) {
@@ -74,12 +94,11 @@ export class RunManager {
         })
     }
 
-    get triggerListeners() {
-        return this.graph.nodes.filter(node => node instanceof GraphEventListenerNode)
+    get triggerEventListeners(): GraphEventListenerNode[] {
+        return this.graph.nodes.filter(node => node instanceof GraphEventListenerNode) as GraphEventListenerNode[]
     }
 
     updateState() {
-        // const nodes = this.sortedNodes()
         const nodes = this.graph.nodes
         nodes.forEach(node => {
             if (isUpdateGraphNodeState(node)) {
@@ -88,10 +107,17 @@ export class RunManager {
         })
     }
 
+
     private incrementStep() {
         this._currentStep++
     }
 
+    private get triggerNotExecutedNodes() {
+        return this.triggeredNodes.filter(node => !this.invokedNodes.includes(node) )
+    }
+
+
+    // maybe not needed
     private sortedNodes() {
         const startedSources = this.graph.nodes.filter(node => {
             if (node instanceof GraphSourceNode) {
@@ -127,5 +153,4 @@ export class RunManager {
         const children = node.outgoingEdges.map(edge => edge.target)
         return children as GraphBaseNode[]
     }
-
 }

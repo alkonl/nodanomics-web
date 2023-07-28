@@ -38,4 +38,12 @@ export class GraphNodeManager {
             }
         });
     }
+
+    clear() {
+        this._nodes = [];
+    }
+
+    includes(node: GraphBaseNode) {
+        return this._nodes.includes(node);
+    }
 }
