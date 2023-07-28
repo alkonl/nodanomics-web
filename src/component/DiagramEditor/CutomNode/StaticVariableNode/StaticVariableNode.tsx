@@ -37,7 +37,6 @@ export const StaticVariableNode: React.FC<NodeProps<IStaticVariableNodeData>> = 
             <Handle type="source" position={Position.Right} id="b" isConnectable={isConnectable}/>
             <Box sx={{
                 position: 'relative',
-
                 backgroundColor: style.fillColor,
                 color: textStyles.fontColor,
                 borderWidth: style.borderWidth,

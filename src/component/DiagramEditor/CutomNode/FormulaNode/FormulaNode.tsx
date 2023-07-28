@@ -84,6 +84,9 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectabl
                 display: 'flex',
                 flexDirection: 'column',
                 flex: 1,
+                borderWidth: 3,
+                borderColor: data.style.borderColor,
+                borderStyle: 'solid',
             }}
                  ref={elementRef}
             >

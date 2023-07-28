@@ -106,6 +106,7 @@ export const diagramEditorSlice = createSlice({
                     targetId: payload.target,
                     edgeData: payload.data,
                 })
+                runManager.updateState()
                 updateNodes(state.diagramNodes)
                 state.autoSaveCalled++
             }

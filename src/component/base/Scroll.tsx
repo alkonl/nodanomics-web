@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React from 'react';
 import {Box} from "@mui/material";
 
 import {EColor} from "../../constant";
