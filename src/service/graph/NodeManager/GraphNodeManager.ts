@@ -1,5 +1,4 @@
-import {GraphBaseNode} from "../abstracts";
-import {GraphVariableNode} from "../GraphVariableNode";
+import {GraphBaseNode, GraphVariableNode} from "../GraphNodes";
 
 export class GraphNodeManager {
     private _nodes: GraphBaseNode[] = [];
@@ -10,6 +9,10 @@ export class GraphNodeManager {
 
     add(node: GraphBaseNode) {
         this._nodes.push(node);
+    }
+
+    addBulk(nodes: GraphBaseNode[]) {
+        this._nodes = this._nodes.concat(nodes);
     }
 
     findById({nodeId}: {
@@ -23,12 +26,16 @@ export class GraphNodeManager {
         this._nodes = nodes;
     }
 
-    delete({nodeId}:{nodeId: string}) {
+    deleteNode({nodeId}:{nodeId: string}) {
         const node = this.findById({nodeId});
         if (node) {
             node.delete();
         }
         this._nodes = this._nodes.filter(node => node.data.id !== nodeId);
+    }
+
+    deleteNodeFromNodes(node: GraphBaseNode) {
+        this._nodes = this._nodes.filter(nodeInNodes => nodeInNodes.data.id !== node.data.id);
     }
 
     resetResourcesToProvide() {
