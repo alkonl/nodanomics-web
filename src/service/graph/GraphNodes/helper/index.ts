@@ -1,2 +1,2 @@
 export * from './GraphMatchManager'
-export * from './GraphNodeManager'
+export * from '../../NodeManager/GraphNodeManager'

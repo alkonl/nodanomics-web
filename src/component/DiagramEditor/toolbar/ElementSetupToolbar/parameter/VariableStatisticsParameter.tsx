@@ -3,9 +3,9 @@ import {Box} from "@mui/material";
 import ReactApexChart from "react-apexcharts";
 import {ApexOptions} from "apexcharts";
 
-import {useWidthAndHeight} from "../../../../hooks";
-import {EColor} from "../../../../constant";
-import {Parameter} from "./styledComponents";
+import {useWidthAndHeight} from "../../../../../hooks";
+import {EColor} from "../../../../../constant";
+import {Parameter} from "../styledComponents";
 
 
 const options: ApexOptions = {
@@ -26,6 +26,7 @@ const options: ApexOptions = {
         enabled: false
     },
     chart: {
+        background: EColor.grey,
         zoom: {
             enabled: false
         },
@@ -43,9 +44,6 @@ const options: ApexOptions = {
         dashArray: 0,
     },
     grid: {
-        column: {
-            colors: [EColor.purple2],
-        },
         borderColor: EColor.black,
         padding: {
             top: -29,
@@ -70,7 +68,7 @@ export const VariableStatisticsParameter: React.FC<{
     max?: number,
 }> = ({resourcesCountHistory, min, max}) => {
 
-    const {series, isShowChart} = useMemo(() => {
+    const {series} = useMemo(() => {
         const chartData = [{
             name: 'Resources',
             data: resourcesCountHistory || [],
@@ -96,16 +94,20 @@ export const VariableStatisticsParameter: React.FC<{
                     width: '100%',
                     height: 120,
                     overflow: 'hidden',
+                    borderColor: EColor.black,
+                    borderWidth: 1,
+                    borderStyle: 'solid',
+                    boxSizing: 'border-box',
                 }}
                 ref={elementRef}
             >
-                {isShowChart && <ReactApexChart
+                <ReactApexChart
                     width={elementSize.width}
                     height={elementSize.height}
                     options={options}
                     series={series}
                     type="line"
-                />}
+                />
             </Box>
             <Box sx={{
                 paddingTop: 1,

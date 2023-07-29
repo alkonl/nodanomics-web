@@ -1,6 +1,6 @@
 import {GraphBaseNode} from "./GraphBaseNode";
-import {IDiagramNodeBaseData} from "../../../../interface";
+import {IDiagramNodeBaseData, INodeData} from "../../../../interface";
 
-export abstract class GraphInvokableNode<IGenericNodeData extends IDiagramNodeBaseData> extends GraphBaseNode<IGenericNodeData> {
+export abstract class GraphInvokableNode<IGenericNodeData extends IDiagramNodeBaseData = INodeData> extends GraphBaseNode<IGenericNodeData> {
     abstract invokeStep(): void
 }

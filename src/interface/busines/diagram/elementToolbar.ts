@@ -1,4 +1,5 @@
-import {EElementType, IBaseDiagramElement} from "./diagramElement";
+import {IBaseDiagramElement} from "./diagramElement";
+import {EElementShow} from "../../../component/DiagramEditor/toolbar";
 
 export interface IDiagramElementPreviewToolbarElement extends IBaseDiagramElement {
     tooltip: string;
@@ -6,5 +7,5 @@ export interface IDiagramElementPreviewToolbarElement extends IBaseDiagramElemen
 }
 
 export type DiagramElementPreviewToolbar = {
-    [key in EElementType]: IDiagramElementPreviewToolbarElement[]
+    [key in EElementShow]: IDiagramElementPreviewToolbarElement[]
 }

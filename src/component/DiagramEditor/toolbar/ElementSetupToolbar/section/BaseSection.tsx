@@ -37,14 +37,12 @@ export const BaseSection: React.FC<{
                         margin: 0,
                         minHeight: '0 !important',
                         '& .MuiAccordionSummary-content': {
-                            margin: 0,
+                            margin: '0 !important',
                             padding: 0,
                             minHeight: 0,
                             height: 'auto',
                         },
                         '& .Mui-expanded': {
-                            margin: 0,
-                            padding: 0,
                             minHeight: '0 !important',
                             height: 'auto',
                         }

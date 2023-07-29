@@ -1,88 +1,91 @@
 import React from 'react';
-import {
-    DiagramElementPreviewToolbar,
-    EConnection,
-    EDiagramNode,
-    EElementType,
-    ELogic
-} from "../../../../interface";
+import {DiagramElementPreviewToolbar, EConnection, EDiagramNode, EElementType, ELogic} from "../../../../interface";
 import {Box} from "@mui/material";
 import {EColor} from "../../../../constant";
 import {ElementToolbarSection} from "./ElementToolbarSection";
 import {useInvokeStep, useResetDiagramRun} from "../../../../hooks";
 import {MButton} from '../../../base';
+import {RunningStep} from "./RunningStep";
+
+
+export enum EElementShow {
+    Node = 'Node',
+    Connection = 'Connection',
+    Event = 'Event',
+    Logic = 'Logic',
+}
 
 const mockDiagramNodes: DiagramElementPreviewToolbar = {
-    [EElementType.Node]: [{
+    [EElementShow.Node]: [{
         elementType: EElementType.Node,
         type: EDiagramNode.StaticVariable,
         tooltip: 'Static Variable',
         toolbarName: 'SV',
     },
-    //     {
-    //     elementType: EElementType.Node,
-    //     type: EDiagramNode.D,
-    //     tooltip: 'no',
-    //     toolbarName: 'D',
-    // },
+        //     {
+        //     elementType: EElementType.Node,
+        //     type: EDiagramNode.D,
+        //     tooltip: 'no',
+        //     toolbarName: 'D',
+        // },
         {
-        elementType: EElementType.Node,
-        type: EDiagramNode.Source,
-        tooltip: 'no',
-        toolbarName: 'S',
-    }, {
-        elementType: EElementType.Node,
-        type: EDiagramNode.Formula,
-        tooltip: 'Formula',
-        toolbarName: 'F',
-    },
-    //     {
-    //     elementType: EElementType.Node,
-    //     type: EDiagramNode.DOWN,
-    //     tooltip: 'Variable',
-    //     toolbarName: 'Do',
-    // },
+            elementType: EElementType.Node,
+            type: EDiagramNode.Source,
+            tooltip: 'no',
+            toolbarName: 'S',
+        }, {
+            elementType: EElementType.Node,
+            type: EDiagramNode.Formula,
+            tooltip: 'Formula',
+            toolbarName: 'F',
+        },
+        //     {
+        //     elementType: EElementType.Node,
+        //     type: EDiagramNode.DOWN,
+        //     tooltip: 'Variable',
+        //     toolbarName: 'Do',
+        // },
         {
+            elementType: EElementType.Node,
+            type: EDiagramNode.Variable,
+            tooltip: 'Variable',
+            toolbarName: 'V',
+        }],
+    [EElementShow.Logic]: [{
         elementType: EElementType.Node,
-        type: EDiagramNode.Variable,
-        tooltip: 'Variable',
-        toolbarName: 'V',
-    }],
-    [EElementType.Logic]: [{
-        elementType: EElementType.Logic,
         type: ELogic.M,
         tooltip: 'M',
         toolbarName: 'M',
     }, {
-        elementType: EElementType.Logic,
+        elementType: EElementType.Node,
         type: ELogic.W,
         tooltip: 'W',
         toolbarName: 'W',
     }],
-    [EElementType.Event]: [{
-        elementType: EElementType.Event,
+    [EElementShow.Event]: [{
+        elementType: EElementType.Node,
         type: EDiagramNode.EventTrigger,
         tooltip: 'Trigger',
         toolbarName: 'T',
     }, {
-        elementType: EElementType.Event,
+        elementType: EElementType.Node,
         type: EDiagramNode.EventListener,
         tooltip: 'Listener',
         toolbarName: 'L',
     }],
     [EElementType.Connection]: [
-    //     {
-    //     elementType: EElementType.Connection,
-    //     type: EDiagramNode.ConnectionNode,
-    //     tooltip: 'Con',
-    //     toolbarName: 'Con',
-    // },
+        //     {
+        //     elementType: EElementType.Connection,
+        //     type: EDiagramNode.ConnectionNode,
+        //     tooltip: 'Con',
+        //     toolbarName: 'Con',
+        // },
         {
-        elementType: EElementType.Connection,
-        type: EConnection.LogicConnection,
-        tooltip: '2',
-        toolbarName: '2',
-    }],
+            elementType: EElementType.Connection,
+            type: EConnection.LogicConnection,
+            tooltip: '2',
+            toolbarName: '2',
+        }],
 
 }
 
@@ -126,6 +129,7 @@ export const ElementToolbar = () => {
             <MButton.Submit onClick={resetDiagramRun}>
                 Reset
             </MButton.Submit>
+            <RunningStep/>
         </Box>
     );
 };

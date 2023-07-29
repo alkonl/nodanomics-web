@@ -132,7 +132,7 @@ export class Graph {
     deleteNode({nodeId}: {
         nodeId: string
     }) {
-        this.nodesManager.delete({nodeId});
+        this.nodesManager.deleteNode({nodeId});
         const edgesToDelete = this._edges.filter(edge => edge.source.data.id === nodeId || edge.target.data.id === nodeId);
         edgesToDelete.forEach(edge => {
             this.deleteEdge(edge.data.id);
@@ -147,5 +147,9 @@ export class Graph {
                 graphNode.updateNode(node)
             }
         })
+    }
+
+    resetResourcesToProvide() {
+        this.nodesManager.resetResourcesToProvide();
     }
 }

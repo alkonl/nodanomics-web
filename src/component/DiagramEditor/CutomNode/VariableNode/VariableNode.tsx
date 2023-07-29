@@ -27,8 +27,8 @@ export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = ({isConnecta
                     }}
             />
             <Box sx={{
-                borderWidth: 1,
-                borderColor: EColor.purple,
+                borderWidth: 3,
+                borderColor: data.style.borderColor,
                 borderStyle: 'solid',
                 display: 'flex',
                 justifyContent: 'center',
