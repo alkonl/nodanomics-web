@@ -21,6 +21,7 @@ const logicConnection: Omit<ILogicConnectionData, 'id' | 'targetId' | 'sourceId'
     name: 'logic connection',
     type: EConnection.LogicConnection,
     label: 'some label',
+    variableName: 'a',
     style: initialNodeDiagramElement
 }
 

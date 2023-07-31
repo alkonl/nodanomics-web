@@ -5,6 +5,7 @@ export enum EFontColor {
     grey4 = '#4D4D4D',
     purple = '#c64bff',
     black = '#000000d6',
+    red = '#f44336',
 }
 
 export enum EColor {

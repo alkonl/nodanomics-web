@@ -1,10 +1,16 @@
-import {IFormulaNodeData, IFormulaNodeVariable, IFormulaResult, IUpdateGraphNodeState} from "../../../interface";
+import {
+    IFormulaNodeData,
+    IFormulaNodeVariable,
+    IFormulaResult,
+    IGetNodeExternalValue,
+    IUpdateGraphNodeState
+} from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphInvokableNode} from "./abstracts";
 import {GraphMatchManager} from "./helper";
 
 export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
-    implements IUpdateGraphNodeState {
+    implements IUpdateGraphNodeState, IGetNodeExternalValue {
 
     private readonly matchManager: GraphMatchManager = new GraphMatchManager(this.incomingEdges)
 
@@ -16,8 +22,12 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
         return this.data.formula;
     }
 
-    get variable() {
-        return this.data;
+    get nodeExternalValue() {
+        return this.result?.value
+    }
+
+    get result() {
+        return this.data.result;
     }
 
     invokeStep() {
@@ -28,6 +38,7 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
         this.updateVariables()
         this.updateResult()
     }
+
 
     private updateResult() {
         if (this.formula) {

@@ -1,6 +1,6 @@
 import {
     ENodeAction,
-    IDiagramNodeBaseData,
+    IDiagramNodeBaseData, IGetNodeExternalValue,
     IResource,
     IUpdateGraphNodeState,
     IVariableNodeData
@@ -11,7 +11,7 @@ import {GraphSourceNode} from "./GraphSourceNode";
 import {RunManager} from "../RunManager";
 
 export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
-    implements IUpdateGraphNodeState {
+    implements IUpdateGraphNodeState, IGetNodeExternalValue {
 
     private _resourcesToProvide: IResource[] = [];
 
@@ -38,7 +38,7 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
         return this.data.minResources;
     }
 
-    get currentResources() {
+    get currentResourcesCount() {
         return this.data.resources.length;
     }
 
@@ -46,8 +46,8 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
         return this.data.resources;
     }
 
-    get resourcesCount() {
-        return this.data.resources.length;
+    get nodeExternalValue() {
+        return this.currentResourcesCount
     }
 
 
@@ -84,8 +84,8 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
         this._data = {
             ...this.data,
             resourcesCountHistory: this.data.resourcesCountHistory
-                ? [...this.data.resourcesCountHistory, this.currentResources]
-                : [this.currentResources]
+                ? [...this.data.resourcesCountHistory, this.currentResourcesCount]
+                : [this.currentResourcesCount]
         }
     }
 
@@ -103,16 +103,16 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
     }
 
     private reCalculateMaxMinAvgValue() {
-        if (this.maxResources === undefined || this.maxResources <= this.currentResources) {
+        if (this.maxResources === undefined || this.maxResources <= this.currentResourcesCount) {
             this._data = {
                 ...this.data,
-                maxResources: this.currentResources
+                maxResources: this.currentResourcesCount
             }
         }
-        if (this.minResources === undefined || this.minResources >= this.currentResources) {
+        if (this.minResources === undefined || this.minResources >= this.currentResourcesCount) {
             this._data = {
                 ...this.data,
-                minResources: this.currentResources
+                minResources: this.currentResourcesCount
             }
         }
     }
