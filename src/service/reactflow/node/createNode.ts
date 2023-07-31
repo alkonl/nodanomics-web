@@ -12,6 +12,7 @@ import {
 } from "../../../interface";
 
 import {nanoid} from 'nanoid'
+import {loopSize} from "../../../constant/loopSize";
 
 const getId = () => `nodeId_${nanoid()}`;
 
@@ -114,8 +115,8 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
                     type,
                     style: {
                         ...baseData.style,
-                        width: 200,
-                        height: 200,
+                        width: loopSize.minWidth,
+                        height: loopSize.minHeight,
                     }
                 },
 

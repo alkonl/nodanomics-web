@@ -142,6 +142,7 @@ export const diagramEditorSlice = createSlice({
                     width: payload.size.width,
                     height: payload.size.height,
                 }
+                graph.updateNodeData(payload.nodeId, node.data)
                 state.autoSaveCalled++
             }
         },

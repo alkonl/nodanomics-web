@@ -9,7 +9,7 @@ import {Scroll} from "../../../base";
 
 export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectable, data}) => {
 
-    const [formula, setFormula] = useState<string>(data.formula || '')
+    const [formula, setFormula] = useState<string| undefined>(data.formula)
 
     const result = useMemo(() => {
         if (data.result && data.result.type === 'number') {
@@ -24,11 +24,7 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectabl
         setFormula(event.target.value)
     }
 
-    useEffect(() => {
-        updateNodeData({
-            formula
-        })
-    }, [formula])
+
 
     const duplicateMessage = useMemo(() => {
         const duplicates = data.variables?.filter((variable, index, array) => {
@@ -48,6 +44,14 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectabl
             setInitialContentHeight(elementSize.height)
         }
     }, [elementSize])
+    //
+    useEffect(() => {
+        if (formula) {
+            updateNodeData({
+                formula
+            })
+        }
+    }, [formula])
 
     const contentHeight = useMemo(() => {
         if (!data.variables || !initialContentHeight) {

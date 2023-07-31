@@ -5,9 +5,9 @@ import {EColor} from "../../../../constant";
 import {NodeProps} from "reactflow";
 import {IMicroLoopNodeData} from "../../../../interface";
 
-export const MicroLoop: React.FC<NodeProps<IMicroLoopNodeData>> = ({
-                                                                       data
-                                                                   }) => {
+export const MicroLoop: React.FC<NodeProps<IMicroLoopNodeData>> = (props) => {
+    const {data} = props
+    console.log(`MicroLoopNode: ${data.id}`, props)
     return (
         <Box
             sx={{
@@ -16,10 +16,10 @@ export const MicroLoop: React.FC<NodeProps<IMicroLoopNodeData>> = ({
                 borderWidth: 1,
                 borderColor: EColor.black,
                 borderStyle: 'solid',
-                padding: 1,
             }}
         >
             MicroLoop
+            id: {data.id}
         </Box>
     );
 };
