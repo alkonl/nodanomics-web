@@ -29,39 +29,56 @@ export const useUpdateNode = <IGenericNode extends IDiagramNodeBaseData = INodeD
     const updateNodeTrigger = ({trigger}: { trigger: ENodeTrigger }) => {
         if (selectedNode) {
             if (trigger === ENodeTrigger.interactive) {
-                dispatch(updateNodeData({
-                    ...selectedNode.data,
-                    id: selectedNode.id,
-                    type: selectedNode?.data.type,
+                updateNodeDataWrapper({
                     trigger: {
                         mode: trigger,
                         isClicked: false
                     }
-                }))
+                })
+                // dispatch(updateNodeData({
+                //     ...selectedNode.data,
+                //     id: selectedNode.id,
+                //     type: selectedNode?.data.type,
+                //     trigger: {
+                //         mode: trigger,
+                //         isClicked: false
+                //     }
+                // }))
             } else {
-                dispatch(updateNodeData({
-                    ...selectedNode.data,
-                    id: selectedNode.id,
-                    type: selectedNode?.data.type,
+                updateNodeDataWrapper({
                     trigger: {
-                        mode: trigger
+                        mode: trigger,
                     }
-                }))
+                })
+                // dispatch(updateNodeData({
+                //     ...selectedNode.data,
+                //     id: selectedNode.id,
+                //     type: selectedNode?.data.type,
+                //     trigger: {
+                //         mode: trigger
+                //     }
+                // }))
             }
         }
     }
 
     const unableInteractiveTrigger = () => {
         if (selectedNode) {
-            dispatch(updateNodeData({
-                ...selectedNode.data,
-                id: selectedNode.id,
-                type: selectedNode?.data.type,
+            updateNodeDataWrapper({
                 trigger: {
                     mode: ENodeTrigger.interactive,
                     isClicked: true
                 }
-            }))
+            })
+            // dispatch(updateNodeData({
+            //     ...selectedNode.data,
+            //     id: selectedNode.id,
+            //     type: selectedNode?.data.type,
+            //     trigger: {
+            //         mode: ENodeTrigger.interactive,
+            //         isClicked: true
+            //     }
+            // }))
         }
     }
 

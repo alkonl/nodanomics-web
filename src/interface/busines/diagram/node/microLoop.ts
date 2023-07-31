@@ -1,14 +1,13 @@
-import {EDiagramNode} from "./structures";
-import {IDiagramBaseInteractiveElementData} from "../diagramElement";
+import {EDiagramNode, IDiagramNodeBaseData} from "./structures";
 import {IDiagramNodeStyle} from "../elementStyle";
+import {INodeSize} from "./additional";
 
-export interface IMicroLoopNodeDataStyle extends IDiagramNodeStyle {
-    width: number;
-    height: number;
-}
+export type IMicroLoopNodeDataStyle = INodeSize & IDiagramNodeStyle;
 
-export interface IMicroLoopNodeData extends IDiagramBaseInteractiveElementData {
+
+export interface IMicroLoopNodeData extends IDiagramNodeBaseData {
     type: EDiagramNode.MicroLoop;
     loopCount?: number;
     style: IMicroLoopNodeDataStyle;
 }
+

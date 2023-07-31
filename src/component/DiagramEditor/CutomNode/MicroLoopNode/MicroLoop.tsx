@@ -11,11 +11,12 @@ export const MicroLoop: React.FC<NodeProps<IMicroLoopNodeData>> = ({
     return (
         <Box
             sx={{
-                width: data.style.width || 200,
-                height: data.style.width || 200,
+                width: data.style.width,
+                height: data.style.height,
                 borderWidth: 1,
                 borderColor: EColor.black,
-                borderStyle: 'solid'
+                borderStyle: 'solid',
+                padding: 1,
             }}
         >
             MicroLoop

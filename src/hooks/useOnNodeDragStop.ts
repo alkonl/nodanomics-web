@@ -1,18 +1,19 @@
 // eslint-disable-next-line import/named
-import {EDiagramNode, IReactFlowNode} from "../interface";
-import {MouseEvent as ReactMouseEvent, useCallback} from "react";
+import {EDiagramNode, IReactFlowNode, isINodeSize} from "../interface";
+import {MouseEvent as ReactMouseEvent} from "react";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 
 export const findParent = (node: IReactFlowNode, nodes: IReactFlowNode[]) => {
-    if(node.type === EDiagramNode.MicroLoop){
+    if (node.type === EDiagramNode.MicroLoop) {
         return undefined
     }
     return nodes.find((nds: IReactFlowNode) => {
-        const ndsSize = {
-            width: nds.data.style.width,
-            height: nds.data.style.height
-        }
-        if (nds.type === EDiagramNode.MicroLoop) {
+
+        if (nds.type === EDiagramNode.MicroLoop && isINodeSize(nds.data.style)) {
+            const ndsSize = {
+                width: nds.data.style.width,
+                height: nds.data.style.height
+            }
             if (
                 nds.position.x <= node.position.x &&
                 nds.position.x + parseInt(ndsSize.width?.toString() || "0") >=
@@ -33,7 +34,6 @@ export const useOnNodeDragStop = () => {
     const {updateNodeParent} = diagramEditorActions
     return (event: ReactMouseEvent, node: IReactFlowNode) => {
         const parentNode = findParent(node, diagramNodes)
-        console.log('parent', parentNode)
 
         if (parentNode) {
             dispatch(updateNodeParent({

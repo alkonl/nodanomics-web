@@ -5,7 +5,7 @@ import 'reactflow/dist/style.css';
 
 import {
     useEdgeUpdateManager,
-    useOnDrop,
+    useOnDrop, useOnNodeDrag,
     useOnNodeDragStart,
     useOnNodeDragStop,
     useUploadDiagramOnServer
@@ -53,6 +53,7 @@ export const DiagramCanvas = () => {
     const {diagramNodes, diagramEdges} = useDiagramEditorState()
 
     const onNodeDragStop = useOnNodeDragStop()
+    const onNodeDrag = useOnNodeDrag()
 
     const {onNodesChange, addEdge} = diagramEditorActions
     const onNodesChangeHandler = useCallback((nodes: NodeChange[]) => dispatch(onNodesChange(nodes)), [dispatch])
@@ -106,6 +107,7 @@ export const DiagramCanvas = () => {
                     fitView
                     onInit={setReactFlowInstance}
                     onDrop={onDrop}
+                    onNodeDrag={onNodeDrag}
                     onDragOver={onDragOver}
                     onNodeDragStart={onNodeDragStart}
                     onNodeDragStop={onNodeDragStop}

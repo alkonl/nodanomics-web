@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {DiagramCanvas} from "../DiagramCanvas";
 import style from './DiagramEditor.module.scss'
-import {ElementSetupToolbar, LeftToolbar} from "../toolbar";
+import {ElementSetupToolbar, LeftToolbar, ElementToolbar} from "../toolbar";
 import {useGetEditDiagramFromServer, useWidthAndHeight} from "../../../hooks";
 import {Box} from "@mui/material";
-import {ElementToolbar} from "../toolbar/ElementToolbar/ElementToolbar";
 import {DiagramEditorHeader} from "../DiagramEditorHeader";
 import {CONFIG} from "../../../utils";
 

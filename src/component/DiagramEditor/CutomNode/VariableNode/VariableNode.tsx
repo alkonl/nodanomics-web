@@ -5,6 +5,7 @@ import {Box} from "@mui/material";
 import {EConnection, IVariableNodeData} from "../../../../interface";
 import {NodeText} from "../styledComponent";
 import {EColor} from "../../../../constant";
+import {ResizeParentContainer} from "../container";
 
 export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = ({isConnectable, data}) => {
 
@@ -13,6 +14,7 @@ export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = ({isConnecta
     const minRegisteredValue = data.minResources
 
     return (
+
         <Box>
             <Handle type="target" position={Position.Left} id={EConnection.DataConnection}
                     isConnectable={isConnectable}

@@ -5,7 +5,7 @@ import {
     INodeData,
     IReactFlowEdge,
     IDiagramConnectionData,
-    EElementType, IReactFlowEdgeConnection
+    EElementType, IReactFlowEdgeConnection, isINodeSize
 } from "../../interface";
 // eslint-disable-next-line import/named
 import {addEdge, applyEdgeChanges, applyNodeChanges, NodeChange, EdgeChange, updateEdge, Connection} from "reactflow";
@@ -124,7 +124,6 @@ export const diagramEditorSlice = createSlice({
         },
         updateNodeParent: (state, {payload}: PayloadAction<{ node: IReactFlowNode, parentNode: IReactFlowNode }>) => {
             const node = state.diagramNodes.find(node => node.id === payload.node.id)
-            console.log('updateNodeParent.node: ', node, payload,  state.diagramNodes)
             if (node) {
                 node.parentNode = payload.parentNode.id
                 node.position = {
@@ -132,6 +131,17 @@ export const diagramEditorSlice = createSlice({
                     y: payload.node.position.y - payload.parentNode.position.y,
                 }
                 node.extent = 'parent'
+                state.autoSaveCalled++
+            }
+        },
+        updateNodeSize: (state, {payload}: PayloadAction<{ nodeId: string, size: { width: number, height: number } }>) => {
+            const node = state.diagramNodes.find(node => node.id === payload.nodeId)
+            if (node && isINodeSize(node.data.style)) {
+                node.data.style = {
+                    ...node.data.style,
+                    width: payload.size.width,
+                    height: payload.size.height,
+                }
                 state.autoSaveCalled++
             }
         },
