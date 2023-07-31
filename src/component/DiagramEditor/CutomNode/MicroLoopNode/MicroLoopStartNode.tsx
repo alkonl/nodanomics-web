@@ -1,11 +1,10 @@
 import React from 'react';
 import {Box} from "@mui/material";
 // eslint-disable-next-line import/named
-import {Handle, NodeProps, Position} from "reactflow";
+import {NodeProps, Position} from "reactflow";
 import {LogicHandle} from "../../CustomHandle";
 import {IMicroLoopNodeData} from "../../../../interface";
 import {EventHandle} from "../../CustomHandle/EventHandle";
-import {EColor} from "../../../../constant";
 
 export const MicroLoopStartNode: React.FC<NodeProps<IMicroLoopNodeData>> = ({
                                                                                 isConnectable
@@ -13,7 +12,7 @@ export const MicroLoopStartNode: React.FC<NodeProps<IMicroLoopNodeData>> = ({
     return (
         <Box sx={{
             width: 10,
-            height: 30,
+            height: 36,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',

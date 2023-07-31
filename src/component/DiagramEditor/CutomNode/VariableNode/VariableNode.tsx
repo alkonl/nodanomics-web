@@ -5,10 +5,10 @@ import {Box} from "@mui/material";
 import {EConnection, IVariableNodeData} from "../../../../interface";
 import {NodeText} from "../styledComponent";
 import {EColor} from "../../../../constant";
-import {ResizeParentContainer} from "../container";
+import {BaseNodeContainer} from "../container/BaseNodeContainer";
 
-export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = ({isConnectable, data}) => {
-
+export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = (props) => {
+    const {isConnectable, data} = props
     const currentResourcesValue = data.resources?.length.toFixed(1) || 0
     const maxRegisteredValue = data.maxResources
     const minRegisteredValue = data.minResources
@@ -28,63 +28,63 @@ export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = ({isConnecta
                         background: EColor.green,
                     }}
             />
-            <Box sx={{
-                borderWidth: 3,
-                borderColor: data.style.borderColor,
-                borderStyle: 'solid',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: 150,
-                backgroundColor: EColor.black,
-            }}>
+            <BaseNodeContainer node={props}>
+
                 <Box sx={{
+
                     display: 'flex',
-                    flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    gap: 1,
-                    justifyItems: 'center',
-                    flex: 2,
+                    width: 150,
                 }}>
-                    <NodeText.Name sx={{
-                        maxWidth: '100%',
-                        overflow: 'hidden',
-                        inlineSize: 100,
-                        textAlign: 'center',
-                        overflowWrap: 'break-word',
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: 1,
+                        justifyItems: 'center',
+                        flex: 2,
                     }}>
-                        {data.name}
-                    </NodeText.Name>
-                    <NodeText.Value>
-                        {currentResourcesValue}
-                    </NodeText.Value>
-                </Box>
-                <Box sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '2px',
-                }}>
-                    <Box>
-                        <NodeText.Name>
-                            Max
+                        <NodeText.Name sx={{
+                            maxWidth: '100%',
+                            overflow: 'hidden',
+                            inlineSize: 100,
+                            textAlign: 'center',
+                            overflowWrap: 'break-word',
+                        }}>
+                            {data.name}
                         </NodeText.Name>
                         <NodeText.Value>
-                            {maxRegisteredValue}
+                            {currentResourcesValue}
                         </NodeText.Value>
                     </Box>
-                    <Box>
-                        <NodeText.Name>
-                            Min
-                        </NodeText.Name>
-                        <NodeText.Value>
-                            {minRegisteredValue}
-                        </NodeText.Value>
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: '2px',
+                    }}>
+                        <Box>
+                            <NodeText.Name>
+                                Max
+                            </NodeText.Name>
+                            <NodeText.Value>
+                                {maxRegisteredValue}
+                            </NodeText.Value>
+                        </Box>
+                        <Box>
+                            <NodeText.Name>
+                                Min
+                            </NodeText.Name>
+                            <NodeText.Value>
+                                {minRegisteredValue}
+                            </NodeText.Value>
+                        </Box>
                     </Box>
                 </Box>
-            </Box>
+            </BaseNodeContainer>
 
         </Box>
     );

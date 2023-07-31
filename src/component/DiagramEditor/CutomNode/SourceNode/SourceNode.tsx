@@ -6,12 +6,14 @@ import {EConnection, ISourceNodeData} from "../../../../interface";
 import {NodeTextName} from "../styledComponent";
 import {InteractiveNodeContainer} from "../container";
 import {EColor} from "../../../../constant";
+import {BaseNodeContainer} from "../container/BaseNodeContainer";
 
-export const SourceNode: React.FC<NodeProps<ISourceNodeData>> = ({isConnectable, data}) => {
+export const SourceNode: React.FC<NodeProps<ISourceNodeData>> = (props) => {
+    const {isConnectable, data} = props
     return (
         <InteractiveNodeContainer data={data}>
+            <BaseNodeContainer node={props}>
             <Box sx={{
-                border: '1px solid #777',
                 padding: 1,
                 display: 'flex',
                 flexDirection: 'column',
@@ -38,6 +40,7 @@ export const SourceNode: React.FC<NodeProps<ISourceNodeData>> = ({isConnectable,
                     background: EColor.orange,
                 }}
             />
+            </BaseNodeContainer>
         </InteractiveNodeContainer>
     );
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 // eslint-disable-next-line import/named
 import {Handle, HandleProps} from "reactflow";
-import {EConnection} from "../../../interface";
 import {EColor} from "../../../constant";
 
 export const EventHandle: React.FC<Pick<HandleProps, 'isConnectable' | 'type' | 'position'> & {
