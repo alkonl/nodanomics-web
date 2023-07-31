@@ -22,12 +22,6 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
         tooltip: 'Static Variable',
         toolbarName: 'SV',
     },
-        //     {
-        //     elementType: EElementType.Node,
-        //     type: EDiagramNode.D,
-        //     tooltip: 'no',
-        //     toolbarName: 'D',
-        // },
         {
             elementType: EElementType.Node,
             type: EDiagramNode.Source,
@@ -39,12 +33,6 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
             tooltip: 'Formula',
             toolbarName: 'F',
         },
-        //     {
-        //     elementType: EElementType.Node,
-        //     type: EDiagramNode.DOWN,
-        //     tooltip: 'Variable',
-        //     toolbarName: 'Do',
-        // },
         {
             elementType: EElementType.Node,
             type: EDiagramNode.Variable,
@@ -53,8 +41,8 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
         }],
     [EElementShow.Logic]: [{
         elementType: EElementType.Node,
-        type: ELogic.M,
-        tooltip: 'M',
+        type: EDiagramNode.MicroLoop,
+        tooltip: 'Micro Loop',
         toolbarName: 'M',
     }, {
         elementType: EElementType.Node,
@@ -74,12 +62,6 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
         toolbarName: 'L',
     }],
     [EElementType.Connection]: [
-        //     {
-        //     elementType: EElementType.Connection,
-        //     type: EDiagramNode.ConnectionNode,
-        //     tooltip: 'Con',
-        //     toolbarName: 'Con',
-        // },
         {
             elementType: EElementType.Connection,
             type: EConnection.LogicConnection,

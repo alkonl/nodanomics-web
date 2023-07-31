@@ -106,6 +106,21 @@ export const createNode = ({type, flowInstance, wrapperNode, event}: {
                 }
             }
         }
+        case EDiagramNode.MicroLoop: {
+            return {
+                ...baseParams,
+                data: {
+                    ...baseData,
+                    type,
+                    style: {
+                        ...baseData.style,
+                        width: 200,
+                        height: 200,
+                    }
+                },
+
+            }
+        }
         default :
             console.error(`wrong node type: ${type}`)
             break;

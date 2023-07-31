@@ -7,6 +7,7 @@ export enum EDiagramNode {
     Variable = 'Variable',
     EventTrigger = 'EventTrigger',
     EventListener = 'EventListener',
+    MicroLoop = 'MicroLoop',
 }
 
 

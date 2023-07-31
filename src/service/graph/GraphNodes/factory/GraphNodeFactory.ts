@@ -8,6 +8,7 @@ import {RunManager} from "../../RunManager";
 import {GraphEventTriggerNode} from "../GraphEventTriggerNode";
 import {GraphEventListenerNode} from "../GraphEventListenerNode";
 import {Graph} from "../../Graph";
+import {GraphMicroLoopNode} from "../GraphMicroLoopNode";
 
 export class GraphNodeFactory {
     static createNode(value: INodeData, runManager: RunManager, graph: Graph): GraphBaseNode {
@@ -24,6 +25,8 @@ export class GraphNodeFactory {
                 return new GraphEventTriggerNode(value, runManager);
             case EDiagramNode.EventListener:
                 return new GraphEventListenerNode(value, runManager, graph.nodesManager);
+            case EDiagramNode.MicroLoop:
+                return new GraphMicroLoopNode(value, runManager);
             default:
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore

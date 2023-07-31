@@ -122,6 +122,19 @@ export const diagramEditorSlice = createSlice({
             updateNodes(state.diagramNodes)
             state.autoSaveCalled++
         },
+        updateNodeParent: (state, {payload}: PayloadAction<{ node: IReactFlowNode, parentNode: IReactFlowNode }>) => {
+            const node = state.diagramNodes.find(node => node.id === payload.node.id)
+            console.log('updateNodeParent.node: ', node, payload,  state.diagramNodes)
+            if (node) {
+                node.parentNode = payload.parentNode.id
+                node.position = {
+                    x: payload.node.position.x - payload.parentNode.position.x,
+                    y: payload.node.position.y - payload.parentNode.position.y,
+                }
+                node.extent = 'parent'
+                state.autoSaveCalled++
+            }
+        },
         deleteNode: (state, {payload}: PayloadAction<{ nodeId: string }>) => {
             state.diagramNodes = state.diagramNodes.filter(node => node.id !== payload.nodeId)
             state.autoSaveCalled++

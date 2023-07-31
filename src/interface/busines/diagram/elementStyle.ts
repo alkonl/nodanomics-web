@@ -4,5 +4,5 @@ export interface IDiagramNodeStyle {
     borderWidth: number;
     borderColor: string;
     fillColor?: string;
-    textStyles: IDiagramTextStyle
+    textStyles: IDiagramTextStyle,
 }
