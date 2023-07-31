@@ -1,7 +1,7 @@
 import React from 'react';
 // eslint-disable-next-line import/named
 import {BaseEdge, EdgeLabelRenderer, EdgeProps, getBezierPath} from 'reactflow';
-import {Box, Button, Typography} from "@mui/material";
+import {Box, Button} from "@mui/material";
 import {diagramEditorActions, useAppDispatch} from "../../../redux";
 import {EElementType, ILogicConnectionData} from "../../../interface";
 import {EColor} from "../../../constant";

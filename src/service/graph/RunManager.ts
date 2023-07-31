@@ -37,6 +37,7 @@ export class RunManager {
     invokeStep() {
         this.incrementStep()
         this.invokeInitialStep()
+        this.updateState()
         this.graph.nodes.forEach(node => {
             if (node instanceof GraphVariableNode) {
                 node.updateRecoursesProvide()
