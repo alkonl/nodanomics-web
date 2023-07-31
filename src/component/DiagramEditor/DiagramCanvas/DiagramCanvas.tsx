@@ -16,7 +16,7 @@ import {
     EventListenerNode,
     EventTriggerNode,
     FormulaNode,
-    MicroLoop,
+    MicroLoopNode, MicroLoopStartNode,
     SourceNode,
     StaticVariableNode,
     VariableNode
@@ -36,7 +36,8 @@ const nodeTypes = {
     [EDiagramNode.Variable]: VariableNode,
     [EDiagramNode.EventTrigger]: EventTriggerNode,
     [EDiagramNode.EventListener]: EventListenerNode,
-    [EDiagramNode.MicroLoop]: MicroLoop,
+    [EDiagramNode.MicroLoop]: MicroLoopNode,
+    [EDiagramNode.MicroLoopStartNode]: MicroLoopStartNode,
 };
 
 const edgeTypes = {

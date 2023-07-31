@@ -61,6 +61,11 @@ export const diagramEditorSlice = createSlice({
             state.autoSaveCalled++
             graph.addOrGetNode(state.diagramNodes[length - 1].data)
         },
+        addBulkNodes: (state, {payload}: PayloadAction<IReactFlowNode[]>) => {
+            state.diagramNodes = state.diagramNodes.concat(payload)
+            state.autoSaveCalled++
+            payload.forEach(node => graph.addOrGetNode(node.data))
+        },
         onNodesChange: (state, {payload}: PayloadAction<NodeChange[]>) => {
             state.diagramNodes = applyNodeChanges<INodeData>(payload, state.diagramNodes)
             state.autoSaveCalled++

@@ -1,129 +1,36 @@
-// eslint-disable-next-line import/named
-import {ReactFlowInstance} from "reactflow";
-import {DragEvent} from "react";
-import {initialNodeDiagramElement} from "../../../constant";
-import {
-    EDiagramNode,
-    EElementType,
-    ENodeAction,
-    ENodeTrigger,
-    IDiagramNodeBaseData,
-    IReactFlowNode
-} from "../../../interface";
+import {EDiagramNode, ICreatedCompoundNode, ICreatedNode} from "../../../interface";
+import {createBaseNode} from "./createBaseNode";
+import {loopSize} from "../../../constant";
+import {addAdditionalData} from "./addAdditionalData";
 
-import {nanoid} from 'nanoid'
-import {loopSize} from "../../../constant/loopSize";
+const compoundNodeTypes = [EDiagramNode.MicroLoop]
 
-const getId = () => `nodeId_${nanoid()}`;
-
-
-export const createNode = ({type, flowInstance, wrapperNode, event}: {
+export const createNode = ({type, position}: {
     type: EDiagramNode,
-    flowInstance: ReactFlowInstance
-    wrapperNode: HTMLDivElement
-    event: DragEvent<HTMLDivElement>
-}): IReactFlowNode | undefined => {
-    const reactFlowBounds = wrapperNode?.getBoundingClientRect();
-    const position = flowInstance.project({
-        x: event.clientX - reactFlowBounds.left,
-        y: event.clientY - reactFlowBounds.top,
-    });
-    const nodeId = getId();
-    const baseParams = {
-        id: nodeId,
-        type,
-        position,
+    position: { x: number, y: number }
+}): ICreatedNode | ICreatedCompoundNode => {
+    if (compoundNodeTypes.includes(type)) {
+        const loopNode = createBaseNode({type: EDiagramNode.MicroLoop, position: position})
+        const startNodeBase = createBaseNode({
+            type: EDiagramNode.MicroLoopStartNode, position: {
+                x: 10,
+                y: loopSize.minHeight / 2
+            },
+        })
+        const startNode = addAdditionalData({
+            node: startNodeBase, addition: {
+                parentNode: loopNode.id,
+                extent: 'parent',
+                dragHandle: '.custom-drag-handle-no-drag',
+            }
+        })
+        return {
+            type: 'compound',
+            nodes: [loopNode, startNode]
+        }
     }
-    const baseData: IDiagramNodeBaseData = {
-        elementType: EElementType.Node,
-        type,
-        label: '',
-        id: nodeId,
-        style: initialNodeDiagramElement,
-        name: `node name ${nodeId}`,
-    }
-    switch (type) {
-        case EDiagramNode.StaticVariable: {
-            return {
-                ...baseParams,
-                data: {
-                    ...baseData,
-                    type,
-                },
-            };
-        }
-        case EDiagramNode.Formula: {
-            return {
-                ...baseParams,
-                data: {
-                    ...baseData,
-                    type,
-                },
-            }
-        }
-        case EDiagramNode.Source: {
-            return {
-                ...baseParams,
-                data: {
-                    ...baseData,
-                    type,
-                    trigger: {
-                        mode: ENodeTrigger.automatic,
-                    },
-                    actionMode: ENodeAction.pushAny,
-                }
-            }
-        }
-        case EDiagramNode.Variable: {
-            return {
-                ...baseParams,
-                data: {
-                    ...baseData,
-                    type,
-                    resources: [],
-                    actionMode: ENodeAction.pullAny,
-                    trigger: {
-                        mode: ENodeTrigger.passive,
-                    },
-                }
-            }
-        }
-        case EDiagramNode.EventTrigger: {
-            return {
-                ...baseParams,
-                data: {
-                    ...baseData,
-                    type,
-                    eventName: '',
-                }
-            }
-        }
-        case EDiagramNode.EventListener: {
-            return {
-                ...baseParams,
-                data: {
-                    ...baseData,
-                    type,
-                }
-            }
-        }
-        case EDiagramNode.MicroLoop: {
-            return {
-                ...baseParams,
-                data: {
-                    ...baseData,
-                    type,
-                    style: {
-                        ...baseData.style,
-                        width: loopSize.minWidth,
-                        height: loopSize.minHeight,
-                    }
-                },
-
-            }
-        }
-        default :
-            console.error(`wrong node type: ${type}`)
-            break;
+    return {
+        type: 'node',
+        node: createBaseNode({type, position})
     }
 }

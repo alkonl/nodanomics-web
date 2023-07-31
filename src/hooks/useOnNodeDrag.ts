@@ -1,7 +1,7 @@
 import {MouseEvent as ReactMouseEvent, useCallback} from "react";
 import {IReactFlowNode, isINodeSize} from "../interface";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
-import {loopSize} from "../constant/loopSize";
+import {loopSize} from "../constant";
 
 
 export const useOnNodeDrag = () => {

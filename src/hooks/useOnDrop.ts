@@ -1,6 +1,6 @@
 import {DragEvent, useCallback} from "react";
 import {EDiagramNode} from "../interface";
-import {createNode} from "../service";
+import {createNodeOnDrag} from "../service";
 // eslint-disable-next-line import/named
 import {ReactFlowInstance} from "reactflow";
 import {diagramEditorActions, useAppDispatch} from "../redux";
@@ -10,9 +10,9 @@ export const useOnDrop = ({flowWrapper, flowInstance}: {
     flowInstance?: ReactFlowInstance
 }) => {
     const dispatch = useAppDispatch()
-    const {addNode} = diagramEditorActions
-    // const uploadDiagram = useUploadDiagramOnServer()
-    // const {addNode} = useWrappedEditDiagram()
+    const {addNode, addBulkNodes} = diagramEditorActions
+
+
     return useCallback(
         (event: DragEvent<HTMLDivElement>) => {
             if (flowWrapper && flowInstance) {
@@ -25,14 +25,19 @@ export const useOnDrop = ({flowWrapper, flowInstance}: {
                     console.error(`Invalid element type: ${type}`)
                     return;
                 }
-                const newNode = createNode({
+                const newNode = createNodeOnDrag({
                     type,
                     flowInstance,
                     event,
                     wrapperNode: flowWrapper
                 })
                 if (newNode) {
-                    dispatch(addNode(newNode))
+                    if (newNode.type === 'compound') {
+                        dispatch(addBulkNodes(newNode.nodes))
+                    } else if (newNode.type === 'node') {
+                        dispatch(addNode(newNode.node))
+                    }
+
                 }
             }
         },
