@@ -119,6 +119,7 @@ export const createBaseNode = ({type, position,additionalData}: {
                 data: {
                     ...baseData,
                     type,
+                    currentLoopCount: 0,
                     style: {
                         ...baseData.style,
                         width: loopSize.minWidth,

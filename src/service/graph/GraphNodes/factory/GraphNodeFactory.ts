@@ -55,17 +55,11 @@ export type IGraphCreatedNodes = {
 
 export class GraphNodeFactory {
 
-    static createNode(params: IGraphCreateNode): IGraphCreatedNodes | IGraphCreatedNode {
+    static createNode(params: IGraphCreateNode) {
         if (params.type === ECreatedNodeType.Simple) {
-            return {
-                type: 'Node',
-                node: this.createSimpleNode(params),
-            }
+            return this.createSimpleNode(params)
         } else {
-            return {
-                type: 'Nodes',
-                nodes: this.createCompoundNode(params),
-            }
+            return this.createCompoundNode(params)
         }
     }
 
@@ -129,7 +123,7 @@ export class GraphNodeFactory {
                         runManager,
                         type: ECreatedNodeType.Simple,
                     });
-                    return [startNodeNode, microLoopNode]
+                    return [microLoopNode, startNodeNode];
                 }
                 throw new Error(`Start node is not a micro loop start node`)
             }

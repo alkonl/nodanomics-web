@@ -29,6 +29,15 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                     isEventConditionMet: undefined,
                 }
             }
+        case EDiagramNode.MicroLoop:{
+            return {
+                ...node,
+                data: {
+                    ...node.data,
+                    currentLoopCount: 0,
+                }
+            }
+        }
         default:
             return node
     }

@@ -6,4 +6,14 @@ export class GraphMicroLoopStartNode extends GraphBaseNode<IMicroLoopStartNodeDa
     constructor(value: IMicroLoopStartNodeData, runManager: RunManager) {
         super(value, runManager);
     }
+
+    setIsLoopActive(isLoopActive: boolean) {
+        this.updateNode({isLoopActive})
+    }
+
+    setLoopCurrentCount(loopCurrentCount: number) {
+        this.updateNode({loopCurrentCount})
+    }
+
+
 }

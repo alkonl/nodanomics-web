@@ -8,7 +8,7 @@ export type IMicroLoopNodeDataStyle = INodeSize & IDiagramNodeStyle;
 export interface IMicroLoopNodeData extends IDiagramNodeBaseData {
     type: EDiagramNode.MicroLoop;
     loopCount?: number;
-    currentLoopCount?: number;
+    currentLoopCount: number;
     style: IMicroLoopNodeDataStyle;
 }
 
