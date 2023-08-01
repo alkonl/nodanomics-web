@@ -38,6 +38,16 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                 }
             }
         }
+        case EDiagramNode.MicroLoopStartNode:{
+            return {
+                ...node,
+                data: {
+                    ...node.data,
+                    isLoopActive: undefined,
+                    loopCurrentCount: undefined,
+                }
+            }
+        }
         default:
             return node
     }

@@ -17,15 +17,19 @@ export class GraphMicroLoopNode extends GraphInvokableNode<IMicroLoopNodeData> {
     }
 
     invokeStep() {
+        this.updateStartNode()
         if(!this.isLoopFinished){
             this.addStep()
-            this._startNode.setIsLoopActive(true)
-            this._startNode.setLoopCurrentCount(this.loopCurrentCount)
         }
     }
 
+    updateStartNode(){
+        this._startNode.setIsLoopActive(!this.isLoopFinished)
+        this._startNode.setLoopCurrentCount(this.loopCurrentCount)
+    }
+
     private addStep() {
-        const currentLoopCount = this.data.currentLoopCount || 0;
+        const currentLoopCount = this.data.currentLoopCount
         this._data = {
             ...this.data,
             currentLoopCount: currentLoopCount + 1,
@@ -36,7 +40,10 @@ export class GraphMicroLoopNode extends GraphInvokableNode<IMicroLoopNodeData> {
         if(!this.data.loopCount){
             return  true
         }
-        return this.data.currentLoopCount >= this.data.loopCount
+        const res = this.data.currentLoopCount >= this.data.loopCount
+        console.log(`count ${this.data.currentLoopCount} >=:  ${this.data.loopCount}`, !res)
+
+        return res
     }
 
 

@@ -1,11 +1,20 @@
 import {GraphBaseNode} from "../abstracts";
-import {IGetNodeExternalValue, IMicroLoopStartNodeData} from "../../../../interface";
+import {IGetNodeExternalValue, IIsEventTriggered, IMicroLoopStartNodeData} from "../../../../interface";
 import {RunManager} from "../../RunManager";
 
 export class GraphMicroLoopStartNode extends GraphBaseNode<IMicroLoopStartNodeData>
- implements IGetNodeExternalValue{
+    implements IGetNodeExternalValue, IIsEventTriggered {
+
     constructor(value: IMicroLoopStartNodeData, runManager: RunManager) {
         super(value, runManager);
+    }
+
+    get nodeExternalValue() {
+        return this.data.loopCurrentCount
+    }
+
+    get isEventTriggered() {
+        return this.data.isLoopActive
     }
 
     setIsLoopActive(isLoopActive: boolean) {
@@ -16,8 +25,5 @@ export class GraphMicroLoopStartNode extends GraphBaseNode<IMicroLoopStartNodeDa
         this.updateNode({loopCurrentCount})
     }
 
-    get nodeExternalValue() {
-        return this.data.loopCurrentCount
-    }
 
 }
