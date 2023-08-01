@@ -22,9 +22,9 @@ export class GraphNodeManager {
 
     }
 
-    setNewNodes(nodes: GraphBaseNode[]) {
-        this._nodes = nodes;
-    }
+    // setNewNodes(nodes: GraphBaseNode[]) {
+    //     this._nodes = nodes;
+    // }
 
     deleteNode({nodeId}:{nodeId: string}) {
         const node = this.findById({nodeId});

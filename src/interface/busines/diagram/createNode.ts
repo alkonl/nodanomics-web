@@ -1,4 +1,4 @@
-import {EDiagramNode, INodeData, IReactFlowNode} from "./node";
+import {INodeData, IReactFlowNode} from "./node";
 
 
 export enum ECreatedNodeType {
@@ -17,7 +17,7 @@ export type ICreatedMicroLoopNode<T> = {
 
 export type IReactFlowCreatedCompoundNode = ICreatedMicroLoopNode<IReactFlowNode>
 
-export type IGraphCreatedCompoundNode = ICreatedMicroLoopNode<INodeData>
+export type ICreatedCompoundNodeForGraph = ICreatedMicroLoopNode<INodeData>
 
 export type ICreatedSimpleNode = {
     type: ECreatedNodeType.Simple

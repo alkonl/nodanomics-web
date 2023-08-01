@@ -15,19 +15,19 @@ export type IAdditionalMicroLoopData = {
     startNode: GraphMicroLoopStartNode,
 }
 
-export type ICreatedNode = IAdditionalMicroLoopData;
+export type ICreateNodeAdditionalData = IAdditionalMicroLoopData;
 
 export type IGraphCreateSimpleNode = {
     type: ECreatedNodeType.Simple,
     value: {
         node: INodeData,
-        additionalData?: ICreatedNode
+        additionalData?: ICreateNodeAdditionalData
     },
     runManager: RunManager,
     graph: Graph
 }
 
-export type IGraphCreateCompoundNode = {
+export type IGraphCreateMicroLoopNode = {
     type: ECreatedNodeType.MicroLoop,
     value: {
         nodes: {
@@ -39,8 +39,9 @@ export type IGraphCreateCompoundNode = {
     graph: Graph
 }
 
+export type IGraphCreateCompoundNodeParams = IGraphCreateMicroLoopNode
 
-export type IGraphCreateNode = IGraphCreateSimpleNode | IGraphCreateCompoundNode;
+export type IGraphCreateNode = IGraphCreateSimpleNode | IGraphCreateCompoundNodeParams;
 
 export type IGraphCreatedNode = {
     type: 'Node',
@@ -99,11 +100,12 @@ export class GraphNodeFactory {
         }
     }
 
-    static createCompoundNode(parmas: IGraphCreateCompoundNode): GraphBaseNode[] {
-        const {value, runManager, graph} = parmas;
-        switch (parmas.type) {
+    static createCompoundNode(params: IGraphCreateMicroLoopNode): GraphBaseNode[] {
+        const {value, runManager, graph} = params;
+        switch (params.type) {
             case ECreatedNodeType.MicroLoop: {
                 const {microLoopNodeData, startNodeData} = value.nodes;
+                console.log('startNodeNode before',)
                 const startNodeNode = GraphNodeFactory.createSimpleNode({
                     value: {
                         node: startNodeData,
@@ -112,6 +114,8 @@ export class GraphNodeFactory {
                     runManager,
                     type: ECreatedNodeType.Simple,
                 });
+                console.log('startNodeNode after',startNodeNode)
+
                 if (startNodeNode instanceof GraphMicroLoopStartNode) {
                     const microLoopNode = GraphNodeFactory.createSimpleNode({
                         value: {
