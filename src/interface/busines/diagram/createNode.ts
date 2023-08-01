@@ -10,8 +10,8 @@ export enum ECreatedNodeType {
 export type ICreatedMicroLoopNode<T> = {
     type: ECreatedNodeType.MicroLoop
     nodes: {
-        microLoop: T,
-        startNode: T,
+        microLoopNodeData: T,
+        startLoopNodeData: T,
     }
 }
 

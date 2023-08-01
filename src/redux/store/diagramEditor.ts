@@ -67,10 +67,16 @@ export const diagramEditorSlice = createSlice({
         addCompoundNodes: (state, {payload}: PayloadAction<IReactFlowCreatedCompoundNode>) => {
             switch (payload.type) {
                 case ECreatedNodeType.MicroLoop: {
-                    const {microLoop, startNode} = payload.nodes
-                    state.diagramNodes.push(microLoop)
-                    state.diagramNodes.push(startNode)
-                    graph.addCompoundNode(payload)
+                    const {microLoopNodeData, startLoopNodeData} = payload.nodes
+                    state.diagramNodes.push(microLoopNodeData)
+                    state.diagramNodes.push(startLoopNodeData)
+                    graph.addCompoundNode({
+                        type: ECreatedNodeType.MicroLoop,
+                        nodes: {
+                            microLoopNodeData: microLoopNodeData.data,
+                            startLoopNodeData: startLoopNodeData.data,
+                        }
+                    })
                     break
                 }
                 default:

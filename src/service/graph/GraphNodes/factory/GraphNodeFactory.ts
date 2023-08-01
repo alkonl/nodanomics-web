@@ -1,4 +1,4 @@
-import {ECreatedNodeType, EDiagramNode, IGraphCreatedCompoundNode, INodeData} from "../../../../interface";
+import {ECreatedNodeType, EDiagramNode, INodeData} from "../../../../interface";
 import {GraphBaseNode} from "../abstracts";
 import {GraphFormulaNode} from "../GraphFormulaNode";
 import {GraphStaticVariableNode} from "../GraphStaticVariableNode";
@@ -17,11 +17,60 @@ export type IAdditionalMicroLoopData = {
 
 export type ICreatedNode = IAdditionalMicroLoopData;
 
-export class GraphNodeFactory {
-    static createSimpleNode(value: {
+export type IGraphCreateSimpleNode = {
+    type: ECreatedNodeType.Simple,
+    value: {
         node: INodeData,
         additionalData?: ICreatedNode
-    }, runManager: RunManager, graph: Graph): GraphBaseNode {
+    },
+    runManager: RunManager,
+    graph: Graph
+}
+
+export type IGraphCreateCompoundNode = {
+    type: ECreatedNodeType.MicroLoop,
+    value: {
+        nodes: {
+            microLoopNodeData: INodeData,
+            startNodeData: INodeData,
+        },
+    },
+    runManager: RunManager,
+    graph: Graph
+}
+
+
+export type IGraphCreateNode = IGraphCreateSimpleNode | IGraphCreateCompoundNode;
+
+export type IGraphCreatedNode = {
+    type: 'Node',
+    node: GraphBaseNode,
+}
+
+export type IGraphCreatedNodes = {
+    type: 'Nodes',
+    nodes: GraphBaseNode[],
+}
+
+export class GraphNodeFactory {
+
+    static createNode(params: IGraphCreateNode): IGraphCreatedNodes | IGraphCreatedNode {
+        if (params.type === ECreatedNodeType.Simple) {
+            return {
+                type: 'Node',
+                node: this.createSimpleNode(params),
+            }
+        } else {
+            return {
+                type: 'Nodes',
+                nodes: this.createCompoundNode(params),
+            }
+        }
+    }
+
+
+    static createSimpleNode(params: IGraphCreateSimpleNode): GraphBaseNode {
+        const {value, runManager, graph} = params;
         if (EDiagramNode.MicroLoop === value.node.type) {
             if (value.additionalData && value.additionalData.startNode) {
                 return new GraphMicroLoopNode(value.node, runManager, value.additionalData.startNode);
@@ -50,22 +99,32 @@ export class GraphNodeFactory {
         }
     }
 
-
-    static createCompoundNode(compoundNode: IGraphCreatedCompoundNode, runManager: RunManager, graph: Graph) {
-        switch (compoundNode.type) {
+    static createCompoundNode(parmas: IGraphCreateCompoundNode): GraphBaseNode[] {
+        const {value, runManager, graph} = parmas;
+        switch (parmas.type) {
             case ECreatedNodeType.MicroLoop: {
-                const {microLoop, startNode} = compoundNode.nodes;
+                const {microLoopNodeData, startNodeData} = value.nodes;
                 const startNodeNode = GraphNodeFactory.createSimpleNode({
-                    node: startNode,
-                }, runManager, graph);
+                    value: {
+                        node: startNodeData,
+                    },
+                    graph,
+                    runManager,
+                    type: ECreatedNodeType.Simple,
+                });
                 if (startNodeNode instanceof GraphMicroLoopStartNode) {
                     const microLoopNode = GraphNodeFactory.createSimpleNode({
-                        node: microLoop,
-                        additionalData: {
-                            type:  EDiagramNode.MicroLoop,
-                            startNode: startNodeNode,
-                        }
-                    }, runManager, graph);
+                        value: {
+                            node: microLoopNodeData,
+                            additionalData: {
+                                type: EDiagramNode.MicroLoop,
+                                startNode: startNodeNode,
+                            }
+                        },
+                        graph,
+                        runManager,
+                        type: ECreatedNodeType.Simple,
+                    });
                     return [startNodeNode, microLoopNode]
                 }
                 throw new Error(`Start node is not a micro loop start node`)

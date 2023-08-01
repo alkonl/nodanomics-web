@@ -4,7 +4,7 @@ import {
 } from "../../../interface";
 import {createBaseNode} from "./createBaseNode";
 import {loopSize} from "../../../constant";
-import {addAdditionalData} from "./addAdditionalData";
+import {addAdditionalReactFlowData} from "./addAdditionalReactFlowData";
 
 const compoundNodeTypes = [EDiagramNode.MicroLoop]
 
@@ -13,16 +13,20 @@ export const createNode = ({type, position}: {
     position: { x: number, y: number }
 }): ICreatedNode => {
     if (compoundNodeTypes.includes(type)) {
-        const loopNode = createBaseNode({type: EDiagramNode.MicroLoop, position: position})
+        const microLoopNodeData = createBaseNode({type: EDiagramNode.MicroLoop, position: position})
         const startNodeBase = createBaseNode({
             type: EDiagramNode.MicroLoopStartNode, position: {
                 x: 10,
                 y: loopSize.minHeight / 2
             },
+            additionalData: {
+                type: EDiagramNode.MicroLoopStartNode,
+                parentId: microLoopNodeData.id,
+            }
         })
-        const startNode = addAdditionalData({
+        const startLoopNodeData = addAdditionalReactFlowData({
             node: startNodeBase, addition: {
-                parentNode: loopNode.id,
+                parentNode: microLoopNodeData.id,
                 extent: 'parent',
                 dragHandle: '.custom-drag-handle-no-drag',
             }
@@ -30,8 +34,8 @@ export const createNode = ({type, position}: {
         return {
             type: ECreatedNodeType.MicroLoop,
             nodes: {
-                microLoop: loopNode,
-                startNode: startNode,
+                microLoopNodeData: microLoopNodeData,
+                startLoopNodeData: startLoopNodeData,
             }
         }
     }

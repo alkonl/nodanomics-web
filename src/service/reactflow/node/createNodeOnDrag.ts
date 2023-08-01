@@ -2,7 +2,7 @@
 import {ReactFlowInstance} from "reactflow";
 import {DragEvent} from "react";
 import {
-    EDiagramNode, IReactFlowCreatedCompoundNode, ICreatedSimpleNode, ICreatedNode,
+    EDiagramNode, ICreatedNode,
 } from "../../../interface";
 
 import {createNode} from "./createNode";

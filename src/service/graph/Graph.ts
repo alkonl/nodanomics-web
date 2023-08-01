@@ -1,4 +1,4 @@
-import {IDiagramConnectionData, INodeData, IReactFlowCreatedCompoundNode,} from "../../interface";
+import {ECreatedNodeType, IDiagramConnectionData, IGraphCreatedCompoundNode, INodeData,} from "../../interface";
 import {GraphBaseNode, GraphNodeFactory, GraphNodeManager} from "./GraphNodes";
 import {GraphBaseEdge, GraphEdgeFactory} from "./GraphEdge";
 import {Optionalize} from "../../utils";
@@ -35,24 +35,35 @@ export class Graph {
         if (!node) {
             if (this.runManager) {
                 node = GraphNodeFactory.createSimpleNode({
-                    node: value,
-                }, this.runManager, this);
+                    type: ECreatedNodeType.Simple,
+                    value: {
+                        node: value,
+                    },
+                    runManager: this.runManager,
+                    graph: this,
+                });
+
                 this.nodesManager.add(node);
             }
         }
         return node;
     }
 
-    addCompoundNode(compoundNode: IReactFlowCreatedCompoundNode) {
+    addCompoundNode(compoundNode: IGraphCreatedCompoundNode) {
         if (this.runManager) {
-            const {microLoop, startNode} = compoundNode.nodes
+            const {microLoopNodeData, startLoopNodeData} = compoundNode.nodes
             const newNodes = GraphNodeFactory.createCompoundNode({
-                type: compoundNode.type,
-                nodes: {
-                    microLoop: microLoop.data,
-                    startNode: startNode.data,
-                }
-            }, this.runManager, this);
+                type: ECreatedNodeType.MicroLoop,
+                value: {
+                    nodes: {
+                        microLoopNodeData: microLoopNodeData,
+                        startNodeData: startLoopNodeData,
+                    }
+                },
+                runManager: this.runManager,
+                graph: this,
+            });
+
             this.nodesManager.addBulk(newNodes);
         }
     }
@@ -100,14 +111,15 @@ export class Graph {
 
     setDiagramElements({nodes, edges}: { nodes: INodeData[], edges: IDiagramConnectionData[] }) {
         this._edges = [];
+        // const nodesWithParents = nodes.filter(node => node.parentN);
         const runManager = this.runManager;
         if (runManager) {
-            const newNodes = nodes.map(node =>
-                GraphNodeFactory.createSimpleNode({
-                    node,
-                }, runManager, this)
-            )
-            this.nodesManager.setNewNodes(newNodes);
+            // const newNodes = nodes.map(node =>
+            //     GraphNodeFactory.createSimpleNode({
+            //         node,
+            //     }, runManager, this)
+            // )
+            // this.nodesManager.setNewNodes(newNodes);
             edges.forEach(edge => {
                 if (edge.sourceId && edge.targetId) {
                     const source = this.findNode(edge.sourceId);

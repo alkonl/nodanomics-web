@@ -14,5 +14,6 @@ export enum EDiagramNode {
 
 export interface IDiagramNodeBaseData extends IDiagramBaseInteractiveElementData {
     type: EDiagramNode;
+    parentId?: string;
     tag?: string;
 }
