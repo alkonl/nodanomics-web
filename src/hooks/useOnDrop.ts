@@ -1,16 +1,16 @@
 import {DragEvent, useCallback} from "react";
-import {EDiagramNode} from "../interface";
 import {createNodeOnDrag} from "../service";
 // eslint-disable-next-line import/named
 import {ReactFlowInstance} from "reactflow";
 import {diagramEditorActions, useAppDispatch} from "../redux";
+import {ECreatedNodeType, EDiagramNode} from "../interface";
 
 export const useOnDrop = ({flowWrapper, flowInstance}: {
     flowWrapper?: HTMLDivElement
     flowInstance?: ReactFlowInstance
 }) => {
     const dispatch = useAppDispatch()
-    const {addNode, addBulkNodes} = diagramEditorActions
+    const {addNode, addCompoundNodes} = diagramEditorActions
 
 
     return useCallback(
@@ -32,9 +32,9 @@ export const useOnDrop = ({flowWrapper, flowInstance}: {
                     wrapperNode: flowWrapper
                 })
                 if (newNode) {
-                    if (newNode.type === 'compound') {
-                        dispatch(addBulkNodes(newNode.nodes))
-                    } else if (newNode.type === 'node') {
+                    if (newNode.type ===  ECreatedNodeType.MicroLoop) {
+                        dispatch(addCompoundNodes(newNode))
+                    } else if (newNode) {
                         dispatch(addNode(newNode.node))
                     }
 

@@ -1,4 +1,7 @@
-import {EDiagramNode, ICreatedCompoundNode, ICreatedNode} from "../../../interface";
+import {
+    ECreatedNodeType,
+    EDiagramNode, ICreatedNode,
+} from "../../../interface";
 import {createBaseNode} from "./createBaseNode";
 import {loopSize} from "../../../constant";
 import {addAdditionalData} from "./addAdditionalData";
@@ -8,7 +11,7 @@ const compoundNodeTypes = [EDiagramNode.MicroLoop]
 export const createNode = ({type, position}: {
     type: EDiagramNode,
     position: { x: number, y: number }
-}): ICreatedNode | ICreatedCompoundNode => {
+}): ICreatedNode => {
     if (compoundNodeTypes.includes(type)) {
         const loopNode = createBaseNode({type: EDiagramNode.MicroLoop, position: position})
         const startNodeBase = createBaseNode({
@@ -25,12 +28,15 @@ export const createNode = ({type, position}: {
             }
         })
         return {
-            type: 'compound',
-            nodes: [loopNode, startNode]
+            type: ECreatedNodeType.MicroLoop,
+            nodes: {
+                microLoop: loopNode,
+                startNode: startNode,
+            }
         }
     }
     return {
-        type: 'node',
-        node: createBaseNode({type, position})
+        type: ECreatedNodeType.Simple,
+        node: createBaseNode({type, position}),
     }
 }

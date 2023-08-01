@@ -2,13 +2,13 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
     EDiagramNode,
-    EElementType,
+    EElementType, IReactFlowCreatedCompoundNode,
     IDiagramConnectionData,
     INodeData,
     IReactFlowEdge,
     IReactFlowEdgeConnection,
     IReactFlowNode,
-    isINodeSize
+    isINodeSize, ECreatedNodeType
 } from "../../interface";
 // eslint-disable-next-line import/named
 import {addEdge, applyEdgeChanges, applyNodeChanges, Connection, EdgeChange, NodeChange, updateEdge} from "reactflow";
@@ -64,10 +64,20 @@ export const diagramEditorSlice = createSlice({
             state.autoSaveCalled++
             graph.addOrGetNode(state.diagramNodes[length - 1].data)
         },
-        addBulkNodes: (state, {payload}: PayloadAction<IReactFlowNode[]>) => {
-            state.diagramNodes = state.diagramNodes.concat(payload)
+        addCompoundNodes: (state, {payload}: PayloadAction<IReactFlowCreatedCompoundNode>) => {
+            switch (payload.type) {
+                case ECreatedNodeType.MicroLoop: {
+                    const {microLoop, startNode} = payload.nodes
+                    state.diagramNodes.push(microLoop)
+                    state.diagramNodes.push(startNode)
+                    graph.addCompoundNode(payload)
+                    break
+                }
+                default:
+                    throw new Error(`Invalid compound node type ${payload.type}`)
+            }
             state.autoSaveCalled++
-            payload.forEach(node => graph.addOrGetNode(node.data))
+
         },
         onNodesChange: (state, {payload}: PayloadAction<NodeChange[]>) => {
             state.diagramNodes = applyNodeChanges<INodeData>(payload, state.diagramNodes)
@@ -160,9 +170,16 @@ export const diagramEditorSlice = createSlice({
         deleteNode: (state, {payload}: PayloadAction<{ nodeId: string }>) => {
             const node = state.diagramNodes.find(node => node.id === payload.nodeId)
             if (node?.data.type === EDiagramNode.MicroLoop) {
+                const toDeleteNodes: string[] = []
                 state.diagramNodes = state.diagramNodes.filter(node => {
-                    return node.id !== payload.nodeId && node.parentNode !== payload.nodeId
+                    const toDelete = node.id === payload.nodeId || node.parentNode === payload.nodeId
+                    if (toDelete) {
+                        toDeleteNodes.push(node.id)
+                    }
+                    return !toDelete
                 })
+                graph.deleteBulkNodes(toDeleteNodes)
+
             } else {
                 state.diagramNodes = state.diagramNodes.filter(node => node.id !== payload.nodeId)
                 graph.deleteNode({
@@ -222,6 +239,7 @@ export const diagramEditorSlice = createSlice({
         },
         invokeStep: (state) => {
             runManager.invokeStep()
+            console.log('invokeStep:', graph)
             updateNodes(state.diagramNodes)
             state.currentRunningDiagramStep = runManager.currentStep
         },

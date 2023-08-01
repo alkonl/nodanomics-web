@@ -1,4 +1,4 @@
-import {IDiagramConnectionData, INodeData,} from "../../interface";
+import {IDiagramConnectionData, INodeData, IReactFlowCreatedCompoundNode,} from "../../interface";
 import {GraphBaseNode, GraphNodeFactory, GraphNodeManager} from "./GraphNodes";
 import {GraphBaseEdge, GraphEdgeFactory} from "./GraphEdge";
 import {Optionalize} from "../../utils";
@@ -34,11 +34,27 @@ export class Graph {
         let node: GraphBaseNode | undefined = this.findNode(value.id);
         if (!node) {
             if (this.runManager) {
-                node = GraphNodeFactory.createNode(value, this.runManager, this);
+                node = GraphNodeFactory.createSimpleNode({
+                    node: value,
+                }, this.runManager, this);
                 this.nodesManager.add(node);
             }
         }
         return node;
+    }
+
+    addCompoundNode(compoundNode: IReactFlowCreatedCompoundNode) {
+        if (this.runManager) {
+            const {microLoop, startNode} = compoundNode.nodes
+            const newNodes = GraphNodeFactory.createCompoundNode({
+                type: compoundNode.type,
+                nodes: {
+                    microLoop: microLoop.data,
+                    startNode: startNode.data,
+                }
+            }, this.runManager, this);
+            this.nodesManager.addBulk(newNodes);
+        }
     }
 
     findNode(nodeId: string) {
@@ -87,7 +103,9 @@ export class Graph {
         const runManager = this.runManager;
         if (runManager) {
             const newNodes = nodes.map(node =>
-                GraphNodeFactory.createNode(node, runManager, this)
+                GraphNodeFactory.createSimpleNode({
+                    node,
+                }, runManager, this)
             )
             this.nodesManager.setNewNodes(newNodes);
             edges.forEach(edge => {
@@ -127,6 +145,12 @@ export class Graph {
         if (edge && source && target) {
             edge.updateSourceAndTarget({source, target});
         }
+    }
+
+    deleteBulkNodes(nodeIds: string[]) {
+        nodeIds.forEach(nodeId => {
+            this.deleteNode({nodeId});
+        })
     }
 
     deleteNode({nodeId}: {
