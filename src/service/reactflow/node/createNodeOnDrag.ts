@@ -1,13 +1,8 @@
 // eslint-disable-next-line import/named
 import {ReactFlowInstance} from "reactflow";
 import {DragEvent} from "react";
-import {
-    EDiagramNode, ICreatedNode,
-} from "../../../interface";
-
+import {EDiagramNode, ICreatedNode,} from "../../../interface";
 import {createNode} from "./createNode";
-
-
 
 
 export const createNodeOnDrag = ({type, flowInstance, wrapperNode, event}: {
@@ -15,7 +10,8 @@ export const createNodeOnDrag = ({type, flowInstance, wrapperNode, event}: {
     flowInstance: ReactFlowInstance
     wrapperNode: HTMLDivElement
     event: DragEvent<HTMLDivElement>
-}):ICreatedNode => {
+}): ICreatedNode => {
+
     const reactFlowBounds = wrapperNode?.getBoundingClientRect();
     const position = flowInstance.project({
         x: event.clientX - reactFlowBounds.left,
