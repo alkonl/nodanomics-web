@@ -1,8 +1,9 @@
 import {GraphBaseNode} from "../abstracts";
-import {IMicroLoopStartNodeData} from "../../../../interface";
+import {IGetNodeExternalValue, IMicroLoopStartNodeData} from "../../../../interface";
 import {RunManager} from "../../RunManager";
 
-export class GraphMicroLoopStartNode extends GraphBaseNode<IMicroLoopStartNodeData> {
+export class GraphMicroLoopStartNode extends GraphBaseNode<IMicroLoopStartNodeData>
+ implements IGetNodeExternalValue{
     constructor(value: IMicroLoopStartNodeData, runManager: RunManager) {
         super(value, runManager);
     }
@@ -15,5 +16,8 @@ export class GraphMicroLoopStartNode extends GraphBaseNode<IMicroLoopStartNodeDa
         this.updateNode({loopCurrentCount})
     }
 
+    get nodeExternalValue() {
+        return this.data.loopCurrentCount
+    }
 
 }

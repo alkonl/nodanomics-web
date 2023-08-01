@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Box} from "@mui/material";
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";

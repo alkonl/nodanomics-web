@@ -1,8 +1,6 @@
 import {IFormulaNodeVariable, isIGetNodeExternalValue} from "../../../../interface";
-import {GraphVariableNode} from "../GraphVariableNode";
 import {GraphBaseEdge, GraphLogicEdge} from "../../GraphEdge";
 import * as Match from "mathjs";
-import {GraphFormulaNode} from "../GraphFormulaNode";
 
 export class GraphMatchManager {
     private readonly incomingEdges: GraphBaseEdge[]
@@ -11,21 +9,9 @@ export class GraphMatchManager {
         this.incomingEdges = incomingEdges
     }
 
-
-
-    // getVariables(): IFormulaNodeVariable[] {
-    //     return this.getIncomingLogicEdge.map((edge) => {
-    //         if (edge.source instanceof GraphVariableNode) {
-    //             return {
-    //                 variableName: edge.variableName,
-    //                 value: edge.source.resourcesCount,
-    //             }
-    //         }
-    //     }).filter((variable) => variable !== undefined) as IFormulaNodeVariable[]
-    // }
-
     getVariables(): IFormulaNodeVariable[] {
         return this.getIncomingLogicEdge.map((edge) => {
+
             //edge.source instanceof GraphVariableNode
             const source = edge.source
             if (isIGetNodeExternalValue(source)) {
@@ -37,13 +23,6 @@ export class GraphMatchManager {
         }).filter((variable) => variable !== undefined) as IFormulaNodeVariable[]
     }
 
-    private get getIncomingLogicEdge(): GraphLogicEdge[] {
-        return this.incomingEdges.filter((edge) => {
-            if (edge instanceof GraphLogicEdge) {
-                return edge
-            }
-        }) as GraphLogicEdge[]
-    }
 
     calculateFormula({formula}: { formula: string }) {
         try {
@@ -63,4 +42,13 @@ export class GraphMatchManager {
         }
 
     }
+
+    private get getIncomingLogicEdge(): GraphLogicEdge[] {
+        return this.incomingEdges.filter((edge) => {
+            if (edge instanceof GraphLogicEdge) {
+                return edge
+            }
+        }) as GraphLogicEdge[]
+    }
+
 }
