@@ -146,10 +146,6 @@ export class Graph {
                 return acc
             }, [])
 
-
-            console.log('compoundNodes: ', compoundNodes)
-            console.log('nodes: ', nodes)
-
             compoundNodes.forEach(compoundNode => {
                 const newNodes = GraphNodeFactory.createCompoundNode(compoundNode);
                 this.nodesManager.addBulk(newNodes);

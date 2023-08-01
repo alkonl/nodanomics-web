@@ -1,9 +1,10 @@
 import {GraphInvokableNode} from "../abstracts";
-import {IMicroLoopNodeData} from "../../../../interface";
+import {IIsEventTriggered, IMicroLoopNodeData, IUpdateGraphNodeState} from "../../../../interface";
 import {RunManager} from "../../RunManager";
 import {GraphMicroLoopStartNode} from "./GraphMicroLoopStart";
 
-export class GraphMicroLoopNode extends GraphInvokableNode<IMicroLoopNodeData> {
+export class GraphMicroLoopNode extends GraphInvokableNode<IMicroLoopNodeData>
+    implements IIsEventTriggered, IUpdateGraphNodeState {
 
     private _startNode: GraphMicroLoopStartNode;
 
@@ -12,18 +13,22 @@ export class GraphMicroLoopNode extends GraphInvokableNode<IMicroLoopNodeData> {
         this._startNode = startNode;
     }
 
+    updateState() {
+        this.updateStartNode()
+    }
+
     get loopCurrentCount() {
         return this.data.currentLoopCount;
     }
 
     invokeStep() {
         this.updateStartNode()
-        if(!this.isLoopFinished){
+        if (!this.isLoopFinished) {
             this.addStep()
         }
     }
 
-    updateStartNode(){
+    updateStartNode() {
         this._startNode.setIsLoopActive(!this.isLoopFinished)
         this._startNode.setLoopCurrentCount(this.loopCurrentCount)
     }
@@ -37,14 +42,14 @@ export class GraphMicroLoopNode extends GraphInvokableNode<IMicroLoopNodeData> {
     }
 
     get isLoopFinished() {
-        if(!this.data.loopCount){
-            return  true
+        if (!this.data.loopCount) {
+            return true
         }
-        const res = this.data.currentLoopCount >= this.data.loopCount
-        console.log(`count ${this.data.currentLoopCount} >=:  ${this.data.loopCount}`, !res)
-
-        return res
+        return this.data.currentLoopCount >= this.data.loopCount
     }
 
+    get isEventTriggered() {
+        return this.isLoopFinished
+    }
 
 }

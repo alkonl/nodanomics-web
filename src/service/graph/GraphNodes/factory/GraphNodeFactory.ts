@@ -99,7 +99,6 @@ export class GraphNodeFactory {
         switch (params.type) {
             case ECreatedNodeType.MicroLoop: {
                 const {microLoopNodeData, startNodeData} = value.nodes;
-                console.log('startNodeNode before',)
                 const startNodeNode = GraphNodeFactory.createSimpleNode({
                     value: {
                         node: startNodeData,
@@ -108,7 +107,6 @@ export class GraphNodeFactory {
                     runManager,
                     type: ECreatedNodeType.Simple,
                 });
-                console.log('startNodeNode after',startNodeNode)
 
                 if (startNodeNode instanceof GraphMicroLoopStartNode) {
                     const microLoopNode = GraphNodeFactory.createSimpleNode({

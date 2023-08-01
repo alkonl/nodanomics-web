@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 // eslint-disable-next-line import/named
-import {NodeProps} from "reactflow";
+import {NodeProps, Position} from "reactflow";
 import {IMicroLoopNodeData} from "../../../../interface";
 import {BaseNodeContainer} from "../container/BaseNodeContainer";
 import {Box, Input} from "@mui/material";
 import {NodeText} from "../styledComponent";
 import {EColor, EFontColor} from "../../../../constant";
 import {useUpdateNode} from "../../../../hooks";
+import {EventHandle} from "../../CustomHandle/EventHandle";
 
 export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) => {
     const {data} = props;
@@ -35,6 +36,8 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                     width: data.style.width,
                     height: data.style.height,
                     backgroundColor: EColor.darkPurple,
+                    display: 'flex',
+                    flexDirection: 'column',
                 }}
             >
                 <Box sx={{
@@ -42,7 +45,7 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                     gap: 3,
                 }}>
                     <NodeText.Name type="header">
-                        Micro Loop
+                        {data.name}
                     </NodeText.Name>
                     <Box sx={{
                         display: 'flex',
@@ -72,7 +75,15 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                         </NodeText.Name>
                     </Box>
                 </Box>
-
+                <Box sx={{
+                    position: 'relative',
+                    flex: 1,
+                }}>
+                    <EventHandle
+                        type="source"
+                        position={Position.Right}
+                    />
+                </Box>
             </Box>
         </BaseNodeContainer>
     );

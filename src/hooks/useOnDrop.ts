@@ -3,8 +3,7 @@ import {createNodeOnDrag} from "../service";
 // eslint-disable-next-line import/named
 import {ReactFlowInstance} from "reactflow";
 import {diagramEditorActions, useAppDispatch} from "../redux";
-import {ECreatedNodeType, EDiagramNode, IReactFlowNode} from "../interface";
-import {findParent} from "./useOnNodeDragStop";
+import {ECreatedNodeType, EDiagramNode} from "../interface";
 import {useSetParentNode} from "./useSetParentNode";
 
 export const useOnDrop = ({flowWrapper, flowInstance}: {

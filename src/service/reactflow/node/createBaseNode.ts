@@ -116,28 +116,22 @@ export const createBaseNode = ({type, position,additionalData}: {
         case EDiagramNode.MicroLoop: {
             return {
                 ...baseParams,
+                zIndex: 0,
                 data: {
                     ...baseData,
                     type,
                     currentLoopCount: 0,
+                    name: 'MicroLoop',
                     style: {
                         ...baseData.style,
                         width: loopSize.minWidth,
                         height: loopSize.minHeight,
+
                     }
                 },
 
             }
         }
-        // case EDiagramNode.MicroLoopStartNode: {
-        //     return {
-        //         ...baseParams,
-        //         data: {
-        //             ...baseData,
-        //             type,
-        //         },
-        //     }
-        // }
         default :
             throw new Error(`Unknown node type: ${type}`);
     }
