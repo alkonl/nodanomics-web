@@ -1,27 +1,22 @@
-import {GraphInvokableNode, GraphLoopNode} from "./abstracts";
-import {
-    IIsEventTriggered,
-    isIIsEventTriggered,
-    IUpdateGraphNodeState,
-    IWhileLoopNodeData
-} from "../../../interface";
+import {GraphLoopNode} from "./abstracts";
+import {IIsEventTriggered, isIIsEventTriggered, IUpdateGraphNodeState, IWhileLoopNodeData} from "../../../interface";
 import {RunManager} from "../RunManager";
 
 export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
-    implements IUpdateGraphNodeState, IIsEventTriggered{
+    implements IUpdateGraphNodeState, IIsEventTriggered {
     constructor(value: IWhileLoopNodeData, runManager: RunManager) {
         super(value, runManager)
     }
 
-    get isEventTriggered() {
-        return this.data.isLoopActive
+    isEventTriggered() {
+        return this.data.isLoopActive || false
     }
 
     get isTriggeredIncomingNodes(): boolean {
         return this.incomingEdges.some(edge => {
             const source = edge.source;
             if (isIIsEventTriggered(source)) {
-                return source.isEventTriggered
+                return source.isEventTriggered(edge.data.mode)
             }
             return false
         })

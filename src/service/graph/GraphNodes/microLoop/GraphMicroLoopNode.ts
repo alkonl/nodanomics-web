@@ -48,7 +48,7 @@ export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
         return this.data.currentLoopCount >= this.data.loopCount
     }
 
-    get isEventTriggered() {
+     isEventTriggered() {
         return this.isLoopFinished
     }
 

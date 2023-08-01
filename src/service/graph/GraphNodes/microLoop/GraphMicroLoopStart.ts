@@ -13,8 +13,8 @@ export class GraphMicroLoopStartNode extends GraphBaseNode<IMicroLoopStartNodeDa
         return this.data.loopCurrentCount
     }
 
-    get isEventTriggered() {
-        return this.data.isLoopActive
+     isEventTriggered() {
+        return this.data.isLoopActive || false
     }
 
     setIsLoopActive(isLoopActive: boolean) {

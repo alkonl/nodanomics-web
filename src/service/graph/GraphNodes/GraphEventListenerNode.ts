@@ -1,5 +1,5 @@
 import {GraphBaseNode, GraphInvokableNode} from "./abstracts";
-import {IEventListenerNodeData, IIsEventTriggered, IUpdateGraphNodeState} from "../../../interface";
+import {EConnectionMode, IEventListenerNodeData, IIsEventTriggered, IUpdateGraphNodeState} from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphEventTriggerNode} from "./GraphEventTriggerNode";
 import {GraphNodeManager} from "./helper";
@@ -23,8 +23,8 @@ export class GraphEventListenerNode extends GraphInvokableNode<IEventListenerNod
         this.checkIsEventTriggered()
     }
 
-    get isEventTriggered() {
-        return this.data.isEventTriggered
+    isEventTriggered(): boolean {
+        return this.data.isEventTriggered || false
     }
 
     get eventName() {
