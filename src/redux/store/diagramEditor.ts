@@ -1,14 +1,16 @@
 // eslint-disable-next-line import/named
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
+    ECreatedNodeType,
     EDiagramNode,
-    EElementType, IReactFlowCreatedCompoundNode,
+    EElementType,
     IDiagramConnectionData,
     INodeData,
+    IReactFlowCreatedCompoundNode,
     IReactFlowEdge,
     IReactFlowEdgeConnection,
     IReactFlowNode,
-    isINodeSize, ECreatedNodeType
+    isINodeSize
 } from "../../interface";
 // eslint-disable-next-line import/named
 import {addEdge, applyEdgeChanges, applyNodeChanges, Connection, EdgeChange, NodeChange, updateEdge} from "reactflow";
@@ -146,9 +148,13 @@ export const diagramEditorSlice = createSlice({
             updateNodes(state.diagramNodes)
             state.autoSaveCalled++
         },
+        // TODO FIX Sometimes when moving a node,
+        //  we update the parent of the node by simply moving it.
+        //  This causes a bug, the node teleports after we stop moving it.
+        //  This is now fixed with the following code node.parentNode === undefined
         updateNodeParent: (state, {payload}: PayloadAction<{ node: IReactFlowNode, parentNode: IReactFlowNode }>) => {
             const node = state.diagramNodes.find(node => node.id === payload.node.id)
-            if (node) {
+            if (node && node.parentNode === undefined) {
                 node.parentNode = payload.parentNode.id
                 node.position = {
                     x: payload.node.position.x - payload.parentNode.position.x,
