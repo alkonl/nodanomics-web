@@ -1,7 +1,7 @@
 import {Graph} from "./Graph";
 import {
     GraphInteractiveNode,
-    GraphInvokableNode,
+    GraphInvokableNode, GraphLoopNode,
     GraphMicroLoopNode,
     GraphVariableNode
 } from "./GraphNodes";
@@ -49,7 +49,7 @@ export class RunManager {
 
     private updateLoopTriggers() {
         this.graph.nodes.forEach(node => {
-            if(node instanceof GraphMicroLoopNode){
+            if(node instanceof GraphLoopNode){
                 node.invokeStep()
             }
         })
@@ -60,7 +60,7 @@ export class RunManager {
             if(!(node instanceof GraphInvokableNode)){
                 return false
             }
-            if(node instanceof GraphMicroLoopNode){
+            if(node instanceof GraphLoopNode){
                 return false
             }
             if (node instanceof GraphInteractiveNode) {

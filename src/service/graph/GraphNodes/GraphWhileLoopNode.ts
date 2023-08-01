@@ -1,11 +1,20 @@
-import {GraphInvokableNode} from "./abstracts";
-import {IMicroLoopNodeData, isIIsEventTriggered, IUpdateGraphNodeState, IWhileLoopNodeData} from "../../../interface";
+import {GraphInvokableNode, GraphLoopNode} from "./abstracts";
+import {
+    IIsEventTriggered,
+    isIIsEventTriggered,
+    IUpdateGraphNodeState,
+    IWhileLoopNodeData
+} from "../../../interface";
 import {RunManager} from "../RunManager";
 
-export class GraphWhileLoopNode extends GraphInvokableNode<IWhileLoopNodeData>
-    implements IUpdateGraphNodeState{
+export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
+    implements IUpdateGraphNodeState, IIsEventTriggered{
     constructor(value: IWhileLoopNodeData, runManager: RunManager) {
         super(value, runManager)
+    }
+
+    get isEventTriggered() {
+        return this.data.isLoopActive
     }
 
     get isTriggeredIncomingNodes(): boolean {

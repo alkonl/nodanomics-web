@@ -1,5 +1,5 @@
 export interface IIsEventTriggered {
-    isEventTriggered?: boolean
+    isEventTriggered: boolean
 }
 
 export const isIIsEventTriggered = (obj: any): obj is IIsEventTriggered => {

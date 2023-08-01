@@ -1,9 +1,9 @@
-import {GraphInvokableNode} from "../abstracts";
+import {GraphLoopNode} from "../abstracts";
 import {IIsEventTriggered, IMicroLoopNodeData, IUpdateGraphNodeState} from "../../../../interface";
 import {RunManager} from "../../RunManager";
 import {GraphMicroLoopStartNode} from "./GraphMicroLoopStart";
 
-export class GraphMicroLoopNode extends GraphInvokableNode<IMicroLoopNodeData>
+export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
     implements IIsEventTriggered, IUpdateGraphNodeState {
 
     private _startNode: GraphMicroLoopStartNode;
