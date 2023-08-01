@@ -1,7 +1,7 @@
 import {useCallback} from "react";
 import {IReactFlowNode} from "../interface";
-import {findParent} from "./useOnNodeDragStop";
 import {diagramEditorActions, useAppDispatch} from "../redux";
+import {findParent} from "../service";
 
 export const useSetParentNode = () => {
     const dispatch = useAppDispatch()

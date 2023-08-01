@@ -9,6 +9,7 @@ export enum EDiagramNode {
     EventListener = 'EventListener',
     MicroLoop = 'MicroLoop',
     MicroLoopStartNode = 'MicroLoopStartNode',
+    WhileLoop = 'WhileLoop',
 }
 
 

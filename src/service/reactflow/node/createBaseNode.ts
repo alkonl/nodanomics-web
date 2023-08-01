@@ -132,6 +132,21 @@ export const createBaseNode = ({type, position,additionalData}: {
 
             }
         }
+        case EDiagramNode.WhileLoop: {
+            return {
+                ...baseParams,
+                data: {
+                    ...baseData,
+                    type,
+                    name: 'WhileLoop',
+                    style: {
+                        ...baseData.style,
+                        width: loopSize.minWidth,
+                        height: loopSize.minHeight,
+                    }
+                }
+            }
+        }
         default :
             throw new Error(`Unknown node type: ${type}`);
     }

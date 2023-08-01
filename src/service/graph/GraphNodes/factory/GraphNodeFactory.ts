@@ -9,6 +9,7 @@ import {GraphEventTriggerNode} from "../GraphEventTriggerNode";
 import {GraphEventListenerNode} from "../GraphEventListenerNode";
 import {Graph} from "../../Graph";
 import {GraphMicroLoopNode, GraphMicroLoopStartNode} from "../microLoop";
+import {GraphWhileLoopNode} from "../GraphWhileLoopNode";
 
 export type IAdditionalMicroLoopData = {
     type: EDiagramNode.MicroLoop,
@@ -87,6 +88,8 @@ export class GraphNodeFactory {
                 return new GraphEventListenerNode(value.node, runManager, graph.nodesManager);
             case EDiagramNode.MicroLoopStartNode:
                 return new GraphMicroLoopStartNode(value.node, runManager);
+            case EDiagramNode.WhileLoop:
+                return new GraphWhileLoopNode(value.node, runManager);
             default:
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
