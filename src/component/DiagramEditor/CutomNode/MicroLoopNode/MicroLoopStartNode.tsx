@@ -12,7 +12,7 @@ export const MicroLoopStartNode: React.FC<NodeProps<IMicroLoopNodeData>> = ({
     return (
         <Box sx={{
             width: 10,
-            height: 36,
+            height: 20,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -36,22 +36,6 @@ export const MicroLoopStartNode: React.FC<NodeProps<IMicroLoopNodeData>> = ({
                     isConnectable={isConnectable}
                 />
 
-            </Box>
-            <Box sx={{
-                position: 'relative',
-            }}>
-                {/*<Handle*/}
-                {/*    type="source"*/}
-                {/*    position={Position.Right}*/}
-                {/*    isConnectable={isConnectable}*/}
-                {/*    // id="micro-loop-start"*/}
-                {/*    id={'EConnection.EventConnection'}*/}
-                {/*    style={{*/}
-                {/*        background: EColor.orange,*/}
-                {/*        width: '10px',*/}
-                {/*        height: '10px',*/}
-                {/*    }}*/}
-                {/*/>*/}
             </Box>
         </Box>
     );

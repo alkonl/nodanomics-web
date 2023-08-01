@@ -20,6 +20,7 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectabl
     const {updateNodeData} = useUpdateNode({
         nodeId: data.id,
     })
+
     const onFormulaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFormula(event.target.value)
     }
