@@ -1,14 +1,17 @@
 // eslint-disable-next-line import/named
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
-    IReactFlowNode,
+    EDiagramNode,
+    EElementType,
+    IDiagramConnectionData,
     INodeData,
     IReactFlowEdge,
-    IDiagramConnectionData,
-    EElementType, IReactFlowEdgeConnection, isINodeSize
+    IReactFlowEdgeConnection,
+    IReactFlowNode,
+    isINodeSize
 } from "../../interface";
 // eslint-disable-next-line import/named
-import {addEdge, applyEdgeChanges, applyNodeChanges, NodeChange, EdgeChange, updateEdge, Connection} from "reactflow";
+import {addEdge, applyEdgeChanges, applyNodeChanges, Connection, EdgeChange, NodeChange, updateEdge} from "reactflow";
 import {Optionalize} from "../../utils";
 import {Graph, resetNodeStates, RunManager} from "../../service";
 
@@ -139,7 +142,10 @@ export const diagramEditorSlice = createSlice({
                 state.autoSaveCalled++
             }
         },
-        updateNodeSize: (state, {payload}: PayloadAction<{ nodeId: string, size: { width: number, height: number } }>) => {
+        updateNodeSize: (state, {payload}: PayloadAction<{
+            nodeId: string,
+            size: { width: number, height: number }
+        }>) => {
             const node = state.diagramNodes.find(node => node.id === payload.nodeId)
             if (node && isINodeSize(node.data.style)) {
                 node.data.style = {
@@ -152,11 +158,18 @@ export const diagramEditorSlice = createSlice({
             }
         },
         deleteNode: (state, {payload}: PayloadAction<{ nodeId: string }>) => {
-            state.diagramNodes = state.diagramNodes.filter(node => node.id !== payload.nodeId)
+            const node = state.diagramNodes.find(node => node.id === payload.nodeId)
+            if (node?.data.type === EDiagramNode.MicroLoop) {
+                state.diagramNodes = state.diagramNodes.filter(node => {
+                    return node.id !== payload.nodeId && node.parentNode !== payload.nodeId
+                })
+            } else {
+                state.diagramNodes = state.diagramNodes.filter(node => node.id !== payload.nodeId)
+                graph.deleteNode({
+                    nodeId: payload.nodeId
+                })
+            }
             state.autoSaveCalled++
-            graph.deleteNode({
-                nodeId: payload.nodeId
-            })
         },
         updateEdgeData: (state, {payload}: PayloadAction<Optionalize<IDiagramConnectionData, 'id' | 'type'>>) => {
             const edge = state.diagramEdges.find(edge => edge.id === payload.id)
