@@ -23,6 +23,10 @@ implements  IIsEventTriggered{
         return this.data.isLoopActive || false
     }
 
+    protected setIsLoopActive(isLoopActive: boolean) {
+        this.updateNode({isLoopActive})
+    }
+
     private checkWasLoopActiveOnce() {
         if (!this.isLoopWasActive && this.isLoopActive) {
             this.updateNode({isLoopWasActive: this.isLoopActive})

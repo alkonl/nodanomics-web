@@ -1,6 +1,5 @@
-import {ENodeTrigger, INodeDataWithInteractivity,} from "../../../../interface";
+import {ENodeTrigger, INodeDataWithInteractivity,isIIsEventTriggered} from "../../../../interface";
 import {GraphInvokableNode} from "./GraphInvokable";
-import {isIIsEventTriggered} from "../../../../interface/busines/graph/isEventTriggered";
 
 
 export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWithInteractivity = INodeDataWithInteractivity>

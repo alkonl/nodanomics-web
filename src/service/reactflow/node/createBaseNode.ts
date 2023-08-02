@@ -11,14 +11,8 @@ import {initialNodeDiagramElement, loopSize} from "../../../constant";
 
 const getId = () => `nodeId_${nanoid()}`;
 
-type ICreateMicroLoopStartNode = {
-    type: EDiagramNode.MicroLoopStartNode,
-    parentId: string,
-}
-
-export const createBaseNode = ({type, position,additionalData}: {
+export const createBaseNode = ({type, position}: {
     type: EDiagramNode,
-    additionalData?: ICreateMicroLoopStartNode,
     position: { x: number, y: number },
 }): IReactFlowNode => {
     const nodeId = getId();
@@ -36,17 +30,6 @@ export const createBaseNode = ({type, position,additionalData}: {
         name: `node name ${nodeId}`,
     }
 
-    if(type === EDiagramNode.MicroLoopStartNode) {
-        if(additionalData && additionalData.type === EDiagramNode.MicroLoopStartNode)       return {
-            ...baseParams,
-            data: {
-                ...baseData,
-                parentId: additionalData.parentId,
-                type,
-            },
-        }
-        throw new Error('additionalData is required for MicroLoopStartNode')
-    }
 
     switch (type) {
         case EDiagramNode.StaticVariable: {
@@ -126,7 +109,6 @@ export const createBaseNode = ({type, position,additionalData}: {
                         ...baseData.style,
                         width: loopSize.minWidth,
                         height: loopSize.minHeight,
-
                     }
                 },
 

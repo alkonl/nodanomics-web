@@ -16,7 +16,7 @@ import {
     EventListenerNode,
     EventTriggerNode,
     FormulaNode,
-    MicroLoopNode, MicroLoopStartNode,
+    MicroLoopNode,
     SourceNode,
     StaticVariableNode,
     VariableNode, WhileLoopNode
@@ -37,7 +37,6 @@ const nodeTypes = {
     [EDiagramNode.EventTrigger]: EventTriggerNode,
     [EDiagramNode.EventListener]: EventListenerNode,
     [EDiagramNode.MicroLoop]: MicroLoopNode,
-    [EDiagramNode.MicroLoopStartNode]: MicroLoopStartNode,
     [EDiagramNode.WhileLoop]: WhileLoopNode,
 };
 

@@ -1,57 +1,51 @@
 import {GraphLoopNode} from "../abstracts";
-import {IIsEventTriggered, IMicroLoopNodeData, IUpdateGraphNodeState} from "../../../../interface";
+import {IMicroLoopNodeData} from "../../../../interface";
 import {RunManager} from "../../RunManager";
-import {GraphMicroLoopStartNode} from "./GraphMicroLoopStart";
 
-export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
-    implements IUpdateGraphNodeState {
+export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData> {
 
-    private _startNode: GraphMicroLoopStartNode;
 
-    constructor(value: IMicroLoopNodeData, runManager: RunManager, startNode: GraphMicroLoopStartNode) {
+    constructor(value: IMicroLoopNodeData, runManager: RunManager) {
         super(value, runManager);
-        this._startNode = startNode;
     }
 
 
     get loopCurrentCount() {
-        return this.data.currentLoopCount;
+        return this.data.currentLoopCount || 0;
     }
 
-    protected checkIsLoopActive() {
-        if (!this.data.loopCount) {
-            return false
-        }
-        return this.data.currentLoopCount <= this.data.loopCount
+    get loopCount() {
+        return this.data.loopCount || 0;
+    }
 
+
+    protected checkIsLoopActive() {
+        console.log('this.loopCount: ', this.loopCount)
+        if (this.loopCount === 0) {
+            this.setIsLoopActive(false)
+        } else {
+            const isLoopActive = this.loopCurrentCount <= this.loopCount
+            this.setIsLoopActive(isLoopActive)
+        }
     }
 
     isEventTriggered() {
         return !this.isLoopActive
     }
 
-    updateState() {
-        this.updateStartNode()
-    }
-
     invokeStep() {
+        console.log('invokeStep')
         super.invokeStep()
-        this.updateStartNode()
         if (this.isLoopActive) {
             this.addStep()
         }
     }
 
-    updateStartNode() {
-        this._startNode.setIsLoopActive(this.isLoopActive)
-        this._startNode.setLoopCurrentCount(this.loopCurrentCount)
-    }
-
     private addStep() {
-        const currentLoopCount = this.data.currentLoopCount
-        this._data = {
-            ...this.data,
-            currentLoopCount: currentLoopCount + 1,
+        const updatedLoopCount = this.loopCurrentCount + 1
+        const isPossibleToAddStep = updatedLoopCount <= this.loopCount
+        if(isPossibleToAddStep){
+            this.updateNode({currentLoopCount: updatedLoopCount})
         }
     }
 

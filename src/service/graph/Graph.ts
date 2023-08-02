@@ -1,11 +1,8 @@
 import {
-    ECreatedNodeType,
-    EDiagramNode,
-    ICreatedCompoundNodeForGraph,
     IDiagramConnectionData,
     INodeData,
 } from "../../interface";
-import {GraphBaseNode, GraphNodeFactory, GraphNodeManager, IGraphCreateCompoundNodeParams} from "./GraphNodes";
+import {GraphBaseNode, GraphNodeFactory, GraphNodeManager} from "./GraphNodes";
 import {GraphBaseEdge, GraphEdgeFactory} from "./GraphEdge";
 import {Optionalize} from "../../utils";
 import {RunManager} from "./RunManager";
@@ -41,7 +38,6 @@ export class Graph {
         if (!node) {
             if (this.runManager) {
                 node = GraphNodeFactory.createSimpleNode({
-                    type: ECreatedNodeType.Simple,
                     value: {
                         node: value,
                     },
@@ -55,24 +51,24 @@ export class Graph {
         return node;
     }
 
-    addCompoundNode(compoundNode: ICreatedCompoundNodeForGraph) {
-        if (this.runManager) {
-            const {microLoopNodeData, startLoopNodeData} = compoundNode.nodes
-            const newNodes = GraphNodeFactory.createCompoundNode({
-                type: ECreatedNodeType.MicroLoop,
-                value: {
-                    nodes: {
-                        microLoopNodeData: microLoopNodeData,
-                        startNodeData: startLoopNodeData,
-                    }
-                },
-                runManager: this.runManager,
-                graph: this,
-            });
-
-            this.nodesManager.addBulk(newNodes);
-        }
-    }
+    // addCompoundNode(compoundNode: ICreatedCompoundNodeForGraph) {
+    //     if (this.runManager) {
+    //         const {microLoopNodeData, startLoopNodeData} = compoundNode.nodes
+    //         const newNodes = GraphNodeFactory.createCompoundNode({
+    //             type: ECreatedNodeType.MicroLoop,
+    //             value: {
+    //                 nodes: {
+    //                     microLoopNodeData: microLoopNodeData,
+    //                     startNodeData: startLoopNodeData,
+    //                 }
+    //             },
+    //             runManager: this.runManager,
+    //             graph: this,
+    //         });
+    //
+    //         this.nodesManager.addBulk(newNodes);
+    //     }
+    // }
 
     findNode(nodeId: string) {
         return this.nodesManager.findById({nodeId});
@@ -121,38 +117,37 @@ export class Graph {
 
         const runManager = this.runManager;
         if (runManager) {
-            const compoundNodes: IGraphCreateCompoundNodeParams[] = nodes.reduce((acc: IGraphCreateCompoundNodeParams[], node) => {
-                if (node.type === EDiagramNode.MicroLoop) {
-                    const microLoopNodeData = node;
-                    const startLoopNodeData = nodes.find(node => {
-                        return node.parentId === microLoopNodeData.id && node.type === EDiagramNode.MicroLoopStartNode
-                    });
-                    if (startLoopNodeData) {
-                        nodes.splice(nodes.indexOf(startLoopNodeData), 1);
-                        nodes.splice(nodes.indexOf(microLoopNodeData), 1);
-                        acc.push({
-                            type: ECreatedNodeType.MicroLoop,
-                            value: {
-                                nodes: {
-                                    microLoopNodeData: microLoopNodeData,
-                                    startNodeData: startLoopNodeData,
-                                },
-                            },
-                            graph: this,
-                            runManager: runManager,
-                        })
-                    }
-                }
-                return acc
-            }, [])
+            // const compoundNodes: IGraphCreateCompoundNodeParams[] = nodes.reduce((acc: IGraphCreateCompoundNodeParams[], node) => {
+            //     if (node.type === EDiagramNode.MicroLoop) {
+            //         const microLoopNodeData = node;
+            //         const startLoopNodeData = nodes.find(node => {
+            //             return node.parentId === microLoopNodeData.id && node.type === EDiagramNode.MicroLoopStartNode
+            //         });
+            //         if (startLoopNodeData) {
+            //             nodes.splice(nodes.indexOf(startLoopNodeData), 1);
+            //             nodes.splice(nodes.indexOf(microLoopNodeData), 1);
+            //             acc.push({
+            //                 type: ECreatedNodeType.MicroLoop,
+            //                 value: {
+            //                     nodes: {
+            //                         microLoopNodeData: microLoopNodeData,
+            //                         startNodeData: startLoopNodeData,
+            //                     },
+            //                 },
+            //                 graph: this,
+            //                 runManager: runManager,
+            //             })
+            //         }
+            //     }
+            //     return acc
+            // }, [])
 
-            compoundNodes.forEach(compoundNode => {
-                const newNodes = GraphNodeFactory.createCompoundNode(compoundNode);
-                this.nodesManager.addBulk(newNodes);
-            })
+            // compoundNodes.forEach(compoundNode => {
+            //     const newNodes = GraphNodeFactory.createCompoundNode(compoundNode);
+            //     this.nodesManager.addBulk(newNodes);
+            // })
             const newNodes = nodes.map(node =>
                 GraphNodeFactory.createSimpleNode({
-                    type: ECreatedNodeType.Simple,
                     value: {
                         node,
                     },

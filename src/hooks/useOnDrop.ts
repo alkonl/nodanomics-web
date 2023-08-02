@@ -3,7 +3,7 @@ import {createNodeOnDrag} from "../service";
 // eslint-disable-next-line import/named
 import {ReactFlowInstance} from "reactflow";
 import {diagramEditorActions, useAppDispatch} from "../redux";
-import {ECreatedNodeType, EDiagramNode} from "../interface";
+import {EDiagramNode} from "../interface";
 import {useSetParentNode} from "./useSetParentNode";
 
 export const useOnDrop = ({flowWrapper, flowInstance}: {
@@ -11,7 +11,7 @@ export const useOnDrop = ({flowWrapper, flowInstance}: {
     flowInstance?: ReactFlowInstance
 }) => {
     const dispatch = useAppDispatch()
-    const {addNode, addCompoundNodes} = diagramEditorActions
+    const {addNode} = diagramEditorActions
 
     const setParent = useSetParentNode()
 
@@ -34,12 +34,15 @@ export const useOnDrop = ({flowWrapper, flowInstance}: {
                     wrapperNode: flowWrapper
                 })
                 if (newNode) {
-                    if (newNode.type === ECreatedNodeType.MicroLoop) {
-                        dispatch(addCompoundNodes(newNode))
-                    } else if (newNode) {
-                        dispatch(addNode(newNode.node))
-                        setParent(newNode.node, flowInstance.getNodes())
-                    }
+                    dispatch(addNode(newNode))
+                    setParent(newNode, flowInstance.getNodes())
+
+                    // if (newNode.type === ECreatedNodeType.MicroLoop) {
+                    //     dispatch(addCompoundNodes(newNode))
+                    // } else if (newNode) {
+                    //     dispatch(addNode(newNode.node))
+                    //     setParent(newNode.node, flowInstance.getNodes())
+                    // }
 
                 }
             }
