@@ -30,6 +30,7 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
             const source = edge.source;
             if (isIIsEventTriggered(source)) {
                 console.log('edge:', edge)
+                console.log('source:', source)
                 return source.isEventTriggered(edge.data.mode)
             }
             return false

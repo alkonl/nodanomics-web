@@ -2,7 +2,6 @@ import {Graph} from "./Graph";
 import {
     GraphInteractiveNode,
     GraphInvokableNode, GraphLoopNode,
-    GraphMicroLoopNode,
     GraphVariableNode
 } from "./GraphNodes";
 import {ENodeTrigger, isUpdateGraphNodeState} from "../../interface";
@@ -35,6 +34,7 @@ export class RunManager {
     }
 
     invokeStep() {
+        console.log('invokeStep', this.graph)
         this.incrementStep()
         this.updateLoopTriggers()
         this.invokeInitialStep()

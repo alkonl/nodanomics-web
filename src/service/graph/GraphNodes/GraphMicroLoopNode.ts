@@ -1,9 +1,9 @@
 import {GraphLoopNode} from "./abstracts";
-import {IGetNodeExternalValue, IMicroLoopNodeData} from "../../../interface";
+import {EConnectionMode, IGetNodeExternalValue, IMicroLoopNodeData, IUpdateGraphNodeState} from "../../../interface";
 import {RunManager} from "../RunManager";
 
 export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
-implements IGetNodeExternalValue{
+implements IGetNodeExternalValue, IUpdateGraphNodeState{
 
 
     constructor(value: IMicroLoopNodeData, runManager: RunManager) {
@@ -33,8 +33,17 @@ implements IGetNodeExternalValue{
         }
     }
 
-    isEventTriggered() {
-        return this.isLoopActive
+    updateState() {
+        this.checkIsLoopActive()
+    }
+
+    isEventTriggered(mode: EConnectionMode): boolean  {
+        if(EConnectionMode.LoopInToChildren === mode){
+            return this.isLoopActive
+        }else if(EConnectionMode.LoopOut === mode){
+            return !this.isLoopActive
+        }
+        return false
     }
 
     invokeStep() {
