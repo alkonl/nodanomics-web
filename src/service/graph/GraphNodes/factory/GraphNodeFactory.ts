@@ -8,8 +8,8 @@ import {RunManager} from "../../RunManager";
 import {GraphEventTriggerNode} from "../GraphEventTriggerNode";
 import {GraphEventListenerNode} from "../GraphEventListenerNode";
 import {Graph} from "../../Graph";
-import {GraphMicroLoopNode} from "../microLoop";
 import {GraphWhileLoopNode} from "../GraphWhileLoopNode";
+import {GraphMicroLoopNode} from "../GraphMicroLoopNode";
 
 
 export type IGraphCreateSimpleNode = {

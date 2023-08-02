@@ -1,14 +1,18 @@
-import {GraphLoopNode} from "../abstracts";
-import {IMicroLoopNodeData} from "../../../../interface";
-import {RunManager} from "../../RunManager";
+import {GraphLoopNode} from "./abstracts";
+import {IGetNodeExternalValue, IMicroLoopNodeData} from "../../../interface";
+import {RunManager} from "../RunManager";
 
-export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData> {
+export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
+implements IGetNodeExternalValue{
 
 
     constructor(value: IMicroLoopNodeData, runManager: RunManager) {
         super(value, runManager);
     }
 
+    get nodeExternalValue() {
+        return this.loopCurrentCount
+    }
 
     get loopCurrentCount() {
         return this.data.currentLoopCount || 0;
@@ -20,21 +24,20 @@ export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData> {
 
 
     protected checkIsLoopActive() {
-        console.log('this.loopCount: ', this.loopCount)
         if (this.loopCount === 0) {
             this.setIsLoopActive(false)
         } else {
-            const isLoopActive = this.loopCurrentCount <= this.loopCount
+
+            const isLoopActive = this.loopCurrentCount < this.loopCount
             this.setIsLoopActive(isLoopActive)
         }
     }
 
     isEventTriggered() {
-        return !this.isLoopActive
+        return this.isLoopActive
     }
 
     invokeStep() {
-        console.log('invokeStep')
         super.invokeStep()
         if (this.isLoopActive) {
             this.addStep()
