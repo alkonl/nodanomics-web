@@ -1,15 +1,21 @@
 import {GraphLoopNode} from "./abstracts";
-import {IIsEventTriggered, isIIsEventTriggered, IUpdateGraphNodeState, IWhileLoopNodeData} from "../../../interface";
+import {
+    EConnectionMode,
+    isIIsEventTriggered,
+    IUpdateGraphNodeState,
+    IWhileLoopNodeData
+} from "../../../interface";
 import {RunManager} from "../RunManager";
 
 export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
-    implements IUpdateGraphNodeState, IIsEventTriggered {
+    implements IUpdateGraphNodeState {
     constructor(value: IWhileLoopNodeData, runManager: RunManager) {
         super(value, runManager)
     }
 
-    isEventTriggered() {
-        return this.data.isLoopActive || false
+
+    protected checkIsLoopActive() {
+        this.updateNode({isLoopActive: this.isTriggeredIncomingNodes})
     }
 
     get isTriggeredIncomingNodes(): boolean {
@@ -22,18 +28,20 @@ export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
         })
     }
 
-    updateState() {
-        this.setIisLoopActive(this.isTriggeredIncomingNodes)
-    }
-
-    invokeStep() {
-        this.updateState()
-    }
-
-    private setIisLoopActive(isLooping: boolean) {
-        this._data = {
-            ...this.data,
-            isLoopActive: isLooping,
+    isEventTriggered(mode?: EConnectionMode) {
+        if (mode === EConnectionMode.LoopOut) {
+            return this.isLoopWasActive && !this.isLoopActive
+        } else if (mode === EConnectionMode.LoopIn) {
+            return this.isTriggeredIncomingNodes
+        } else if (mode === EConnectionMode.LoopInToChildren) {
+            return this.isTriggeredIncomingNodes
         }
+        throw new Error(`isEventTriggered: unknown or empty mode ${mode}`)
     }
+
+
+    updateState() {
+        this.checkIsLoopActive()
+    }
+
 }

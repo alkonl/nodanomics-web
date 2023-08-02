@@ -12,6 +12,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
     const {data} = props;
 
     const isActiveText = data.isLoopActive ? 'active' : 'no active'
+    const loopOutText = !data.isLoopWasActive ? 'was not active' : !data.isLoopActive ? 'finished' : 'running'
 
     return (
         <BaseNodeContainer node={props}>
@@ -65,7 +66,10 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                         width: 'fit-content',
                     }}>
                         <NodeText.Name>
-                            out
+                            out state
+                        </NodeText.Name>
+                        <NodeText.Name>
+                           {loopOutText}
                         </NodeText.Name>
                         <EventHandle type="source" position={Position.Right} mode={EConnectionMode.LoopOut}/>
                     </Box>
@@ -87,7 +91,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                         borderRadius: 2,
                         position: 'relative',
                     }}>
-                        <EventHandle type="source" position={Position.Right}/>
+                        <EventHandle type="source" position={Position.Right} mode={EConnectionMode.LoopInToChildren}/>
                         <NodeText.Name type="small">
                             Loop
                         </NodeText.Name>

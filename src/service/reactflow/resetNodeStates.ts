@@ -48,6 +48,16 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                 }
             }
         }
+        case EDiagramNode.WhileLoop:{
+            return {
+                ...node,
+                data: {
+                    ...node.data,
+                    isLoopWasActive: undefined,
+                    isLoopActive: undefined,
+                }
+            }
+        }
         default:
             return node
     }
