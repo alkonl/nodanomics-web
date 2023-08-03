@@ -9,6 +9,7 @@ export enum EConnection {
 export enum EConnectionMode{
     LoopOut = 'LoopOut',
     LoopIn = 'LoopIn',
+    LoopOutConnector = 'LoopOutConnector',
     LoopInToChildren = 'LoopInToChildren',
 }
 

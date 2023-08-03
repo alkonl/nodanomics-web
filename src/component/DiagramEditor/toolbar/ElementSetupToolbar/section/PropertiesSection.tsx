@@ -23,7 +23,7 @@ export const PropertiesSection: React.FC<{
 
     return (
         <BaseSection
-            isOpen={accordionController.isExpanded}
+            isOpen={accordionController.isOpened}
             toggle={accordionController.toggle}
             title="Properties"
         >

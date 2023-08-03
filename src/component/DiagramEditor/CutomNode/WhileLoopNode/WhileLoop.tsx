@@ -9,6 +9,7 @@ import {NodeText} from "../styledComponent";
 import {EventHandle} from "../../CustomHandle/EventHandle";
 import {useExpandOrCollapse} from "../../../../hooks";
 import {MButton} from "../../../base";
+import {LogicHandle} from "../../CustomHandle";
 
 export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) => {
     const {data} = props;
@@ -53,6 +54,59 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                         collapse
                     </MButton.Submit>
                 </Box>
+                {/* external data handlers */}
+                <Box sx={{
+                    display: 'flex',
+                    position: 'relative',
+                }}>
+                    <Box sx={{
+                        position: 'absolute',
+                        left: -14,
+                        height: 'fit-content',
+                        width: 20,
+                        display: 'flex',
+                        alignItems: 'center',
+                        backgroundColor: EColor.grey,
+                        borderRadius: 4,
+                        boxSizing: 'border-box'
+                    }}>
+                        <Box sx={{
+                            my: 0.3,
+                            marginRight: 0.5,
+                            marginLeft: 0.2,
+                            display: 'flex',
+                            flex: 1,
+                            gap: 1,
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}>
+                            <Box sx={{
+                                position: 'relative',
+                                height: 10,
+                            }}>
+                                <LogicHandle
+                                    type="target"
+                                    position={Position.Left}
+                                    mode={EConnectionMode.LoopOutConnector}
+                                />
+                            </Box>
+                            <Box sx={{
+                                position: 'relative',
+                                height: 10,
+                            }}>
+                                <EventHandle
+                                    type="target"
+                                    position={Position.Left}
+                                    mode={EConnectionMode.LoopOutConnector}
+                                />
+                            </Box>
+                        </Box>
+
+                    </Box>
+
+
+                </Box>
                 <Box sx={{
                     display: 'flex',
                     justifyContent: 'space-between',
@@ -91,7 +145,6 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                         <EventHandle type="source" position={Position.Right} mode={EConnectionMode.LoopOut}/>
                     </Box>
                 </Box>
-
 
                 <Box sx={{
                     flex: 1,

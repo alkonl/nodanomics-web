@@ -17,7 +17,7 @@ export const StyleSection: React.FC<{
 
     return (
         <BaseSection
-            isOpen={accordionController.isExpanded}
+            isOpen={accordionController.isOpened}
             toggle={accordionController.toggle}
             title="Style">
             <Grid container columns={9} gap={1}>

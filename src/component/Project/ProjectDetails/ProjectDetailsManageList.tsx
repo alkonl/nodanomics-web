@@ -31,12 +31,12 @@ export const ProjectDetailsManageList: React.FC<{
     return (
         <>
             <ManageUserPopUp
-                isShow={manageUserPopUp.isExpanded}
+                isShow={manageUserPopUp.isOpened}
                 onClose={manageUserPopUp.close}
                 projectId={projectInfo.id}
             />
             <InviteUserPopUp
-                isShow={inviteUserPopUp.isExpanded}
+                isShow={inviteUserPopUp.isOpened}
                 onClose={inviteUserPopUp.close}
                 projectId={projectInfo.id}
             />
