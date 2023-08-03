@@ -8,7 +8,8 @@ import {
     IReactFlowEdge,
     IReactFlowEdgeConnection,
     IReactFlowNode,
-    isINodeSize
+    isINodeSize,
+    IUpdateReactflowNode
 } from "../../interface";
 // eslint-disable-next-line import/named
 import {addEdge, applyEdgeChanges, applyNodeChanges, Connection, EdgeChange, NodeChange, updateEdge} from "reactflow";
@@ -132,15 +133,20 @@ export const diagramEditorSlice = createSlice({
             updateNodesFromGraph(state.diagramNodes)
             state.autoSaveCalled++
         },
-        // this function does not update the node data. Only the information related to the nodes in reactflow
-        bulkUpdateNodes: (state, {payload}: PayloadAction<Optionalize<Omit<IReactFlowNode, 'data'>, 'id'>[]>) => {
-            state.diagramNodes.map(stateNode => {
-                const updatedNode = payload.find(updatedNode => updatedNode.id === stateNode.id)
-                if (updatedNode) {
-                    stateNode.hidden = updatedNode.hidden
+        bulkUpdateNodes: (state, {payload}: PayloadAction<IUpdateReactflowNode[]>) => {
+            payload.forEach(updatedNode => {
+                const stateNodeIndex = state.diagramNodes.findIndex(node => node.id === updatedNode.id)
+                const stateNode = state.diagramNodes[stateNodeIndex]
+                state.diagramNodes[stateNodeIndex] = {
+                    ...stateNode,
+                    ...updatedNode,
+                    data: {
+                        ...stateNode.data,
+                        ...updatedNode.data
+                    }
                 }
             })
-            // state.autoSaveCalled++
+            state.autoSaveCalled++
         },
         // TODO FIX Sometimes when moving a node,
         //  we update the parent of the node by simply moving it.

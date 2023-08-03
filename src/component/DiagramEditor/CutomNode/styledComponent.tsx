@@ -24,13 +24,15 @@ const typeTextStyle: {
 
 export const NodeTextName: React.FC<{
     children: React.ReactNode,
-    sx?: SxProps<Theme>
     type?: ITextType
-}> = ({
-          children,
-          sx,
-          type = 'text'
-      }) => {
+} & TypographyProps> = (
+    {
+        children,
+        sx,
+        type = 'text',
+        ...props
+    }
+) => {
 
     const baseSx = typeTextStyle[type]
     const outerSx = sx || {}
@@ -42,6 +44,7 @@ export const NodeTextName: React.FC<{
 
     return (<Typography
         sx={textSx}
+        {...props}
     >
         {children}
     </Typography>)
