@@ -35,29 +35,12 @@ export const useUpdateNode = <IGenericNode extends IDiagramNodeBaseData = INodeD
                         isClicked: false
                     }
                 })
-                // dispatch(updateNodeData({
-                //     ...selectedNode.data,
-                //     id: selectedNode.id,
-                //     type: selectedNode?.data.type,
-                //     trigger: {
-                //         mode: trigger,
-                //         isClicked: false
-                //     }
-                // }))
             } else {
                 updateNodeDataWrapper({
                     trigger: {
                         mode: trigger,
                     }
                 })
-                // dispatch(updateNodeData({
-                //     ...selectedNode.data,
-                //     id: selectedNode.id,
-                //     type: selectedNode?.data.type,
-                //     trigger: {
-                //         mode: trigger
-                //     }
-                // }))
             }
         }
     }
@@ -70,19 +53,11 @@ export const useUpdateNode = <IGenericNode extends IDiagramNodeBaseData = INodeD
                     isClicked: true
                 }
             })
-            // dispatch(updateNodeData({
-            //     ...selectedNode.data,
-            //     id: selectedNode.id,
-            //     type: selectedNode?.data.type,
-            //     trigger: {
-            //         mode: ENodeTrigger.interactive,
-            //         isClicked: true
-            //     }
-            // }))
+
         }
     }
 
-    const updateNodeStyle = (nodeStyles: Partial<IDiagramNodeStyle>) => {
+    const updateNodeStyle = (nodeStyles: Partial<IGenericNode['style']>) => {
         if (selectedNode) {
             updateNodeDataWrapper({
                 id: selectedNode.id,

@@ -19,7 +19,10 @@ export interface IDiagramEditorState {
     currentDiagramId?: string
     name?: string
     description?: string
-    diagramTags?: { id: string, name: string }[]
+    diagramTags?: {
+        id: string,
+        name: string
+    }[]
     diagramNodes: IReactFlowNode[]
     diagramEdges: IReactFlowEdge[],
     autoSaveCalled: number
@@ -40,7 +43,7 @@ const graph = new Graph()
 const runManager = new RunManager(graph)
 graph.attachRunManager(runManager)
 
-const updateNodes = (diagramNodes: IReactFlowNode[]) => {
+const updateNodesFromGraph = (diagramNodes: IReactFlowNode[]) => {
     diagramNodes.forEach(node => {
         const updatedData = graph.findNode(node.id)?.data
         if (updatedData) {
@@ -48,6 +51,7 @@ const updateNodes = (diagramNodes: IReactFlowNode[]) => {
         }
     })
 }
+
 
 export const diagramEditorSlice = createSlice({
     name: 'diagramEditor',
@@ -64,27 +68,8 @@ export const diagramEditorSlice = createSlice({
             state.autoSaveCalled++
             graph.addOrGetNode(state.diagramNodes[length - 1].data)
         },
-        // addCompoundNodes: (state, {payload}: PayloadAction<IReactFlowCreatedCompoundNode>) => {
-        //     switch (payload.type) {
-        //         case ECreatedNodeType.MicroLoop: {
-        //             const {microLoopNodeData, startLoopNodeData} = payload.nodes
-        //             state.diagramNodes.push(microLoopNodeData)
-        //             state.diagramNodes.push(startLoopNodeData)
-        //             graph.addCompoundNode({
-        //                 type: ECreatedNodeType.MicroLoop,
-        //                 nodes: {
-        //                     microLoopNodeData: microLoopNodeData.data,
-        //                     startLoopNodeData: startLoopNodeData.data,
-        //                 }
-        //             })
-        //             break
-        //         }
-        //         default:
-        //             throw new Error(`Invalid compound node type ${payload.type}`)
-        //     }
-        //     state.autoSaveCalled++
-        //
-        // },
+
+        // updateNodeData: (state, {payload}: PayloadAction<INodeData>) => {
         onNodesChange: (state, {payload}: PayloadAction<NodeChange[]>) => {
             state.diagramNodes = applyNodeChanges<INodeData>(payload, state.diagramNodes)
             state.autoSaveCalled++
@@ -95,7 +80,8 @@ export const diagramEditorSlice = createSlice({
             graph.deleteEdge(payload.id)
         },
         onEdgeUpdate: (state, {payload}: PayloadAction<{
-            oldEdge: IReactFlowEdge, newConnection: Connection
+            oldEdge: IReactFlowEdge,
+            newConnection: Connection
         }>) => {
             state.diagramEdges = updateEdge({
                 ...payload.oldEdge,
@@ -131,7 +117,7 @@ export const diagramEditorSlice = createSlice({
                     edgeData: payload.data,
                 })
                 runManager.updateState()
-                updateNodes(state.diagramNodes)
+                updateNodesFromGraph(state.diagramNodes)
                 state.autoSaveCalled++
             }
         },
@@ -143,14 +129,27 @@ export const diagramEditorSlice = createSlice({
         },
         updateNodeData: (state, {payload}: PayloadAction<Optionalize<INodeData, 'id'>>) => {
             graph.updateNodeData(payload.id, payload)
-            updateNodes(state.diagramNodes)
+            updateNodesFromGraph(state.diagramNodes)
             state.autoSaveCalled++
+        },
+        // this function does not update the node data. Only the information related to the nodes in reactflow
+        bulkUpdateNodes: (state, {payload}: PayloadAction<Optionalize<Omit<IReactFlowNode, 'data'>, 'id'>[]>) => {
+            state.diagramNodes.map(stateNode => {
+                const updatedNode = payload.find(updatedNode => updatedNode.id === stateNode.id)
+                if (updatedNode) {
+                    stateNode.hidden = updatedNode.hidden
+                }
+            })
+            // state.autoSaveCalled++
         },
         // TODO FIX Sometimes when moving a node,
         //  we update the parent of the node by simply moving it.
         //  This causes a bug, the node teleports after we stop moving it.
         //  This is now fixed with the following code node.parentNode === undefined
-        updateNodeParent: (state, {payload}: PayloadAction<{ node: IReactFlowNode, parentNode: IReactFlowNode }>) => {
+        updateNodeParent: (state, {payload}: PayloadAction<{
+            node: IReactFlowNode,
+            parentNode: IReactFlowNode
+        }>) => {
             const node = state.diagramNodes.find(node => node.id === payload.node.id)
             if (node && node.parentNode === undefined) {
                 node.parentNode = payload.parentNode.id
@@ -165,7 +164,10 @@ export const diagramEditorSlice = createSlice({
         },
         updateNodeSize: (state, {payload}: PayloadAction<{
             nodeId: string,
-            size: { width: number, height: number }
+            size: {
+                width: number,
+                height: number
+            }
         }>) => {
             const node = state.diagramNodes.find(node => node.id === payload.nodeId)
             if (node && isINodeSize(node.data.style)) {
@@ -178,7 +180,9 @@ export const diagramEditorSlice = createSlice({
                 state.autoSaveCalled++
             }
         },
-        deleteNode: (state, {payload}: PayloadAction<{ nodeId: string }>) => {
+        deleteNode: (state, {payload}: PayloadAction<{
+            nodeId: string
+        }>) => {
             const node = state.diagramNodes.find(node => node.id === payload.nodeId)
             if (node?.data.type === EDiagramNode.MicroLoop) {
                 const toDeleteNodes: string[] = []
@@ -251,7 +255,7 @@ export const diagramEditorSlice = createSlice({
         invokeStep: (state) => {
             runManager.invokeStep()
             console.log('invokeStep:', graph)
-            updateNodes(state.diagramNodes)
+            updateNodesFromGraph(state.diagramNodes)
             state.currentRunningDiagramStep = runManager.currentStep
         },
         resetDiagramRun: (state) => {
@@ -260,13 +264,13 @@ export const diagramEditorSlice = createSlice({
             graph.updateNodesState(resetNode.map(node => node.data))
             runManager.updateState()
             runManager.resetCurrentStep()
-            updateNodes(state.diagramNodes)
+            updateNodesFromGraph(state.diagramNodes)
             state.currentRunningDiagramStep = runManager.currentStep
         },
         // using this action to render new values like variableName
         renderState: (state) => {
             runManager.updateState()
-            updateNodes(state.diagramNodes)
+            updateNodesFromGraph(state.diagramNodes)
         },
     }
 })

@@ -1,14 +1,16 @@
 import React, {useEffect, useState} from 'react';
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";
-import {EConnectionMode, IMicroLoopNodeData} from "../../../../interface";
+import {EConnectionMode, IMicroLoopNodeData, INodeData, IReactFlowNode} from "../../../../interface";
 import {BaseNodeContainer} from "../container/BaseNodeContainer";
 import {Box, Input} from "@mui/material";
 import {NodeText} from "../styledComponent";
 import {EColor, EFontColor} from "../../../../constant";
-import {useUpdateNode} from "../../../../hooks";
+import {useGetChildrenNodes, useToggle, useUpdateNode} from "../../../../hooks";
 import {EventHandle} from "../../CustomHandle/EventHandle";
 import {LogicHandle} from "../../CustomHandle";
+import {MButton} from "../../../base";
+import {diagramEditorActions, useAppDispatch} from "../../../../redux";
 
 export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) => {
     const {data} = props;
@@ -28,6 +30,35 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
         }
     }, [loopCount])
 
+    const collapse = useToggle()
+
+    const {updateNodeStyle} = useUpdateNode<IMicroLoopNodeData>({
+        nodeId: data.id,
+    })
+
+    const dispatch = useAppDispatch()
+    const {bulkUpdateNodes} = diagramEditorActions
+
+    const getChildrenNodes = useGetChildrenNodes()
+
+
+    const change = () => {
+        collapse.toggle()
+        updateNodeStyle({
+            // height: collapse.isOpened ? 50 : 200,
+            // width: collapse.isOpened ? 100 : 200,
+        })
+        const children = getChildrenNodes({parentId: data.id})
+        const updatedNodes: IReactFlowNode[] = children.map((child) => {
+            return {
+                ...child,
+                hidden: collapse.isOpened
+            }
+        })
+        dispatch(bulkUpdateNodes(updatedNodes))
+    }
+
+
     return (
         <BaseNodeContainer node={props}>
             <Box
@@ -43,38 +74,51 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
             >
                 <Box sx={{
                     display: 'flex',
-                    gap: 3,
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                 }}>
-                    <NodeText.Name type="header">
-                        {data.name}
-                    </NodeText.Name>
                     <Box sx={{
                         display: 'flex',
-                        gap: 1,
-                        alignItems: 'flex-end',
+                        gap: 3,
                     }}>
-                        <NodeText.Name>
-                            total:
-                        </NodeText.Name>
-                        <Input
-                            onChange={onLoopCountChange}
-                            value={loopCount}
-                            sx={{
-                                color: EFontColor.white,
-                                width: 40,
-                                height: 20,
-                            }}/>
 
-                    </Box>
-                    <Box sx={{
-                        display: 'flex',
-                        gap: 1,
-                        alignItems: 'flex-end',
-                    }}>
-                        <NodeText.Name>
-                            current: {data.currentLoopCount}
+
+                        <NodeText.Name type="header">
+                            {data.name}
                         </NodeText.Name>
+                        <Box sx={{
+                            display: 'flex',
+                            gap: 1,
+                            alignItems: 'flex-end',
+                        }}>
+                            <NodeText.Name>
+                                total:
+                            </NodeText.Name>
+                            <Input
+                                onChange={onLoopCountChange}
+                                value={loopCount}
+                                sx={{
+                                    color: EFontColor.white,
+                                    width: 40,
+                                    height: 20,
+                                }}/>
+
+                        </Box>
+                        <Box sx={{
+                            display: 'flex',
+                            gap: 1,
+                            alignItems: 'flex-end',
+                        }}>
+                            <NodeText.Name>
+                                current: {data.currentLoopCount}
+                            </NodeText.Name>
+                        </Box>
                     </Box>
+                    <MButton.Submit
+                        onClick={change}
+                    >
+                        change
+                    </MButton.Submit>
                 </Box>
                 <Box sx={{
                     position: 'relative',
