@@ -17,7 +17,7 @@ export const VariableStatisticSection = () => {
     }
     return (
         <BaseSection
-            isOpen={accordionController.isOpened}
+            isOpen={accordionController.isExpanded}
             toggle={accordionController.toggle}
             title="Statistic"
                     >

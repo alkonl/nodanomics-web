@@ -28,7 +28,7 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
         }
     }, [loopCount])
 
-    const {isOpened, expandOrCollapse} = useExpandOrCollapse({
+    const {isExpanded, expandOrCollapse} = useExpandOrCollapse({
         initialIsOpened: data.isCollapsed,
     })
 
@@ -38,7 +38,7 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
 
     return (
         <BaseNodeContainer node={props}>
-            {isOpened ?
+            {isExpanded ?
                 <MicroLoopNodeHeader
                     type="small"
                     name={data.name}

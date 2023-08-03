@@ -16,7 +16,7 @@ export const useToggle = (props?: {
     }
 
     return {
-        isOpened: isShow,
+        isExpanded: isShow,
         close,
         open,
         toggle,

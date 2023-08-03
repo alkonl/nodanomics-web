@@ -7,6 +7,8 @@ import {EColor} from "../../../../constant";
 import {Box} from "@mui/material";
 import {NodeText} from "../styledComponent";
 import {EventHandle} from "../../CustomHandle/EventHandle";
+import {useExpandOrCollapse} from "../../../../hooks";
+import {MButton} from "../../../base";
 
 export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) => {
     const {data} = props;
@@ -14,14 +16,22 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
     const isActiveText = data.isLoopActive ? 'active' : 'no active'
     const loopOutText = !data.isLoopWasActive ? 'was not active' : !data.isLoopActive ? 'finished' : 'running'
 
+    const {isExpanded, expandOrCollapse} = useExpandOrCollapse({
+        initialIsOpened: data.isCollapsed,
+    })
+
+    const changeExpandOrCollapse = () => {
+        expandOrCollapse({parentId: data.id})
+    }
+
     return (
         <BaseNodeContainer node={props}>
             <Box
                 sx={{
                     padding: 1,
                     boxSizing: 'border-box',
-                    width: data.style.width,
-                    height: data.style.height,
+                    width: isExpanded ? 'fit-content' : data.style.width,
+                    height: isExpanded ? 'fit-content' : data.style.height,
                     backgroundColor: EColor.darkGreen,
                     display: 'flex',
                     flexDirection: 'column',
@@ -31,16 +41,23 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                 <Box sx={{
                     display: 'flex',
                     gap: 3,
-                    alignItems: 'flex-end',
+                    justifyContent: 'space-between',
                 }}>
 
                     <NodeText.Name type="header">
                         {data.name}
                     </NodeText.Name>
+                    <MButton.Submit
+                        onClick={changeExpandOrCollapse}
+                    >
+                        collapse
+                    </MButton.Submit>
                 </Box>
                 <Box sx={{
                     display: 'flex',
                     justifyContent: 'space-between',
+                    height: isExpanded ? 'fit-content' : 100,
+                    alignItems: 'flex-end',
                 }}>
                     <Box sx={{
                         position: 'relative',
@@ -83,7 +100,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                     justifyContent: 'center',
                     width: 'fit-content',
                 }}>
-                    <Box sx={{
+                    {isExpanded && <Box sx={{
                         backgroundColor: EColor.white,
                         paddingLeft: 0.7,
                         paddingRight: 1,
@@ -98,7 +115,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                         <NodeText.Name type="small">
                             Trigger
                         </NodeText.Name>
-                    </Box>
+                    </Box>}
 
                 </Box>
             </Box>

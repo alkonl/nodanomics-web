@@ -23,13 +23,13 @@ export const useExpandOrCollapse = (props?: {
         const updatedNodes: IUpdateReactflowNode[] = children.map((childNode) => {
             return {
                 id: childNode.id,
-                hidden: !expandOrCollapseManager.isOpened,
+                hidden: !expandOrCollapseManager.isExpanded,
             }
         })
         updatedNodes.push({
             id: parentId,
             data: {
-                isCollapsed: !expandOrCollapseManager.isOpened
+                isCollapsed: !expandOrCollapseManager.isExpanded
             }
         })
         dispatch(bulkUpdateNodes(updatedNodes))
@@ -37,6 +37,6 @@ export const useExpandOrCollapse = (props?: {
 
     return {
         expandOrCollapse: expandOrCollapse,
-        isOpened: expandOrCollapseManager.isOpened
+        isExpanded: expandOrCollapseManager.isExpanded
     }
 }

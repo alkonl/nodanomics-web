@@ -114,7 +114,7 @@ export const ProjectDetails = () => {
                     flexDirection: 'row-reverse',
                     alignItems: 'flex-end'
                 }}>
-                    {manageProjectTab.isOpened && projectInfo ? <ProjectDetailsManageList projectInfo={projectInfo}/> : <MButton.Submit
+                    {manageProjectTab.isExpanded && projectInfo ? <ProjectDetailsManageList projectInfo={projectInfo}/> : <MButton.Submit
                         onClick={manageProjectTab.open}
                         variant="border">
                         Manage

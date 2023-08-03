@@ -10,7 +10,7 @@ export const CreateProjectButton = () => {
         <>
             <CreateProjectPopUp
                 onClose={createProjectPopUp.close}
-                isShow={createProjectPopUp.isOpened}
+                isShow={createProjectPopUp.isExpanded}
             />
             <MButton.Submit onClick={createProjectPopUp.open}>
                 Create Project
