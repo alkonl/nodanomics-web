@@ -1,6 +1,6 @@
 import {
     IFormulaNodeData,
-    IFormulaNodeVariable,
+    INumberVariable,
     IFormulaResult,
     IGetNodeExternalValue,
     IUpdateGraphNodeState
@@ -8,11 +8,13 @@ import {
 import {RunManager} from "../RunManager";
 import {GraphInvokableNode} from "./abstracts";
 import {GraphMatchManager} from "./helper";
+import {GraphLogicManager} from "./helper/GraphLogicManager";
 
 export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue {
 
     private readonly matchManager: GraphMatchManager = new GraphMatchManager(this.incomingEdges)
+    private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
 
     constructor(value: IFormulaNodeData, runManager: RunManager) {
         super(value, runManager);
@@ -56,13 +58,13 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
                     value: result,
                 })
             } else if (result !== undefined) {
-                console.error(`Unknown result type ${JSON.stringify(this.data)} result: ${JSON.stringify(result, null,2)}`)
+                console.error(`Unknown result type ${JSON.stringify(this.data)} result: ${JSON.stringify(result, null, 2)}`)
             }
         }
     }
 
     private updateVariables() {
-        const variables = this.matchManager.getVariables()
+        const variables = this.logicManager.getVariables()
         this.setVariables(variables)
     }
 
@@ -74,7 +76,7 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
         }
     }
 
-    private setVariables(variables: IFormulaNodeVariable[]) {
+    private setVariables(variables: INumberVariable[]) {
         this._data = {
             ...this.data,
             variables,

@@ -16,6 +16,7 @@ export const EventHandle: React.FC<Pick<HandleProps, 'isConnectable' | 'type' | 
           mode
       }) => {
     const id = `${EConnection.EventConnection}.${mode}`;
+    const translateLeftCoefficient = position === 'left' ? 25 : -25
     return (
         <Box sx={{
             position: 'relative',
@@ -31,7 +32,7 @@ export const EventHandle: React.FC<Pick<HandleProps, 'isConnectable' | 'type' | 
                     background: EColor.orange,
                     width: '10px',
                     height: '10px',
-                    transform: 'translate(-25%, -50%)',
+                    transform: `translate(${translateLeftCoefficient}%, -50%)`,
                     ...style
                 }}
             />

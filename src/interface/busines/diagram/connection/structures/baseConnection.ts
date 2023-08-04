@@ -7,10 +7,10 @@ export enum EConnection {
 }
 
 export enum EConnectionMode{
-    LoopOut = 'LoopOut',
-    LoopIn = 'LoopIn',
-    LoopOutConnector = 'LoopOutConnector',
     LoopInToChildren = 'LoopInToChildren',
+    WhileLoopIsTriggered = 'WhileLoopIsTriggered',
+    NodeIn = 'NodeIn',
+    NodeOut = 'NodeOut',
 }
 
 
@@ -18,6 +18,7 @@ export interface IDiagramConnectionBaseData extends IDiagramBaseInteractiveEleme
     sourceId: string;
     targetId: string;
     elementType: EElementType.Connection;
-    mode?: EConnectionMode
+    sourceMode?: EConnectionMode
+    targetMode?: EConnectionMode
     type: EConnection;
 }

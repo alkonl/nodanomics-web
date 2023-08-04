@@ -1,8 +1,8 @@
 import {GraphBaseNode, GraphInvokableNode} from "./abstracts";
-import {EConnectionMode, IEventListenerNodeData, IIsEventTriggered, IUpdateGraphNodeState} from "../../../interface";
+import {IEventListenerNodeData, IIsEventTriggered, IUpdateGraphNodeState} from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphEventTriggerNode} from "./GraphEventTriggerNode";
-import {GraphNodeManager} from "./helper";
+import {GraphNodeManager} from "../NodeManager";
 
 export class GraphEventListenerNode extends GraphInvokableNode<IEventListenerNodeData>
     implements IIsEventTriggered, IUpdateGraphNodeState {

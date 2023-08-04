@@ -5,6 +5,7 @@ import {connectionStyle} from "./connectionStyle";
 import {connectionInitialProps} from "./connectionInitialProps";
 import {nanoid} from "nanoid";
 import {EDGE_Z_INDEX} from "../../../constant";
+import {parseConnectionHandleId} from "./connectionMode";
 
 const getEdgeId = () => `edgeId_${nanoid()}`;
 
@@ -53,6 +54,9 @@ export const connectEdge = ({connection}:
         targetHandle: connection.targetHandle
     });
 
+    const sourceMode = parseConnectionHandleId(connection.sourceHandle).mode;
+    const targetMode = parseConnectionHandleId(connection.targetHandle).mode;
+
     const mode = defineConnectionModeBySourceHandle({
         sourceHandle: connection.sourceHandle,
     })
@@ -70,7 +74,8 @@ export const connectEdge = ({connection}:
             sourceId: connection.source,
             targetId: connection.target,
             id: edgeId,
-            mode,
+            sourceMode: sourceMode,
+            targetMode: targetMode,
         }
     }
 }

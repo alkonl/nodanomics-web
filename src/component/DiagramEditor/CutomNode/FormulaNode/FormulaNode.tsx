@@ -2,7 +2,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {Box, Input, Typography} from "@mui/material";
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";
-import {IFormulaNodeData} from "../../../../interface";
+import {EConnectionMode, IFormulaNodeData} from "../../../../interface";
 import {EColor, EFontColor} from "../../../../constant";
 import {useUpdateNode} from "../../../../hooks";
 import {Scroll} from "../../../base";
@@ -70,11 +70,13 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectabl
                     type="target"
                     position={Position.Left}
                     isConnectable={isConnectable}
+                    mode={EConnectionMode.NodeIn}
                 />
                 <LogicHandle
                     type="source"
                     position={Position.Right}
                     isConnectable={isConnectable}
+                    mode={EConnectionMode.NodeOut}
                 />
             </Box>
             <Box sx={{

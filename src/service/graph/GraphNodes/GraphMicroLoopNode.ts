@@ -40,7 +40,7 @@ implements IGetNodeExternalValue, IUpdateGraphNodeState{
     isEventTriggered(mode: EConnectionMode): boolean  {
         if(EConnectionMode.LoopInToChildren === mode){
             return this.isLoopActive
-        }else if(EConnectionMode.LoopOut === mode){
+        }else if(EConnectionMode.NodeOut === mode){
             return !this.isLoopActive
         }
         return false

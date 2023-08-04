@@ -4,10 +4,11 @@ import {Handle, HandleProps} from "reactflow";
 import {EConnection, EConnectionMode} from "../../../interface";
 import {EColor} from "../../../constant";
 import {Box} from "@mui/material";
+import {createHandleId} from "../../../service";
 
 export const LogicHandle: React.FC<Pick<HandleProps, 'isConnectable' | 'type' | 'position'> & {
     style?: React.CSSProperties
-    mode?: EConnectionMode
+    mode: EConnectionMode
 }> = ({
           isConnectable,
           type,
@@ -15,8 +16,8 @@ export const LogicHandle: React.FC<Pick<HandleProps, 'isConnectable' | 'type' | 
           position,
           mode
       }) => {
-    const id = `${EConnection.LogicConnection}.${mode}`;
-    // const id = `${EConnection.LogicConnection}`;
+
+    const id = createHandleId(EConnection.LogicConnection, mode, type);
 
     const translateLeftCoefficient = position === 'left' ? 25 : -25
 

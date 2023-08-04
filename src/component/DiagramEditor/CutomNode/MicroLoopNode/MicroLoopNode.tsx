@@ -94,13 +94,14 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                                 <LogicHandle
                                     type="source"
                                     position={Position.Right}
+                                    mode={EConnectionMode.NodeOut}
                                 />
                             </Box>
                         </Box>
                         <EventHandle
                             type="source"
                             position={Position.Right}
-                            mode={EConnectionMode.LoopOut}
+                            mode={EConnectionMode.NodeOut}
                         />
                     </Box>
                 </Box>}
