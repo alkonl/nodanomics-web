@@ -57,30 +57,6 @@ export class RunManager {
         this.invokedNodes = []
     }
 
-    // private updateTriggeredNodes() {
-    //     this.newTriggeredNodes.forEach(node => {
-    //         if (node instanceof GraphInvokableNode) {
-    //             node.invokeStep()
-    //             this.invokedNodes.push(node)
-    //         }
-    //     })
-    //     if (this.updateTriggeredNodes.length > 0) {
-    //         this.updateTriggeredNodes()
-    //     }
-    // }
-
-    // private get newTriggeredNodes() {
-    //     const triggered = this.triggerEventListeners.filter(eventListener => eventListener.checkIsEventTriggered())
-    //     const nodes = triggered.map(node => {
-    //         return this.getNodesChildrenRecursive(node)
-    //     })
-    //     return nodes.flat()
-    // }
-
-    // get triggerEventListeners(): GraphEventListenerNode[] {
-    //     return this.graph.nodes.filter(node => node instanceof GraphEventListenerNode) as GraphEventListenerNode[]
-    // }
-
 
     private incrementStep() {
         this._currentStep++
@@ -102,7 +78,17 @@ export class RunManager {
             return this.getNodesChildrenRecursive(source)
         })
         console.log('sortedNodes', sortedNodes.map(nodes => nodes.map(node => node.node.data.name)))
-        return sortedNodes.flat()
+        // nodes queue that start from trigger listener invoke in last step
+        return sortedNodes.sort((a, b) => {
+            const aFirstNode = a[0].node
+            const bFirstNode = b[0].node
+            if (aFirstNode instanceof GraphEventListenerNode && !(bFirstNode instanceof GraphEventListenerNode)) {
+                return 1
+            } else if (!(aFirstNode instanceof GraphEventListenerNode) && bFirstNode instanceof GraphEventListenerNode) {
+                return -1
+            }
+            return 0
+        }).flat()
     }
 
     private getNodesChildrenRecursive(node: GraphBaseNode, children: IReason[] = [{
@@ -129,7 +115,7 @@ export class RunManager {
             const isHasOtherConnectionThenEvent = target.outgoingEdges.some(edge => edge.type !== EConnection.EventConnection)
             const isHasOutgoingEdges = target.outgoingEdges.length > 0
             console.log('target:', target.data.name)
-            if(!isHasOutgoingEdges) {
+            if (!isHasOutgoingEdges) {
                 return {
                     node: edge.target,
                     trigger: edge.type
