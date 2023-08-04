@@ -22,7 +22,7 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
     }
 
 
-    updateNode(data: Partial<INodeData>) {
+    updateNode(data: Partial<IGenericNodeData>) {
         this._data = {
             ...this._data,
             ...data

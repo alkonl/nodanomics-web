@@ -85,13 +85,13 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                             <LogicHandle
                                 type="target"
                                 position={Position.Left}
-                                mode={EConnectionMode.NodeIn}
+                                mode={EConnectionMode.NodeIncoming}
                             />
 
                             <EventHandle
                                 type="target"
                                 position={Position.Left}
-                                mode={EConnectionMode.NodeIn}
+                                mode={EConnectionMode.NodeIncoming}
                             />
                         </Box>
 
@@ -115,7 +115,8 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                         borderRadius: 4,
                         width: 'fit-content',
                     }}>
-                        <EventHandle type="target" position={Position.Left} mode={EConnectionMode.WhileLoopIsTriggered}/>
+                        <EventHandle type="target" position={Position.Left}
+                                     mode={EConnectionMode.WhileLoopIncomingTrigger}/>
                         <NodeText.Name>
                             {isActiveText}
                         </NodeText.Name>
@@ -138,7 +139,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                             </NodeText.Name>
                         </Box>
 
-                        <EventHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOut}/>
+                        <EventHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
                     </Box>
                 </Box>
 
@@ -155,19 +156,43 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                         paddingRight: 1,
                         py: 0.5,
                         borderRadius: 2,
+                        gap: 1,
                         position: 'relative',
                         display: 'flex',
+                        flexDirection: 'column',
                         alignItems: 'center',
                     }}>
-                        <Box>
-                            <NodeText.Name type="small">
-                                Loop
-                            </NodeText.Name>
-                            <NodeText.Name type="small">
-                                Trigger
-                            </NodeText.Name>
+                        <Box sx={{
+                            flex: 1,
+                            display: 'flex',
+                            alignItems: 'center'
+                        }}>
+                            <Box>
+                                <NodeText.Name type="small">
+                                    start Trigger
+                                </NodeText.Name>
+                            </Box>
+                            <EventHandle type="source" position={Position.Right}
+                                         mode={EConnectionMode.LoopInnerToChildren}/>
                         </Box>
-                        <EventHandle type="source" position={Position.Right} mode={EConnectionMode.LoopInToChildren}/>
+                        <Box sx={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}>
+                            <NodeText.Name type="small">
+                                data
+                            </NodeText.Name>
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'column'
+                            }}>
+                                <LogicHandle type="source" position={Position.Right}
+                                             mode={EConnectionMode.LoopInnerToChildren}/>
+                            </Box>
+
+                        </Box>
+
 
                     </Box>}
 

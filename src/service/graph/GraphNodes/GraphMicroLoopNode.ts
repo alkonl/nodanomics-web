@@ -38,9 +38,9 @@ implements IGetNodeExternalValue, IUpdateGraphNodeState{
     }
 
     isEventTriggered(mode: EConnectionMode): boolean  {
-        if(EConnectionMode.LoopInToChildren === mode){
+        if(EConnectionMode.LoopInnerToChildren === mode){
             return this.isLoopActive
-        }else if(EConnectionMode.NodeOut === mode){
+        }else if(EConnectionMode.NodeOutgoing === mode){
             return !this.isLoopActive
         }
         return false

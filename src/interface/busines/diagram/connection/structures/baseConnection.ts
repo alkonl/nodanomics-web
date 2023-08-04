@@ -7,10 +7,10 @@ export enum EConnection {
 }
 
 export enum EConnectionMode{
-    LoopInToChildren = 'LoopInToChildren',
-    WhileLoopIsTriggered = 'WhileLoopIsTriggered',
-    NodeIn = 'NodeIn',
-    NodeOut = 'NodeOut',
+    LoopInnerToChildren = 'LoopInnerToChildren',
+    WhileLoopIncomingTrigger = 'WhileLoopIncomingTrigger',
+    NodeIncoming = 'NodeIncoming',
+    NodeOutgoing = 'NodeOutgoing',
 }
 
 

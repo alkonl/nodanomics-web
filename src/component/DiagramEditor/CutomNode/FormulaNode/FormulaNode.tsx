@@ -11,7 +11,7 @@ import {EventHandle} from "../../CustomHandle/EventHandle";
 
 export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectable, data}) => {
 
-    const [formula, setFormula] = useState<string | undefined>(data.formula)
+    const [formula, setFormula] = useState<string | undefined>(data.formula || '')
 
     const result = useMemo(() => {
         if (data.result && data.result.type === 'number') {
@@ -70,13 +70,13 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectabl
                     type="target"
                     position={Position.Left}
                     isConnectable={isConnectable}
-                    mode={EConnectionMode.NodeIn}
+                    mode={EConnectionMode.NodeIncoming}
                 />
                 <LogicHandle
                     type="source"
                     position={Position.Right}
                     isConnectable={isConnectable}
-                    mode={EConnectionMode.NodeOut}
+                    mode={EConnectionMode.NodeOutgoing}
                 />
             </Box>
             <Box sx={{

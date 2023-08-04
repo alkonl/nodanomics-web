@@ -1,5 +1,6 @@
 import {GraphBaseEdge, GraphLogicEdge} from "../../GraphEdge";
 import {INumberVariable, isIGetNodeExternalValue} from "../../../../interface";
+import {GraphLoopNode} from "../abstracts";
 
 export class GraphLogicManager {
     private readonly incomingEdges: GraphBaseEdge[]
@@ -10,17 +11,23 @@ export class GraphLogicManager {
 
     getVariables(): INumberVariable[] {
         return this.getIncomingLogicEdge.map((edge) => {
-
-            //edge.source instanceof GraphVariableNode
             const source = edge.source
-            console.log(`edge ${edge.variableName}:`, edge.data)
             if (isIGetNodeExternalValue(source)) {
                 return {
                     variableName: edge.variableName,
                     value: source.nodeExternalValue,
                 }
+            } else if (source instanceof GraphLoopNode) {
+                const value = source.incomingData?.variables?.find((variable) => {
+                    return variable.variableName === edge.variableName
+                })?.value
+                return {
+                    variableName: edge.variableName,
+                    value: value,
+                }
             }
         }).filter((variable) => variable !== undefined) as INumberVariable[]
+
     }
 
 

@@ -1,4 +1,4 @@
-import {ENodeTrigger, INodeDataWithInteractivity,isIIsEventTriggered} from "../../../../interface";
+import {ENodeTrigger, INodeDataWithInteractivity, isIIsEventTriggered} from "../../../../interface";
 import {GraphInvokableNode} from "./GraphInvokable";
 
 
@@ -40,10 +40,11 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
     private clearClick() {
         if (this._data.trigger.mode === ENodeTrigger.interactive) {
             this.updateNode({
+                ...this.data,
                 trigger: {
-                    ...this._data.trigger,
+                    mode: ENodeTrigger.interactive,
                     isClicked: false,
-                }
+                },
             })
         }
     }

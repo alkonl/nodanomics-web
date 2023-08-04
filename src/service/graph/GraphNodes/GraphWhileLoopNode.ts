@@ -1,6 +1,7 @@
 import {GraphLoopNode} from "./abstracts";
 import {
-    EConnectionMode, INumberVariable,
+    EConnectionMode,
+    INumberVariable,
     isIIsEventTriggered,
     IUpdateGraphNodeState,
     IWhileLoopNodeData
@@ -34,11 +35,11 @@ export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
     }
 
     isEventTriggered(mode?: EConnectionMode) {
-        if (mode === EConnectionMode.NodeOut) {
+        if (mode === EConnectionMode.NodeOutgoing) {
             return this.isLoopWasActive && !this.isLoopActive
-        } else if (mode === EConnectionMode.WhileLoopIsTriggered) {
+        } else if (mode === EConnectionMode.WhileLoopIncomingTrigger) {
             return this.isTriggeredIncomingNodes
-        } else if (mode === EConnectionMode.LoopInToChildren) {
+        } else if (mode === EConnectionMode.LoopInnerToChildren) {
             return this.isTriggeredIncomingNodes
         }
         throw new Error(`isEventTriggered: unknown or empty mode ${mode}`)
@@ -57,12 +58,10 @@ export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
     }
 
     private setVariables(variables: INumberVariable[]) {
-        this._data = {
-            ...this.data,
+        this.updateNode({
             incomingData: {
-                ...this.data.incomingData,
-                variables,
+                variables
             }
-        }
+        })
     }
 }
