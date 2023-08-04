@@ -3,7 +3,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
     EDiagramNode,
     EElementType,
-    IDiagramConnectionData, IDiagramTextStyle,
+    IDiagramConnectionData,
     INodeData,
     IReactFlowEdge,
     IReactFlowEdgeConnection,
@@ -137,14 +137,12 @@ export const diagramEditorSlice = createSlice({
             payload.forEach(updatedNode => {
                 const stateNodeIndex = state.diagramNodes.findIndex(node => node.id === updatedNode.id)
                 const stateNode = state.diagramNodes[stateNodeIndex]
-                if (updatedNode.data) {
-                    state.diagramNodes[stateNodeIndex] = {
-                        ...stateNode,
-                        ...updatedNode,
-                        data: {
-                            ...stateNode.data,
-                            ...updatedNode.data,
-                        }
+                state.diagramNodes[stateNodeIndex] = {
+                    ...stateNode,
+                    ...updatedNode,
+                    data: {
+                        ...stateNode.data,
+                        ...updatedNode.data,
                     }
                 }
             })
@@ -221,6 +219,25 @@ export const diagramEditorSlice = createSlice({
                 }
             }
             state.autoSaveCalled++
+        },
+        bulkUpdateEdges: (state, {payload}: PayloadAction<Optionalize<IReactFlowEdge, 'id'>[]>) => {
+            payload.forEach(updatedEdge => {
+                const stateEdgeIndex = state.diagramEdges.findIndex(node => node.id === updatedEdge.id)
+                const stateEdge = state.diagramEdges[stateEdgeIndex]
+                if (stateEdge) {
+                    if (stateEdge.data) {
+                        stateEdge.data = {
+                            ...stateEdge.data,
+                            ...updatedEdge.data,
+                        }
+                    }
+                    state.diagramEdges[stateEdgeIndex] = {
+                        ...stateEdge,
+                        ...updatedEdge,
+                    }
+                }
+
+            })
         },
         replaceEdge: (state, {payload}: PayloadAction<IReactFlowEdge>) => {
             const edgeToUpdateIndex = state.diagramEdges.findIndex(edge => edge.id === payload.id)
