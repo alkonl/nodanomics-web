@@ -10,32 +10,39 @@ export class GraphLogicManager {
     }
 
     getVariables(): INumberVariable[] {
-        const variables: INumberVariable[] = []
-        this.getIncomingLogicEdge.forEach((edge) => {
-            const source = edge.source
-            if (isIGetNodeExternalValue(source)) {
-                variables.push({
-                    variableName: edge.variableName || 'unknown',
-                    value: source.nodeExternalValue,
-                })
-            } else if (source instanceof GraphLoopNode) {
-                const variableNames = edge.variableName?.trim().split(',')
-                const incomingVariables = source.incomingData?.variables
-                const values = variableNames?.map((variableName) => {
-                    const value = incomingVariables?.find((variable) => {
-                        return variable.variableName === variableName
-                    })?.value
-                    return {
-                        variableName: variableName,
-                        value: value,
+        try {
+
+
+            const variables: INumberVariable[] = []
+            this.getIncomingLogicEdge.forEach((edge) => {
+                const source = edge.source
+                if (isIGetNodeExternalValue(source)) {
+                    variables.push({
+                        variableName: edge.variableName || 'unknown',
+                        value: source.nodeExternalValue,
+                    })
+                } else if (source instanceof GraphLoopNode) {
+                    const variableNames = edge.variableName?.trim().split(',')
+                    const incomingVariables = source.incomingData?.variables
+                    const values = variableNames?.map((variableName) => {
+                        const value = incomingVariables?.find((variable) => {
+                            return variable.variableName === variableName
+                        })?.value
+                        return {
+                            variableName: variableName,
+                            value: value,
+                        }
+                    }).filter((variable) => variable !== undefined)
+                    if (values) {
+                        variables.push(...values)
                     }
-                }).filter((variable) => variable !== undefined)
-                if(values) {
-                    variables.push(...values)
                 }
-            }
-        })
-        return variables
+            })
+            return variables
+        } catch (e) {
+            console.error('error', e)
+        }
+        return []
     }
 
 

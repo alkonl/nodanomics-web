@@ -4,11 +4,6 @@ import {EConnection, ENodeTrigger, isUpdateGraphNodeState} from "../../interface
 import {GraphEventListenerNode} from "./GraphNodes/GraphEventListenerNode";
 import {GraphNodeManager} from "./NodeManager";
 
-export type IReason = {
-    node: GraphBaseNode
-    trigger?: EConnection
-}
-
 export class RunManager {
     private graph: Graph
     private _currentStep = 0
@@ -29,7 +24,17 @@ export class RunManager {
     }
 
     updateState() {
+        // const nodes = this.sortedNodes()
+        // nodes.forEach(node => {
+        //     if (isUpdateGraphNodeState(node)) {
+        //         node.updateState()
+        //     }
+        // })
         const nodes = this.sortedNodes()
+        // const formulaNodes = startedNodes.map(node => {
+        //     return this.recursiveGetAllFormulaNodes(node)
+        // }).flat().filter(item => item instanceof GraphFormulaNode)
+        console.log('formulaNodes', nodes.map(node => node.data.name))
         nodes.forEach(node => {
             if (isUpdateGraphNodeState(node)) {
                 node.updateState()
@@ -62,8 +67,8 @@ export class RunManager {
         this._currentStep++
     }
 
-    private sortedNodes(): GraphBaseNode[] {
-        const startedNodes = this.graph.nodes.filter(node => {
+    private getStartedNodes(): GraphBaseNode[] {
+        return this.graph.nodes.filter(node => {
             if (node instanceof GraphSourceNode) {
                 if (node.triggerMode === ENodeTrigger.enabling || node.triggerMode === ENodeTrigger.passive) {
                     return node.hasEventListeners
@@ -73,7 +78,10 @@ export class RunManager {
                 return node
             }
         })
+    }
 
+    private sortedNodes(): GraphBaseNode[] {
+        const startedNodes = this.getStartedNodes()
         const childrenNodes = startedNodes.map(source => {
             return this.getNodesChildrenRecursive(source)
         })
@@ -95,7 +103,7 @@ export class RunManager {
     private getNodesChildrenRecursive(node: GraphBaseNode, children: GraphBaseNode[] = [node]) {
         const nodes = this.getNodesChildren(node)
         nodes.forEach(child => {
-            if (!children.includes(child) && !this.invokedNodes.includes(child)) {
+            if (!children.includes(child)) {
                 children.push(child)
             }
         })
@@ -120,7 +128,7 @@ export class RunManager {
             if (isHasEventConnection && isHasOtherConnectionThenEvent && edge.type === EConnection.EventConnection) {
                 return edge.target
             }
-            if(isHasEventConnection && edge.type === EConnection.EventConnection) {
+            if (isHasEventConnection && edge.type === EConnection.EventConnection) {
                 return edge.target
             }
             console.log(`isHasOtherConnectionThenEvent: ${node.data.name}`, isHasOtherConnectionThenEvent, edge)
@@ -129,5 +137,20 @@ export class RunManager {
             }
         })
         return children.filter(item => item !== undefined) as GraphBaseNode[]
+    }
+
+    private recursiveGetAllFormulaNodes(node: GraphBaseNode, nodes: GraphBaseNode[] = []) {
+        const children = this.getNodesChildren(node)
+        children.forEach(child => {
+            if (!nodes.includes(child)) {
+                nodes.push(child)
+            }
+        })
+        children.forEach(child => {
+            if (child.outgoingEdges.length > 0) {
+                this.recursiveGetAllFormulaNodes(child, nodes)
+            }
+        })
+        return nodes
     }
 }
