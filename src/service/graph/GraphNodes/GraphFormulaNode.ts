@@ -25,7 +25,9 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
     }
 
     get nodeExternalValue() {
-        return this.result?.value
+        if(typeof this.result?.value === 'number') {
+            return this.result?.value
+        }
     }
 
     get result() {

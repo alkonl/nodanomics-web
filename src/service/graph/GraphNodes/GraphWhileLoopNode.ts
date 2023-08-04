@@ -45,14 +45,7 @@ export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
         throw new Error(`isEventTriggered: unknown or empty mode ${mode}`)
     }
 
-
-    updateState() {
-        this.checkIsLoopActive()
-        this.updateVariables()
-    }
-
-
-    private updateVariables() {
+    protected updateVariables() {
         const variables = this.logicManager.getVariables()
         this.setVariables(variables)
     }

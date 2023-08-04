@@ -1,16 +1,15 @@
 import {Graph} from "./Graph";
-import {
-    GraphInteractiveNode,
-    GraphInvokableNode, GraphLoopNode,
-    GraphVariableNode
-} from "./GraphNodes";
+import {GraphBaseNode, GraphInvokableNode, GraphSourceNode, GraphVariableNode} from "./GraphNodes";
 import {ENodeTrigger, isUpdateGraphNodeState} from "../../interface";
 import {GraphEventListenerNode} from "./GraphNodes/GraphEventListenerNode";
+import {GraphNodeManager} from "./NodeManager";
 
 export class RunManager {
     private graph: Graph
     private _currentStep = 0
+    private invokedNodes: GraphNodeManager = new GraphNodeManager()
 
+    // private update
 
     constructor(graph: Graph) {
         this.graph = graph
@@ -36,55 +35,38 @@ export class RunManager {
     invokeStep() {
         console.log('invokeStep', this.graph)
         this.incrementStep()
-        this.updateLoopTriggers()
-        this.invokeInitialStep()
-        this.invokeTriggerEventListeners()
-        this.updateState()
+        this.sortedNodes().forEach(node => {
+            if (node instanceof GraphInvokableNode) {
+                node.invokeStep()
+                this.invokedNodes.add(node)
+            }
+        })
+        this.updateTriggeredNodes()
         this.graph.nodes.forEach(node => {
             if (node instanceof GraphVariableNode) {
                 node.updateRecoursesProvide()
             }
         })
+        this.invokedNodes.clear()
     }
-
-    private updateLoopTriggers() {
-        this.graph.nodes.forEach(node => {
-            if(node instanceof GraphLoopNode){
+    private updateTriggeredNodes() {
+        this.newTriggeredNodes.forEach(node => {
+            if (node instanceof GraphInvokableNode) {
                 node.invokeStep()
+                this.invokedNodes.add(node)
             }
         })
+        if(this.updateTriggeredNodes.length > 0){
+            this.updateTriggeredNodes()
+        }
     }
 
-    private invokeInitialStep() {
-        const nodesToInitialInvocation = this.graph.nodes.filter(node => {
-            if(!(node instanceof GraphInvokableNode)){
-                return false
-            }
-            if(node instanceof GraphLoopNode){
-                return false
-            }
-            if (node instanceof GraphInteractiveNode) {
-                if (node.triggerMode === ENodeTrigger.enabling) {
-                    return node.isTriggeredIncomingNodes
-                }
-                return true
-            } else if (node instanceof GraphEventListenerNode) {
-                return false
-            }
-            return true
-        }) as GraphInvokableNode[]
-
-        nodesToInitialInvocation.forEach(node => {
-                node.invokeStep()
+    private get newTriggeredNodes() {
+        const triggered = this.triggerEventListeners.filter(eventListener => eventListener.checkIsEventTriggered())
+        const nodes = triggered.map(node => {
+            return this.getNodesChildrenRecursive(node)
         })
-    }
-
-    private invokeTriggerEventListeners() {
-        this.triggerEventListeners.forEach(node => {
-            if (node.checkIsEventTriggered()) {
-                node.invokeStep()
-            }
-        })
+        return nodes.flat()
     }
 
     get triggerEventListeners(): GraphEventListenerNode[] {
@@ -96,42 +78,41 @@ export class RunManager {
         this._currentStep++
     }
 
-    // maybe not needed
-    // private sortedNodes() {
-    //     const startedSources = this.graph.nodes.filter(node => {
-    //         if (node instanceof GraphSourceNode) {
-    //             if (node.triggerMode === ENodeTrigger.enabling) {
-    //                 return node.isTriggeredIncomingNodes
-    //             }
-    //             return node
-    //         }
-    //     }) as GraphSourceNode[]
-    //
-    //     const sortedNodes = startedSources.map(source => {
-    //         return this.getNodesChildrenRecursive(source)
-    //     })
-    //     return sortedNodes.flat()
-    // }
-    //
-    // // maybe not needed
-    // private getNodesChildrenRecursive(node: GraphBaseNode, children: GraphBaseNode[] = [node]) {
-    //     const nodes = this.getNodesChildren(node)
-    //     nodes.forEach(child => {
-    //         if (!children.includes(child)) {
-    //             children.push(child)
-    //         }
-    //     })
-    //     nodes.forEach(child => {
-    //         if (child.outgoingEdges.length > 0) {
-    //             this.getNodesChildrenRecursive(child, children)
-    //         }
-    //     })
-    //     return children
-    // }
-    //
-    // // maybe not needed
-    // private getNodesChildren(node: GraphBaseNode) {
-    //     const children = node.outgoingEdges.map(edge => edge.target)
-    //     return children as GraphBaseNode[]
-    // }
+    private sortedNodes() {
+        const startedNodes = this.graph.nodes.filter(node => {
+            if (node instanceof GraphSourceNode) {
+                if (node.triggerMode === ENodeTrigger.enabling || node.triggerMode === ENodeTrigger.passive) {
+                    return node.hasEventListeners
+                }
+                return node
+            } else if (node instanceof GraphEventListenerNode) {
+                return node
+            }
+        })
+
+        const sortedNodes = startedNodes.map(source => {
+            return this.getNodesChildrenRecursive(source)
+        })
+        return sortedNodes.reverse().flat()
+    }
+
+    private getNodesChildrenRecursive(node: GraphBaseNode, children: GraphBaseNode[] = [node]) {
+        const nodes = this.getNodesChildren(node)
+        nodes.forEach(child => {
+            if (!children.includes(child) && !this.invokedNodes.includes(child)) {
+                children.push(child)
+            }
+        })
+        nodes.forEach(child => {
+            if (child.outgoingEdges.length > 0) {
+                this.getNodesChildrenRecursive(child, children)
+            }
+        })
+        return children
+    }
+
+    private getNodesChildren(node: GraphBaseNode) {
+        const children = node.outgoingEdges.map(edge => edge.target)
+        return children as GraphBaseNode[]
+    }
 }

@@ -20,8 +20,9 @@ export class GraphLogicManager {
                 })
             } else if (source instanceof GraphLoopNode) {
                 const variableNames = edge.variableName?.trim().split(',')
+                const incomingVariables = source.incomingData?.variables
                 const values = variableNames?.map((variableName) => {
-                    const value = source.incomingData?.variables?.find((variable) => {
+                    const value = incomingVariables?.find((variable) => {
                         return variable.variableName === variableName
                     })?.value
                     return {
@@ -29,7 +30,6 @@ export class GraphLogicManager {
                         value: value,
                     }
                 }).filter((variable) => variable !== undefined)
-
                 if(values) {
                     variables.push(...values)
                 }

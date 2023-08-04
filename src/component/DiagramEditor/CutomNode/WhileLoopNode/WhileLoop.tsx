@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {BaseNodeContainer} from "../container/BaseNodeContainer";
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";
@@ -7,7 +7,7 @@ import {EColor} from "../../../../constant";
 import {Box} from "@mui/material";
 import {NodeText} from "../styledComponent";
 import {EventHandle} from "../../CustomHandle/EventHandle";
-import {useExpandOrCollapse} from "../../../../hooks";
+import {useExpandOrCollapse, useWidthAndHeight} from "../../../../hooks";
 import {MButton} from "../../../base";
 import {LogicHandle} from "../../CustomHandle";
 
@@ -16,7 +16,9 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
 
     const isActiveText = data.isLoopActive ? 'active' : 'no active'
     const loopOutText = !data.isLoopWasActive ? 'was not active' : !data.isLoopActive ? 'finished' : 'running'
-
+    useEffect(() => {
+        console.log('isLoopWasActive', data.isLoopWasActive)
+    }, [data.isLoopWasActive]);
     const {isExpanded, expandOrCollapse} = useExpandOrCollapse({
         initialIsOpened: data.isCollapsed,
     })
@@ -24,6 +26,8 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
     const changeExpandOrCollapse = () => {
         expandOrCollapse({parentId: data.id})
     }
+
+    const {elementSize: externalConnectionContainerSize, elementRef: externalConnectionContainerRef} = useWidthAndHeight()
 
     return (
         <BaseNodeContainer node={props}>
@@ -55,21 +59,24 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                     </MButton.Submit>
                 </Box>
                 {/* external data handlers */}
-                <Box sx={{
-                    display: 'flex',
-                    position: 'relative',
-                }}>
-                    <Box sx={{
-                        position: 'absolute',
-                        left: -14,
-                        height: 'fit-content',
-                        width: 20,
+                <Box
+
+                    sx={{
                         display: 'flex',
-                        alignItems: 'center',
-                        backgroundColor: EColor.grey,
-                        borderRadius: 4,
-                        boxSizing: 'border-box'
+                        height: externalConnectionContainerSize.height,
                     }}>
+                    <Box
+                        ref={externalConnectionContainerRef}
+                        sx={{
+                            position: 'absolute',
+                            left: -14,
+                            height: 'fit-content',
+                            width: 'calc(100% + 14px)',
+                            display: 'flex',
+                            alignItems: 'space-between',
+                            borderRadius: 4,
+                            boxSizing: 'border-box'
+                        }}>
                         <Box sx={{
                             my: 0.3,
                             marginRight: 0.5,
@@ -79,50 +86,51 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                             gap: 1,
                             flexDirection: 'column',
                             justifyContent: 'space-between',
-                            alignItems: 'center',
+                            alignItems: 'flex-start',
                         }}>
+                            <Box sx={{
+                                position: 'relative',
+                                backgroundColor: EColor.white,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 1,
+                                padding: 0.5,
+                                borderRadius: 4,
+                                width: 'fit-content',
+                            }}>
+                                <LogicHandle
+                                    type="target"
+                                    position={Position.Left}
+                                    mode={EConnectionMode.NodeIncoming}
+                                />
+                                <NodeText.Name>
+                                    data
+                                </NodeText.Name>
+                            </Box>
 
-                            <LogicHandle
-                                type="target"
-                                position={Position.Left}
-                                mode={EConnectionMode.NodeIncoming}
-                            />
 
-                            <EventHandle
-                                type="target"
-                                position={Position.Left}
-                                mode={EConnectionMode.NodeIncoming}
-                            />
+                            <Box sx={{
+                                position: 'relative',
+                                backgroundColor: EColor.white,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 1,
+                                padding: 0.5,
+                                borderRadius: 4,
+                                width: 'fit-content',
+                            }}>
+                                <EventHandle type="target" position={Position.Left}
+                                             mode={EConnectionMode.WhileLoopIncomingTrigger}/>
+                                <NodeText.Name>
+                                    {isActiveText}
+                                </NodeText.Name>
+                            </Box>
                         </Box>
 
                     </Box>
-
-
-                </Box>
-                <Box sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    height: isExpanded ? 'fit-content' : 100,
-                    alignItems: 'flex-end',
-                }}>
                     <Box sx={{
-                        position: 'relative',
-                        backgroundColor: EColor.white,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 1,
-                        padding: 0.5,
-                        borderRadius: 4,
-                        width: 'fit-content',
-                    }}>
-                        <EventHandle type="target" position={Position.Left}
-                                     mode={EConnectionMode.WhileLoopIncomingTrigger}/>
-                        <NodeText.Name>
-                            {isActiveText}
-                        </NodeText.Name>
-                    </Box>
-                    <Box sx={{
-                        position: 'relative',
+                        position: 'absolute',
+                        right: -14,
                         backgroundColor: EColor.white,
                         padding: 1,
                         borderRadius: 4,
@@ -138,19 +146,17 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                                 {loopOutText}
                             </NodeText.Name>
                         </Box>
-
                         <EventHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
                     </Box>
                 </Box>
-
-                <Box sx={{
+                {!isExpanded && <Box sx={{
                     flex: 1,
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
                     width: 'fit-content',
                 }}>
-                    {!isExpanded && <Box sx={{
+                    <Box sx={{
                         backgroundColor: EColor.white,
                         paddingLeft: 0.7,
                         paddingRight: 1,
@@ -194,9 +200,9 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                         </Box>
 
 
-                    </Box>}
+                    </Box>
 
-                </Box>
+                </Box>}
             </Box>
         </BaseNodeContainer>
     );

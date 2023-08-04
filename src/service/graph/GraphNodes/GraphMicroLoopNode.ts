@@ -53,6 +53,11 @@ implements IGetNodeExternalValue, IUpdateGraphNodeState{
         }
     }
 
+    protected updateVariables() {
+        // const variables = this.getVariables()
+        // this.setVariables(variables)
+    }
+
     private addStep() {
         const updatedLoopCount = this.loopCurrentCount + 1
         const isPossibleToAddStep = updatedLoopCount <= this.loopCount

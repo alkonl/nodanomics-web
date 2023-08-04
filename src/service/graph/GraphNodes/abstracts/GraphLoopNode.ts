@@ -6,17 +6,25 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
     implements IIsEventTriggered {
 
 
-    protected abstract checkIsLoopActive(): void;
 
     abstract isEventTriggered(mode?: EConnectionMode): boolean;
+
+    protected abstract updateVariables(): void;
+
+    protected abstract checkIsLoopActive(): void;
 
     get incomingData() {
         return this.data.incomingData
     }
 
     invokeStep() {
-        this.checkIsLoopActive()
+        this.updateState()
         this.checkWasLoopActiveOnce()
+    }
+
+    updateState() {
+        this.checkIsLoopActive()
+        this.updateVariables()
     }
 
     get isLoopWasActive() {

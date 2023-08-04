@@ -4,7 +4,7 @@ import {BaseEdge, EdgeLabelRenderer, EdgeProps, getBezierPath} from 'reactflow';
 import {Box, Button} from "@mui/material";
 import {EElementType, IDataConnectionData} from "../../../interface";
 import {diagramEditorActions, useAppDispatch} from "../../../redux";
-import {EColor} from "../../../constant";
+import {EColor, EDGE_Z_INDEX} from "../../../constant";
 
 export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
     {
@@ -47,6 +47,7 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
                         transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
                         fontSize: 12,
                         pointerEvents: 'all',
+                        zIndex: EDGE_Z_INDEX,
                     }}
                 >
                     <Button
