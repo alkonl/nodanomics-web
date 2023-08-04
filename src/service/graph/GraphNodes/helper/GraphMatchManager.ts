@@ -35,7 +35,9 @@ export class GraphMatchManager {
                     [key: string]: number
                 }, variable) => {
                     const variableName = variable.variableName || '-'
-                    acc[variableName] = variable.value
+                    if(variable.value) {
+                        acc[variableName] = variable.value
+                    }
                     return acc
                 }, {})
                 return compiledFormula.evaluate(variables)

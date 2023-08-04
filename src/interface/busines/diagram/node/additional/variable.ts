@@ -2,7 +2,7 @@ import {isObject} from "../../../../../utils";
 
 export interface INumberVariable {
     variableName: string
-    value: number
+    value?: number
 }
 
 export interface INodeNumberVariable {

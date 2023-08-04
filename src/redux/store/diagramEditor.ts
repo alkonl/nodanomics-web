@@ -1,7 +1,6 @@
 // eslint-disable-next-line import/named
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
-    EDiagramNode,
     EElementType,
     IDiagramConnectionData,
     INodeData,
@@ -138,15 +137,15 @@ export const diagramEditorSlice = createSlice({
             payload.forEach(updatedNode => {
                 const stateNodeIndex = state.diagramNodes.findIndex(node => node.id === updatedNode.id)
                 const stateNode = state.diagramNodes[stateNodeIndex]
+                if(updatedNode.data){
+                    graph.updateNodeData(updatedNode.id, updatedNode.data)
+                }
                 state.diagramNodes[stateNodeIndex] = {
                     ...stateNode,
                     ...updatedNode,
-                    data: {
-                        ...stateNode.data,
-                        ...updatedNode.data,
-                    }
                 }
             })
+            updateNodesFromGraph(state.diagramNodes)
             state.autoSaveCalled++
         },
         // TODO FIX Sometimes when moving a node,
