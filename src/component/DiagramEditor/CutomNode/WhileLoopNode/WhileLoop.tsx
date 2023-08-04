@@ -73,7 +73,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                         <Box sx={{
                             my: 0.3,
                             marginRight: 0.5,
-                            marginLeft: 0.2,
+                            marginLeft:0.5,
                             display: 'flex',
                             flex: 1,
                             gap: 1,
@@ -116,9 +116,10 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                     <Box sx={{
                         position: 'relative',
                         backgroundColor: EColor.white,
-                        paddingLeft: 1,
-                        paddingRight: 0.7,
-                        py: 0.5,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
+                        padding: 0.5,
                         borderRadius: 4,
                         width: 'fit-content',
                     }}>
@@ -130,18 +131,21 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                     <Box sx={{
                         position: 'relative',
                         backgroundColor: EColor.white,
-                        paddingLeft: 0.7,
-                        paddingRight: 1,
-                        py: 0.5,
+                        padding: 1,
                         borderRadius: 4,
                         width: 'fit-content',
+                        display: 'flex',
+                        alignItems: 'center',
                     }}>
-                        <NodeText.Name>
-                            out state
-                        </NodeText.Name>
-                        <NodeText.Name>
-                           {loopOutText}
-                        </NodeText.Name>
+                        <Box>
+                            <NodeText.Name>
+                                out state
+                            </NodeText.Name>
+                            <NodeText.Name>
+                                {loopOutText}
+                            </NodeText.Name>
+                        </Box>
+
                         <EventHandle type="source" position={Position.Right} mode={EConnectionMode.LoopOut}/>
                     </Box>
                 </Box>
@@ -153,21 +157,26 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                     justifyContent: 'center',
                     width: 'fit-content',
                 }}>
-                    {isExpanded && <Box sx={{
+                    {!isExpanded && <Box sx={{
                         backgroundColor: EColor.white,
                         paddingLeft: 0.7,
                         paddingRight: 1,
                         py: 0.5,
                         borderRadius: 2,
                         position: 'relative',
+                        display: 'flex',
+                        alignItems: 'center',
                     }}>
+                        <Box>
+                            <NodeText.Name type="small">
+                                Loop
+                            </NodeText.Name>
+                            <NodeText.Name type="small">
+                                Trigger
+                            </NodeText.Name>
+                        </Box>
                         <EventHandle type="source" position={Position.Right} mode={EConnectionMode.LoopInToChildren}/>
-                        <NodeText.Name type="small">
-                            Loop
-                        </NodeText.Name>
-                        <NodeText.Name type="small">
-                            Trigger
-                        </NodeText.Name>
+
                     </Box>}
 
                 </Box>

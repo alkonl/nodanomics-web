@@ -8,13 +8,16 @@ import {EDGE_Z_INDEX} from "../../../constant";
 
 const getEdgeId = () => `edgeId_${nanoid()}`;
 
-export const defineConnectionTypeBySourceAndTarget = ({target, source}: {
-    source: string,
-    target: string
+export const defineConnectionTypeBySourceAndTarget = ({targetHandle, sourceHandle}: {
+    sourceHandle: string,
+    targetHandle: string
 }): EConnection => {
-    if (target === EConnection.LogicConnection) {
+    console.log('defineConnectionTypeBySourceAndTarget', targetHandle, sourceHandle)
+    const targetType = targetHandle.split('.')[0];
+    const sourceType = sourceHandle.split('.')[0];
+    if (targetType === EConnection.LogicConnection) {
         return EConnection.LogicConnection
-    } else if (target === EConnection.EventConnection || source === EConnection.EventConnection) {
+    } else if (targetType === EConnection.EventConnection || sourceType === EConnection.EventConnection) {
         return EConnection.EventConnection
     }
     return EConnection.DataConnection
@@ -25,7 +28,7 @@ export const defineConnectionModeBySourceHandle = ({sourceHandle}: {
 }): EConnectionMode | undefined => {
     console.log('defineConnectionModeBySourceHandle', sourceHandle)
     const mode = sourceHandle.split('.')[1];
-    if(mode && Object.values(EConnectionMode).includes(mode as EConnectionMode)){
+    if (mode && Object.values(EConnectionMode).includes(mode as EConnectionMode)) {
         return mode as EConnectionMode
     }
     return undefined
@@ -46,8 +49,8 @@ export const connectEdge = ({connection}:
     }
 
     const type = defineConnectionTypeBySourceAndTarget({
-        source: connection.sourceHandle,
-        target: connection.targetHandle
+        sourceHandle: connection.sourceHandle,
+        targetHandle: connection.targetHandle
     });
 
     const mode = defineConnectionModeBySourceHandle({

@@ -3,6 +3,7 @@ import React from 'react';
 import {Handle, HandleProps} from "reactflow";
 import {EConnection, EConnectionMode} from "../../../interface";
 import {EColor} from "../../../constant";
+import {Box} from "@mui/material";
 
 export const LogicHandle: React.FC<Pick<HandleProps, 'isConnectable' | 'type' | 'position'> & {
     style?: React.CSSProperties
@@ -15,20 +16,30 @@ export const LogicHandle: React.FC<Pick<HandleProps, 'isConnectable' | 'type' | 
           mode
       }) => {
     const id = `${EConnection.LogicConnection}.${mode}`;
+    // const id = `${EConnection.LogicConnection}`;
+
+    const translateLeftCoefficient = position === 'left' ? 25 : -25
 
     return (
-        <Handle
-            type={type}
-            position={position}
-            isConnectable={isConnectable}
-            id={id}
-            style={{
-                background: EColor.blue,
-                width: '10px',
-                height: '10px',
-                ...style
-            }}
-        />
+        <Box sx={{
+            position: 'relative',
+            height: '10px',
+            width: '10px',
+        }}>
+            <Handle
+                type={type}
+                position={position}
+                isConnectable={isConnectable}
+                id={id}
+                style={{
+                    background: EColor.blue,
+                    width: '10px',
+                    height: '10px',
+                    transform: `translate(${translateLeftCoefficient}%, -50%)`,
+                    ...style
+                }}
+            />
+        </Box>
     );
 };
 

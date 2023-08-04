@@ -1,7 +1,8 @@
 import {IUpdateReactflowNode} from "../interface";
 import {useGetChildrenNodes} from "./useGetChildrenNodes";
-import {diagramEditorActions, useAppDispatch} from "../redux";
+import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {useToggle} from "./useToggle";
+import {useUpdateNode} from "./useUpdateNode";
 
 export const useExpandOrCollapse = (props?: {
     initialIsOpened?: boolean
@@ -17,21 +18,28 @@ export const useExpandOrCollapse = (props?: {
         initialState: initialIsOpened
     })
 
+    const {diagramNodes} = useDiagramEditorState()
+
     const expandOrCollapse = ({parentId}: { parentId: string }) => {
+        const parentNode = diagramNodes.find(node => node.id === parentId)
+
         expandOrCollapseManager.toggle()
         const children = getChildrenNodes({parentId})
         const updatedNodes: IUpdateReactflowNode[] = children.map((childNode) => {
             return {
                 id: childNode.id,
-                hidden: !expandOrCollapseManager.isOpened,
+                hidden: expandOrCollapseManager.isOpened,
             }
         })
-        updatedNodes.push({
-            id: parentId,
-            data: {
-                isCollapsed: !expandOrCollapseManager.isOpened
-            }
-        })
+        if(parentNode){
+            updatedNodes.push({
+                id: parentId,
+                data: {
+                    ...parentNode.data,
+                    isCollapsed: !expandOrCollapseManager.isOpened
+                }
+            })
+        }
         dispatch(bulkUpdateNodes(updatedNodes))
     }
 
