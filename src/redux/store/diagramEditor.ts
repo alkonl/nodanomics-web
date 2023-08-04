@@ -15,6 +15,7 @@ import {
 import {addEdge, applyEdgeChanges, applyNodeChanges, Connection, EdgeChange, NodeChange, updateEdge} from "reactflow";
 import {Optionalize} from "../../utils";
 import {Graph, resetNodeStates, RunManager} from "../../service";
+import {canNodeHasChildren} from "../../service/reactflow/node/canNodeHasChildren";
 
 export interface IDiagramEditorState {
     currentDiagramId?: string
@@ -190,7 +191,7 @@ export const diagramEditorSlice = createSlice({
             nodeId: string
         }>) => {
             const node = state.diagramNodes.find(node => node.id === payload.nodeId)
-            if (node?.data.type === EDiagramNode.MicroLoop) {
+            if (node && canNodeHasChildren(node.data.type)) {
                 const toDeleteNodes: string[] = []
                 state.diagramNodes = state.diagramNodes.filter(node => {
                     const toDelete = node.id === payload.nodeId || node.parentNode === payload.nodeId
