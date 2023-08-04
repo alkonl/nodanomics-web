@@ -1,13 +1,17 @@
 import {Graph} from "./Graph";
 import {GraphBaseNode, GraphInvokableNode, GraphSourceNode, GraphVariableNode} from "./GraphNodes";
-import {ENodeTrigger, isUpdateGraphNodeState} from "../../interface";
+import {EConnection, ENodeTrigger, isUpdateGraphNodeState} from "../../interface";
 import {GraphEventListenerNode} from "./GraphNodes/GraphEventListenerNode";
-import {GraphNodeManager} from "./NodeManager";
+
+export type IReason = {
+    node: GraphBaseNode
+    trigger?: EConnection
+}
 
 export class RunManager {
     private graph: Graph
     private _currentStep = 0
-    private invokedNodes: GraphNodeManager = new GraphNodeManager()
+    private invokedNodes: IReason[] = []
 
     // private update
 
@@ -35,50 +39,54 @@ export class RunManager {
     invokeStep() {
         console.log('invokeStep', this.graph)
         this.incrementStep()
-        this.sortedNodes().forEach(node => {
+        const nodes = this.sortedNodes()
+        console.log('nodes', nodes)
+        nodes.forEach(toInvoke => {
+            const node = toInvoke.node
             if (node instanceof GraphInvokableNode) {
                 node.invokeStep()
-                this.invokedNodes.add(node)
+                this.invokedNodes.push(toInvoke)
             }
         })
-        this.updateTriggeredNodes()
+        // this.updateTriggeredNodes()
         this.graph.nodes.forEach(node => {
             if (node instanceof GraphVariableNode) {
                 node.updateRecoursesProvide()
             }
         })
-        this.invokedNodes.clear()
-    }
-    private updateTriggeredNodes() {
-        this.newTriggeredNodes.forEach(node => {
-            if (node instanceof GraphInvokableNode) {
-                node.invokeStep()
-                this.invokedNodes.add(node)
-            }
-        })
-        if(this.updateTriggeredNodes.length > 0){
-            this.updateTriggeredNodes()
-        }
+        this.invokedNodes = []
     }
 
-    private get newTriggeredNodes() {
-        const triggered = this.triggerEventListeners.filter(eventListener => eventListener.checkIsEventTriggered())
-        const nodes = triggered.map(node => {
-            return this.getNodesChildrenRecursive(node)
-        })
-        return nodes.flat()
-    }
+    // private updateTriggeredNodes() {
+    //     this.newTriggeredNodes.forEach(node => {
+    //         if (node instanceof GraphInvokableNode) {
+    //             node.invokeStep()
+    //             this.invokedNodes.push(node)
+    //         }
+    //     })
+    //     if (this.updateTriggeredNodes.length > 0) {
+    //         this.updateTriggeredNodes()
+    //     }
+    // }
 
-    get triggerEventListeners(): GraphEventListenerNode[] {
-        return this.graph.nodes.filter(node => node instanceof GraphEventListenerNode) as GraphEventListenerNode[]
-    }
+    // private get newTriggeredNodes() {
+    //     const triggered = this.triggerEventListeners.filter(eventListener => eventListener.checkIsEventTriggered())
+    //     const nodes = triggered.map(node => {
+    //         return this.getNodesChildrenRecursive(node)
+    //     })
+    //     return nodes.flat()
+    // }
+
+    // get triggerEventListeners(): GraphEventListenerNode[] {
+    //     return this.graph.nodes.filter(node => node instanceof GraphEventListenerNode) as GraphEventListenerNode[]
+    // }
 
 
     private incrementStep() {
         this._currentStep++
     }
 
-    private sortedNodes() {
+    private sortedNodes(): IReason[] {
         const startedNodes = this.graph.nodes.filter(node => {
             if (node instanceof GraphSourceNode) {
                 if (node.triggerMode === ENodeTrigger.enabling || node.triggerMode === ENodeTrigger.passive) {
@@ -93,10 +101,13 @@ export class RunManager {
         const sortedNodes = startedNodes.map(source => {
             return this.getNodesChildrenRecursive(source)
         })
-        return sortedNodes.reverse().flat()
+        console.log('sortedNodes', sortedNodes.map(nodes => nodes.map(node => node.node.data.name)))
+        return sortedNodes.flat()
     }
 
-    private getNodesChildrenRecursive(node: GraphBaseNode, children: GraphBaseNode[] = [node]) {
+    private getNodesChildrenRecursive(node: GraphBaseNode, children: IReason[] = [{
+        node,
+    }]) {
         const nodes = this.getNodesChildren(node)
         nodes.forEach(child => {
             if (!children.includes(child) && !this.invokedNodes.includes(child)) {
@@ -104,15 +115,40 @@ export class RunManager {
             }
         })
         nodes.forEach(child => {
-            if (child.outgoingEdges.length > 0) {
-                this.getNodesChildrenRecursive(child, children)
+            if (child.node.outgoingEdges.length > 0) {
+                this.getNodesChildrenRecursive(child.node, children)
             }
         })
         return children
     }
 
-    private getNodesChildren(node: GraphBaseNode) {
-        const children = node.outgoingEdges.map(edge => edge.target)
-        return children as GraphBaseNode[]
+    private getNodesChildren(node: GraphBaseNode): IReason[] {
+        const children = node.outgoingEdges.map(edge => {
+            const target = edge.target
+            const isHasEventConnection = target.outgoingEdges.some(edge => edge.type === EConnection.EventConnection)
+            const isHasOtherConnectionThenEvent = target.outgoingEdges.some(edge => edge.type !== EConnection.EventConnection)
+            const isHasOutgoingEdges = target.outgoingEdges.length > 0
+            console.log('target:', target.data.name)
+            if(!isHasOutgoingEdges) {
+                return {
+                    node: edge.target,
+                    trigger: edge.type
+                }
+            }
+            if (isHasEventConnection && isHasOtherConnectionThenEvent && edge.type === EConnection.EventConnection) {
+                return {
+                    node: edge.target,
+                    trigger: edge.type
+                }
+            }
+            console.log(`isHasOtherConnectionThenEvent: ${node.data.name}`, isHasOtherConnectionThenEvent, edge)
+            if (!isHasEventConnection) {
+                return {
+                    node: edge.target,
+                    trigger: edge.type
+                }
+            }
+        })
+        return children.filter(item => item !== undefined) as IReason[]
     }
 }

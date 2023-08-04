@@ -16,6 +16,10 @@ export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionB
         this._data = data
     }
 
+    get type() {
+        return this.data.type;
+    }
+
     get source() {
         return this._source;
     }
@@ -42,8 +46,11 @@ export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionB
         }
     }
 
-    updateSourceAndTarget({source, target}: { source: GraphBaseNode<INodeData>, target: GraphBaseNode<INodeData> }) {
-        this._data ={
+    updateSourceAndTarget({source, target}: {
+        source: GraphBaseNode<INodeData>,
+        target: GraphBaseNode<INodeData>
+    }) {
+        this._data = {
             ...this._data,
             sourceId: source.data.id,
             targetId: target.data.id,
