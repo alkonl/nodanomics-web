@@ -29,7 +29,7 @@ export class RunManager {
     }
 
     updateState() {
-        const nodes = this.graph.nodes
+        const nodes = this.sortedNodes()
         nodes.forEach(node => {
             if (isUpdateGraphNodeState(node)) {
                 node.updateState()
@@ -48,7 +48,7 @@ export class RunManager {
                 this.invokedNodes.add(node)
             }
         })
-        // this.updateTriggeredNodes()
+        this.updateState()
         this.graph.nodes.forEach(node => {
             if (node instanceof GraphVariableNode) {
                 node.updateRecoursesProvide()
@@ -83,9 +83,9 @@ export class RunManager {
             const aFirstNode = a[0]
             const bFirstNode = b[0]
             if (aFirstNode instanceof GraphEventListenerNode && !(bFirstNode instanceof GraphEventListenerNode)) {
-                return 1
-            } else if (!(aFirstNode instanceof GraphEventListenerNode) && bFirstNode instanceof GraphEventListenerNode) {
                 return -1
+            } else if (!(aFirstNode instanceof GraphEventListenerNode) && bFirstNode instanceof GraphEventListenerNode) {
+                return 1
             }
             return 0
         }).flat()
