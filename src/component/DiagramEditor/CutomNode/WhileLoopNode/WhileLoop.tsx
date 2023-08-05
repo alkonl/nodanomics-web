@@ -27,7 +27,10 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
         expandOrCollapse({parentId: data.id})
     }
 
-    const {elementSize: externalConnectionContainerSize, elementRef: externalConnectionContainerRef} = useWidthAndHeight()
+    const {
+        elementSize: externalConnectionContainerSize,
+        elementRef: externalConnectionContainerRef
+    } = useWidthAndHeight()
 
     return (
         <BaseNodeContainer node={props}>
@@ -131,78 +134,127 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                     <Box sx={{
                         position: 'absolute',
                         right: -14,
-                        backgroundColor: EColor.white,
-                        padding: 1,
-                        borderRadius: 4,
-                        width: 'fit-content',
-                        display: 'flex',
-                        alignItems: 'center',
-                    }}>
-                        <Box>
-                            <NodeText.Name>
-                                out state
-                            </NodeText.Name>
-                            <NodeText.Name>
-                                {loopOutText}
-                            </NodeText.Name>
-                        </Box>
-                        <EventHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
-                    </Box>
-                </Box>
-                {!isExpanded && <Box sx={{
-                    flex: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    width: 'fit-content',
-                }}>
-                    <Box sx={{
-                        backgroundColor: EColor.white,
-                        paddingLeft: 0.7,
-                        paddingRight: 1,
-                        py: 0.5,
-                        borderRadius: 2,
-                        gap: 1,
-                        position: 'relative',
                         display: 'flex',
                         flexDirection: 'column',
-                        alignItems: 'center',
+                        alignItems: 'flex-end',
+                        gap: 1,
                     }}>
                         <Box sx={{
-                            flex: 1,
+                            backgroundColor: EColor.white,
+                            padding: 0.5,
+                            borderRadius: 4,
+                            width: 'fit-content',
                             display: 'flex',
-                            alignItems: 'center'
+                            alignItems: 'center',
                         }}>
                             <Box>
-                                <NodeText.Name type="small">
-                                    start Trigger
+                                <NodeText.Name>
+                                    {loopOutText}
                                 </NodeText.Name>
                             </Box>
-                            <EventHandle type="source" position={Position.Right}
-                                         mode={EConnectionMode.LoopInnerToChildren}/>
+                            <EventHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
                         </Box>
                         <Box sx={{
-                            width: '100%',
+                            backgroundColor: EColor.white,
+                            padding: 0.5,
+                            borderRadius: 4,
+                            width: 'fit-content',
+                            display: 'flex',
+                            alignItems: 'center',
+                        }}>
+                            <Box>
+                                <NodeText.Name>
+                                    out data
+                                </NodeText.Name>
+                            </Box>
+                            <LogicHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
+                        </Box>
+                    </Box>
+                </Box>
+                {!isExpanded &&
+                    <Box
+                        sx={{
                             display: 'flex',
                             justifyContent: 'space-between',
+                        }}
+                    >
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            width: 'fit-content',
                         }}>
-                            <NodeText.Name type="small">
-                                data
-                            </NodeText.Name>
                             <Box sx={{
+                                backgroundColor: EColor.white,
+                                paddingLeft: 0.7,
+                                paddingRight: 1,
+                                py: 0.5,
+                                borderRadius: 2,
+                                gap: 1,
+                                position: 'relative',
                                 display: 'flex',
-                                flexDirection: 'column'
+                                flexDirection: 'column',
+                                alignItems: 'center',
                             }}>
-                                <LogicHandle type="source" position={Position.Right}
-                                             mode={EConnectionMode.LoopInnerToChildren}/>
+                                <Box sx={{
+                                    flex: 1,
+                                    display: 'flex',
+                                    alignItems: 'center'
+                                }}>
+                                    <Box>
+                                        <NodeText.Name type="small">
+                                            start Trigger
+                                        </NodeText.Name>
+                                    </Box>
+                                    <EventHandle type="source" position={Position.Right}
+                                                 mode={EConnectionMode.LoopInnerToChildren}/>
+                                </Box>
+                                <Box sx={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                }}>
+                                    <NodeText.Name type="small">
+                                        data
+                                    </NodeText.Name>
+                                    <Box sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column'
+                                    }}>
+                                        <LogicHandle type="source" position={Position.Right}
+                                                     mode={EConnectionMode.LoopInnerToChildren}/>
+                                    </Box>
+                                </Box>
                             </Box>
 
                         </Box>
+                        <Box sx={{
+                            backgroundColor: EColor.white,
+                            paddingLeft: 0.7,
+                            paddingRight: 1,
+                            py: 0.5,
+                            borderRadius: 2,
+                            height: 'fit-content',
+                        }}>
+                            <Box sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                height: 'fit-content',
+                            }}>
+                                <LogicHandle
+                                    type="target"
+                                    position={Position.Left}
+                                    mode={EConnectionMode.LoopChildrenToExternal}
+                                />
+                                <NodeText.Name>
+                                    data to out
+                                </NodeText.Name>
 
+                            </Box>
 
+                        </Box>
                     </Box>
-
-                </Box>}
+                }
             </Box>
         </BaseNodeContainer>
     );
