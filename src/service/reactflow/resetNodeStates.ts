@@ -55,6 +55,9 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                     ...node.data,
                     isLoopWasActive: undefined,
                     isLoopActive: undefined,
+                    // incomingData: {
+                    //     variables: [],
+                    // }
                 }
             }
         }

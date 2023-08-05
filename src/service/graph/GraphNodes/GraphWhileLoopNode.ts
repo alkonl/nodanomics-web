@@ -21,7 +21,7 @@ export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
 
 
     protected checkIsLoopActive() {
-        this.updateNode({isLoopActive: this.isTriggeredIncomingNodes})
+        // this.updateNode({isLoopActive: this.isTriggeredIncomingNodes})
     }
 
     get isTriggeredIncomingNodes(): boolean {
@@ -46,15 +46,15 @@ export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
     }
 
     protected updateVariables() {
-        const variables = this.logicManager.getVariables()
-        this.setVariables(variables)
+        // const variables = this.logicManager.getVariables()
+        // this.setVariables(variables)
     }
 
     private setVariables(variables: INumberVariable[]) {
-        this.updateNode({
-            incomingData: {
-                variables
-            }
-        })
+        // this.updateNode({
+        //     incomingData: {
+        //         variables
+        //     }
+        // })
     }
 }

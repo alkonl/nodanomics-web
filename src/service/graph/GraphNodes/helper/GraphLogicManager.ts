@@ -22,20 +22,20 @@ export class GraphLogicManager {
                         value: source.nodeExternalValue,
                     })
                 } else if (source instanceof GraphLoopNode) {
-                    const variableNames = edge.variableName?.trim().split(',')
-                    const incomingVariables = source.incomingData?.variables
-                    const values = variableNames?.map((variableName) => {
-                        const value = incomingVariables?.find((variable) => {
-                            return variable.variableName === variableName
-                        })?.value
-                        return {
-                            variableName: variableName,
-                            value: value,
-                        }
-                    }).filter((variable) => variable !== undefined)
-                    if (values) {
-                        variables.push(...values)
-                    }
+                    // const variableNames = edge.variableName?.trim().split(',')
+                    // const incomingVariables = source.incomingData?.variables
+                    // const values = variableNames?.map((variableName) => {
+                    //     const value = incomingVariables?.find((variable) => {
+                    //         return variable.variableName === variableName
+                    //     })?.value
+                    //     return {
+                    //         variableName: variableName,
+                    //         value: value,
+                    //     }
+                    // }).filter((variable) => variable !== undefined)
+                    // if (values) {
+                    //     variables.push(...values)
+                    // }
                 }
             })
             return variables

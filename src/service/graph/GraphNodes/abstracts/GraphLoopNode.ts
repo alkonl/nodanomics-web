@@ -13,9 +13,9 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
 
     protected abstract checkIsLoopActive(): void;
 
-    get incomingData() {
-        return this.data.incomingData
-    }
+    // get incomingData() {
+        // return this.data.incomingData
+    // }
 
     invokeStep() {
         this.updateState()

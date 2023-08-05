@@ -121,6 +121,9 @@ export const createBaseNode = ({type, position}: {
                     ...baseData,
                     type,
                     name: 'WhileLoop',
+                    // incomingData: {
+                    //     variables: [],
+                    // },
                     style: {
                         ...baseData.style,
                         width: loopSize.minWidth,
