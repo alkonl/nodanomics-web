@@ -10,6 +10,7 @@ export const CircleResourcesAnimation: React.FC<{
     play?: boolean
 }> = ({parentId, id, begin, duration, play = false, infinite}) => {
     const animationRef = React.useRef<SVGAnimationElement>(null)
+    const [isPlayed, setIsPlayed] = React.useState<boolean>(false)
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout | undefined
@@ -21,6 +22,7 @@ export const CircleResourcesAnimation: React.FC<{
                 }, begin)
             } else {
                 interval = setInterval(() => {
+                    console.log('interval:', id)
                     animationRef.current?.beginElement()
                 }, duration + begin)
             }
@@ -34,16 +36,16 @@ export const CircleResourcesAnimation: React.FC<{
 
     return (
         <>
-            {play && <circle id={id} r="8" fill={EColor.black}>
+            <circle id={id} r="8" fill={EColor.black}>
                 <animateMotion
-                    // repeatCount={infinite ? "indefinite" : undefined}
+                    repeatCount={0}
                     ref={animationRef}
                     dur={`${duration}.ms`}
-                    begin={`${begin}.ms`}
+                    begin={play ? `${begin}.ms` : 'indefinite'}
                 >
                     <mpath xlinkHref={`#${parentId}`}></mpath>
                 </animateMotion>
-            </circle>}
+            </circle>
 
         </>
     )
