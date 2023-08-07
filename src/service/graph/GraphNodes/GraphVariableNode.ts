@@ -68,7 +68,6 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
 
     updateState() {
         this.reCalculateMaxMinAvgValue()
-        this.updateResourcesCountHistory()
     }
 
     addResource(resources?: IResource[]) {
@@ -88,6 +87,11 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
                 ? [...this.data.resourcesCountHistory, this.currentResourcesCount]
                 : [this.currentResourcesCount]
         }
+    }
+
+    invokeStep() {
+        super.invokeStep();
+        this.updateResourcesCountHistory()
     }
 
 
@@ -174,6 +178,7 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
                     if (edge.target instanceof GraphVariableNode) {
                         const resources = this.takeCountResources(edge.countOfResource)
                         edge.target.addResource(resources)
+                        edge.changeIsTransferredResources(true)
                     }
                 }
             })
@@ -188,6 +193,7 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
                         if (edge.target instanceof GraphVariableNode) {
                             const resources = this.takeCountResources(edge.countOfResource)
                             edge.target.addResource(resources)
+                            edge.changeIsTransferredResources(true)
                         }
                     }
                 })

@@ -79,6 +79,7 @@ export const VariableStatisticsParameter: React.FC<{
             isShowChart,
         }
     }, [resourcesCountHistory])
+
     const {elementRef, elementSize} = useWidthAndHeight()
 
     const avg = resourcesCountHistory && resourcesCountHistory.reduce((acc, b) => acc + b, 0) / resourcesCountHistory.length

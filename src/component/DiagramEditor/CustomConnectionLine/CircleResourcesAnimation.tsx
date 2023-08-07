@@ -21,31 +21,30 @@ export const CircleResourcesAnimation: React.FC<{
                 }, begin)
             } else {
                 interval = setInterval(() => {
-                    if (play) {
-                        timeOut = setTimeout(() => {
-                            animationRef.current?.beginElement()
-                        }, begin)
-                    }
-                }, duration)
+                    animationRef.current?.beginElement()
+                }, duration + begin)
             }
         }
         return () => {
-            if (timeOut) {
-                clearInterval(interval)
-                clearTimeout(timeOut)
-            }
+            clearInterval(interval)
+            clearTimeout(timeOut)
+
         }
-    }, [animationRef, play]);
+    }, [animationRef, play, infinite]);
 
     return (
         <>
-            {play &&
-                <circle id={id} r="8" fill={EColor.black}>
-                    <animateMotion ref={animationRef} dur={play && `${duration}.ms`} begin={play && `${begin}.ms`}>
-                        <mpath xlinkHref={`#${parentId}`}></mpath>
-                    </animateMotion>
-                </circle>
-            }
+            {play && <circle id={id} r="8" fill={EColor.black}>
+                <animateMotion
+                    // repeatCount={infinite ? "indefinite" : undefined}
+                    ref={animationRef}
+                    dur={`${duration}.ms`}
+                    begin={`${begin}.ms`}
+                >
+                    <mpath xlinkHref={`#${parentId}`}></mpath>
+                </animateMotion>
+            </circle>}
+
         </>
     )
 }
