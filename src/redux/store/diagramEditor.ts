@@ -1,12 +1,10 @@
 // eslint-disable-next-line import/named
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
-    ECreatedNodeType,
     EDiagramNode,
     EElementType,
     IDiagramConnectionData,
     INodeData,
-    IReactFlowCreatedCompoundNode,
     IReactFlowEdge,
     IReactFlowEdgeConnection,
     IReactFlowNode,
@@ -66,27 +64,27 @@ export const diagramEditorSlice = createSlice({
             state.autoSaveCalled++
             graph.addOrGetNode(state.diagramNodes[length - 1].data)
         },
-        addCompoundNodes: (state, {payload}: PayloadAction<IReactFlowCreatedCompoundNode>) => {
-            switch (payload.type) {
-                case ECreatedNodeType.MicroLoop: {
-                    const {microLoopNodeData, startLoopNodeData} = payload.nodes
-                    state.diagramNodes.push(microLoopNodeData)
-                    state.diagramNodes.push(startLoopNodeData)
-                    graph.addCompoundNode({
-                        type: ECreatedNodeType.MicroLoop,
-                        nodes: {
-                            microLoopNodeData: microLoopNodeData.data,
-                            startLoopNodeData: startLoopNodeData.data,
-                        }
-                    })
-                    break
-                }
-                default:
-                    throw new Error(`Invalid compound node type ${payload.type}`)
-            }
-            state.autoSaveCalled++
-
-        },
+        // addCompoundNodes: (state, {payload}: PayloadAction<IReactFlowCreatedCompoundNode>) => {
+        //     switch (payload.type) {
+        //         case ECreatedNodeType.MicroLoop: {
+        //             const {microLoopNodeData, startLoopNodeData} = payload.nodes
+        //             state.diagramNodes.push(microLoopNodeData)
+        //             state.diagramNodes.push(startLoopNodeData)
+        //             graph.addCompoundNode({
+        //                 type: ECreatedNodeType.MicroLoop,
+        //                 nodes: {
+        //                     microLoopNodeData: microLoopNodeData.data,
+        //                     startLoopNodeData: startLoopNodeData.data,
+        //                 }
+        //             })
+        //             break
+        //         }
+        //         default:
+        //             throw new Error(`Invalid compound node type ${payload.type}`)
+        //     }
+        //     state.autoSaveCalled++
+        //
+        // },
         onNodesChange: (state, {payload}: PayloadAction<NodeChange[]>) => {
             state.diagramNodes = applyNodeChanges<INodeData>(payload, state.diagramNodes)
             state.autoSaveCalled++

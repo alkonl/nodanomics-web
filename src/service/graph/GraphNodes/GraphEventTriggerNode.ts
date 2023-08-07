@@ -46,7 +46,7 @@ export class GraphEventTriggerNode extends GraphInvokableNode<IEventTriggerNodeD
             if (typeof result === 'boolean') {
                 this.setResult(result)
             } else if (result !== undefined) {
-                throw new Error(`Unknown result type ${JSON.stringify(this.data)} result: ${JSON.stringify(result)}`)
+                console.error(`Unknown result type ${JSON.stringify(this.data, null, 2)} result: ${JSON.stringify(result, null, 2)} `)
             }
         }
     }

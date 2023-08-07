@@ -6,9 +6,17 @@ export enum EConnection {
     EventConnection = 'EventConnection',
 }
 
+export enum EConnectionMode{
+    LoopOut = 'LoopOut',
+    LoopIn = 'LoopIn',
+    LoopInToChildren = 'LoopInToChildren',
+}
+
+
 export interface IDiagramConnectionBaseData extends IDiagramBaseInteractiveElementData {
     sourceId: string;
     targetId: string;
     elementType: EElementType.Connection;
+    mode?: EConnectionMode
     type: EConnection;
 }

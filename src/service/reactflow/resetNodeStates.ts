@@ -35,16 +35,18 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                 data: {
                     ...node.data,
                     currentLoopCount: 0,
+                    isLoopActive: undefined,
+                    isLoopWasActive: undefined,
                 }
             }
         }
-        case EDiagramNode.MicroLoopStartNode:{
+        case EDiagramNode.WhileLoop:{
             return {
                 ...node,
                 data: {
                     ...node.data,
+                    isLoopWasActive: undefined,
                     isLoopActive: undefined,
-                    loopCurrentCount: undefined,
                 }
             }
         }

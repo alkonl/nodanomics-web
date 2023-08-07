@@ -16,10 +16,10 @@ import {
     EventListenerNode,
     EventTriggerNode,
     FormulaNode,
-    MicroLoopNode, MicroLoopStartNode,
+    MicroLoopNode,
     SourceNode,
     StaticVariableNode,
-    VariableNode
+    VariableNode, WhileLoopNode
 } from "../CutomNode";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../redux";
 import {Box} from "@mui/material";
@@ -37,7 +37,7 @@ const nodeTypes = {
     [EDiagramNode.EventTrigger]: EventTriggerNode,
     [EDiagramNode.EventListener]: EventListenerNode,
     [EDiagramNode.MicroLoop]: MicroLoopNode,
-    [EDiagramNode.MicroLoopStartNode]: MicroLoopStartNode,
+    [EDiagramNode.WhileLoop]: WhileLoopNode,
 };
 
 const edgeTypes = {

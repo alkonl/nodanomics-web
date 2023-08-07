@@ -46,8 +46,8 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
         toolbarName: 'M',
     }, {
         elementType: EElementType.Node,
-        type: ELogic.W,
-        tooltip: 'W',
+        type: EDiagramNode.WhileLoop,
+        tooltip: 'While Loop',
         toolbarName: 'W',
     }],
     [EElementShow.Event]: [{

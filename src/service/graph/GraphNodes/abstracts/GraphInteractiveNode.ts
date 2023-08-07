@@ -1,6 +1,5 @@
-import {ENodeTrigger, INodeDataWithInteractivity,} from "../../../../interface";
+import {ENodeTrigger, INodeDataWithInteractivity,isIIsEventTriggered} from "../../../../interface";
 import {GraphInvokableNode} from "./GraphInvokable";
-import {isIIsEventTriggered} from "../../../../interface/busines/graph/isEventTriggered";
 
 
 export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWithInteractivity = INodeDataWithInteractivity>
@@ -30,7 +29,9 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
         return this.incomingEdges.some(edge => {
             const source = edge.source;
             if (isIIsEventTriggered(source)) {
-                return source.isEventTriggered
+                console.log('edge:', edge)
+                console.log('source:', source)
+                return source.isEventTriggered(edge.data.mode)
             }
             return false
         })

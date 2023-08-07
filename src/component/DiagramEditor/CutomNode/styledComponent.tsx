@@ -3,7 +3,7 @@ import {styled, SxProps, Theme, Typography, TypographyProps} from "@mui/material
 import {EFontColor} from "../../../constant";
 import React from "react";
 
-type ITextType = 'text' | 'header'
+type ITextType = 'text' | 'header' | 'small'
 
 const typeTextStyle: {
     [key in ITextType]: SxProps<Theme>
@@ -15,6 +15,10 @@ const typeTextStyle: {
     header: {
         fontSize: 14,
         fontWeight: 600,
+    },
+    small: {
+        fontSize: 8,
+        fontWeight: 400,
     }
 }
 

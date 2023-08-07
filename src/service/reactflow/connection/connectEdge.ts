@@ -1,4 +1,4 @@
-import {EConnection, IDiagramConnectionData} from "../../../interface";
+import {EConnection, EConnectionMode, IDiagramConnectionData} from "../../../interface";
 // eslint-disable-next-line import/named
 import {Connection, Edge} from "reactflow";
 import {connectionStyle} from "./connectionStyle";
@@ -20,13 +20,24 @@ export const defineConnectionTypeBySourceAndTarget = ({target, source}: {
     return EConnection.DataConnection
 }
 
+export const defineConnectionModeBySourceHandle = ({sourceHandle}: {
+    sourceHandle: string,
+}): EConnectionMode | undefined => {
+    console.log('defineConnectionModeBySourceHandle', sourceHandle)
+    const mode = sourceHandle.split('.')[1];
+    if(mode && Object.values(EConnectionMode).includes(mode as EConnectionMode)){
+        return mode as EConnectionMode
+    }
+    return undefined
+}
+
 
 export const connectEdge = ({connection}:
                                 {
                                     connection: Connection
                                 }): Connection & { data: IDiagramConnectionData } &
     Pick<Edge, 'type' | 'id' | 'markerEnd' | 'zIndex'> => {
-
+    console.log('connection', connection)
     if (connection.sourceHandle === null || connection.targetHandle === null) {
         throw new Error('sourceHandle and targetHandle null')
     }
@@ -39,6 +50,11 @@ export const connectEdge = ({connection}:
         target: connection.targetHandle
     });
 
+    const mode = defineConnectionModeBySourceHandle({
+        sourceHandle: connection.sourceHandle,
+    })
+
+    console.log('mode', mode)
     const edgeId = getEdgeId();
     return {
         ...connectionStyle[type],
@@ -51,6 +67,7 @@ export const connectEdge = ({connection}:
             sourceId: connection.source,
             targetId: connection.target,
             id: edgeId,
+            mode,
         }
     }
 }

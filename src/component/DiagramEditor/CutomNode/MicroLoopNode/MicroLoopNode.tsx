@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";
-import {IMicroLoopNodeData} from "../../../../interface";
+import {EConnectionMode, IMicroLoopNodeData} from "../../../../interface";
 import {BaseNodeContainer} from "../container/BaseNodeContainer";
 import {Box, Input} from "@mui/material";
 import {NodeText} from "../styledComponent";
 import {EColor, EFontColor} from "../../../../constant";
 import {useUpdateNode} from "../../../../hooks";
 import {EventHandle} from "../../CustomHandle/EventHandle";
+import {LogicHandle} from "../../CustomHandle";
 
 export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) => {
     const {data} = props;
@@ -78,10 +79,38 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                 <Box sx={{
                     position: 'relative',
                     flex: 1,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                 }}>
+                    <Box sx={{
+                        height: 20,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                    }}>
+                        <Box sx={{
+                            position: 'relative',
+                        }}>
+                            <EventHandle
+                                type="source"
+                                position={Position.Right}
+                                mode={EConnectionMode.LoopInToChildren}
+                            />
+                        </Box>
+                        <Box sx={{
+                            position: 'relative',
+                        }}>
+                            <LogicHandle
+                                type="source"
+                                position={Position.Right}
+                            />
+                        </Box>
+                    </Box>
                     <EventHandle
                         type="source"
                         position={Position.Right}
+                        mode={EConnectionMode.LoopOut}
                     />
                 </Box>
             </Box>
