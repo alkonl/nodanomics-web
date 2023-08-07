@@ -33,6 +33,7 @@ export interface IDiagramEditorState {
     }
     currentRunningDiagramStep?: number
     isDiagramRunning: boolean
+    isDiagramRunningInterval: boolean
 }
 
 const initialState: IDiagramEditorState = {
@@ -40,6 +41,7 @@ const initialState: IDiagramEditorState = {
     diagramEdges: [],
     autoSaveCalled: 0,
     isDiagramRunning: false,
+    isDiagramRunningInterval: false,
 }
 
 const graph = new Graph()
@@ -51,6 +53,15 @@ const updateNodesFromGraph = (diagramNodes: IReactFlowNode[]) => {
         const updatedData = graph.findNode(node.id)?.data
         if (updatedData) {
             node.data = updatedData
+        }
+    })
+}
+
+const updateEdgesFromGraph = (diagramEdges: IReactFlowEdge[]) => {
+    diagramEdges.forEach(edge => {
+        const updatedData = graph.findEdge(edge.id)?.data
+        if (updatedData) {
+            edge.data = updatedData
         }
     })
 }
@@ -290,12 +301,20 @@ export const diagramEditorSlice = createSlice({
         invokeStep: (state) => {
             runManager.invokeStep()
             updateNodesFromGraph(state.diagramNodes)
+            updateEdgesFromGraph(state.diagramEdges)
             state.currentRunningDiagramStep = runManager.currentStep
         },
-        setIsDiagramRunning: (state, {payload}: PayloadAction<{
-            isRunning: boolean
+        setIsDiagramRunning: (state, {payload: {isDiagramRunningInterval, isRunning}}: PayloadAction<{
+            isRunning?: boolean
+            isDiagramRunningInterval?: boolean
         }>) => {
-          state.isDiagramRunning = payload.isRunning
+            if (isRunning !== undefined) {
+                state.isDiagramRunning = isRunning
+            }
+            if (isDiagramRunningInterval !== undefined) {
+                state.isDiagramRunningInterval = isDiagramRunningInterval
+            }
+
         },
         resetDiagramRun: (state) => {
             const resetNode = resetNodeStates(state.diagramNodes)

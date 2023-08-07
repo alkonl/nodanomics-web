@@ -5,56 +5,8 @@ import {EElementType, IDataConnectionData} from "../../../interface";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../redux";
 import {Box, Button} from "@mui/material";
 import {DIAGRAM_RUN_DURATION, EColor, EDGE_Z_INDEX} from "../../../constant";
+import {CircleResourcesAnimation} from "./CircleResourcesAnimation";
 
-const CircleAnimation: React.FC<{
-    parentId: string
-    id: string
-    begin: number
-    duration: number
-    infinite?: boolean
-    play?: boolean
-}> = ({parentId, id, begin, duration, play = false}) => {
-    const animationRef = React.useRef<SVGAnimationElement>(null)
-
-    // useTimeout(() => {
-    //     animationRef.current?.beginElement()
-    // }, begin, [animationRef])
-
-    useEffect(() => {
-        let timeOut: NodeJS.Timeout | undefined
-        let interval: NodeJS.Timeout | undefined
-        if (animationRef.current && play) {
-            timeOut = setTimeout(() => {
-                animationRef.current?.beginElement()
-            }, begin)
-            // interval = setInterval(() => {
-            //     if (play) {
-            //         timeOut = setTimeout(() => {
-            //             animationRef.current?.beginElement()
-            //         }, begin)
-            //     }
-            // }, duration)
-        }
-        return () => {
-            if (timeOut) {
-                clearInterval(interval)
-                clearTimeout(timeOut)
-            }
-        }
-    }, [animationRef, play]);
-
-    return (
-        <>
-            {play &&
-                <circle id={id} r="8" fill={EColor.black}>
-                    <animateMotion ref={animationRef} dur={`${duration}.ms`} begin={`${begin}.ms`}>
-                        <mpath xlinkHref={`#${parentId}`}></mpath>
-                    </animateMotion>
-                </circle>
-            }
-        </>
-    )
-}
 
 export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
     {
@@ -70,7 +22,7 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
         data
     }
 ) => {
-    const {isDiagramRunning} = useDiagramEditorState()
+    const {isDiagramRunning, isDiagramRunningInterval} = useDiagramEditorState()
     const [edgePath, labelX, labelY] = getBezierPath({
         sourceX,
         sourceY,
@@ -96,13 +48,17 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
         setCircleCount(data?.formula ? parseInt(data.formula) : 0)
     }, [data?.formula]);
 
+
+    const isPlay = isDiagramRunning && data?.isTransferredResources
+
     return (
         <>
             {Array.from({length: circleCount}).map((_, index) => {
                 const delay = index * 50
                 return (
-                    <CircleAnimation
-                        play={isDiagramRunning}
+                    <CircleResourcesAnimation
+                        infinite={isDiagramRunningInterval}
+                        play={isPlay}
                         duration={DIAGRAM_RUN_DURATION - delay - 100}
                         begin={delay}
                         key={index} parentId={animationCircleId}

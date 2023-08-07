@@ -4,7 +4,7 @@ import {IDiagramConnectionBaseData, INodeData} from "../../../../interface";
 export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionBaseData = IDiagramConnectionBaseData> {
     private _source: GraphBaseNode<INodeData>;
     private _target: GraphBaseNode<INodeData>;
-    private _data: IGenericEdgeData;
+    protected _data: IGenericEdgeData;
 
     protected constructor(
         source: GraphBaseNode<INodeData>,

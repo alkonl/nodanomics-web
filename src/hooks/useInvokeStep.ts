@@ -1,11 +1,11 @@
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {DIAGRAM_RUN_DURATION} from "../constant";
 
 export const useInvokeStep = () => {
-    const [isManyRuns, setIsManyRuns] = useState(false)
+
     const dispatch = useAppDispatch()
-    const {isDiagramRunning} = useDiagramEditorState()
+    const {isDiagramRunning, isDiagramRunningInterval} = useDiagramEditorState()
     const {invokeStep, setIsDiagramRunning} = diagramEditorActions
 
     const runStep = () => {
@@ -14,7 +14,7 @@ export const useInvokeStep = () => {
 
     const runOneStep = () => {
         runStep()
-        if(!isManyRuns) {
+        if(!isDiagramRunningInterval) {
             dispatch(setIsDiagramRunning({
                 isRunning: true
             }))
@@ -31,7 +31,7 @@ export const useInvokeStep = () => {
 
     useEffect(() => {
         let interval: NodeJS.Timer | undefined
-        if (isManyRuns) {
+        if (isDiagramRunningInterval) {
             interval = setInterval(runStep, DIAGRAM_RUN_DURATION)
         } else {
             if (interval) {
@@ -43,12 +43,12 @@ export const useInvokeStep = () => {
                 clearInterval(interval)
             }
         }
-    }, [isManyRuns])
+    }, [isDiagramRunningInterval])
 
     const toggleStepInterval = () => {
-        setIsManyRuns(!isManyRuns)
         dispatch(setIsDiagramRunning({
-            isRunning: !isDiagramRunning
+            isRunning: !isDiagramRunning,
+            isDiagramRunningInterval: !isDiagramRunningInterval
         }))
     }
     return {runStep: runOneStep , isRunning: isDiagramRunning, toggleStepInterval}

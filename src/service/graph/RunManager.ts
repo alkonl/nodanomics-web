@@ -3,6 +3,7 @@ import {GraphBaseNode, GraphInvokableNode, GraphSourceNode, GraphVariableNode} f
 import {EConnection, EConnectionMode, ENodeTrigger, isUpdateGraphNodeState} from "../../interface";
 import {GraphEventListenerNode} from "./GraphNodes/GraphEventListenerNode";
 import {GraphNodeManager} from "./NodeManager";
+import {GraphDataEdge} from "./GraphEdge";
 
 export class RunManager {
     private graph: Graph
@@ -32,6 +33,7 @@ export class RunManager {
 
     invokeStep() {
         this.incrementStep()
+        this.resetIsTransferredResources()
         const nodes = this.sortedNodes()
         nodes.forEach(node => {
             if (node instanceof GraphInvokableNode) {
@@ -130,5 +132,13 @@ export class RunManager {
 
         })
         return children.filter(item => item !== undefined) as GraphBaseNode[]
+    }
+
+    private resetIsTransferredResources() {
+        this.graph.edges.forEach(edge => {
+            if (edge instanceof GraphDataEdge) {
+                edge.changeIsTransferredResources(false)
+            }
+        })
     }
 }

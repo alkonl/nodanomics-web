@@ -21,6 +21,7 @@ export class GraphSourceNode extends GraphInteractiveNode<ISourceNodeData> {
             const resources = this.generateResourceFromSource(edge.countOfResource);
             if (GraphVariableNode.baseNodeIsVariable(edge.target)) {
                 edge.target.addResource(resources);
+                edge.changeIsTransferredResources(true)
             }
         })
     }

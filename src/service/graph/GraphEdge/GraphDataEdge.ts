@@ -21,4 +21,16 @@ export class GraphDataEdge extends GraphBaseEdge<IDataConnectionData> {
     static baseEdgeIsData(edge: GraphBaseEdge): edge is GraphDataEdge {
         return edge instanceof GraphDataEdge;
     }
+
+    changeIsTransferredResources(isTransferredResources: boolean) {
+        if(this._data){
+            console.log('changeIsTransferredResources', isTransferredResources)
+
+            this._data = {
+                ...this._data,
+                isTransferredResources: isTransferredResources,
+            }
+        }
+
+    }
 }
