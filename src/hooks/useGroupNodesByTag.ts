@@ -10,7 +10,7 @@ export const useGroupNodesByTag = (nodes:  IReactFlowNode[]) => {
                 return;
             }
             if (groupedNodesByTag[node.data.tag] === undefined) {
-                groupedNodesByTag[node.data.tag] = {
+                groupedNodesByTag[node.data?.tag] = {
                     tag: node.data.tag,
                     nodes: [],
                 }

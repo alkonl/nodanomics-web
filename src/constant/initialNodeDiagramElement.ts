@@ -9,6 +9,7 @@ export const initialNodeDiagramElement = {
         fontSize: 14,
         fontColor: EFontColor.grey4,
         fontStyles: [],
+        zIndex: 10,
     },
     borderWidth: 1,
 }

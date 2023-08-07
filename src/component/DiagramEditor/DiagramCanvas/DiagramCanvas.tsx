@@ -1,21 +1,26 @@
 import React, {DragEvent, useCallback, useRef, useState} from 'react';
-import ReactFlow, {
-    Background,
-    Controls,
-    // eslint-disable-next-line import/named
-    ReactFlowInstance, NodeChange, EdgeChange, ConnectionMode
-} from 'reactflow';
+// eslint-disable-next-line import/named
+import ReactFlow, {Background, ConnectionMode, Controls, EdgeChange, NodeChange, ReactFlowInstance} from 'reactflow';
 import 'reactflow/dist/style.css';
 
 import {
     useEdgeUpdateManager,
-    useOnDrop,
+    useOnDrop, useOnNodeDrag,
     useOnNodeDragStart,
+    useOnNodeDragStop,
     useUploadDiagramOnServer
 } from "../../../hooks";
 import styles from './DiagramCanvas.module.scss'
 import {EConnection, EDiagramNode} from "../../../interface";
-import {EventListenerNode, EventTriggerNode, FormulaNode, VariableNode, SourceNode, StaticVariableNode} from "../CutomNode";
+import {
+    EventListenerNode,
+    EventTriggerNode,
+    FormulaNode,
+    MicroLoopNode, MicroLoopStartNode,
+    SourceNode,
+    StaticVariableNode,
+    VariableNode
+} from "../CutomNode";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../redux";
 import {Box} from "@mui/material";
 import {DataConnection} from "../CustomConnectionLine/DataConnection";
@@ -31,6 +36,8 @@ const nodeTypes = {
     [EDiagramNode.Variable]: VariableNode,
     [EDiagramNode.EventTrigger]: EventTriggerNode,
     [EDiagramNode.EventListener]: EventListenerNode,
+    [EDiagramNode.MicroLoop]: MicroLoopNode,
+    [EDiagramNode.MicroLoopStartNode]: MicroLoopStartNode,
 };
 
 const edgeTypes = {
@@ -45,6 +52,10 @@ export const DiagramCanvas = () => {
     const dispatch = useAppDispatch()
 
     const {diagramNodes, diagramEdges} = useDiagramEditorState()
+
+    const onNodeDragStop = useOnNodeDragStop()
+    const onNodeDrag = useOnNodeDrag()
+
     const {onNodesChange, addEdge} = diagramEditorActions
     const onNodesChangeHandler = useCallback((nodes: NodeChange[]) => dispatch(onNodesChange(nodes)), [dispatch])
     const onEgeChangeHandler = useCallback((eges: EdgeChange[]) => dispatch(addEdge(eges)), [dispatch])
@@ -97,8 +108,10 @@ export const DiagramCanvas = () => {
                     fitView
                     onInit={setReactFlowInstance}
                     onDrop={onDrop}
+                    onNodeDrag={onNodeDrag}
                     onDragOver={onDragOver}
                     onNodeDragStart={onNodeDragStart}
+                    onNodeDragStop={onNodeDragStop}
                     edgeTypes={edgeTypes}
                     connectionMode={ConnectionMode.Loose}
                 >

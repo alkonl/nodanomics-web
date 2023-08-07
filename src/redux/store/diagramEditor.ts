@@ -1,14 +1,19 @@
 // eslint-disable-next-line import/named
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
-    IReactFlowNode,
-    INodeData,
-    IReactFlowEdge,
+    ECreatedNodeType,
+    EDiagramNode,
+    EElementType,
     IDiagramConnectionData,
-    EElementType, IReactFlowEdgeConnection
+    INodeData,
+    IReactFlowCreatedCompoundNode,
+    IReactFlowEdge,
+    IReactFlowEdgeConnection,
+    IReactFlowNode,
+    isINodeSize
 } from "../../interface";
 // eslint-disable-next-line import/named
-import {addEdge, applyEdgeChanges, applyNodeChanges, NodeChange, EdgeChange, updateEdge, Connection} from "reactflow";
+import {addEdge, applyEdgeChanges, applyNodeChanges, Connection, EdgeChange, NodeChange, updateEdge} from "reactflow";
 import {Optionalize} from "../../utils";
 import {Graph, resetNodeStates, RunManager} from "../../service";
 
@@ -60,6 +65,27 @@ export const diagramEditorSlice = createSlice({
             const length = state.diagramNodes.push(payload)
             state.autoSaveCalled++
             graph.addOrGetNode(state.diagramNodes[length - 1].data)
+        },
+        addCompoundNodes: (state, {payload}: PayloadAction<IReactFlowCreatedCompoundNode>) => {
+            switch (payload.type) {
+                case ECreatedNodeType.MicroLoop: {
+                    const {microLoopNodeData, startLoopNodeData} = payload.nodes
+                    state.diagramNodes.push(microLoopNodeData)
+                    state.diagramNodes.push(startLoopNodeData)
+                    graph.addCompoundNode({
+                        type: ECreatedNodeType.MicroLoop,
+                        nodes: {
+                            microLoopNodeData: microLoopNodeData.data,
+                            startLoopNodeData: startLoopNodeData.data,
+                        }
+                    })
+                    break
+                }
+                default:
+                    throw new Error(`Invalid compound node type ${payload.type}`)
+            }
+            state.autoSaveCalled++
+
         },
         onNodesChange: (state, {payload}: PayloadAction<NodeChange[]>) => {
             state.diagramNodes = applyNodeChanges<INodeData>(payload, state.diagramNodes)
@@ -122,12 +148,58 @@ export const diagramEditorSlice = createSlice({
             updateNodes(state.diagramNodes)
             state.autoSaveCalled++
         },
+        // TODO FIX Sometimes when moving a node,
+        //  we update the parent of the node by simply moving it.
+        //  This causes a bug, the node teleports after we stop moving it.
+        //  This is now fixed with the following code node.parentNode === undefined
+        updateNodeParent: (state, {payload}: PayloadAction<{ node: IReactFlowNode, parentNode: IReactFlowNode }>) => {
+            const node = state.diagramNodes.find(node => node.id === payload.node.id)
+            if (node && node.parentNode === undefined) {
+                node.parentNode = payload.parentNode.id
+                node.position = {
+                    x: payload.node.position.x - payload.parentNode.position.x,
+                    y: payload.node.position.y - payload.parentNode.position.y,
+                }
+                node.zIndex = 1100
+                node.extent = 'parent'
+                state.autoSaveCalled++
+            }
+        },
+        updateNodeSize: (state, {payload}: PayloadAction<{
+            nodeId: string,
+            size: { width: number, height: number }
+        }>) => {
+            const node = state.diagramNodes.find(node => node.id === payload.nodeId)
+            if (node && isINodeSize(node.data.style)) {
+                node.data.style = {
+                    ...node.data.style,
+                    width: payload.size.width,
+                    height: payload.size.height,
+                }
+                graph.updateNodeData(payload.nodeId, node.data)
+                state.autoSaveCalled++
+            }
+        },
         deleteNode: (state, {payload}: PayloadAction<{ nodeId: string }>) => {
-            state.diagramNodes = state.diagramNodes.filter(node => node.id !== payload.nodeId)
+            const node = state.diagramNodes.find(node => node.id === payload.nodeId)
+            if (node?.data.type === EDiagramNode.MicroLoop) {
+                const toDeleteNodes: string[] = []
+                state.diagramNodes = state.diagramNodes.filter(node => {
+                    const toDelete = node.id === payload.nodeId || node.parentNode === payload.nodeId
+                    if (toDelete) {
+                        toDeleteNodes.push(node.id)
+                    }
+                    return !toDelete
+                })
+                graph.deleteBulkNodes(toDeleteNodes)
+
+            } else {
+                state.diagramNodes = state.diagramNodes.filter(node => node.id !== payload.nodeId)
+                graph.deleteNode({
+                    nodeId: payload.nodeId
+                })
+            }
             state.autoSaveCalled++
-            graph.deleteNode({
-                nodeId: payload.nodeId
-            })
         },
         updateEdgeData: (state, {payload}: PayloadAction<Optionalize<IDiagramConnectionData, 'id' | 'type'>>) => {
             const edge = state.diagramEdges.find(edge => edge.id === payload.id)
@@ -180,6 +252,7 @@ export const diagramEditorSlice = createSlice({
         },
         invokeStep: (state) => {
             runManager.invokeStep()
+            console.log('invokeStep:', graph)
             updateNodes(state.diagramNodes)
             state.currentRunningDiagramStep = runManager.currentStep
         },

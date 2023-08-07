@@ -6,6 +6,7 @@ import {ISourceNodeData} from "../sourceNode";
 import {IEventTriggerNodeData} from "../eventTriggerNode";
 import {IEventListenerNodeData} from "../eventListenerNode";
 import {IStaticVariableNodeData} from "../staticVariableNode";
+import {IMicroLoopNodeData, IMicroLoopStartNodeData} from "../microLoop";
 
 
 export type INodeData = IStaticVariableNodeData
@@ -14,6 +15,8 @@ export type INodeData = IStaticVariableNodeData
     | IVariableNodeData
     | IEventTriggerNodeData
     | IEventListenerNodeData
+    | IMicroLoopNodeData
+    | IMicroLoopStartNodeData
 
 export type IReactFlowNode = Node<INodeData>
 
