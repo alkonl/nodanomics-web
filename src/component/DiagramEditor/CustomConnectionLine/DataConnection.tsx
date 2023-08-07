@@ -6,28 +6,16 @@ import {diagramEditorActions, useAppDispatch} from "../../../redux";
 import {Box, Button} from "@mui/material";
 import {EColor, EDGE_Z_INDEX} from "../../../constant";
 
-const CircleAnimation = () => {
+const CircleAnimation: React.FC<{
+    id: string
+}> = ({id}) => {
     return (
         <circle cx="" cy="" r="8" fill="#529fd9">
             <animateMotion dur="1.6s" repeatCount="indefinite">
-                <mpath xlinkHref="#wire"></mpath>
+                <mpath xlinkHref={`#${id}`}></mpath>
             </animateMotion>
         </circle>
     )
-}
-
-function SimpleEdgeWithAnimation({edgePath}: { edgePath: string; }) {
-    return (
-        <g>
-            <path d={edgePath}
-                  stroke="#529fd9" strokeWidth="2" fill="none" id="wire"></path>
-            <circle cx="" cy="" r="8" fill="#529fd9">
-                <animateMotion dur="1.6s" repeatCount="indefinite">
-                    <mpath xlinkHref="#wire"></mpath>
-                </animateMotion>
-            </circle>
-        </g>
-    );
 }
 
 export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
@@ -61,25 +49,12 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
             elementType: EElementType.Connection,
         }))
     }
-    const svg = 'M121.59 254L134.26 217.361H127.278L118.137 246.51H117.705L108.489 217.361H101.252L114.049 254H121.59Z'
-    console.log('edge data',
-        targetX,
-        targetY,
-        sourceX,
-        sourceY,
-        sourcePosition,
-        targetPosition,
-    )
-    console.log('edge style', style, edgePath)
-
-
-
+    const animationCircleId = `animation-circle-${id}`
 
     return (
         <>
-            {/*<SimpleEdgeWithAnimation edgePath={edgePath}/>*/}
-            <CircleAnimation/>
-            <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} id="wire"/>
+            <CircleAnimation id={animationCircleId}/>
+            <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} id={animationCircleId}/>
             <EdgeLabelRenderer>
                 <Box
                     sx={{
