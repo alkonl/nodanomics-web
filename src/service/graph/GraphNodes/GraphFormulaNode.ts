@@ -79,9 +79,8 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
     }
 
     private setVariables(variables: INumberVariable[]) {
-        this._data = {
-            ...this.data,
-            variables,
-        }
+        // this._data = {
+        //     ...this.data,
+        // }
     }
 }

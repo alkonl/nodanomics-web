@@ -13,6 +13,10 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
 
     protected abstract checkIsLoopActive(): void;
 
+    // get incomingVariables() {
+    //     // return this.data.incomingVariables
+    // }
+
     // get incomingData() {
         // return this.data.incomingData
     // }

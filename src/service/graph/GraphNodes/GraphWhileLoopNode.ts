@@ -46,15 +46,18 @@ export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
     }
 
     protected updateVariables() {
-        // const variables = this.logicManager.getVariables()
-        // this.setVariables(variables)
+        const variables = this.logicManager.getVariables()
+        // console.log('while loop vars', variables)
+        this.setVariables(variables)
     }
 
     private setVariables(variables: INumberVariable[]) {
+        this._data = {
+            ...this.data,
+            isLoopActive: true,
+        }
         // this.updateNode({
-        //     incomingData: {
-        //         variables
-        //     }
+        //     incomingVariables: variables,
         // })
     }
 }

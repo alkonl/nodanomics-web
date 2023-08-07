@@ -22,9 +22,10 @@ export class GraphLogicManager {
                         value: source.nodeExternalValue,
                     })
                 } else if (source instanceof GraphLoopNode) {
-                    // const variableNames = edge.variableName?.trim().split(',')
-                    // const incomingVariables = source.incomingData?.variables
-                    // const values = variableNames?.map((variableName) => {
+                    // console.log('source', source)
+                    // const variableNames = edge.variableName?.trim().split(',') || []
+                    // const incomingVariables = source.incomingVariables
+                    // const values = variableNames.map((variableName) => {
                     //     const value = incomingVariables?.find((variable) => {
                     //         return variable.variableName === variableName
                     //     })?.value
