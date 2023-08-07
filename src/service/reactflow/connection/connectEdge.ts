@@ -41,7 +41,7 @@ export const connectEdge = ({connection}:
                                     connection: Connection
                                 }): Connection & { data: IDiagramConnectionData } &
     Pick<Edge, 'type' | 'id' | 'markerEnd' | 'zIndex'> => {
-    console.log('connection', connection)
+    console.log('connectEdge.connection', connection)
     if (connection.sourceHandle === null || connection.targetHandle === null) {
         throw new Error('sourceHandle and targetHandle null')
     }
@@ -56,12 +56,8 @@ export const connectEdge = ({connection}:
 
     const sourceMode = parseConnectionHandleId(connection.sourceHandle).mode;
     const targetMode = parseConnectionHandleId(connection.targetHandle).mode;
+    console.log('targetMode', targetMode)
 
-    const mode = defineConnectionModeBySourceHandle({
-        sourceHandle: connection.sourceHandle,
-    })
-
-    console.log('mode', mode)
     const edgeId = getEdgeId();
     return {
         ...connectionStyle[type],

@@ -247,7 +247,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                                     mode={EConnectionMode.LoopChildrenToExternal}
                                 />
                                 <NodeText.Name>
-                                    data to out
+                                    data to out1
                                 </NodeText.Name>
 
                             </Box>

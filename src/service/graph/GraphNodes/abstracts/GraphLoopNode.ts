@@ -1,15 +1,18 @@
 import {GraphInvokableNode} from "./GraphInvokable";
 import {ILoopNodeData} from "../../../../interface/busines/diagram/node/structures/loopNode";
 import {EConnectionMode, IIsEventTriggered} from "../../../../interface";
+import {GraphLogicManager} from "../helper/GraphLogicManager";
 
 export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILoopNodeData> extends GraphInvokableNode<IGenericNodeData>
     implements IIsEventTriggered {
 
-
+    private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
 
     abstract isEventTriggered(mode?: EConnectionMode): boolean;
 
-    protected abstract updateVariables(): void;
+    // protected abstract updateVariables(): void;
+    //
+    // protected abstract updateVariablesToExternal(): void;
 
     protected abstract checkIsLoopActive(): void;
 
@@ -17,9 +20,9 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
         return this.data.incomingVariables
     }
 
-    // get incomingData() {
-        // return this.data.incomingData
-    // }
+    get outgoingVariables() {
+        return this.data.outgoingVariables
+    }
 
     invokeStep() {
         this.updateState()
@@ -29,6 +32,7 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
     updateState() {
         this.checkIsLoopActive()
         this.updateVariables()
+        this.updateVariablesToExternal()
     }
 
     get isLoopWasActive() {
@@ -37,6 +41,26 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
 
     get isLoopActive() {
         return this.data.isLoopActive || false
+    }
+
+    protected updateVariablesToExternal() {
+        const variablesToExternal = this.logicManager.getVariables({
+            targetMode: EConnectionMode.LoopChildrenToExternal,
+        })
+        this._data = {
+            ...this.data,
+            outgoingVariables: variablesToExternal,
+        }
+    }
+
+    protected updateVariables() {
+        const variables = this.logicManager.getVariables({
+            targetMode: EConnectionMode.NodeIncoming,
+        })
+        this._data = {
+            ...this.data,
+            incomingVariables: variables,
+        }
     }
 
     protected setIsLoopActive(isLoopActive: boolean) {

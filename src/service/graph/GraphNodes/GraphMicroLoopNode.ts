@@ -66,5 +66,8 @@ implements IGetNodeExternalValue, IUpdateGraphNodeState{
         }
     }
 
+    protected updateVariablesToExternal() {
+
+    }
 
 }

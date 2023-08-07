@@ -1,19 +1,14 @@
 import {GraphLoopNode} from "./abstracts";
 import {
     EConnectionMode,
-    INumberVariable,
     isIIsEventTriggered,
     IUpdateGraphNodeState,
     IWhileLoopNodeData
 } from "../../../interface";
 import {RunManager} from "../RunManager";
-import {GraphLogicManager} from "./helper/GraphLogicManager";
 
 export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
     implements IUpdateGraphNodeState {
-
-    private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
-
 
     constructor(value: IWhileLoopNodeData, runManager: RunManager) {
         super(value, runManager)
@@ -21,7 +16,7 @@ export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
 
 
     protected checkIsLoopActive() {
-        // this.updateNode({isLoopActive: this.isTriggeredIncomingNodes})
+        this.updateNode({isLoopActive: this.isTriggeredIncomingNodes})
     }
 
     get isTriggeredIncomingNodes(): boolean {
@@ -43,17 +38,5 @@ export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
             return this.isTriggeredIncomingNodes
         }
         throw new Error(`isEventTriggered: unknown or empty mode ${mode}`)
-    }
-
-    protected updateVariables() {
-        const variables = this.logicManager.getVariables()
-        // console.log('while loop vars', variables)
-        this.setVariables(variables)
-    }
-
-    private setVariables(variables: INumberVariable[]) {
-        this.updateNode({
-            incomingVariables: variables,
-        })
     }
 }
