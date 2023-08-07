@@ -41,6 +41,8 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
         return this._outgoingEdges;
     }
 
+
+
     get outgoingNodes(): GraphBaseNode[] {
         return this._outgoingEdges.map(edge => edge.target);
     }

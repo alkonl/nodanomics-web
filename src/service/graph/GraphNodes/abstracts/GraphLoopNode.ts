@@ -10,10 +10,6 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
 
     abstract isEventTriggered(mode?: EConnectionMode): boolean;
 
-    // protected abstract updateVariables(): void;
-    //
-    // protected abstract updateVariablesToExternal(): void;
-
     protected abstract checkIsLoopActive(): void;
 
     get incomingVariables() {
@@ -25,6 +21,7 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
     }
 
     invokeStep() {
+        console.log('super invokeStep')
         this.updateState()
         this.checkWasLoopActiveOnce()
     }

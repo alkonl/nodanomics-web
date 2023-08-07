@@ -1,6 +1,7 @@
 import {ENodeTrigger, INodeDataWithInteractivity, isIIsEventTriggered} from "../../../../interface";
 import {GraphInvokableNode} from "./GraphInvokable";
 import {GraphEventListenerNode} from "../GraphEventListenerNode";
+import {GraphLoopNode} from "./GraphLoopNode";
 
 
 export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWithInteractivity = INodeDataWithInteractivity>
@@ -69,6 +70,6 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
     }
 
     get hasEventListeners(): boolean {
-        return this.outgoingEdges.some(edge => edge.source instanceof GraphEventListenerNode)
+        return this.outgoingEdges.some(edge => edge.source instanceof GraphEventListenerNode || edge.source instanceof GraphLoopNode)
     }
 }
