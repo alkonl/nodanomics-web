@@ -17,7 +17,6 @@ export const DiagramEditor = () => {
     //  it takes some time to display new elements instead of the old ones.
     //  Therefore, setTimeout is used
     useEffect(() => {
-        console.log('CONFIG.IS_OFFLINE', CONFIG.IS_OFFLINE)
         if (!CONFIG.IS_OFFLINE) {
             let timeout: NodeJS.Timeout
             if (isRequestLoaded && !isCanvasShow) {

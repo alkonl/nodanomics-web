@@ -20,7 +20,6 @@ implements IUpdateGraphNodeState{
 
 
     protected checkIsLoopActive() {
-        console.log('isLoopActive', this.loopCurrentCount, this.loopCount)
         if (this.loopCount === 0) {
             this.setIsLoopActive(false)
         } else {
@@ -41,7 +40,6 @@ implements IUpdateGraphNodeState{
     }
 
     invokeStep() {
-        console.log('invokeStep')
         super.invokeStep()
         if (this.isLoopActive) {
             this.addStep()

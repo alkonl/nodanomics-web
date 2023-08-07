@@ -16,9 +16,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
 
     const isActiveText = data.isLoopActive ? 'active' : 'no active'
     const loopOutText = !data.isLoopWasActive ? 'was not active' : !data.isLoopActive ? 'finished' : 'running'
-    useEffect(() => {
-        console.log('isLoopWasActive', data.isLoopWasActive)
-    }, [data.isLoopWasActive]);
+
     const {isExpanded, expandOrCollapse} = useExpandOrCollapse({
         initialIsOpened: data.isCollapsed,
     })

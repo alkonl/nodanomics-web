@@ -1,5 +1,5 @@
 import {Graph} from "./Graph";
-import {GraphBaseNode, GraphInvokableNode, GraphLoopNode, GraphSourceNode, GraphVariableNode} from "./GraphNodes";
+import {GraphBaseNode, GraphInvokableNode, GraphSourceNode, GraphVariableNode} from "./GraphNodes";
 import {EConnection, EConnectionMode, ENodeTrigger, isUpdateGraphNodeState} from "../../interface";
 import {GraphEventListenerNode} from "./GraphNodes/GraphEventListenerNode";
 import {GraphNodeManager} from "./NodeManager";
@@ -8,8 +8,6 @@ export class RunManager {
     private graph: Graph
     private _currentStep = 0
     private invokedNodes: GraphNodeManager = new GraphNodeManager()
-
-    // private update
 
     constructor(graph: Graph) {
         this.graph = graph
@@ -24,17 +22,7 @@ export class RunManager {
     }
 
     updateState() {
-        // const nodes = this.sortedNodes()
-        // nodes.forEach(node => {
-        //     if (isUpdateGraphNodeState(node)) {
-        //         node.updateState()
-        //     }
-        // })
         const nodes = this.sortedNodes()
-        // const formulaNodes = startedNodes.map(node => {
-        //     return this.recursiveGetAllFormulaNodes(node)
-        // }).flat().filter(item => item instanceof GraphFormulaNode)
-        console.log('formulaNodes', nodes.map(node => node.data.name))
         nodes.forEach(node => {
             if (isUpdateGraphNodeState(node)) {
                 node.updateState()
@@ -43,7 +31,6 @@ export class RunManager {
     }
 
     invokeStep() {
-        console.log('invokeStep', this.graph)
         this.incrementStep()
         const nodes = this.sortedNodes()
         nodes.forEach(node => {
@@ -81,13 +68,11 @@ export class RunManager {
 
     private sortedNodes(): GraphBaseNode[] {
         const startedNodes = this.getStartedNodes()
-        console.log('startedNodes', startedNodes.map(node => node.data.name))
         const childrenNodes = startedNodes.map(source => {
             return this.getNodesChildrenRecursive(source)
         })
-        console.log('childrenNodes', childrenNodes.map(nodes => nodes.map(node => node.data.name)))
         // nodes queue that start from trigger listener invoke in last step
-        const sortedQueue = childrenNodes.sort((a, b) => {
+        return childrenNodes.sort((a, b) => {
             const aFirstNode = a[0]
             const bFirstNode = b[0]
             if (aFirstNode instanceof GraphEventListenerNode && !(bFirstNode instanceof GraphEventListenerNode)) {
@@ -97,7 +82,6 @@ export class RunManager {
             }
             return 0
         }).flat()
-        return sortedQueue
     }
 
     private getNodesChildrenRecursive(node: GraphBaseNode, children: GraphBaseNode[] = [node]) {
@@ -108,17 +92,14 @@ export class RunManager {
                 children.push(child)
             }
         })
-        console.log(`getNodesChildrenRecursive.children ${node.data.name}`, children.map(node => node.data.name))
 
         nodes.forEach(child => {
             const toNextEdges = child.outgoingEdges.filter(edge => {
-                console.log(`getNodesChildrenRecursive.targetMode ${child.data.name}`, edge.data.targetMode)
                 if (edge.data.targetMode === EConnectionMode.LoopChildrenToExternal) {
                     return false
                 }
                 return true
             })
-            console.log(`getNodesChildrenRecursive.toNextEdges ${child.data.name}`, toNextEdges.map(edge => edge.target.data.name))
             if (toNextEdges.length > 0) {
                 this.getNodesChildrenRecursive(child, children)
             }
@@ -128,7 +109,25 @@ export class RunManager {
 
     private getNodesChildren(node: GraphBaseNode): GraphBaseNode[] {
         const children = node.outgoingEdges.map(edge => {
-            return edge.target
+            const target = edge.target
+            const isHasEventIncomingConnection = target.incomingEdges.some(edge => edge.type === EConnection.EventConnection)
+            const isHasOtherIncomingConnectionThenEvent = target.incomingEdges.some(edge => edge.type !== EConnection.EventConnection)
+            const isHasIncomingEdges = target.incomingEdges.length > 0
+            if (!isHasIncomingEdges) {
+                return edge.target
+            }
+            if (isHasEventIncomingConnection && isHasOtherIncomingConnectionThenEvent && edge.type === EConnection.EventConnection) {
+                return edge.target
+            }
+
+            if (isHasEventIncomingConnection && edge.type === EConnection.EventConnection) {
+                return edge.target
+            }
+
+            if (!isHasEventIncomingConnection) {
+                return edge.target
+            }
+
         })
         return children.filter(item => item !== undefined) as GraphBaseNode[]
     }

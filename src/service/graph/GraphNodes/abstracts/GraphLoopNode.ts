@@ -1,6 +1,5 @@
 import {GraphInvokableNode} from "./GraphInvokable";
-import {ILoopNodeData} from "../../../../interface/busines/diagram/node/structures/loopNode";
-import {EConnectionMode, IIsEventTriggered} from "../../../../interface";
+import {EConnectionMode, IIsEventTriggered, ILoopNodeData} from "../../../../interface";
 import {GraphLogicManager} from "../helper/GraphLogicManager";
 
 export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILoopNodeData> extends GraphInvokableNode<IGenericNodeData>
@@ -21,7 +20,6 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
     }
 
     invokeStep() {
-        console.log('super invokeStep')
         this.updateState()
         this.checkWasLoopActiveOnce()
     }

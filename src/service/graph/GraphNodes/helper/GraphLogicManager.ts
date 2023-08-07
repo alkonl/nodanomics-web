@@ -26,7 +26,6 @@ export class GraphLogicManager {
                         })
                     }
                 } else if (source instanceof GraphLoopNode) {
-                    console.log('take here edge', edge)
                     const values = this.getLoopVariable({edge})
                     if (values) {
                         variables.push(...values)

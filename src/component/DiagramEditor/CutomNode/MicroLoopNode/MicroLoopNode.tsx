@@ -10,7 +10,6 @@ import {EventHandle} from "../../CustomHandle/EventHandle";
 import {LogicHandle} from "../../CustomHandle";
 import {MicroLoopNodeHeader} from "./MicroLoopNodeHeader";
 import {NodeText} from "../styledComponent";
-import {ExternalDataHandlers} from "../LoopHandlers";
 
 export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) => {
     const {data} = props;
