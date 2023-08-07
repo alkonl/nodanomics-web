@@ -105,7 +105,7 @@ export const createBaseNode = ({type, position}: {
                     type,
                     currentLoopCount: 0,
                     name: 'MicroLoop',
-                    // incomingVariables: [],
+                    incomingVariables: [],
                     style: {
                         ...baseData.style,
                         width: loopSize.minWidth,
@@ -122,6 +122,7 @@ export const createBaseNode = ({type, position}: {
                     ...baseData,
                     type,
                     name: 'WhileLoop',
+                    incomingVariables: [],
                     style: {
                         ...baseData.style,
                         width: loopSize.minWidth,

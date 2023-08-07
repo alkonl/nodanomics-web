@@ -52,12 +52,8 @@ export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
     }
 
     private setVariables(variables: INumberVariable[]) {
-        this._data = {
-            ...this.data,
-            isLoopActive: true,
-        }
-        // this.updateNode({
-        //     incomingVariables: variables,
-        // })
+        this.updateNode({
+            incomingVariables: variables,
+        })
     }
 }

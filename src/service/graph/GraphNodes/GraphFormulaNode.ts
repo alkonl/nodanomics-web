@@ -1,8 +1,8 @@
 import {
     IFormulaNodeData,
-    INumberVariable,
     IFormulaResult,
     IGetNodeExternalValue,
+    INumberVariable,
     IUpdateGraphNodeState
 } from "../../../interface";
 import {RunManager} from "../RunManager";
@@ -25,7 +25,7 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
     }
 
     get nodeExternalValue() {
-        if(typeof this.result?.value === 'number') {
+        if (typeof this.result?.value === 'number') {
             return this.result?.value
         }
     }
@@ -79,8 +79,9 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
     }
 
     private setVariables(variables: INumberVariable[]) {
-        // this._data = {
-        //     ...this.data,
-        // }
+        this._data = {
+            ...this.data,
+            variables,
+        }
     }
 }

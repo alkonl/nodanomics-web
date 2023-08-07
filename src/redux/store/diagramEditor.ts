@@ -137,7 +137,7 @@ export const diagramEditorSlice = createSlice({
             payload.forEach(updatedNode => {
                 const stateNodeIndex = state.diagramNodes.findIndex(node => node.id === updatedNode.id)
                 const stateNode = state.diagramNodes[stateNodeIndex]
-                if(updatedNode.data){
+                if (updatedNode.data) {
                     graph.updateNodeData(updatedNode.id, updatedNode.data)
                 }
                 state.diagramNodes[stateNodeIndex] = {
@@ -175,14 +175,22 @@ export const diagramEditorSlice = createSlice({
                 height: number
             }
         }>) => {
-            const node = state.diagramNodes.find(node => node.id === payload.nodeId)
-            if (node && isINodeSize(node.data.style)) {
-                node.data.style = {
-                    ...node.data.style,
-                    width: payload.size.width,
-                    height: payload.size.height,
+            const stateNodeIndex = state.diagramNodes.findIndex(node => node.id === payload.nodeId)
+            const stateNode = state.diagramNodes[stateNodeIndex]
+            if (stateNode && isINodeSize(stateNode.data.style)) {
+                const newNode = {
+                    ...stateNode,
+                    data: {
+                        ...stateNode.data,
+                        style: {
+                            ...stateNode.data.style,
+                            width: payload.size.width,
+                            height: payload.size.height,
+                        }
+                    }
                 }
-                graph.updateNodeData(payload.nodeId, node.data)
+                graph.updateNodeData(payload.nodeId, newNode.data)
+                updateNodesFromGraph(state.diagramNodes)
                 state.autoSaveCalled++
             }
         },
