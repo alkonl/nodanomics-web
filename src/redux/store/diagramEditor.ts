@@ -32,12 +32,14 @@ export interface IDiagramEditorState {
         id: string
     }
     currentRunningDiagramStep?: number
+    isDiagramRunning: boolean
 }
 
 const initialState: IDiagramEditorState = {
     diagramNodes: [],
     diagramEdges: [],
     autoSaveCalled: 0,
+    isDiagramRunning: false,
 }
 
 const graph = new Graph()
@@ -289,6 +291,11 @@ export const diagramEditorSlice = createSlice({
             runManager.invokeStep()
             updateNodesFromGraph(state.diagramNodes)
             state.currentRunningDiagramStep = runManager.currentStep
+        },
+        setIsDiagramRunning: (state, {payload}: PayloadAction<{
+            isRunning: boolean
+        }>) => {
+          state.isDiagramRunning = payload.isRunning
         },
         resetDiagramRun: (state) => {
             const resetNode = resetNodeStates(state.diagramNodes)
