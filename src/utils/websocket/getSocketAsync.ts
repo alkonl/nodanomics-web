@@ -10,7 +10,7 @@ export async function getSocketAsync() {
         throw new Error("User is not logged in");
     }
     if (!socket) {
-        socket = io(`http://localhost:8081`, {
+        socket = io(`${CONFIG.API_WEBSOCKET_URL}`, {
             withCredentials: true,
             query: {token}
         });

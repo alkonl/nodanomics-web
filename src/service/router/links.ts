@@ -3,7 +3,7 @@ export enum ELinks {
     login = '/login',
     register = '/register',
     verificationLink = '/auth/verify-email',
-    forgotPassword = '/forgotPassword',
+    forgotPassword = '/auth/reset-password',
     authGoogle = '/auth/callback/google',
     accountManageData = '/account',
     accountPlan = '/account/plan',
