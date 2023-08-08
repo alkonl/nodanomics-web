@@ -1,8 +1,8 @@
-export interface IGetSpreadsheetRequests {
+export interface IGetSpreadsheetsBaseInfoRequests {
     projectId?: string;
 }
 
-export interface IGetSpreadsheetResponse {
+export interface IGetSpreadsheetBaseInfoResponse {
     data: {
         id: string;
         name: string;

@@ -3,7 +3,7 @@ import {Box, Button, Typography} from "@mui/material";
 import {UploadSpreadSheetPopUp} from "../../../../../popUp";
 import {useToggle} from "../../../../../../hooks";
 import {useDiagramEditorState} from "../../../../../../redux";
-import {useGetProjectInfoQuery, useGetSpreadSheetsQuery} from "../../../../../../api";
+import {useGetProjectInfoQuery, useGetSpreadSheetsBaseInfoQuery} from "../../../../../../api";
 import {SpreadsheetPreviewButton} from "./SpreadsheetPreviewButton";
 
 export const LibrariesSideMenu: React.FC = () => {
@@ -15,7 +15,7 @@ export const LibrariesSideMenu: React.FC = () => {
         skip: !currentDiagramId,
     })
 
-    const {data: spreadsheets} = useGetSpreadSheetsQuery({
+    const {data: spreadsheets} = useGetSpreadSheetsBaseInfoQuery({
         projectId: resProjectInfo?.id,
     }, {
         skip: !resProjectInfo?.id,

@@ -26,7 +26,7 @@ import {
     IGetProjectsRequest,
     IGetProjectsResponse,
     IGetProjectTeamMembersRequest,
-    IGetProjectTeamMembersResponse, IGetSpreadsheetRequests, IGetSpreadsheetResponse,
+    IGetProjectTeamMembersResponse, IGetSpreadsheetsBaseInfoRequests, IGetSpreadsheetBaseInfoResponse,
     IInviteUserToProjectRequest,
     ILeaveProjectTeamRequest,
     ILoginEmailPasswordRequest,
@@ -37,7 +37,7 @@ import {
     ISubmitNewPasswordRequest,
     IUpdateUserDataRequest,
     IUpdateUserDataResponse,
-    IUploadSpreadSheetRequest
+    IUploadSpreadSheetRequest, IGetSpreadsheetRequests, IGetSpreadsheetResponse
 } from "../interface";
 import {CONFIG, getSocketAsync} from "../utils";
 
@@ -536,8 +536,8 @@ export const baseApi = createApi({
             },
             invalidatesTags: [ERTKTags.Spreadsheet]
         }),
-        getSpreadSheets: builder.query<IGetSpreadsheetResponse, IGetSpreadsheetRequests>({
-            query: (params: IGetSpreadsheetRequests) => {
+        getSpreadSheetsBaseInfo: builder.query<IGetSpreadsheetBaseInfoResponse, IGetSpreadsheetsBaseInfoRequests>({
+            query: (params: IGetSpreadsheetsBaseInfoRequests) => {
                 return {
                     url: `/project/spreadsheets/base-info`,
                     method: 'GET',
@@ -547,7 +547,16 @@ export const baseApi = createApi({
             providesTags: (result, error, arg) => {
                 return [{type: ERTKTags.Spreadsheet, id: arg?.projectId}]
             }
-        })
+        }),
+        getSpreadSheet: builder.query<IGetSpreadsheetResponse, IGetSpreadsheetRequests>({
+            query: (params: IGetSpreadsheetRequests) => {
+                return {
+                    url: `/project/spreadsheet`,
+                    method: 'GET',
+                    params: params,
+                }
+            }
+        }),
     }),
 })
 export const {
@@ -580,6 +589,7 @@ export const {
     useDeleteTeamMemberFromProjectTeamMutation,
     useLeaveProjectTeamMutation,
     useUploadSpreadSheetMutation,
-    useGetSpreadSheetsQuery,
+    useGetSpreadSheetsBaseInfoQuery,
+    useGetSpreadSheetQuery,
 } = baseApi;
 

@@ -49,7 +49,7 @@ export const UploadSpreadsheetForm: React.FC<{
                 variant="contained"
                 component="label"
             >
-                <input type="file" accept=".xlsx" onChange={handleFileChange} hidden/>
+                <input type="file" accept=".xlsx, .numbers" onChange={handleFileChange} hidden/>
                 {uploadedFile
                     ? <Typography>selected: {uploadedFile.name}</Typography>
                     : <Typography>choose</Typography>}

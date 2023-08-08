@@ -21,7 +21,6 @@ export const CircleResourcesAnimation: React.FC<{
                 }, begin)
             } else {
                 interval = setInterval(() => {
-                    console.log('interval:', id)
                     animationRef.current?.beginElement()
                 }, duration + begin)
             }

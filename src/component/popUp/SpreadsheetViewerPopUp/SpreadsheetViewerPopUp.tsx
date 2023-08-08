@@ -6,12 +6,15 @@ import {BasePopUp} from "../PopUp";
 export const SpreadsheetViewerPopUp: React.FC<{
     isShow: boolean;
     onClose: () => void;
-}> = ({isShow, onClose}) => {
+    spreadsheetId: string;
+}> = ({isShow, onClose,spreadsheetId}) => {
     return (
         <Dialog open={isShow} onClose={onClose}>
             <BasePopUp>
                 <Dialog.Panel>
-            <SpreadsheetViewer/>
+                    <SpreadsheetViewer
+                        spreadsheetId={spreadsheetId}
+                    />
                 </Dialog.Panel>
             </BasePopUp>
         </Dialog>
