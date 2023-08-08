@@ -24,7 +24,6 @@ export const UploadSpreadsheetForm: React.FC<{
                 file: uploadedFile,
                 projectId: projectId,
             });
-            console.log(uploadedFile);
         }
     }
 
@@ -52,7 +51,7 @@ export const UploadSpreadsheetForm: React.FC<{
             >
                 <input type="file" accept=".xlsx" onChange={handleFileChange} hidden/>
                 {uploadedFile
-                    ? <Typography>Uploaded: {uploadedFile.name}</Typography>
+                    ? <Typography>selected: {uploadedFile.name}</Typography>
                     : <Typography>choose</Typography>}
             </Button>
             {uploadedFile && <Button type="submit">Submit</Button>}

@@ -17,26 +17,26 @@ import {
     ICreateNewDiagramResponse,
     ICreateProjectRequest,
     ICreateProjectResponse,
+    IDeleteProjectRequest,
     IGetDiagramByIdResponse,
     IGetDiagramTagsRequest,
     IGetDiagramTagsResponse,
+    IGetProjectInfoRequest,
+    IGetProjectInfoResponse,
     IGetProjectsRequest,
     IGetProjectsResponse,
+    IGetProjectTeamMembersRequest,
+    IGetProjectTeamMembersResponse, IGetSpreadsheetRequests, IGetSpreadsheetResponse,
     IInviteUserToProjectRequest,
+    ILeaveProjectTeamRequest,
     ILoginEmailPasswordRequest,
     ISendEmailToResetPasswordRequest,
+    IServerErrorResponse,
     ISessionUserDataResponse,
     ISignUpRequest,
     ISubmitNewPasswordRequest,
     IUpdateUserDataRequest,
     IUpdateUserDataResponse,
-    IServerErrorResponse,
-    IGetProjectInfoResponse,
-    IGetProjectInfoRequest,
-    IGetProjectTeamMembersResponse,
-    IGetProjectTeamMembersRequest,
-    IDeleteProjectRequest,
-    ILeaveProjectTeamRequest,
     IUploadSpreadSheetRequest
 } from "../interface";
 import {CONFIG, getSocketAsync} from "../utils";
@@ -97,6 +97,7 @@ export const baseApi = createApi({
         ERTKTags.PersonalDashboard,
         ERTKTags.Projects,
         ERTKTags.ProjectTeamMember,
+        ERTKTags.Spreadsheet,
     ],
     reducerPath: 'baseApi',
     baseQuery: baseQueryWithReauth,
@@ -523,13 +524,30 @@ export const baseApi = createApi({
         }),
         uploadSpreadSheet: builder.mutation<unknown, IUploadSpreadSheetRequest>({
             query: (params: IUploadSpreadSheetRequest) => {
+                const formData = new FormData();
+                formData.append('file', params.file);
+                formData.append('projectId', params.projectId);
                 return {
-                    url: `/diagram/spreadsheet/upload`,
+                    url: `/project/spreadsheet/upload`,
                     method: 'POST',
-                    body: params,
+                    body: formData,
+                    formData: true
                 }
-            }
+            },
+            invalidatesTags: [ERTKTags.Spreadsheet]
         }),
+        getSpreadSheets: builder.query<IGetSpreadsheetResponse, IGetSpreadsheetRequests>({
+            query: (params: IGetSpreadsheetRequests) => {
+                return {
+                    url: `/project/spreadsheets/base-info`,
+                    method: 'GET',
+                    params: params,
+                }
+            },
+            providesTags: (result, error, arg) => {
+                return [{type: ERTKTags.Spreadsheet, id: arg?.projectId}]
+            }
+        })
     }),
 })
 export const {
@@ -562,5 +580,6 @@ export const {
     useDeleteTeamMemberFromProjectTeamMutation,
     useLeaveProjectTeamMutation,
     useUploadSpreadSheetMutation,
+    useGetSpreadSheetsQuery,
 } = baseApi;
 

@@ -3,7 +3,8 @@ import {Box, Button, Typography} from "@mui/material";
 import {UploadSpreadSheetPopUp} from "../../../../../popUp";
 import {useToggle} from "../../../../../../hooks";
 import {useDiagramEditorState} from "../../../../../../redux";
-import {useGetProjectInfoQuery} from "../../../../../../api";
+import {useGetProjectInfoQuery, useGetSpreadSheetsQuery} from "../../../../../../api";
+import {SpreadsheetPreviewButton} from "./SpreadsheetPreviewButton";
 
 export const LibrariesSideMenu: React.FC = () => {
     const uploadSpreadSheetPopUpManager = useToggle();
@@ -13,6 +14,13 @@ export const LibrariesSideMenu: React.FC = () => {
     }, {
         skip: !currentDiagramId,
     })
+
+    const {data: spreadsheets} = useGetSpreadSheetsQuery({
+        projectId: resProjectInfo?.id,
+    }, {
+        skip: !resProjectInfo?.id,
+    })
+
     return (
         <>
             {resProjectInfo && <UploadSpreadSheetPopUp
@@ -38,6 +46,14 @@ export const LibrariesSideMenu: React.FC = () => {
                     >
                         Upload File
                     </Button>
+                </Box>
+                <Box>
+                    {spreadsheets?.data.map((spreadsheet) => (
+                        <SpreadsheetPreviewButton
+                            spreadsheet={spreadsheet}
+                            key={spreadsheet.id}
+                        />
+                    ))}
                 </Box>
             </Box>
         </>
