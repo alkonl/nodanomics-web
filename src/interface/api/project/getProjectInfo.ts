@@ -1,5 +1,6 @@
 export interface IGetProjectInfoRequest {
-    projectId: string;
+    projectId?: string;
+    diagramId?: string;
 }
 
 export interface IGetProjectInfoResponse {

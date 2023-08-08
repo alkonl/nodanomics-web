@@ -10,7 +10,6 @@ export const CircleResourcesAnimation: React.FC<{
     play?: boolean
 }> = ({parentId, id, begin, duration, play = false, infinite}) => {
     const animationRef = React.useRef<SVGAnimationElement>(null)
-    const [isPlayed, setIsPlayed] = React.useState<boolean>(false)
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout | undefined

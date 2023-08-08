@@ -35,7 +35,9 @@ import {
     IGetProjectInfoRequest,
     IGetProjectTeamMembersResponse,
     IGetProjectTeamMembersRequest,
-    IDeleteProjectRequest, ILeaveProjectTeamRequest
+    IDeleteProjectRequest,
+    ILeaveProjectTeamRequest,
+    IUploadSpreadSheetRequest
 } from "../interface";
 import {CONFIG, getSocketAsync} from "../utils";
 
@@ -510,12 +512,22 @@ export const baseApi = createApi({
         getProjectInfo: builder.query<IGetProjectInfoResponse, IGetProjectInfoRequest>({
             query: (params: IGetProjectInfoRequest) => {
                 return {
-                    url: `/project/info/${params.projectId}`,
+                    url: `/project/info`,
                     method: 'GET',
+                    params: params,
                 }
             },
             providesTags: (result, error, arg) => {
                 return [{type: ERTKTags.Projects, id: arg?.projectId}]
+            }
+        }),
+        uploadSpreadSheet: builder.mutation<unknown, IUploadSpreadSheetRequest>({
+            query: (params: IUploadSpreadSheetRequest) => {
+                return {
+                    url: `/diagram/spreadsheet/upload`,
+                    method: 'POST',
+                    body: params,
+                }
             }
         }),
     }),
@@ -549,5 +561,6 @@ export const {
     useGetProjectInfoQuery,
     useDeleteTeamMemberFromProjectTeamMutation,
     useLeaveProjectTeamMutation,
+    useUploadSpreadSheetMutation,
 } = baseApi;
 
