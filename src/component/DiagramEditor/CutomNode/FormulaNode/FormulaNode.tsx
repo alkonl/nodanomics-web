@@ -1,15 +1,17 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {Box, Input, Typography} from "@mui/material";
 // eslint-disable-next-line import/named
-import {Handle, NodeProps, Position} from "reactflow";
-import {EConnection, IFormulaNodeData} from "../../../../interface";
+import {NodeProps, Position} from "reactflow";
+import {EConnectionMode, IFormulaNodeData} from "../../../../interface";
 import {EColor, EFontColor} from "../../../../constant";
-import {useUpdateNode, useWidthAndHeight} from "../../../../hooks";
+import {useUpdateNode} from "../../../../hooks";
 import {Scroll} from "../../../base";
+import {LogicHandle} from "../../CustomHandle";
+import {EventHandle} from "../../CustomHandle/EventHandle";
 
 export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectable, data}) => {
 
-    const [formula, setFormula] = useState<string| undefined>(data.formula)
+    const [formula, setFormula] = useState<string | undefined>(data.formula || '')
 
     const result = useMemo(() => {
         if (data.result && data.result.type === 'number') {
@@ -26,7 +28,6 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectabl
     }
 
 
-
     const duplicateMessage = useMemo(() => {
         const duplicates = data.variables?.filter((variable, index, array) => {
             return array.findIndex((item) => item.variableName === variable.variableName) !== index
@@ -36,16 +37,7 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectabl
         }
     }, [data.variables])
 
-    const {elementRef, elementSize} = useWidthAndHeight()
 
-    const [initialContentHeight, setInitialContentHeight] = useState<number>()
-
-    useEffect(() => {
-        if (!initialContentHeight && elementSize.height) {
-            setInitialContentHeight(elementSize.height)
-        }
-    }, [elementSize])
-    //
     useEffect(() => {
         if (formula) {
             updateNodeData({
@@ -55,37 +47,44 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectabl
     }, [formula])
 
     const contentHeight = useMemo(() => {
-        if (!data.variables || !initialContentHeight) {
-            return 'fit-content'
+        if (!data.variables) {
+            return 0
         }
         const multiplier = data.variables.length <= 3 ? data.variables.length : 3
-        return initialContentHeight + (multiplier * 20)
+        return multiplier * 24
 
-    }, [data.variables, initialContentHeight])
+    }, [data.variables])
 
     return (
         <Box>
-            <Handle
-                type="target"
-                position={Position.Left}
-                isConnectable={isConnectable}
-                id={EConnection.LogicConnection}
-            />
-            <Handle
-                type="source"
-                position={Position.Right}
-                isConnectable={isConnectable}
-                id={EConnection.EventConnection}
-                style={{
-                    background: EColor.blue,
-                }}
-            />
+            <Box sx={{
+                position: 'absolute',
+                width: 'calc(100% + 10px)',
+                left: -5,
+                height: '100%',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+            }}>
+                <LogicHandle
+                    type="target"
+                    position={Position.Left}
+                    isConnectable={isConnectable}
+                    mode={EConnectionMode.NodeIncoming}
+                />
+                <LogicHandle
+                    type="source"
+                    position={Position.Right}
+                    isConnectable={isConnectable}
+                    mode={EConnectionMode.NodeOutgoing}
+                />
+            </Box>
             <Box sx={{
                 padding: 1,
                 backgroundColor: EColor.black,
                 color: EFontColor.white,
                 width: 200,
-                height: contentHeight,
+                height: 'fit-content',
                 display: 'flex',
                 flexDirection: 'column',
                 flex: 1,
@@ -93,7 +92,6 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectabl
                 borderColor: data.style.borderColor,
                 borderStyle: 'solid',
             }}
-                 ref={elementRef}
             >
                 <Input
                     onChange={onFormulaChange}
@@ -106,24 +104,36 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectabl
                     flex: 1,
                     justifyContent: 'space-between',
                 }}>
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        flex: 1,
-                    }}>
+                    <Box
+                        sx={{
+                            flex: 1,
+                            height: 'fit-content',
+                        }}
+                    >
                         <Typography sx={{
                             flexShrink: 0,
                         }}>
                             list of inputs
                         </Typography>
-                        <Scroll>
-                            {data.variables?.map((variable, index) => (
-                                <Typography key={index}>
-                                    {variable.variableName} = {variable.value}
-                                </Typography>
-                            ))}
-                        </Scroll>
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            flex: 1,
+                            height: contentHeight,
+                        }}
+                        >
+
+                            <Scroll>
+                                {data.variables?.map((variable, index) => (
+                                    <Typography key={index}>
+                                        {variable.variableName} = {variable.value}
+                                    </Typography>
+                                ))}
+                            </Scroll>
+
+                        </Box>
                     </Box>
+
                     <Box sx={{
                         minWidth: 20,
                     }}>

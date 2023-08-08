@@ -1,5 +1,5 @@
 export interface IGetNodeExternalValue {
-    nodeExternalValue?: number | boolean
+    nodeExternalValue?: number
 }
 
 export const isIGetNodeExternalValue = (obj: unknown): obj is IGetNodeExternalValue => {

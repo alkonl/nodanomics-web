@@ -1,11 +1,13 @@
 import {GraphInvokableNode} from "./abstracts";
-import {IEventTriggerNodeData, IFormulaNodeVariable, IUpdateGraphNodeState} from "../../../interface";
+import {IEventTriggerNodeData, INumberVariable, IUpdateGraphNodeState} from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphMatchManager} from "./helper";
+import {GraphLogicManager} from "./helper/GraphLogicManager";
 
 export class GraphEventTriggerNode extends GraphInvokableNode<IEventTriggerNodeData>
     implements IUpdateGraphNodeState {
     private readonly matchManager: GraphMatchManager = new GraphMatchManager(this.incomingEdges)
+    private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
 
     constructor(value: IEventTriggerNodeData, runManager: RunManager) {
         super(value, runManager);
@@ -34,7 +36,7 @@ export class GraphEventTriggerNode extends GraphInvokableNode<IEventTriggerNodeD
     }
 
     private updateVariables() {
-        const variables = this.matchManager.getVariables()
+        const variables = this.logicManager.getVariables()
         this.setVariables(variables)
     }
 
@@ -51,7 +53,7 @@ export class GraphEventTriggerNode extends GraphInvokableNode<IEventTriggerNodeD
         }
     }
 
-    private setVariables(variables: IFormulaNodeVariable[]) {
+    private setVariables(variables: INumberVariable[]) {
         this._data = {
             ...this.data,
             variables,

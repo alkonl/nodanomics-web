@@ -1,17 +1,13 @@
 import {GraphLoopNode} from "./abstracts";
-import {EConnectionMode, IGetNodeExternalValue, IMicroLoopNodeData, IUpdateGraphNodeState} from "../../../interface";
+import {EConnectionMode, IMicroLoopNodeData, IUpdateGraphNodeState} from "../../../interface";
 import {RunManager} from "../RunManager";
 
 export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
-implements IGetNodeExternalValue, IUpdateGraphNodeState{
+implements IUpdateGraphNodeState{
 
 
     constructor(value: IMicroLoopNodeData, runManager: RunManager) {
         super(value, runManager);
-    }
-
-    get nodeExternalValue() {
-        return this.loopCurrentCount
     }
 
     get loopCurrentCount() {
@@ -27,20 +23,17 @@ implements IGetNodeExternalValue, IUpdateGraphNodeState{
         if (this.loopCount === 0) {
             this.setIsLoopActive(false)
         } else {
-
             const isLoopActive = this.loopCurrentCount < this.loopCount
             this.setIsLoopActive(isLoopActive)
         }
     }
 
-    updateState() {
-        this.checkIsLoopActive()
-    }
+
 
     isEventTriggered(mode: EConnectionMode): boolean  {
-        if(EConnectionMode.LoopInToChildren === mode){
+        if(EConnectionMode.LoopInnerToChildren === mode){
             return this.isLoopActive
-        }else if(EConnectionMode.LoopOut === mode){
+        }else if(EConnectionMode.NodeOutgoing === mode){
             return !this.isLoopActive
         }
         return false
@@ -60,6 +53,4 @@ implements IGetNodeExternalValue, IUpdateGraphNodeState{
             this.updateNode({currentLoopCount: updatedLoopCount})
         }
     }
-
-
 }

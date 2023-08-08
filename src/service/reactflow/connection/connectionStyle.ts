@@ -7,7 +7,7 @@ const dataConnection = {
         type: MarkerType.ArrowClosed,
         width: 20,
         height: 20,
-        color: '#FF0072',
+        color: EColor.green,
     },
 }
 
@@ -16,7 +16,7 @@ const logicConnection = {
         type: MarkerType.ArrowClosed,
         width: 20,
         height: 20,
-        color: '#48ce22',
+        color: EColor.blue,
     },
 }
 

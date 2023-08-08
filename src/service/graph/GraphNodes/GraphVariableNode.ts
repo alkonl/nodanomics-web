@@ -1,6 +1,7 @@
 import {
     ENodeAction,
-    IDiagramNodeBaseData, IGetNodeExternalValue,
+    IDiagramNodeBaseData,
+    IGetNodeExternalValue,
     IResource,
     IUpdateGraphNodeState,
     IVariableNodeData
@@ -67,7 +68,6 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
 
     updateState() {
         this.reCalculateMaxMinAvgValue()
-        this.updateResourcesCountHistory()
     }
 
     addResource(resources?: IResource[]) {
@@ -87,6 +87,11 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
                 ? [...this.data.resourcesCountHistory, this.currentResourcesCount]
                 : [this.currentResourcesCount]
         }
+    }
+
+    invokeStep() {
+        super.invokeStep();
+        this.updateResourcesCountHistory()
     }
 
 
@@ -124,6 +129,7 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
                 if (edge instanceof GraphDataEdge && edge.source instanceof GraphVariableNode) {
                     const resources = edge.source.takeCountResources(edge.countOfResource)
                     this.addResource(resources)
+                    this.writeToEdgeIsResourcesWereTransferred(edge, true)
                 }
             })
         }
@@ -136,7 +142,9 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
                     if (edge.source.resourcesToProvideCount >= edge.countOfResource) {
                         const resources = edge.source.takeCountResources(edge.countOfResource)
                         this.addResource(resources)
+                        this.writeToEdgeIsResourcesWereTransferred(edge, true)
                     }
+                    this.writeToEdgeIsResourcesWereTransferred(edge, false)
                 }
             })
         }
@@ -170,6 +178,7 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
                     if (edge.target instanceof GraphVariableNode) {
                         const resources = this.takeCountResources(edge.countOfResource)
                         edge.target.addResource(resources)
+                        edge.changeIsTransferredResources(true)
                     }
                 }
             })
@@ -184,6 +193,7 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
                         if (edge.target instanceof GraphVariableNode) {
                             const resources = this.takeCountResources(edge.countOfResource)
                             edge.target.addResource(resources)
+                            edge.changeIsTransferredResources(true)
                         }
                     }
                 })
@@ -199,8 +209,16 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
                 if (edge.source instanceof GraphSourceNode) {
                     const generatedResources = edge.source.generateResourceFromSource(resources)
                     this.addResource(generatedResources)
+                    this.writeToEdgeIsResourcesWereTransferred(edge, true)
                 }
+                this.writeToEdgeIsResourcesWereTransferred(edge, false)
             })
+        }
+    }
+
+    private writeToEdgeIsResourcesWereTransferred(edge: GraphDataEdge, isTransferred: boolean) {
+        if (edge instanceof GraphDataEdge) {
+            edge.changeIsTransferredResources(isTransferred)
         }
     }
 

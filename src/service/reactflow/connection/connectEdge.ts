@@ -5,16 +5,19 @@ import {connectionStyle} from "./connectionStyle";
 import {connectionInitialProps} from "./connectionInitialProps";
 import {nanoid} from "nanoid";
 import {EDGE_Z_INDEX} from "../../../constant";
+import {parseConnectionHandleId} from "./connectionMode";
 
 const getEdgeId = () => `edgeId_${nanoid()}`;
 
-export const defineConnectionTypeBySourceAndTarget = ({target, source}: {
-    source: string,
-    target: string
+export const defineConnectionTypeBySourceAndTarget = ({targetHandle, sourceHandle}: {
+    sourceHandle: string,
+    targetHandle: string
 }): EConnection => {
-    if (target === EConnection.LogicConnection) {
+    const targetType = targetHandle.split('.')[0];
+    const sourceType = sourceHandle.split('.')[0];
+    if (targetType === EConnection.LogicConnection) {
         return EConnection.LogicConnection
-    } else if (target === EConnection.EventConnection || source === EConnection.EventConnection) {
+    } else if (targetType === EConnection.EventConnection || sourceType === EConnection.EventConnection) {
         return EConnection.EventConnection
     }
     return EConnection.DataConnection
@@ -23,9 +26,8 @@ export const defineConnectionTypeBySourceAndTarget = ({target, source}: {
 export const defineConnectionModeBySourceHandle = ({sourceHandle}: {
     sourceHandle: string,
 }): EConnectionMode | undefined => {
-    console.log('defineConnectionModeBySourceHandle', sourceHandle)
     const mode = sourceHandle.split('.')[1];
-    if(mode && Object.values(EConnectionMode).includes(mode as EConnectionMode)){
+    if (mode && Object.values(EConnectionMode).includes(mode as EConnectionMode)) {
         return mode as EConnectionMode
     }
     return undefined
@@ -37,7 +39,6 @@ export const connectEdge = ({connection}:
                                     connection: Connection
                                 }): Connection & { data: IDiagramConnectionData } &
     Pick<Edge, 'type' | 'id' | 'markerEnd' | 'zIndex'> => {
-    console.log('connection', connection)
     if (connection.sourceHandle === null || connection.targetHandle === null) {
         throw new Error('sourceHandle and targetHandle null')
     }
@@ -46,15 +47,13 @@ export const connectEdge = ({connection}:
     }
 
     const type = defineConnectionTypeBySourceAndTarget({
-        source: connection.sourceHandle,
-        target: connection.targetHandle
+        sourceHandle: connection.sourceHandle,
+        targetHandle: connection.targetHandle
     });
 
-    const mode = defineConnectionModeBySourceHandle({
-        sourceHandle: connection.sourceHandle,
-    })
+    const sourceMode = parseConnectionHandleId(connection.sourceHandle).mode;
+    const targetMode = parseConnectionHandleId(connection.targetHandle).mode;
 
-    console.log('mode', mode)
     const edgeId = getEdgeId();
     return {
         ...connectionStyle[type],
@@ -67,7 +66,8 @@ export const connectEdge = ({connection}:
             sourceId: connection.source,
             targetId: connection.target,
             id: edgeId,
-            mode,
+            sourceMode: sourceMode,
+            targetMode: targetMode,
         }
     }
 }

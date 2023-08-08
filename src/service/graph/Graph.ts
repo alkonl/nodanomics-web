@@ -2,10 +2,11 @@ import {
     IDiagramConnectionData,
     INodeData,
 } from "../../interface";
-import {GraphBaseNode, GraphNodeFactory, GraphNodeManager} from "./GraphNodes";
+import {GraphBaseNode, GraphNodeFactory} from "./GraphNodes";
 import {GraphBaseEdge, GraphEdgeFactory} from "./GraphEdge";
 import {Optionalize} from "../../utils";
 import {RunManager} from "./RunManager";
+import {GraphNodeManager} from "./NodeManager";
 
 
 export class Graph {

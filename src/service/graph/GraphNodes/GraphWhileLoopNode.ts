@@ -9,6 +9,7 @@ import {RunManager} from "../RunManager";
 
 export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
     implements IUpdateGraphNodeState {
+
     constructor(value: IWhileLoopNodeData, runManager: RunManager) {
         super(value, runManager)
     }
@@ -22,26 +23,20 @@ export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
         return this.incomingEdges.some(edge => {
             const source = edge.source;
             if (isIIsEventTriggered(source)) {
-                return source.isEventTriggered(edge.data.mode)
+                return source.isEventTriggered(edge.data.sourceMode)
             }
             return false
         })
     }
 
     isEventTriggered(mode?: EConnectionMode) {
-        if (mode === EConnectionMode.LoopOut) {
+        if (mode === EConnectionMode.NodeOutgoing) {
             return this.isLoopWasActive && !this.isLoopActive
-        } else if (mode === EConnectionMode.LoopIn) {
+        } else if (mode === EConnectionMode.WhileLoopIncomingTrigger) {
             return this.isTriggeredIncomingNodes
-        } else if (mode === EConnectionMode.LoopInToChildren) {
+        } else if (mode === EConnectionMode.LoopInnerToChildren) {
             return this.isTriggeredIncomingNodes
         }
         throw new Error(`isEventTriggered: unknown or empty mode ${mode}`)
     }
-
-
-    updateState() {
-        this.checkIsLoopActive()
-    }
-
 }

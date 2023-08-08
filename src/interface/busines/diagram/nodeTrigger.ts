@@ -1,3 +1,6 @@
+import {isObject} from "../../../utils";
+import {IDiagramNodeBaseData} from "./node";
+
 export enum ENodeTrigger {
     passive = "passive",
     automatic = "automatic",
@@ -19,4 +22,8 @@ export type INodeTriggers = INodeWithBaseTrigger | INodeDataWithInteractiveTrigg
 
 export interface INodeWithTrigger {
     trigger: INodeTriggers
+}
+
+export const isINodeWithTrigger = (obj: unknown): obj is (IDiagramNodeBaseData & INodeWithTrigger) => {
+    return isObject(obj) && 'trigger' in obj
 }

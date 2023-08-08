@@ -1,5 +1,7 @@
-import {ENodeTrigger, INodeDataWithInteractivity,isIIsEventTriggered} from "../../../../interface";
+import {ENodeTrigger, INodeDataWithInteractivity, isIIsEventTriggered} from "../../../../interface";
 import {GraphInvokableNode} from "./GraphInvokable";
+import {GraphEventListenerNode} from "../GraphEventListenerNode";
+import {GraphLoopNode} from "./GraphLoopNode";
 
 
 export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWithInteractivity = INodeDataWithInteractivity>
@@ -19,6 +21,10 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
                 this.runAction();
                 this.clearClick()
             }
+        } else if (this.triggerMode === ENodeTrigger.passive) {
+            if (this.isTriggeredIncomingNodes) {
+                this.runAction();
+            }
         }
     }
 
@@ -29,9 +35,7 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
         return this.incomingEdges.some(edge => {
             const source = edge.source;
             if (isIIsEventTriggered(source)) {
-                console.log('edge:', edge)
-                console.log('source:', source)
-                return source.isEventTriggered(edge.data.mode)
+                return source.isEventTriggered(edge.data.sourceMode)
             }
             return false
         })
@@ -40,10 +44,11 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
     private clearClick() {
         if (this._data.trigger.mode === ENodeTrigger.interactive) {
             this.updateNode({
+                ...this.data,
                 trigger: {
-                    ...this._data.trigger,
+                    mode: ENodeTrigger.interactive,
                     isClicked: false,
-                }
+                },
             })
         }
     }
@@ -62,5 +67,9 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
 
     get actionMode() {
         return this._data.actionMode;
+    }
+
+    get hasEventListeners(): boolean {
+        return this.outgoingEdges.some(edge => edge.source instanceof GraphEventListenerNode || edge.source instanceof GraphLoopNode)
     }
 }

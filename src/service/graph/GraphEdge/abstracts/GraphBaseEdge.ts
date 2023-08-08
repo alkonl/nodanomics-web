@@ -4,7 +4,7 @@ import {IDiagramConnectionBaseData, INodeData} from "../../../../interface";
 export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionBaseData = IDiagramConnectionBaseData> {
     private _source: GraphBaseNode<INodeData>;
     private _target: GraphBaseNode<INodeData>;
-    private _data: IGenericEdgeData;
+    protected _data: IGenericEdgeData;
 
     protected constructor(
         source: GraphBaseNode<INodeData>,
@@ -14,6 +14,10 @@ export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionB
         this._source = source;
         this._target = target;
         this._data = data
+    }
+
+    get type() {
+        return this.data.type;
     }
 
     get source() {
@@ -42,8 +46,11 @@ export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionB
         }
     }
 
-    updateSourceAndTarget({source, target}: { source: GraphBaseNode<INodeData>, target: GraphBaseNode<INodeData> }) {
-        this._data ={
+    updateSourceAndTarget({source, target}: {
+        source: GraphBaseNode<INodeData>,
+        target: GraphBaseNode<INodeData>
+    }) {
+        this._data = {
             ...this._data,
             sourceId: source.data.id,
             targetId: target.data.id,

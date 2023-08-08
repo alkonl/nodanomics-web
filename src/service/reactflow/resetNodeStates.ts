@@ -13,6 +13,14 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                     resourcesCountHistory: undefined,
                 }
             }
+        case EDiagramNode.Formula:
+            return {
+                ...node,
+                data: {
+                    ...node.data,
+                    result: undefined,
+                }
+            }
         case EDiagramNode.EventListener:
             return {
                 ...node,
@@ -37,6 +45,7 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                     currentLoopCount: 0,
                     isLoopActive: undefined,
                     isLoopWasActive: undefined,
+                    incomingVariables: [],
                 }
             }
         }
@@ -47,6 +56,7 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                     ...node.data,
                     isLoopWasActive: undefined,
                     isLoopActive: undefined,
+                    incomingVariables: [],
                 }
             }
         }

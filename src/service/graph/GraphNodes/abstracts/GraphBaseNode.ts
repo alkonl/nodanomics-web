@@ -22,7 +22,7 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
     }
 
 
-    updateNode(data: Partial<INodeData>) {
+    updateNode(data: Partial<IGenericNodeData>) {
         this._data = {
             ...this._data,
             ...data
@@ -40,6 +40,8 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
     get outgoingEdges(): GraphBaseEdge[] {
         return this._outgoingEdges;
     }
+
+
 
     get outgoingNodes(): GraphBaseNode[] {
         return this._outgoingEdges.map(edge => edge.target);

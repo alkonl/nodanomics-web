@@ -6,7 +6,7 @@ import {IEventConnectionData} from "../eventConnection";
 
 export type IDiagramConnectionData = IDataConnectionData | ILogicConnectionData | IEventConnectionData;
 
-export type IReactFlowEdge = Edge<IDiagramConnectionData>;
+export type IReactFlowEdge = Edge<IDiagramConnectionData>
 
 export type IReactFlowEdgeConnection = Connection & {
     data: IDiagramConnectionData

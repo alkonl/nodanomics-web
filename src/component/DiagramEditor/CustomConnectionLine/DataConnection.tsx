@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 // eslint-disable-next-line import/named
 import {BaseEdge, EdgeLabelRenderer, EdgeProps, getBezierPath} from 'reactflow';
-import {Box, Button} from "@mui/material";
 import {EElementType, IDataConnectionData} from "../../../interface";
-import {diagramEditorActions, useAppDispatch} from "../../../redux";
-import {EColor} from "../../../constant";
+import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../redux";
+import {Box, Button} from "@mui/material";
+import {DIAGRAM_RUN_DURATION, EColor, EDGE_Z_INDEX} from "../../../constant";
+import {CircleResourcesAnimation} from "./CircleResourcesAnimation";
+
 
 export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
     {
@@ -20,6 +22,7 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
         data
     }
 ) => {
+    const {isDiagramRunning, isDiagramRunningInterval} = useDiagramEditorState()
     const [edgePath, labelX, labelY] = getBezierPath({
         sourceX,
         sourceY,
@@ -37,9 +40,33 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
             elementType: EElementType.Connection,
         }))
     }
+    const animationCircleId = `animation-circle-${id}`
+
+    const [circleCount, setCircleCount] = useState<number>(data?.formula ? parseInt(data.formula) : 0)
+
+    useEffect(() => {
+        setCircleCount(data?.formula ? parseInt(data.formula) : 0)
+    }, [data?.formula]);
+
+
+    const isPlay = isDiagramRunning && data?.isTransferredResources
+
     return (
         <>
-            <BaseEdge path={edgePath} markerEnd={markerEnd} style={style}/>
+            {Array.from({length: circleCount}).map((_, index) => {
+                const delay = index * 50
+                return (
+                    <CircleResourcesAnimation
+                        infinite={isDiagramRunningInterval}
+                        play={isPlay}
+                        duration={DIAGRAM_RUN_DURATION - delay - 100}
+                        begin={delay}
+                        key={index} parentId={animationCircleId}
+                        id={`${animationCircleId}-${index}`}
+                    />
+                )
+            })}
+            <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} id={animationCircleId}/>
             <EdgeLabelRenderer>
                 <Box
                     sx={{
@@ -47,6 +74,7 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
                         transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
                         fontSize: 12,
                         pointerEvents: 'all',
+                        zIndex: EDGE_Z_INDEX,
                     }}
                 >
                     <Button

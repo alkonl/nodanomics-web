@@ -2,14 +2,16 @@ import {MouseEvent as ReactMouseEvent, useCallback} from "react";
 import {IReactFlowNode, isINodeSize} from "../interface";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {loopSize} from "../constant";
+import {useGetChildrenNodes} from "./useGetChildrenNodes";
 
 
 export const useOnNodeDrag = () => {
     const dispatch = useAppDispatch()
     const {diagramNodes} = useDiagramEditorState()
-
+    const getChildrenNodes = useGetChildrenNodes()
     return useCallback((event: ReactMouseEvent, node: IReactFlowNode) => {
-        const childrenNodes = diagramNodes.filter((diagramNode) => diagramNode.parentNode === node.parentNode)
+        if (!node.parentNode) return
+        const childrenNodes = getChildrenNodes({parentId: node.parentNode})
 
 
         const parentNode = diagramNodes.find((diagramNode) => diagramNode.id === node.parentNode)
@@ -38,7 +40,7 @@ export const useOnNodeDrag = () => {
 
                 if (event.movementX < 0 && widthBetween > 20) {
                     updatedWidth = preCalculatedWidth
-                } else if(widthBetween < 40) {
+                } else if (widthBetween < 40) {
                     const additionalIncrease = widthBetween < 20 ? 10 : 0
                     updatedWidth = preCalculatedWidth + additionalIncrease
                 }
@@ -50,7 +52,7 @@ export const useOnNodeDrag = () => {
                 const heightBetween = parentSize.height - mostBottomChild.position.y - mostBottomChild.height
                 if (event.movementY < 0 && heightBetween > 20) {
                     updatedHeight = preCalculatedHeight
-                } else if(heightBetween < 40) {
+                } else if (heightBetween < 40) {
                     const additionalIncrease = heightBetween < 20 ? 10 : 0
                     updatedHeight = preCalculatedHeight + additionalIncrease
                 }
