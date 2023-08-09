@@ -5,4 +5,5 @@ export * from './project'
 export * from './team'
 export * from './graph'
 export * from './groupedNodes'
+export * from './spreadsheet'
 

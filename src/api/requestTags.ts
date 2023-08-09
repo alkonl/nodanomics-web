@@ -5,4 +5,5 @@ export enum ERTKTags {
     PersonalDashboard ='PersonalDashboard',
     Projects ='Projects',
     ProjectTeamMember ='ProjectTeamMember',
+    Spreadsheet ='Spreadsheet',
 }

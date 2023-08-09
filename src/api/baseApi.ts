@@ -17,25 +17,27 @@ import {
     ICreateNewDiagramResponse,
     ICreateProjectRequest,
     ICreateProjectResponse,
+    IDeleteProjectRequest,
     IGetDiagramByIdResponse,
     IGetDiagramTagsRequest,
     IGetDiagramTagsResponse,
+    IGetProjectInfoRequest,
+    IGetProjectInfoResponse,
     IGetProjectsRequest,
     IGetProjectsResponse,
+    IGetProjectTeamMembersRequest,
+    IGetProjectTeamMembersResponse, IGetSpreadsheetsBaseInfoRequests, IGetSpreadsheetBaseInfoResponse,
     IInviteUserToProjectRequest,
+    ILeaveProjectTeamRequest,
     ILoginEmailPasswordRequest,
     ISendEmailToResetPasswordRequest,
+    IServerErrorResponse,
     ISessionUserDataResponse,
     ISignUpRequest,
     ISubmitNewPasswordRequest,
     IUpdateUserDataRequest,
     IUpdateUserDataResponse,
-    IServerErrorResponse,
-    IGetProjectInfoResponse,
-    IGetProjectInfoRequest,
-    IGetProjectTeamMembersResponse,
-    IGetProjectTeamMembersRequest,
-    IDeleteProjectRequest, ILeaveProjectTeamRequest
+    IUploadSpreadSheetRequest, IGetSpreadsheetRequests, IGetSpreadsheetResponse
 } from "../interface";
 import {CONFIG, getSocketAsync} from "../utils";
 
@@ -95,6 +97,7 @@ export const baseApi = createApi({
         ERTKTags.PersonalDashboard,
         ERTKTags.Projects,
         ERTKTags.ProjectTeamMember,
+        ERTKTags.Spreadsheet,
     ],
     reducerPath: 'baseApi',
     baseQuery: baseQueryWithReauth,
@@ -510,12 +513,48 @@ export const baseApi = createApi({
         getProjectInfo: builder.query<IGetProjectInfoResponse, IGetProjectInfoRequest>({
             query: (params: IGetProjectInfoRequest) => {
                 return {
-                    url: `/project/info/${params.projectId}`,
+                    url: `/project/info`,
                     method: 'GET',
+                    params: params,
                 }
             },
             providesTags: (result, error, arg) => {
                 return [{type: ERTKTags.Projects, id: arg?.projectId}]
+            }
+        }),
+        uploadSpreadSheet: builder.mutation<unknown, IUploadSpreadSheetRequest>({
+            query: (params: IUploadSpreadSheetRequest) => {
+                const formData = new FormData();
+                formData.append('file', params.file);
+                formData.append('projectId', params.projectId);
+                return {
+                    url: `/project/spreadsheet/upload`,
+                    method: 'POST',
+                    body: formData,
+                    formData: true
+                }
+            },
+            invalidatesTags: [ERTKTags.Spreadsheet]
+        }),
+        getSpreadSheetsBaseInfo: builder.query<IGetSpreadsheetBaseInfoResponse, IGetSpreadsheetsBaseInfoRequests>({
+            query: (params: IGetSpreadsheetsBaseInfoRequests) => {
+                return {
+                    url: `/project/spreadsheets/base-info`,
+                    method: 'GET',
+                    params: params,
+                }
+            },
+            providesTags: (result, error, arg) => {
+                return [{type: ERTKTags.Spreadsheet, id: arg?.projectId}]
+            }
+        }),
+        getSpreadSheet: builder.query<IGetSpreadsheetResponse, IGetSpreadsheetRequests>({
+            query: (params: IGetSpreadsheetRequests) => {
+                return {
+                    url: `/project/spreadsheet`,
+                    method: 'GET',
+                    params: params,
+                }
             }
         }),
     }),
@@ -549,5 +588,8 @@ export const {
     useGetProjectInfoQuery,
     useDeleteTeamMemberFromProjectTeamMutation,
     useLeaveProjectTeamMutation,
+    useUploadSpreadSheetMutation,
+    useGetSpreadSheetsBaseInfoQuery,
+    useGetSpreadSheetQuery,
 } = baseApi;
 
