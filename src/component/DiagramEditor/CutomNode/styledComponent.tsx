@@ -19,6 +19,7 @@ const typeTextStyle: {
     small: {
         fontSize: 8,
         fontWeight: 400,
+        color: EFontColor.grey2,
     }
 }
 
