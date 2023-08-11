@@ -6,7 +6,7 @@ import {useUpdateElement} from "../../../../../hooks";
 import {ElementParameter} from "./ElementParameter";
 import {MSelect} from "../../../../base";
 
-const nodeTriggerModes = Object.keys(ENodeTrigger)
+const nodeTriggerModes = Object.values(ENodeTrigger)
 
 export const NodeTriggerModeParameter: React.FC<{
     nodeData: INodeData
