@@ -10,7 +10,7 @@ import {ConnectionTypeParameter} from "../parameter/ConnectionTypeParameter";
 import {NodeTagParameter} from "../parameter/NodeTagParameter";
 import {ElementNameParameter} from "../parameter/ElementNameParameter";
 import {ConnectionVariableParameter} from "../parameter/ConnectionVariableParameter";
-import {DatasetParameter} from "../parameter";
+import {DataFieldParameter, DatasetParameter, DatasetReadOnly} from "../parameter";
 
 
 export const PropertiesSection: React.FC<{
@@ -40,6 +40,12 @@ export const PropertiesSection: React.FC<{
                 {selectedElementData.elementType === EElementType.Node
                     && selectedElementData.type === EDiagramNode.DatasetDatafield
                     && <DatasetParameter nodeData={selectedElementData}/>}
+                {selectedElementData.elementType === EElementType.Node
+                    && selectedElementData.type === EDiagramNode.DatasetDatafield
+                    && <DataFieldParameter nodeData={selectedElementData}/>}
+                {selectedElementData.elementType === EElementType.Node
+                    && selectedElementData.type === EDiagramNode.DatasetDatafield
+                    && <DatasetReadOnly nodeData={selectedElementData}/>}
                 {selectedElementData?.type === EConnection.DataConnection &&
                     <ConnectionFormulaParameter connection={selectedElementData}/>}
                 {selectedElementData.elementType === EElementType.Connection

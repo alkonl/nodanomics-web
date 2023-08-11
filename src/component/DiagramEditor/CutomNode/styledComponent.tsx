@@ -5,6 +5,10 @@ import React from "react";
 
 type ITextType = 'text' | 'header' | 'small'
 
+const baseSx: SxProps<Theme> = {
+    wordBreak: 'break-all',
+}
+
 const typeTextStyle: {
     [key in ITextType]: SxProps<Theme>
 } = {
@@ -35,10 +39,11 @@ export const NodeTextName: React.FC<{
     }
 ) => {
 
-    const baseSx = typeTextStyle[type]
+    const typeSx = typeTextStyle[type]
     const outerSx = sx || {}
     const textSx: TypographyProps['sx'] = {
         ...baseSx,
+        ...typeSx,
         ...outerSx,
         color: EFontColor.grey2,
     } as TypographyProps['sx']

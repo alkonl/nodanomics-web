@@ -1,11 +1,11 @@
 import React from 'react';
-import {MSelect} from "../../../../base";
-import {ElementParameter} from "./ElementParameter";
+import {MSelect} from "../../../../../base";
+import {ElementParameter} from "../ElementParameter";
 // eslint-disable-next-line import/named
 import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
-import {IDatasetDatafield} from "../../../../../interface";
-import {useProjectDatasets, useUpdateNode} from "../../../../../hooks";
-import {useDiagramEditorState} from "../../../../../redux";
+import {IDatasetDatafield} from "../../../../../../interface";
+import {useProjectDatasets, useUpdateNode} from "../../../../../../hooks";
+import {useDiagramEditorState} from "../../../../../../redux";
 
 export const DatasetParameter: React.FC<{
     nodeData: IDatasetDatafield
@@ -24,7 +24,7 @@ export const DatasetParameter: React.FC<{
     })) || []
 
 
-    const changeNodeTriggerMode = (event: SelectChangeEvent) => {
+    const changeDataset = (event: SelectChangeEvent) => {
         updateNodeData({
             datasetId: event.target.value,
         })
@@ -33,8 +33,8 @@ export const DatasetParameter: React.FC<{
     return (
         <ElementParameter label="Dataset">
             <MSelect.Parameters
-                currentValue={nodeData.datasetId}
-                onChange={changeNodeTriggerMode}
+                currentValue={nodeData.datasetId || ''}
+                onChange={changeDataset}
                 values={mappedProjectDatasets}
             />
         </ElementParameter>
