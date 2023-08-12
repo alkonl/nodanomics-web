@@ -6,7 +6,7 @@ export interface ITeamMemberInfo {
     id: string;
     userId: string;
     firstName: string;
-    lastName: string;
+    lastName?: string;
     email: string;
     avatar?: string;
 }
