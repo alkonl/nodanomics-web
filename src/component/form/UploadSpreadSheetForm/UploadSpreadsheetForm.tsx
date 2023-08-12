@@ -10,7 +10,7 @@ export const UploadSpreadsheetForm: React.FC<{
           projectId,
       }) => {
 
-    const [uploadedFile, setUploadedFile] = useState<File | undefined>();
+    const [uploadedFile, setUploadedFile] = useState<File | null>(null);
     const [googleSheetId, setGoogleSheetId] = useState<string | undefined>();
     const [uploadSpreadSheet, {isSuccess, isError}] = useUploadSpreadSheetMutation();
     const {data: allUserGoogleSpreadsheets} = useGetAllUserGoogleSpreadSheetQuery(undefined);
@@ -111,7 +111,7 @@ export const UploadSpreadsheetForm: React.FC<{
             </Box>
             <Box>
                 <>
-                    {uploadedFile || googleSheetId && <MButton.Submit type="submit">Submit</MButton.Submit>}
+                    {(uploadedFile || googleSheetId) && <MButton.Submit type="submit">Submit</MButton.Submit>}
                     {isSuccess && <Typography>Success</Typography>}
                     {isError && <Typography>Error</Typography>}
                 </>
