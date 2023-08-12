@@ -27,6 +27,7 @@ import {DataConnection} from "../CustomConnectionLine/DataConnection";
 import {LogicConnection} from "../CustomConnectionLine/LogicConnection";
 import {useOnConnect} from "../../../hooks/useOnConnect";
 import {EventConnection} from "../CustomConnectionLine/EventConnection";
+import {DatasetNode} from "../CutomNode/DatasetNode";
 
 
 const nodeTypes = {
@@ -38,6 +39,7 @@ const nodeTypes = {
     [EDiagramNode.EventListener]: EventListenerNode,
     [EDiagramNode.MicroLoop]: MicroLoopNode,
     [EDiagramNode.WhileLoop]: WhileLoopNode,
+    [EDiagramNode.DatasetDatafield]: DatasetNode,
 };
 
 const edgeTypes = {

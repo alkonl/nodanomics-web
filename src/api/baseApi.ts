@@ -11,6 +11,7 @@ import {
 import {sendVerificationEmail, verifyEmail} from "supertokens-auth-react/recipe/emailverification";
 
 import {
+    EUploadSpreadSheetRequestType,
     IChangePasswordRequest,
     IChangePasswordResponse,
     ICreateNewDiagramRequest,
@@ -18,6 +19,7 @@ import {
     ICreateProjectRequest,
     ICreateProjectResponse,
     IDeleteProjectRequest,
+    IGetAllGoogleSpreadsheetResponse,
     IGetDiagramByIdResponse,
     IGetDiagramTagsRequest,
     IGetDiagramTagsResponse,
@@ -26,7 +28,11 @@ import {
     IGetProjectsRequest,
     IGetProjectsResponse,
     IGetProjectTeamMembersRequest,
-    IGetProjectTeamMembersResponse, IGetSpreadsheetsBaseInfoRequests, IGetSpreadsheetBaseInfoResponse,
+    IGetProjectTeamMembersResponse,
+    IGetSpreadsheetBaseInfoResponse,
+    IGetSpreadsheetRequests,
+    IGetSpreadsheetResponse,
+    IGetSpreadsheetsBaseInfoRequests,
     IInviteUserToProjectRequest,
     ILeaveProjectTeamRequest,
     ILoginEmailPasswordRequest,
@@ -37,7 +43,7 @@ import {
     ISubmitNewPasswordRequest,
     IUpdateUserDataRequest,
     IUpdateUserDataResponse,
-    IUploadSpreadSheetRequest, IGetSpreadsheetRequests, IGetSpreadsheetResponse
+    IUploadSpreadSheetRequest
 } from "../interface";
 import {CONFIG, getSocketAsync} from "../utils";
 
@@ -410,7 +416,9 @@ export const baseApi = createApi({
             }
         }),
 
-        getDiagramById: builder.query<{ diagram?: IGetDiagramByIdResponse }, string | undefined>({
+        getDiagramById: builder.query<{
+            diagram?: IGetDiagramByIdResponse
+        }, string | undefined>({
             queryFn: async (diagramId: string) => {
                 const socket = await getSocketAsync();
                 socket.emit(EEventDiagramServer.JoinDiagramRoom, diagramId);
@@ -524,14 +532,24 @@ export const baseApi = createApi({
         }),
         uploadSpreadSheet: builder.mutation<unknown, IUploadSpreadSheetRequest>({
             query: (params: IUploadSpreadSheetRequest) => {
-                const formData = new FormData();
-                formData.append('file', params.file);
-                formData.append('projectId', params.projectId);
+                if (params.type === EUploadSpreadSheetRequestType.File) {
+                    const formData = new FormData();
+                    formData.append('file', params.file);
+                    formData.append('projectId', params.projectId);
+                    return {
+                        url: `/project/spreadsheet/upload`,
+                        method: 'POST',
+                        body: formData,
+                        formData: true
+                    }
+                }
                 return {
                     url: `/project/spreadsheet/upload`,
                     method: 'POST',
-                    body: formData,
-                    formData: true
+                    body: {
+                        projectId: params.projectId,
+                        googleSpreadsheetId: params.googleSpreadsheetId,
+                    },
                 }
             },
             invalidatesTags: [ERTKTags.Spreadsheet]
@@ -557,6 +575,14 @@ export const baseApi = createApi({
                 }
             }
         }),
+        getAllUserGoogleSpreadSheet: builder.query<IGetAllGoogleSpreadsheetResponse, undefined>({
+            query: () => {
+                return {
+                    url: `/spreadsheet/google-spreadsheets`,
+                    method: 'GET',
+                }
+            }
+        })
     }),
 })
 export const {
@@ -591,5 +617,6 @@ export const {
     useUploadSpreadSheetMutation,
     useGetSpreadSheetsBaseInfoQuery,
     useGetSpreadSheetQuery,
+    useGetAllUserGoogleSpreadSheetQuery,
 } = baseApi;
 

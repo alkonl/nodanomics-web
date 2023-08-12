@@ -22,6 +22,7 @@ export const ElementSetupToolbar = () => {
                 px: 2,
                 py: 1,
                 width: 270,
+                maxWidth: 270,
                 backgroundColor: EColor.white,
             }}
         >

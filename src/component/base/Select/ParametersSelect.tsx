@@ -5,16 +5,24 @@ import {EColor, EFontColor} from "../../../constant";
 import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
 
 export const ParametersSelect: React.FC<{
-    currentValue: string,
+    currentValue?: string,
     onChange: (event: SelectChangeEvent) => void,
-    values: string[],
-}> = ({currentValue, onChange,values}) => {
+    values: string[] | {
+        value: string,
+        label: string,
+    }[],
+}> = ({currentValue, onChange, values}) => {
     return (
         <FormControl
-
             fullWidth
             size="small"
+            sx={{
+                maxWidth: '200px',
+                boxSizing: 'border-box',
+            }}
+            id={`ParametersSelect-controller${currentValue}`}
         >
+
             <InputLabel
                 sx={{
                     color: EFontColor.grey4,
@@ -26,6 +34,7 @@ export const ParametersSelect: React.FC<{
                 sx={{
                     color: EFontColor.grey4,
                     width: '100%',
+                    maxWidth: '100%',
                     flex: 1,
                     borderColor: EColor.grey2,
                     borderWidth: 3,
@@ -35,17 +44,30 @@ export const ParametersSelect: React.FC<{
                     padding: 0,
                 }}
             >
-                {values.map((value) => (
-                    <MenuItem
-                        key={value}
-                        value={value}
+                {values.map((item) => {
+                    if (typeof item === 'string') {
+                        return (
+                            <MenuItem
+                                key={item}
+                                value={item}
+                                sx={{
+                                    color: EFontColor.grey4,
+                                }}
+                            >
+                                {item}
+                            </MenuItem>
+                        )
+                    }
+                    return <MenuItem
+                        key={item.value}
+                        value={item.value}
                         sx={{
                             color: EFontColor.grey4,
                         }}
                     >
-                        {value}
+                        {item.label}
                     </MenuItem>
-                ))}
+                })}
             </Select>
         </FormControl>
     );

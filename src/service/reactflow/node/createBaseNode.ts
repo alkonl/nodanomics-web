@@ -133,6 +133,15 @@ export const createBaseNode = ({type, position}: {
                 }
             }
         }
+        case EDiagramNode.DatasetDatafield: {
+            return {
+                ...baseParams,
+                data: {
+                    ...baseData,
+                    type,
+                }
+            }
+        }
         default :
             throw new Error(`Unknown node type: ${type}`);
     }

@@ -25,7 +25,7 @@ export const TeamInlineListItem: React.FC<{
                         <Typography sx={{
                             fontSize: 10,
                         }}>
-                            {firstName[0]}{lastName[0]}
+                            {firstName[0]}{lastName && lastName[0]}
                         </Typography>
                     </Avatar>
                 </TeamMemberListElementIconLayout>

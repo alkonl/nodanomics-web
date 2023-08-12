@@ -28,6 +28,11 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
             type: EDiagramNode.Source,
             tooltip: 'no',
             toolbarName: 'S',
+        },{
+            elementType: EElementType.Node,
+            type: EDiagramNode.DatasetDatafield,
+            tooltip: 'DatasetDatafield',
+            toolbarName: 'D',
         }, {
             elementType: EElementType.Node,
             type: EDiagramNode.Formula,
