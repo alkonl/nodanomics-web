@@ -12,6 +12,7 @@ export const SpreadsheetViewer: React.FC<{
         <Box sx={{
             padding: 1,
             maxHeight: '80vh',
+            maxWidth: '100vw',
             overflow: 'auto',
             backgroundColor: 'white',
         }}>
