@@ -27,7 +27,6 @@ export const UploadSpreadsheetForm: React.FC<{
     }
 
     const onSubmit = () => {
-        console.log('onSubmit: ', uploadedFile, googleSheetId);
         if (uploadedFile) {
             uploadSpreadSheet({
                 type: EUploadSpreadSheetRequestType.File,

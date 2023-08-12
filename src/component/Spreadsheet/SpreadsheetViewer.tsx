@@ -9,32 +9,44 @@ export const SpreadsheetViewer: React.FC<{
         spreadsheetId,
     })
 
-    const formattedTable = useMemo(()=>{
-        if(!data) return undefined
-        const maxLength =  data.rows.reduce((acc, row) => {
-            const rowLength = row.values.length
-            return rowLength > acc ? rowLength : acc
-        }, 0)
-        // every row should have the same length
-        // and we must take into account merged cells, which can take up more space than a single cell
-        const rows = data.rows.map((row) => {
-            const rowLength = row.values.length
-            if (rowLength === maxLength) {
-                return row
-            } else {
-                const diff = maxLength - rowLength
-                const emptyCells = Array.from({length: diff}, () => ({content: ''}))
-                return {
-                    ...row,
-                    values: [...row.values, ...emptyCells],
+    const formattedTable = useMemo(() => {
+        if (!data) return undefined
+
+        // replace empty cells with
+        const fomattedRows = []
+        for (let i = 0; i < data.rows.length; i++) {
+            const values = []
+            let skipValues: {
+                from: number
+                to: number
+            } | undefined = undefined
+            for (let j = 0; j < data.rows[i].values.length; j++) {
+                const cell = data.rows[i].values[j]
+                if (skipValues && j >= skipValues.from && j <= skipValues.to) {
+                    continue
                 }
+                const colspan = cell.merge ? (cell.merge.e.c - cell.merge.s.c + 1) : undefined
+                if (colspan && colspan > 1) {
+                    skipValues = {
+                        from: j,
+                        to: j + colspan - 1,
+                    }
+                }
+                values.push({
+                    content: cell.content,
+                    colspan,
+                })
             }
-        })
+            fomattedRows.push({
+                ...data.rows[i],
+                values,
+            })
+        }
         return {
             name: data.name,
-            rows,
+            rows: fomattedRows,
         }
-    },[data])
+    }, [data])
     return (
         <Box sx={{
             padding: 1,
@@ -55,7 +67,12 @@ export const SpreadsheetViewer: React.FC<{
                                     key={row.id}
                                 >
                                     {row.values.map((cell) => (
-                                        <TableCell key={cell.content} sx={{border: 1}} align="left">{cell.content}</TableCell>
+                                        <TableCell
+                                            colSpan={cell.colspan}
+                                            key={cell.content}
+                                            sx={{border: 1}}
+                                            align="left"
+                                        >{cell.content}</TableCell>
                                     ))}
                                 </TableRow>
                             ))}

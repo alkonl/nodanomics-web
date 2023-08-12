@@ -15,13 +15,11 @@ export const DatasetReadOnly: React.FC<{
     })
 
     const changeIsReadOnly = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-        console.log('checked', checked)
         updateNodeData({
             isReadOnly: checked
         })
     }
 
-    console.log('nodeData.isReadOnly', nodeData.isReadOnly)
 
     return (
         <ElementParameter label='Read-only'>
