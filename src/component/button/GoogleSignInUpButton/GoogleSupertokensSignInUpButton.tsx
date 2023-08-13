@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {useSingInUpGoogleMutation} from "../../../api";
 import {Button} from "@mui/material";
 
-export const GoogleSignInUpButton = () => {
+export const GoogleSupertokensSignInUpButton = () => {
     const [signInUp, {data}] = useSingInUpGoogleMutation();
 
     useEffect(() => {

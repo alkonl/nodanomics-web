@@ -22,6 +22,7 @@ export const AuthGoogle = () => {
                 width: '100vw',
             }}
         >
+
             <CircularProgress/>
         </Box>
     );

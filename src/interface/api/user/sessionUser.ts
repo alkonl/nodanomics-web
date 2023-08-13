@@ -6,4 +6,5 @@ export interface ISessionUserDataResponse {
     lastName: string,
     phoneNumber: string | null,
     avatar?: string,
+    googleUserId?: string,
 }
