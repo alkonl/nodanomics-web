@@ -11,6 +11,7 @@ import {NodeTagParameter} from "../parameter/NodeTagParameter";
 import {ElementNameParameter} from "../parameter/ElementNameParameter";
 import {ConnectionVariableParameter} from "../parameter/ConnectionVariableParameter";
 import {DataFieldParameter, DatasetParameter, DatasetReadOnly} from "../parameter";
+import {NodeDataCapacityParameters} from "../parameter/NodeDataCapacityParameters";
 
 
 export const PropertiesSection: React.FC<{
@@ -35,6 +36,11 @@ export const PropertiesSection: React.FC<{
                 <ElementNameParameter elementData={selectedElementData}/>
                 {selectedElementData.elementType === EElementType.Node &&
                     <NodeTagParameter nodeData={selectedElementData}/>}
+
+                {selectedElementData.elementType === EElementType.Node &&
+                selectedElementData.type === EDiagramNode.Data &&
+                <NodeDataCapacityParameters nodeData={selectedElementData}/>}
+
                 {'trigger' in selectedElementData && <NodeTriggerModeParameter nodeData={selectedElementData}/>}
                 {'actionMode' in selectedElementData && <NodeActionParameter node={selectedElementData}/>}
                 {selectedElementData.elementType === EElementType.Node
