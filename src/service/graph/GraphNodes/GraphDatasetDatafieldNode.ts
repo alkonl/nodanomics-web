@@ -11,7 +11,7 @@ export class GraphDatasetDatafieldNode extends GraphInvokableNode<IDatasetDatafi
 
 
     invokeStep() {
-        console.log("GraphEventListenerNode.invokeStep()");
+        console.info("GraphEventListenerNode.invokeStep()");
     }
 
 }

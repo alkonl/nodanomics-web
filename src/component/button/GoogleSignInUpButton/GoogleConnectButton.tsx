@@ -3,9 +3,8 @@ import {MButton} from "../../base";
 import {useCurrentUser} from "../../../hooks";
 
 export const GoogleConnectButton: React.FC<{
-    onSuccess?: () => void;
+    onSuccess?: () => Promise<void>;
 }> = ({onSuccess}) => {
-
 
     const {currentUser} = useCurrentUser()
 
@@ -18,14 +17,11 @@ export const GoogleConnectButton: React.FC<{
             );
         }
 
-        window.addEventListener('message', (event) => {
-            console.log('event: ', event)
+        window.addEventListener('message', async (event) => {
             if (event.origin === 'http://localhost:8080' && event.data.status === 'ok') {
                 if (onSuccess) {
-                    onSuccess();
+                   await onSuccess();
                 }
-                console.log('success')
-                console.log('event.data: ', event)
             }
         });
     };

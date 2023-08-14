@@ -1,8 +1,9 @@
 import {useSessionUserDataQuery} from "../api";
 
 export const useCurrentUser = () => {
-    const {data} = useSessionUserDataQuery(undefined)
+    const {data, refetch, } = useSessionUserDataQuery(undefined)
     return {
         currentUser: data,
+        refetch,
     }
 }
