@@ -12,7 +12,9 @@ import {GoogleConnectButton} from "../../button";
 
 export const UploadSpreadsheetForm: React.FC<{
     projectId: string;
+    onSuccessLogin?: () => void;
 }> = ({
+          onSuccessLogin,
           projectId,
       }) => {
 
@@ -129,7 +131,9 @@ export const UploadSpreadsheetForm: React.FC<{
                         </RadioGroup>
                     </FormControl>
                 </Box>}
-                {!isUserConnectedToGoogle && <GoogleConnectButton/>}
+                {!isUserConnectedToGoogle && <GoogleConnectButton
+                    onSuccess={onSuccessLogin}
+                />}
             </Box>
             <Box>
                 <>
