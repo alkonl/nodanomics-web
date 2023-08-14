@@ -1,12 +1,12 @@
 import React from 'react';
-import {IDataNodeData} from "../../../../../../interface";
 import {ElementParameter} from "../ElementParameter";
 import {Box, Checkbox} from "@mui/material";
 import {EColor} from "../../../../../../constant";
-import {useChangeNodeDataStep, useUpdateNode} from "../../../../../../hooks";
 import {Parameter} from "../../styledComponents";
+import {IDataNodeData} from "../../../../../../interface";
+import {useUpdateNode} from "../../../../../../hooks";
 
-export const NodeDataStepParameter: React.FC<{
+export const NodeDataDecimalParameter: React.FC<{
     nodeData: IDataNodeData
 }> = ({nodeData}) => {
 
@@ -14,25 +14,21 @@ export const NodeDataStepParameter: React.FC<{
         nodeId: nodeData.id,
     })
 
-    const changeIsReadOnly = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    const changeIsShowDecimals = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
         updateNodeData({
-          isShowStep: checked
+            isShowStep: checked
         })
     }
 
-    const {changeNodeDataStep} = useChangeNodeDataStep({
-        nodeId: nodeData.id,
-    })
-
-    const changeStep = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const step = Number(event.target.value)
-        changeNodeDataStep(step)
+    const changeDigits = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const decimals = Number(event.target.value)
+        updateNodeData({
+            isShowStep: decimals
+        })
     }
 
-
-
     return (
-        <ElementParameter label="Steps">
+        <ElementParameter label="Decimals">
             <Box sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -43,8 +39,8 @@ export const NodeDataStepParameter: React.FC<{
                     alignItems: 'center',
                 }}>
                     <Checkbox
-                        onChange={changeIsReadOnly}
-                        checked={nodeData.isShowStep || false}
+                        onChange={changeIsShowDecimals}
+                        checked={nodeData.isShowDecimal || false}
                         sx={{
                             padding: 0,
                             borderColor: EColor.grey2,
@@ -64,12 +60,13 @@ export const NodeDataStepParameter: React.FC<{
                         fontWeight: 400,
                         marginRight: 0.25,
                     }}>
-                        Per Step
+                        Digits
                     </Parameter.Text>
                     <Parameter.Input
+
                         type="number"
-                        value={nodeData.step || ''}
-                        onChange={changeStep}
+                        value={nodeData.decimalDigits || ''}
+                        onChange={changeDigits}
                         sx={{
                             maxWidth: 65,
                         }}

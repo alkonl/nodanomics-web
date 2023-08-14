@@ -2,7 +2,6 @@ import {EDiagramNode, IDiagramNodeBaseData} from "./structures";
 import {IResource} from "../resource";
 import {INodeWithAction} from "../nodeAction";
 import {INodeWithTrigger} from "../nodeTrigger";
-import {isObject} from "../../../../utils";
 
 
 export interface IDataNodeData extends IDiagramNodeBaseData, INodeWithTrigger, INodeWithAction {
@@ -11,6 +10,8 @@ export interface IDataNodeData extends IDiagramNodeBaseData, INodeWithTrigger, I
     initialResources?: IResource[]
     isShowStep?: boolean
     step?: number
+    isShowDecimal?: boolean
+    decimalDigits?: number
     minCapacity?: number
     maxCapacity?: number
     minResources?: number
