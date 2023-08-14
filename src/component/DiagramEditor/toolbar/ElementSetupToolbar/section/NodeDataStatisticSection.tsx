@@ -4,7 +4,7 @@ import {useCurrentEditElement, useToggle} from "../../../../../hooks";
 import {EDiagramNode} from "../../../../../interface";
 import {VariableStatisticsParameter} from "../parameter/VariableStatisticsParameter";
 
-export const VariableStatisticSection = () => {
+export const NodeDataStatisticSection = () => {
     const selectedElementData = useCurrentEditElement()?.data
     const accordionController = useToggle()
 
@@ -12,7 +12,7 @@ export const VariableStatisticSection = () => {
         accordionController.open()
     }, [selectedElementData])
 
-    if (selectedElementData?.type !== EDiagramNode.Variable) {
+    if (selectedElementData?.type !== EDiagramNode.Data) {
         throw new Error('VariableStatisticSection can be used only for Variable')
     }
     return (
@@ -21,6 +21,7 @@ export const VariableStatisticSection = () => {
             toggle={accordionController.toggle}
             title="Statistic"
                     >
+
             <VariableStatisticsParameter
                 max={selectedElementData.maxResources}
                 min={selectedElementData.minResources}

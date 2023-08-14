@@ -1,11 +1,9 @@
 import {ISourceNodeData} from "../../../interface";
 import {GraphInteractiveNode} from "./abstracts";
-import {GraphVariableNode} from "./GraphVariableNode";
+import {GraphDataNode} from "./GraphDataNode";
 import {GraphDataEdge} from "../GraphEdge";
 import {RunManager} from "../RunManager";
-import {nanoid} from "nanoid";
-
-const genResourceId = () => `resource_${nanoid()}}`
+import {generateResourceFromSource} from "../../diagram";
 
 export class GraphSourceNode extends GraphInteractiveNode<ISourceNodeData> {
     constructor(data: ISourceNodeData, runManager: RunManager) {
@@ -19,23 +17,24 @@ export class GraphSourceNode extends GraphInteractiveNode<ISourceNodeData> {
     pushAllOrAnyResources() {
         this.edgesToVariables.forEach(edge => {
             const resources = this.generateResourceFromSource(edge.countOfResource);
-            if (GraphVariableNode.baseNodeIsVariable(edge.target)) {
-                edge.target.addResource(resources);
-                edge.changeIsTransferredResources(true)
+            if (GraphDataNode.baseNodeIsData(edge.target)) {
+                const onSuccess = () => {
+                    edge.changeIsTransferredResources(true)
+                }
+                edge.target.addResource(resources, this.addingResourcesMode, {
+                    onSuccess
+                });
             }
         })
     }
 
     get edgesToVariables(): GraphDataEdge[] {
         return this.outgoingEdges
-            .filter(edge => GraphVariableNode.baseNodeIsVariable(edge.target))
+            .filter(edge => GraphDataNode.baseNodeIsData(edge.target))
             .filter(edge => GraphDataEdge.baseEdgeIsData(edge)) as GraphDataEdge[];
     }
 
     generateResourceFromSource(countOfResource: number) {
-        return Array(countOfResource).fill(0).map(() => ({
-            color: 'red',
-            id: genResourceId(),
-        }))
+        return generateResourceFromSource(countOfResource)
     }
 }

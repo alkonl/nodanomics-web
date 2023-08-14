@@ -17,6 +17,7 @@ export const BaseSection: React.FC<{
         <Accordion
             sx={{
                 padding: 0,
+                paddingRight: '2px',
                 margin: 0,
                 '&.MuiAccordion-root': {
                     boxShadow: 'none',

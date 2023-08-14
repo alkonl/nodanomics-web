@@ -16,6 +16,7 @@ export class GraphEventListenerNode extends GraphInvokableNode<IEventListenerNod
 
 
     invokeStep() {
+        super.updateState()
         this.updateState()
     }
 

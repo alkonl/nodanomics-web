@@ -30,10 +30,6 @@ export const AccountDropDownMenuItem: React.FC<{
         const settingsBase: IAccountDropDownMenuTypes = [
             {
                 type: 'link',
-                name: 'Profile',
-                link: ELinks.accountManageData,
-            }, {
-                type: 'link',
                 name: 'Log in',
                 link: ELinks.login,
             }, {

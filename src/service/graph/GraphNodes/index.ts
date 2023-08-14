@@ -1,6 +1,6 @@
 export * from './GraphStaticVariableNode'
 export * from './GraphFormulaNode'
-export * from './GraphVariableNode'
+export * from './GraphDataNode'
 export * from './GraphEventTriggerNode'
 export * from './GraphSourceNode'
 export * from './abstracts'

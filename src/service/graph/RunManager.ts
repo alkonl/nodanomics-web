@@ -1,7 +1,6 @@
 import {Graph} from "./Graph";
-import {GraphBaseNode, GraphInvokableNode, GraphSourceNode, GraphVariableNode} from "./GraphNodes";
+import {GraphBaseNode, GraphInvokableNode, GraphSourceNode, GraphDataNode, GraphEventListenerNode} from "./GraphNodes";
 import {EConnection, EConnectionMode, ENodeTrigger, isUpdateGraphNodeState} from "../../interface";
-import {GraphEventListenerNode} from "./GraphNodes/GraphEventListenerNode";
 import {GraphNodeManager} from "./NodeManager";
 import {GraphDataEdge} from "./GraphEdge";
 
@@ -43,7 +42,7 @@ export class RunManager {
         })
         this.updateState()
         this.graph.nodes.forEach(node => {
-            if (node instanceof GraphVariableNode) {
+            if (node instanceof GraphDataNode) {
                 node.updateRecoursesProvide()
             }
         })

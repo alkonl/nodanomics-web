@@ -27,6 +27,7 @@ export class GraphEventTriggerNode extends GraphInvokableNode<IEventTriggerNodeD
 
 
     invokeStep() {
+        super.updateState()
         this.updateState()
     }
 

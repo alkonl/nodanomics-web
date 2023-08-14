@@ -19,7 +19,7 @@ import {
     MicroLoopNode,
     SourceNode,
     StaticVariableNode,
-    VariableNode, WhileLoopNode
+    DataNode, WhileLoopNode
 } from "../CutomNode";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../redux";
 import {Box} from "@mui/material";
@@ -28,13 +28,14 @@ import {LogicConnection} from "../CustomConnectionLine/LogicConnection";
 import {useOnConnect} from "../../../hooks/useOnConnect";
 import {EventConnection} from "../CustomConnectionLine/EventConnection";
 import {DatasetNode} from "../CutomNode/DatasetNode";
+import {GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../constant";
 
 
 const nodeTypes = {
     [EDiagramNode.StaticVariable]: StaticVariableNode,
     [EDiagramNode.Formula]: FormulaNode,
     [EDiagramNode.Source]: SourceNode,
-    [EDiagramNode.Variable]: VariableNode,
+    [EDiagramNode.Data]: DataNode,
     [EDiagramNode.EventTrigger]: EventTriggerNode,
     [EDiagramNode.EventListener]: EventListenerNode,
     [EDiagramNode.MicroLoop]: MicroLoopNode,
@@ -118,7 +119,7 @@ export const DiagramCanvas = () => {
                     connectionMode={ConnectionMode.Loose}
                 >
                     <Controls/>
-                    <Background color="blue" gap={16}/>
+                    <Background color="blue" gap={GAP_BETWEEN_EDITOR_CANVAS_DOTS}/>
                 </ReactFlow>
             </Box>
         </Box>

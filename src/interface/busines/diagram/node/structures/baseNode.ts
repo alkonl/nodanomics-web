@@ -4,7 +4,8 @@ export enum EDiagramNode {
     StaticVariable = 'StaticVariable',
     Source = 'Source',
     Formula = 'Formula',
-    Variable = 'Variable',
+    // Variable it is DataNode
+    Data = 'Variable',
     EventTrigger = 'EventTrigger',
     EventListener = 'EventListener',
     MicroLoop = 'MicroLoop',
@@ -18,4 +19,5 @@ export interface IDiagramNodeBaseData extends IDiagramBaseInteractiveElementData
     parentId?: string;
     isCollapsed?: boolean;
     tag?: string;
+    connectedNodes?: string[];
 }

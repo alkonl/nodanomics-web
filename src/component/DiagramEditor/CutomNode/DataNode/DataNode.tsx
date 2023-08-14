@@ -2,20 +2,30 @@ import React from 'react';
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from "reactflow";
 import {Box} from "@mui/material";
-import {EConnection, IVariableNodeData} from "../../../../interface";
+import {EConnection, IDataNodeData} from "../../../../interface";
 import {NodeText} from "../styledComponent";
-import {EColor} from "../../../../constant";
+import {EColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
 import {BaseNodeContainer} from "../container/BaseNodeContainer";
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import {useChangeNodeDataStep} from "../../../../hooks";
 
-export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = (props) => {
+
+export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
     const {isConnectable, data} = props
     const currentResourcesValue = data.resources?.length.toFixed(1) || 0
     const maxRegisteredValue = data.maxResources
     const minRegisteredValue = data.minResources
 
+    const isShowStep = data.isShowStep || false
+
+    const {increaseNodeDataStep,decreaseNodeDataStep} = useChangeNodeDataStep({
+        nodeId: props.data.id,
+    })
+
     return (
 
-        <Box>
+        <>
             <Handle type="target" position={Position.Left} id={EConnection.DataConnection}
                     isConnectable={isConnectable}
                     style={{
@@ -35,21 +45,30 @@ export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = (props) => {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    width: 150,
+                    width: GAP_BETWEEN_EDITOR_CANVAS_DOTS * 6,
+                    height: GAP_BETWEEN_EDITOR_CANVAS_DOTS * 4,
                 }}>
                     <Box sx={{
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        gap: 1,
+                        mx: 1,
                         justifyItems: 'center',
-                        flex: 2,
+                        flex: 1,
                     }}>
+                        {isShowStep && <KeyboardArrowUpIcon
+                            onClick={increaseNodeDataStep}
+                            sx={{
+                                cursor: 'pointer',
+                                pointerEvents: 'all',
+                                width: 18,
+                                height: 18,
+                                color: EColor.white,
+                            }}/>}
                         <NodeText.Name sx={{
                             maxWidth: '100%',
                             overflow: 'hidden',
-                            inlineSize: 100,
                             textAlign: 'center',
                             overflowWrap: 'break-word',
                         }}>
@@ -58,6 +77,16 @@ export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = (props) => {
                         <NodeText.Value>
                             {currentResourcesValue}
                         </NodeText.Value>
+                        {isShowStep && <KeyboardArrowDownIcon
+                            onClick={decreaseNodeDataStep}
+                            sx={{
+                                cursor: 'pointer',
+                                pointerEvents: 'all',
+                                width: 18,
+                                height: 18,
+                                color: EColor.white,
+                            }}
+                        />}
                     </Box>
                     <Box sx={{
                         display: 'flex',
@@ -65,13 +94,14 @@ export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = (props) => {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         padding: '2px',
+                        height: 1,
                     }}>
                         <Box>
                             <NodeText.Name>
                                 Max
                             </NodeText.Name>
                             <NodeText.Value>
-                                {maxRegisteredValue}
+                                {maxRegisteredValue ? maxRegisteredValue : <br/>}
                             </NodeText.Value>
                         </Box>
                         <Box>
@@ -79,13 +109,13 @@ export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = (props) => {
                                 Min
                             </NodeText.Name>
                             <NodeText.Value>
-                                {minRegisteredValue}
+                                {minRegisteredValue ? minRegisteredValue : <br/>}
                             </NodeText.Value>
                         </Box>
                     </Box>
                 </Box>
             </BaseNodeContainer>
 
-        </Box>
+        </>
     );
 };

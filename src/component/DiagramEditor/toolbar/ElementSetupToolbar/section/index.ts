@@ -1,2 +1,2 @@
-export * from './VariableStatisticSection'
+export * from './NodeDataStatisticSection'
 export * from './PropertiesSection'

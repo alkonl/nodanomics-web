@@ -4,7 +4,7 @@ import {BASE_CHART_COLORS, EColor} from "../../../constant";
 import ReactApexChart from "react-apexcharts";
 import {useWidthAndHeight} from "../../../hooks";
 import {useDiagramEditorState} from "../../../redux";
-import {EDiagramNode, IVariableNodeData} from "../../../interface";
+import {EDiagramNode, IDataNodeData} from "../../../interface";
 import {ApexOptions} from "apexcharts";
 
 
@@ -55,10 +55,10 @@ export const ExecutionGraph = () => {
     const {elementRef, elementSize} = useWidthAndHeight()
     const {diagramNodes} = useDiagramEditorState()
     const filtered = diagramNodes.map(node=>node.data).filter((nodeData) => {
-        if (nodeData.type === EDiagramNode.Variable) {
+        if (nodeData.type === EDiagramNode.Data) {
             return true
         }
-    }) as IVariableNodeData[]
+    }) as IDataNodeData[]
 
     const {series} = useMemo(() => {
         const chartData = filtered.map((data, index) => {

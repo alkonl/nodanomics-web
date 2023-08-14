@@ -1,30 +1,13 @@
-import {INumberVariable, isIGetNodeExternalValue} from "../../../../interface";
-import {GraphBaseEdge, GraphLogicEdge} from "../../GraphEdge";
+import {GraphBaseEdge} from "../../GraphEdge";
 import * as Match from "mathjs";
 import {GraphLogicManager} from "./GraphLogicManager";
 
 export class GraphMatchManager {
-    private readonly incomingEdges: GraphBaseEdge[]
     private readonly logicManager: GraphLogicManager
 
     constructor(incomingEdges: GraphBaseEdge[]) {
-        this.incomingEdges = incomingEdges
         this.logicManager = new GraphLogicManager(incomingEdges)
     }
-
-    // getVariables(): IFormulaNodeVariable[] {
-    //     return this.getIncomingLogicEdge.map((edge) => {
-    //
-    //         //edge.source instanceof GraphVariableNode
-    //         const source = edge.source
-    //         if (isIGetNodeExternalValue(source)) {
-    //             return {
-    //                 variableName: edge.variableName,
-    //                 value: source.nodeExternalValue,
-    //             }
-    //         }
-    //     }).filter((variable) => variable !== undefined) as IFormulaNodeVariable[]
-    // }
 
 
     calculateFormula({formula}: { formula: string }) {
