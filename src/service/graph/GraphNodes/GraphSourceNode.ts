@@ -1,4 +1,4 @@
-import {ENodeAction, ISourceNodeData} from "../../../interface";
+import {ISourceNodeData} from "../../../interface";
 import {GraphInteractiveNode} from "./abstracts";
 import {GraphDataNode} from "./GraphDataNode";
 import {GraphDataEdge} from "../GraphEdge";

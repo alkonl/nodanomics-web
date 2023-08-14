@@ -31,7 +31,10 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     get minCapacity() {
-        return this.data.minCapacity;
+        const minCapacity = Number(this.data.minCapacity);
+        if (!isNaN(minCapacity)) {
+            return minCapacity;
+        }
     }
 
     get resourcesToProvide() {
@@ -213,15 +216,17 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         }, 0)
     }
 
-    private takeCountResources(count: number) {
-        const deletedResourcesToProvide = this.resourcesToProvide.splice(0, count);
-        this._data = {
-            ...this.data,
-            resources: this.resources.filter(resource => {
-                return !deletedResourcesToProvide.some(deletedResource => deletedResource.id === resource.id)
-            })
+    private takeCountResources(count: number): IResource[] | undefined {
+        if (!this.minCapacity || this.currentResourcesCount - count >= this.minCapacity) {
+            const deletedResourcesToProvide = this.resourcesToProvide.splice(0, count);
+            this._data = {
+                ...this.data,
+                resources: this.resources.filter(resource => {
+                    return !deletedResourcesToProvide.some(deletedResource => deletedResource.id === resource.id)
+                })
+            }
+            return deletedResourcesToProvide
         }
-        return deletedResourcesToProvide
     }
 
 

@@ -1,14 +1,11 @@
-import {INumberVariable, isIGetNodeExternalValue} from "../../../../interface";
-import {GraphBaseEdge, GraphLogicEdge} from "../../GraphEdge";
+import {GraphBaseEdge} from "../../GraphEdge";
 import * as Match from "mathjs";
 import {GraphLogicManager} from "./GraphLogicManager";
 
 export class GraphMatchManager {
-    private readonly incomingEdges: GraphBaseEdge[]
     private readonly logicManager: GraphLogicManager
 
     constructor(incomingEdges: GraphBaseEdge[]) {
-        this.incomingEdges = incomingEdges
         this.logicManager = new GraphLogicManager(incomingEdges)
     }
 
