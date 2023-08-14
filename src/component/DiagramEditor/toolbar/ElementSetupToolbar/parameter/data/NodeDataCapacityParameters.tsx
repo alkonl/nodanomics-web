@@ -1,9 +1,9 @@
 import React from 'react';
-import {IDataNodeData} from "../../../../../interface";
-import {ElementParameter} from "./ElementParameter";
-import {Parameter} from "../styledComponents";
+import {IDataNodeData} from "../../../../../../interface";
+import {ElementParameter} from "../ElementParameter";
+import {Parameter} from "../../styledComponents";
 import {Box} from "@mui/material";
-import {useUpdateNode} from "../../../../../hooks";
+import {useUpdateNode} from "../../../../../../hooks";
 
 export const NodeDataCapacityParameters: React.FC<{
     nodeData: IDataNodeData

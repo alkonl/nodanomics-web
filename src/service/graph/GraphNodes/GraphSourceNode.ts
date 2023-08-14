@@ -4,6 +4,7 @@ import {GraphDataNode} from "./GraphDataNode";
 import {GraphDataEdge} from "../GraphEdge";
 import {RunManager} from "../RunManager";
 import {nanoid} from "nanoid";
+import {generateResourceFromSource} from "../../diagram";
 
 const genResourceId = () => `resource_${nanoid()}}`
 
@@ -37,9 +38,6 @@ export class GraphSourceNode extends GraphInteractiveNode<ISourceNodeData> {
     }
 
     generateResourceFromSource(countOfResource: number) {
-        return Array(countOfResource).fill(0).map(() => ({
-            color: 'red',
-            id: genResourceId(),
-        }))
+        return generateResourceFromSource(countOfResource)
     }
 }

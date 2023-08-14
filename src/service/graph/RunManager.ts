@@ -1,7 +1,6 @@
 import {Graph} from "./Graph";
-import {GraphBaseNode, GraphInvokableNode, GraphSourceNode, GraphDataNode} from "./GraphNodes";
+import {GraphBaseNode, GraphInvokableNode, GraphSourceNode, GraphDataNode, GraphEventListenerNode} from "./GraphNodes";
 import {EConnection, EConnectionMode, ENodeTrigger, isUpdateGraphNodeState} from "../../interface";
-import {GraphEventListenerNode} from "./GraphNodes/GraphEventListenerNode";
 import {GraphNodeManager} from "./NodeManager";
 import {GraphDataEdge} from "./GraphEdge";
 
