@@ -3,7 +3,7 @@ import {Box, Typography} from "@mui/material";
 import {EColor, EFontColor} from "../../../../constant";
 import {EDiagramNode, EElementType, nodeSetupToolbarNames} from "../../../../interface";
 import {useCurrentEditElement} from "../../../../hooks";
-import {PropertiesSection, VariableStatisticSection} from "./section";
+import {NodeDataStatisticSection, PropertiesSection} from "./section";
 import {StyleSection} from "./section/StyleSection";
 import {NodeDeleteButton} from "./NodeDeleteButton";
 
@@ -19,9 +19,7 @@ export const ElementSetupToolbar = () => {
                 borderColor: EColor.grey2,
                 borderStyle: 'solid',
                 borderWidth: '1px',
-                px: 2,
-                py: 1,
-                maxWidth: 300,
+                maxWidth: 320,
                 height: '100%',
                 boxSizing: 'border-box',
                 overflowY: 'auto',
@@ -29,44 +27,51 @@ export const ElementSetupToolbar = () => {
                 backgroundColor: EColor.white,
             }}
         >
-            {selectedElementData ?
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        flex: 1,
-                    }}
-                >
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 2,
-                    }}>
-                        <Typography sx={{
-                            color: EFontColor.grey4,
-                        }}>
-                            {nodeSetupToolbarNames[selectedElementData.type]}
-                        </Typography>
-                        <PropertiesSection selectedElementData={selectedElementData}/>
-                        <StyleSection element={selectedElementData}/>
-                        {selectedElementData?.type === EDiagramNode.Data && <VariableStatisticSection/>}
-
-                    </Box>
-                    {selectedElementData.elementType === EElementType.Node && <Box
+            <Box sx={{
+                px: 2,
+                py: 1,
+            }}>
+                {selectedElementData ?
+                    <Box
                         sx={{
-                            mt: 2,
                             display: 'flex',
-                            justifyContent: 'flex-end',
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                            flex: 1,
                         }}
                     >
-                        <NodeDeleteButton nodeId={selectedElementData.id}/>
-                    </Box>}
-                </Box>
-                : <Typography>
-                    Please select an element to edit
-                </Typography>
-            }
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 2,
+                        }}>
+                            <Typography sx={{
+                                color: EFontColor.grey4,
+                            }}>
+                                {nodeSetupToolbarNames[selectedElementData.type]}
+                            </Typography>
+                            <PropertiesSection selectedElementData={selectedElementData}/>
+
+                            <StyleSection element={selectedElementData}/>
+                            {selectedElementData?.type === EDiagramNode.Data && <NodeDataStatisticSection/>}
+
+
+                        </Box>
+                        {selectedElementData.elementType === EElementType.Node && <Box
+                            sx={{
+                                mt: 2,
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                            }}
+                        >
+                            <NodeDeleteButton nodeId={selectedElementData.id}/>
+                        </Box>}
+                    </Box>
+                    : <Typography>
+                        Please select an element to edit
+                    </Typography>
+                }
+            </Box>
         </Box>
     );
 };

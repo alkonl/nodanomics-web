@@ -143,6 +143,7 @@ export const diagramEditorSlice = createSlice({
         },
         updateNodeData: (state, {payload}: PayloadAction<Optionalize<INodeData, 'id'>>) => {
             graph.updateNodeData(payload.id, payload)
+            runManager.updateState()
             updateNodesFromGraph(state.diagramNodes)
             state.autoSaveCalled++
         },

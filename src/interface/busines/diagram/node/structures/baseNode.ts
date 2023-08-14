@@ -19,4 +19,5 @@ export interface IDiagramNodeBaseData extends IDiagramBaseInteractiveElementData
     parentId?: string;
     isCollapsed?: boolean;
     tag?: string;
+    connectedNodes?: string[];
 }

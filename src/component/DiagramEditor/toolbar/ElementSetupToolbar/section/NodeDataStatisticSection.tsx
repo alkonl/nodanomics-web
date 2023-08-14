@@ -4,7 +4,7 @@ import {useCurrentEditElement, useToggle} from "../../../../../hooks";
 import {EDiagramNode} from "../../../../../interface";
 import {VariableStatisticsParameter} from "../parameter/VariableStatisticsParameter";
 
-export const VariableStatisticSection = () => {
+export const NodeDataStatisticSection = () => {
     const selectedElementData = useCurrentEditElement()?.data
     const accordionController = useToggle()
 

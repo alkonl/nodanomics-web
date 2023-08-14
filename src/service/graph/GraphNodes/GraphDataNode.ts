@@ -82,6 +82,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     updateState() {
+        super.updateState()
         this.reCalculateMaxMinAvgValue()
     }
 
