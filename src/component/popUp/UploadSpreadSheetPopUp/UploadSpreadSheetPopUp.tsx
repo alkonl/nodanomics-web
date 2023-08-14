@@ -21,6 +21,7 @@ export const UploadSpreadSheetPopUp: React.FC<{
                     }}>
                         <UploadSpreadsheetForm
                             projectId={projectId}
+                            onSuccessLogin={onClose}
                         />
                     </Box>
                 </Dialog.Panel>

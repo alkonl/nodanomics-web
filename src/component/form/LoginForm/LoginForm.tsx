@@ -6,7 +6,7 @@ import {useLoginEmailPasswordMutation} from "../../../api";
 import {ELinks} from "../../../service/router";
 import {useNavigate} from "react-router-dom";
 import {FormPassword, FormText} from "../../base/FormInput";
-import {GoogleSignInUpButton} from "../../button";
+import {GoogleSupertokensSignInUpButton} from "../../button";
 import {Box, Button, Typography} from "@mui/material";
 import {GrayLine} from "../../base/GrayLine/GrayLine";
 
@@ -115,7 +115,7 @@ export const LoginForm = () => {
                 </Box>
             </form>
             <GrayLine/>
-            <GoogleSignInUpButton/>
+            <GoogleSupertokensSignInUpButton/>
             <Typography
                 style={{
                     display: 'flex',

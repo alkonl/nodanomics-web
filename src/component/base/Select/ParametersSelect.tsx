@@ -29,7 +29,7 @@ export const ParametersSelect: React.FC<{
                 }}
             />
             <Select
-                value={currentValue}
+                value={currentValue || ''}
                 onChange={onChange}
                 sx={{
                     color: EFontColor.grey4,

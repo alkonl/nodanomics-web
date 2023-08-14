@@ -1,19 +1,26 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useMemo, useState} from 'react';
 import {Box, Button, FormControl, FormControlLabel, Radio, RadioGroup, Typography} from "@mui/material";
 import {useGetAllUserGoogleSpreadSheetQuery, useUploadSpreadSheetMutation} from "../../../api";
 import {MButton} from "../../base";
 import {EUploadSpreadSheetRequestType} from "../../../interface";
+import {useCurrentUser} from "../../../hooks";
+import {GoogleConnectButton} from "../../button";
 
 export const UploadSpreadsheetForm: React.FC<{
     projectId: string;
+    onSuccessLogin?: () => void;
 }> = ({
+          onSuccessLogin,
           projectId,
       }) => {
 
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
     const [googleSheetId, setGoogleSheetId] = useState<string | undefined>();
+    const {currentUser, refetch} = useCurrentUser()
+
+    const isUserConnectedToGoogle = currentUser?.googleUserId
     const [uploadSpreadSheet, {isSuccess, isError}] = useUploadSpreadSheetMutation();
-    const {data: allUserGoogleSpreadsheets} = useGetAllUserGoogleSpreadSheetQuery(undefined);
+    const {data: allUserGoogleSpreadsheets, isLoading: isAllUserGoogleSpreadsheetsLoading} = useGetAllUserGoogleSpreadSheetQuery(undefined);
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -41,6 +48,26 @@ export const UploadSpreadsheetForm: React.FC<{
             });
         }
     }
+
+    const onSuccessLoginHandler = async () => {
+        if (onSuccessLogin) {
+            await refetch();
+            onSuccessLogin();
+        }
+    }
+
+    const isShowGoogleConnectButton = useMemo(()=>{
+        if(isAllUserGoogleSpreadsheetsLoading){
+            return false
+        }
+        if (allUserGoogleSpreadsheets){
+            return false
+        }
+        if (!isUserConnectedToGoogle) {
+            return true
+        }
+    },[allUserGoogleSpreadsheets, isAllUserGoogleSpreadsheetsLoading])
+
 
     return (
         <Box
@@ -108,6 +135,9 @@ export const UploadSpreadsheetForm: React.FC<{
                         </RadioGroup>
                     </FormControl>
                 </Box>}
+                {isShowGoogleConnectButton && <GoogleConnectButton
+                    onSuccess={onSuccessLoginHandler}
+                />}
             </Box>
             <Box>
                 <>

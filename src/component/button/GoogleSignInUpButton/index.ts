@@ -1,1 +1,2 @@
-export * from './GoogleSignInUpButton'
+export * from './GoogleSupertokensSignInUpButton'
+export * from './GoogleConnectButton'

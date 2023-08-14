@@ -596,6 +596,7 @@ export const {
     useThirdPartySignInAndUpQuery,
     useChangePasswordMutation,
     useSessionUserDataQuery,
+    useLazySessionUserDataQuery,
     useUpdateUserDataMutation,
     useGetDiagramTagsQuery,
     useCreateDiagramMutation,
