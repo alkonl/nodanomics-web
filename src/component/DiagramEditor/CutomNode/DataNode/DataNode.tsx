@@ -6,12 +6,22 @@ import {EConnection, IDataNodeData} from "../../../../interface";
 import {NodeText} from "../styledComponent";
 import {EColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
 import {BaseNodeContainer} from "../container/BaseNodeContainer";
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import {useChangeNodeDataStep} from "../../../../hooks";
+
 
 export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
     const {isConnectable, data} = props
     const currentResourcesValue = data.resources?.length.toFixed(1) || 0
     const maxRegisteredValue = data.maxResources
     const minRegisteredValue = data.minResources
+
+    const isShowStep = data.isShowStep || false
+
+    const {increaseNodeDataStep,decreaseNodeDataStep} = useChangeNodeDataStep({
+        nodeId: props.data.id,
+    })
 
     return (
 
@@ -43,10 +53,19 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
                         flexDirection: 'column',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        gap: 1,
+                        mx: 1,
                         justifyItems: 'center',
                         flex: 1,
                     }}>
+                        {isShowStep && <KeyboardArrowUpIcon
+                            onClick={increaseNodeDataStep}
+                            sx={{
+                                cursor: 'pointer',
+                                pointerEvents: 'all',
+                                width: 18,
+                                height: 18,
+                                color: EColor.white,
+                            }}/>}
                         <NodeText.Name sx={{
                             maxWidth: '100%',
                             overflow: 'hidden',
@@ -58,6 +77,16 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
                         <NodeText.Value>
                             {currentResourcesValue}
                         </NodeText.Value>
+                        {isShowStep && <KeyboardArrowDownIcon
+                            onClick={decreaseNodeDataStep}
+                            sx={{
+                                cursor: 'pointer',
+                                pointerEvents: 'all',
+                                width: 18,
+                                height: 18,
+                                color: EColor.white,
+                            }}
+                        />}
                     </Box>
                     <Box sx={{
                         display: 'flex',

@@ -3,7 +3,7 @@ import {IDataNodeData} from "../../../../../../interface";
 import {ElementParameter} from "../ElementParameter";
 import {Box, Checkbox} from "@mui/material";
 import {EColor} from "../../../../../../constant";
-import {useUpdateNode} from "../../../../../../hooks";
+import {useChangeNodeDataStep, useUpdateNode} from "../../../../../../hooks";
 import {Parameter} from "../../styledComponents";
 
 export const NodeDataStepParameter: React.FC<{
@@ -15,8 +15,20 @@ export const NodeDataStepParameter: React.FC<{
     })
 
     const changeIsReadOnly = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-// TODO
+        updateNodeData({
+          isShowStep: checked
+        })
     }
+
+    const {changeNodeDataStep} = useChangeNodeDataStep({
+        nodeId: nodeData.id,
+    })
+    const changeStep = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const step = Number(event.target.value)
+        changeNodeDataStep(step)
+    }
+
+
 
     return (
         <ElementParameter label="Steps">
@@ -53,8 +65,8 @@ export const NodeDataStepParameter: React.FC<{
                     </Parameter.Text>
                     <Parameter.Input
                         type="number"
-                        // value={nodeData.minCapacity || ''}
-                        // onChange={changeIsReadOnly}
+                        value={nodeData.step || ''}
+                        onChange={changeStep}
                     />
                 </Box>
             </Box>
