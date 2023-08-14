@@ -15,13 +15,13 @@ export const NodeDataCapacityParameters: React.FC<{
 
     const onMinCapacityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         updateNodeData({
-            minCapacity: event.target.value,
+            minCapacity: Number(event.target.value),
         })
     }
 
     const onMaxCapacityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         updateNodeData({
-            maxCapacity: event.target.value,
+            maxCapacity: Number(event.target.value),
         })
     }
 
@@ -42,6 +42,7 @@ export const NodeDataCapacityParameters: React.FC<{
                         Min
                     </Parameter.Text>
                     <Parameter.Input
+                        type="number"
                         value={nodeData.minCapacity || ''}
                         onChange={onMinCapacityChange}
                     />
@@ -58,6 +59,7 @@ export const NodeDataCapacityParameters: React.FC<{
                         Max
                     </Parameter.Text>
                     <Parameter.Input
+                        type="number"
                         value={nodeData.maxCapacity || ''}
                         onChange={onMaxCapacityChange}
                     />

@@ -1,4 +1,4 @@
-import {ISourceNodeData} from "../../../interface";
+import {ENodeAction, ISourceNodeData} from "../../../interface";
 import {GraphInteractiveNode} from "./abstracts";
 import {GraphDataNode} from "./GraphDataNode";
 import {GraphDataEdge} from "../GraphEdge";
@@ -20,8 +20,12 @@ export class GraphSourceNode extends GraphInteractiveNode<ISourceNodeData> {
         this.edgesToVariables.forEach(edge => {
             const resources = this.generateResourceFromSource(edge.countOfResource);
             if (GraphDataNode.baseNodeIsData(edge.target)) {
-                edge.target.addResource(resources);
-                edge.changeIsTransferredResources(true)
+                const onSuccess = () => {
+                    edge.changeIsTransferredResources(true)
+                }
+                edge.target.addResource(resources, this.addingResourcesMode, {
+                    onSuccess
+                });
             }
         })
     }

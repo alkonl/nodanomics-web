@@ -1,4 +1,10 @@
-import {ENodeTrigger, INodeDataWithInteractivity, isIIsEventTriggered} from "../../../../interface";
+import {
+    EModeAddResourcesToDataNode,
+    ENodeAction,
+    ENodeTrigger,
+    INodeDataWithInteractivity,
+    isIIsEventTriggered
+} from "../../../../interface";
 import {GraphInvokableNode} from "./GraphInvokable";
 import {GraphEventListenerNode} from "../GraphEventListenerNode";
 import {GraphLoopNode} from "./GraphLoopNode";
@@ -30,6 +36,13 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
 
     protected abstract runAction(): void;
 
+    get addingResourcesMode() {
+        if(this.actionMode === ENodeAction.pushAll || this.actionMode === ENodeAction.pullAll){
+            return EModeAddResourcesToDataNode.onlyAll
+        } else {
+            return EModeAddResourcesToDataNode.asPossible
+        }
+    }
 
     get isTriggeredIncomingNodes(): boolean {
         return this.incomingEdges.some(edge => {
