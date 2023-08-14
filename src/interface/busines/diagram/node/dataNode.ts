@@ -8,6 +8,7 @@ export interface IDataNodeData extends IDiagramNodeBaseData, INodeWithTrigger, I
     type: EDiagramNode.Data
     resources: IResource[]
     initialResources?: IResource[]
+    isShowStep?: boolean
     minCapacity?: number
     maxCapacity?: number
     minResources?: number
