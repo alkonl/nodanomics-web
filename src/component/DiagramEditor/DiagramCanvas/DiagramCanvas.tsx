@@ -28,6 +28,7 @@ import {LogicConnection} from "../CustomConnectionLine/LogicConnection";
 import {useOnConnect} from "../../../hooks/useOnConnect";
 import {EventConnection} from "../CustomConnectionLine/EventConnection";
 import {DatasetNode} from "../CutomNode/DatasetNode";
+import {GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../constant";
 
 
 const nodeTypes = {
@@ -118,7 +119,7 @@ export const DiagramCanvas = () => {
                     connectionMode={ConnectionMode.Loose}
                 >
                     <Controls/>
-                    <Background color="blue" gap={16}/>
+                    <Background color="blue" gap={GAP_BETWEEN_EDITOR_CANVAS_DOTS}/>
                 </ReactFlow>
             </Box>
         </Box>

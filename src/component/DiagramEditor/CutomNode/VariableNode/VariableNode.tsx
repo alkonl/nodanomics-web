@@ -4,7 +4,7 @@ import {Handle, NodeProps, Position} from "reactflow";
 import {Box} from "@mui/material";
 import {EConnection, IVariableNodeData} from "../../../../interface";
 import {NodeText} from "../styledComponent";
-import {EColor} from "../../../../constant";
+import {EColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
 import {BaseNodeContainer} from "../container/BaseNodeContainer";
 
 export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = (props) => {
@@ -15,7 +15,7 @@ export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = (props) => {
 
     return (
 
-        <Box>
+        <>
             <Handle type="target" position={Position.Left} id={EConnection.DataConnection}
                     isConnectable={isConnectable}
                     style={{
@@ -35,7 +35,8 @@ export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = (props) => {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    width: 150,
+                    width: GAP_BETWEEN_EDITOR_CANVAS_DOTS * 6,
+                    height: GAP_BETWEEN_EDITOR_CANVAS_DOTS * 4,
                 }}>
                     <Box sx={{
                         display: 'flex',
@@ -44,12 +45,11 @@ export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = (props) => {
                         alignItems: 'center',
                         gap: 1,
                         justifyItems: 'center',
-                        flex: 2,
+                        flex: 1,
                     }}>
                         <NodeText.Name sx={{
                             maxWidth: '100%',
                             overflow: 'hidden',
-                            inlineSize: 100,
                             textAlign: 'center',
                             overflowWrap: 'break-word',
                         }}>
@@ -65,13 +65,14 @@ export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = (props) => {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         padding: '2px',
+                        height: 1,
                     }}>
                         <Box>
                             <NodeText.Name>
                                 Max
                             </NodeText.Name>
                             <NodeText.Value>
-                                {maxRegisteredValue}
+                                {maxRegisteredValue ? maxRegisteredValue : <br/>}
                             </NodeText.Value>
                         </Box>
                         <Box>
@@ -79,13 +80,13 @@ export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = (props) => {
                                 Min
                             </NodeText.Name>
                             <NodeText.Value>
-                                {minRegisteredValue}
+                                {minRegisteredValue ? minRegisteredValue : <br/>}
                             </NodeText.Value>
                         </Box>
                     </Box>
                 </Box>
             </BaseNodeContainer>
 
-        </Box>
+        </>
     );
 };
