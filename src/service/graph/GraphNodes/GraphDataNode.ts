@@ -4,20 +4,20 @@ import {
     IGetNodeExternalValue,
     IResource,
     IUpdateGraphNodeState,
-    IVariableNodeData
+    IDataNodeData
 } from "../../../interface";
 import {GraphDataEdge} from "../GraphEdge";
 import {GraphBaseNode, GraphInteractiveNode} from "./abstracts";
 import {GraphSourceNode} from "./GraphSourceNode";
 import {RunManager} from "../RunManager";
 
-export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
+export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue {
 
     private _resourcesToProvide: IResource[] = [];
 
 
-    constructor(data: IVariableNodeData, runManager: RunManager) {
+    constructor(data: IDataNodeData, runManager: RunManager) {
         super(data, runManager);
     }
 
@@ -99,8 +99,8 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
         this.pullAllOrAnyResourcesFromSource()
         this.pushAllResources()
         this.pushAnyResources()
-        this.pullAnyResourcesFromVariable()
-        this.pullAllResourcesFromVariable()
+        this.pullAnyResourcesFromData()
+        this.pullAllResourcesFromData()
     }
 
     updateRecoursesProvide() {
@@ -123,10 +123,10 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
     }
 
 
-    private pullAnyResourcesFromVariable() {
+    private pullAnyResourcesFromData() {
         if (this.actionMode === ENodeAction.pullAny) {
             this.incomingEdges.forEach(edge => {
-                if (edge instanceof GraphDataEdge && edge.source instanceof GraphVariableNode) {
+                if (edge instanceof GraphDataEdge && edge.source instanceof GraphDataNode) {
                     const resources = edge.source.takeCountResources(edge.countOfResource)
                     this.addResource(resources)
                     this.writeToEdgeIsResourcesWereTransferred(edge, true)
@@ -135,10 +135,10 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
         }
     }
 
-    private pullAllResourcesFromVariable() {
+    private pullAllResourcesFromData() {
         if (this.actionMode === ENodeAction.pullAll) {
             this.incomingEdges.forEach(edge => {
-                if (edge instanceof GraphDataEdge && edge.source instanceof GraphVariableNode) {
+                if (edge instanceof GraphDataEdge && edge.source instanceof GraphDataNode) {
                     if (edge.source.resourcesToProvideCount >= edge.countOfResource) {
                         const resources = edge.source.takeCountResources(edge.countOfResource)
                         this.addResource(resources)
@@ -175,7 +175,7 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
         if (this.actionMode === ENodeAction.pushAny) {
             this.outgoingEdges.forEach(edge => {
                 if (edge instanceof GraphDataEdge) {
-                    if (edge.target instanceof GraphVariableNode) {
+                    if (edge.target instanceof GraphDataNode) {
                         const resources = this.takeCountResources(edge.countOfResource)
                         edge.target.addResource(resources)
                         edge.changeIsTransferredResources(true)
@@ -190,7 +190,7 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
             if (this.resourcesToProvideCount >= this.countOfRequiredOutgoingResources) {
                 this.outgoingEdges.forEach(edge => {
                     if (edge instanceof GraphDataEdge) {
-                        if (edge.target instanceof GraphVariableNode) {
+                        if (edge.target instanceof GraphDataNode) {
                             const resources = this.takeCountResources(edge.countOfResource)
                             edge.target.addResource(resources)
                             edge.changeIsTransferredResources(true)
@@ -222,7 +222,7 @@ export class GraphVariableNode extends GraphInteractiveNode<IVariableNodeData>
         }
     }
 
-    static baseNodeIsVariable(baseNode: GraphBaseNode<IDiagramNodeBaseData>): baseNode is GraphVariableNode {
-        return baseNode instanceof GraphVariableNode;
+    static baseNodeIsData(baseNode: GraphBaseNode<IDiagramNodeBaseData>): baseNode is GraphDataNode {
+        return baseNode instanceof GraphDataNode;
     }
 }

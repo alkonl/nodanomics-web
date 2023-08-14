@@ -4,8 +4,8 @@ import {INodeWithAction} from "../nodeAction";
 import {INodeWithTrigger} from "../nodeTrigger";
 
 
-export interface IVariableNodeData extends IDiagramNodeBaseData, INodeWithTrigger, INodeWithAction {
-    type: EDiagramNode.Variable
+export interface IDataNodeData extends IDiagramNodeBaseData, INodeWithTrigger, INodeWithAction {
+    type: EDiagramNode.Data
     resources: IResource[]
     minResources?: number
     maxResources?: number

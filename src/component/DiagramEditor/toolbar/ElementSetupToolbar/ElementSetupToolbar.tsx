@@ -1,7 +1,7 @@
 import React from 'react';
 import {Box, Typography} from "@mui/material";
 import {EColor, EFontColor} from "../../../../constant";
-import {EDiagramNode, EElementType} from "../../../../interface";
+import {EDiagramNode, EElementType, nodeSetupToolbarNames} from "../../../../interface";
 import {useCurrentEditElement} from "../../../../hooks";
 import {PropertiesSection, VariableStatisticSection} from "./section";
 import {StyleSection} from "./section/StyleSection";
@@ -43,11 +43,11 @@ export const ElementSetupToolbar = () => {
                         <Typography sx={{
                             color: EFontColor.grey4,
                         }}>
-                            {selectedElementData.type}
+                            {nodeSetupToolbarNames[selectedElementData.type]}
                         </Typography>
                         <PropertiesSection selectedElementData={selectedElementData}/>
                         <StyleSection element={selectedElementData}/>
-                        {selectedElementData?.type === EDiagramNode.Variable && <VariableStatisticSection/>}
+                        {selectedElementData?.type === EDiagramNode.Data && <VariableStatisticSection/>}
 
                     </Box>
                     {selectedElementData.elementType === EElementType.Node && <Box

@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/named
 import {Node} from "reactflow";
-import {IVariableNodeData} from "../variableNode";
+import {IDataNodeData} from "../dataNode";
 import {IFormulaNodeData} from "../formulaNode";
 import {ISourceNodeData} from "../sourceNode";
 import {IEventTriggerNodeData} from "../eventTriggerNode";
@@ -14,7 +14,7 @@ import {IDatasetDatafield} from "../datasetDatafield";
 export type INodeData = IStaticVariableNodeData
     | IFormulaNodeData
     | ISourceNodeData
-    | IVariableNodeData
+    | IDataNodeData
     | IEventTriggerNodeData
     | IEventListenerNodeData
     | IMicroLoopNodeData

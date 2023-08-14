@@ -19,7 +19,7 @@ import {
     MicroLoopNode,
     SourceNode,
     StaticVariableNode,
-    VariableNode, WhileLoopNode
+    DataNode, WhileLoopNode
 } from "../CutomNode";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../redux";
 import {Box} from "@mui/material";
@@ -35,7 +35,7 @@ const nodeTypes = {
     [EDiagramNode.StaticVariable]: StaticVariableNode,
     [EDiagramNode.Formula]: FormulaNode,
     [EDiagramNode.Source]: SourceNode,
-    [EDiagramNode.Variable]: VariableNode,
+    [EDiagramNode.Data]: DataNode,
     [EDiagramNode.EventTrigger]: EventTriggerNode,
     [EDiagramNode.EventListener]: EventListenerNode,
     [EDiagramNode.MicroLoop]: MicroLoopNode,

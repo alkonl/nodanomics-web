@@ -3,7 +3,7 @@ import {GraphBaseNode} from "../abstracts";
 import {GraphFormulaNode} from "../GraphFormulaNode";
 import {GraphStaticVariableNode} from "../GraphStaticVariableNode";
 import {GraphSourceNode} from "../GraphSourceNode";
-import {GraphVariableNode} from "../GraphVariableNode";
+import {GraphDataNode} from "../GraphDataNode";
 import {RunManager} from "../../RunManager";
 import {GraphEventTriggerNode} from "../GraphEventTriggerNode";
 import {GraphEventListenerNode} from "../GraphEventListenerNode";
@@ -34,8 +34,8 @@ export class GraphNodeFactory {
                 return new GraphStaticVariableNode(value.node, runManager);
             case EDiagramNode.Source:
                 return new GraphSourceNode(value.node, runManager);
-            case EDiagramNode.Variable:
-                return new GraphVariableNode(value.node, runManager);
+            case EDiagramNode.Data:
+                return new GraphDataNode(value.node, runManager);
             case EDiagramNode.EventTrigger:
                 return new GraphEventTriggerNode(value.node, runManager);
             case EDiagramNode.EventListener:

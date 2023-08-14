@@ -63,7 +63,7 @@ export const createBaseNode = ({type, position}: {
                 }
             }
         }
-        case EDiagramNode.Variable: {
+        case EDiagramNode.Data: {
             return {
                 ...baseParams,
                 data: {

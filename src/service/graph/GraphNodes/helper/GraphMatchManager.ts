@@ -12,20 +12,6 @@ export class GraphMatchManager {
         this.logicManager = new GraphLogicManager(incomingEdges)
     }
 
-    // getVariables(): IFormulaNodeVariable[] {
-    //     return this.getIncomingLogicEdge.map((edge) => {
-    //
-    //         //edge.source instanceof GraphVariableNode
-    //         const source = edge.source
-    //         if (isIGetNodeExternalValue(source)) {
-    //             return {
-    //                 variableName: edge.variableName,
-    //                 value: source.nodeExternalValue,
-    //             }
-    //         }
-    //     }).filter((variable) => variable !== undefined) as IFormulaNodeVariable[]
-    // }
-
 
     calculateFormula({formula}: { formula: string }) {
         try {

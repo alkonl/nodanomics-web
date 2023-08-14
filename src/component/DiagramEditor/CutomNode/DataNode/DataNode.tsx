@@ -2,12 +2,12 @@ import React from 'react';
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from "reactflow";
 import {Box} from "@mui/material";
-import {EConnection, IVariableNodeData} from "../../../../interface";
+import {EConnection, IDataNodeData} from "../../../../interface";
 import {NodeText} from "../styledComponent";
 import {EColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
 import {BaseNodeContainer} from "../container/BaseNodeContainer";
 
-export const VariableNode: React.FC<NodeProps<IVariableNodeData>> = (props) => {
+export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
     const {isConnectable, data} = props
     const currentResourcesValue = data.resources?.length.toFixed(1) || 0
     const maxRegisteredValue = data.maxResources

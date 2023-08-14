@@ -1,6 +1,6 @@
 import {ISourceNodeData} from "../../../interface";
 import {GraphInteractiveNode} from "./abstracts";
-import {GraphVariableNode} from "./GraphVariableNode";
+import {GraphDataNode} from "./GraphDataNode";
 import {GraphDataEdge} from "../GraphEdge";
 import {RunManager} from "../RunManager";
 import {nanoid} from "nanoid";
@@ -19,7 +19,7 @@ export class GraphSourceNode extends GraphInteractiveNode<ISourceNodeData> {
     pushAllOrAnyResources() {
         this.edgesToVariables.forEach(edge => {
             const resources = this.generateResourceFromSource(edge.countOfResource);
-            if (GraphVariableNode.baseNodeIsVariable(edge.target)) {
+            if (GraphDataNode.baseNodeIsData(edge.target)) {
                 edge.target.addResource(resources);
                 edge.changeIsTransferredResources(true)
             }
@@ -28,7 +28,7 @@ export class GraphSourceNode extends GraphInteractiveNode<ISourceNodeData> {
 
     get edgesToVariables(): GraphDataEdge[] {
         return this.outgoingEdges
-            .filter(edge => GraphVariableNode.baseNodeIsVariable(edge.target))
+            .filter(edge => GraphDataNode.baseNodeIsData(edge.target))
             .filter(edge => GraphDataEdge.baseEdgeIsData(edge)) as GraphDataEdge[];
     }
 

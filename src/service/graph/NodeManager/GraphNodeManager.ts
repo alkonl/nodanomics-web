@@ -1,4 +1,4 @@
-import {GraphBaseNode, GraphVariableNode} from "../GraphNodes";
+import {GraphBaseNode, GraphDataNode} from "../GraphNodes";
 
 export class GraphNodeManager {
     private _nodes: GraphBaseNode[] = [];
@@ -40,7 +40,7 @@ export class GraphNodeManager {
 
     resetResourcesToProvide() {
         this._nodes.forEach(node => {
-            if (node instanceof GraphVariableNode) {
+            if (node instanceof GraphDataNode) {
                 node.resetResourcesToProvide();
             }
         });

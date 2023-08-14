@@ -12,7 +12,7 @@ export const VariableStatisticSection = () => {
         accordionController.open()
     }, [selectedElementData])
 
-    if (selectedElementData?.type !== EDiagramNode.Variable) {
+    if (selectedElementData?.type !== EDiagramNode.Data) {
         throw new Error('VariableStatisticSection can be used only for Variable')
     }
     return (
