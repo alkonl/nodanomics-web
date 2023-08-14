@@ -12,6 +12,7 @@ export interface IDataNodeData extends IDiagramNodeBaseData, INodeWithTrigger, I
     step?: number
     isShowDecimal?: boolean
     decimalDigits?: number
+    roundingType?: string
     minCapacity?: number
     maxCapacity?: number
     minResources?: number

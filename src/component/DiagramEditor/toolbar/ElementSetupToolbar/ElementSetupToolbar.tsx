@@ -21,8 +21,11 @@ export const ElementSetupToolbar = () => {
                 borderWidth: '1px',
                 px: 2,
                 py: 1,
-                width: 270,
-                maxWidth: 270,
+                maxWidth: 300,
+                height: '100%',
+                boxSizing: 'border-box',
+                overflowY: 'auto',
+                overflowX: 'hidden',
                 backgroundColor: EColor.white,
             }}
         >

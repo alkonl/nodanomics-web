@@ -21,6 +21,7 @@ export const VariableStatisticSection = () => {
             toggle={accordionController.toggle}
             title="Statistic"
                     >
+
             <VariableStatisticsParameter
                 max={selectedElementData.maxResources}
                 min={selectedElementData.minResources}
