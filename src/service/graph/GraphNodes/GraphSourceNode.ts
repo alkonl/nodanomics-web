@@ -3,10 +3,7 @@ import {GraphInteractiveNode} from "./abstracts";
 import {GraphDataNode} from "./GraphDataNode";
 import {GraphDataEdge} from "../GraphEdge";
 import {RunManager} from "../RunManager";
-import {nanoid} from "nanoid";
 import {generateResourceFromSource} from "../../diagram";
-
-const genResourceId = () => `resource_${nanoid()}}`
 
 export class GraphSourceNode extends GraphInteractiveNode<ISourceNodeData> {
     constructor(data: ISourceNodeData, runManager: RunManager) {

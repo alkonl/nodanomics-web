@@ -15,7 +15,7 @@ export const NodeDataStepParameter: React.FC<{
     })
 
     const changeIsReadOnly = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-
+// TODO
     }
 
     return (
