@@ -50,9 +50,7 @@ export const DatasetNode: React.FC<NodeProps<IDatasetDatafield>> = (props) => {
                     </Box>
 
                 </Box>
-                <NodeText.Name sx={{
-                    alignSelf: 'flex-start',
-                }} type='small'>
+                <NodeText.Name  type='small'>
                     Tag: {props.data.tag}
                 </NodeText.Name>
             </Box>
