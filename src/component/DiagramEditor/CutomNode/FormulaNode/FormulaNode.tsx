@@ -7,7 +7,6 @@ import {EColor, EFontColor} from "../../../../constant";
 import {useUpdateNode} from "../../../../hooks";
 import {Scroll} from "../../../base";
 import {LogicHandle} from "../../CustomHandle";
-import {EventHandle} from "../../CustomHandle/EventHandle";
 
 export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectable, data}) => {
 

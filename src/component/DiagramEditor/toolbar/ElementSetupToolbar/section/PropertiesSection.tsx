@@ -15,7 +15,8 @@ import {
     DatasetParameter,
     DatasetReadOnly,
     ForLoopLoopsParameter,
-    NodeConnectedNodesParameter
+    NodeConnectedNodesParameter,
+    NodeFormulaParameterContainer
 } from "../parameter";
 import {NodeDataParametersContainer} from "../parameter/data/NodeDataParametersContainer";
 import {GeneralLoopChildrenNodesParameter} from "../parameter/generalLoop";
@@ -48,7 +49,8 @@ export const PropertiesSection: React.FC<{
                 {selectedElementData.elementType === EElementType.Node &&
                     selectedElementData.type === EDiagramNode.Data &&
                     <NodeDataParametersContainer nodeData={selectedElementData}/>}
-
+                {selectedElementData.type === EDiagramNode.Formula
+                    && <NodeFormulaParameterContainer nodeData={selectedElementData}/>}
                 {'trigger' in selectedElementData && <NodeTriggerModeParameter nodeData={selectedElementData}/>}
                 {selectedElementData.type === EDiagramNode.MicroLoop
                     && <ForLoopLoopsParameter nodeData={selectedElementData}/>}
