@@ -23,7 +23,7 @@ export const BaseNodeShapeContainer: React.FC<{
             height: params.height + 4,
             position: 'relative',
             clipPath: params.clipPath,
-            backgroundColor: 'red',
+            backgroundColor: node.data.style.borderColor,
         }}>
             <Box sx={{
                 position: 'absolute',

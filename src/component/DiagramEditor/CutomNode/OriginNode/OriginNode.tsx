@@ -3,7 +3,7 @@ import {Box} from "@mui/material";
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";
 import {IOriginNodeData} from "../../../../interface";
-import {NodeTextName} from "../styledComponent";
+import {NodeStyle, NodeTextName} from "../styledComponent";
 import {EColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
 import {BaseNodeShapeContainer} from "../container";
 import {EventHandle} from "../../CustomHandle/EventHandle";
@@ -71,14 +71,14 @@ export const OriginNode: React.FC<NodeProps<IOriginNodeData>> = (props) => {
                     clipPath: clipPath,
                     background: EColor.black,
                 }}>
-                    <NodeTextName sx={{
+                    <NodeStyle.Name sx={{
                         position: 'absolute',
                         top: GAP_BETWEEN_EDITOR_CANVAS_DOTS * 2.5,
                         paddingLeft: 0.5,
                         paddingRight: 0.5,
                     }}>
                         {data.name}
-                    </NodeTextName>
+                    </NodeStyle.Name>
                 </Box>
             </BaseNodeShapeContainer>
 

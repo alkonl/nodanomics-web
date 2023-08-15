@@ -1,15 +1,19 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {Box, Input, Typography} from "@mui/material";
-// eslint-disable-next-line import/named
-import {NodeProps, Position} from "reactflow";
-import {EConnectionMode, IFormulaNodeData} from "../../../../interface";
-import {EColor, EFontColor} from "../../../../constant";
+import {Box} from "@mui/material";
+import {IFormulaNodeData} from "../../../../interface";
+import {EColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
 import {useUpdateNode} from "../../../../hooks";
-import {Scroll} from "../../../base";
-import {LogicHandle} from "../../CustomHandle";
+import {BaseNodeShapeContainer} from "../container";
+// eslint-disable-next-line import/named
+import {NodeProps} from "reactflow";
+import {NodeStyle} from "../styledComponent";
 
-export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectable, data}) => {
 
+const HEIGHT = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 4
+const WIDTH = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 6
+const clipPath = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
+export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = (props) => {
+    const {isConnectable, data} = props
     const [formula, setFormula] = useState<string | undefined>(data.formula || '')
 
     const result = useMemo(() => {
@@ -55,100 +59,134 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = ({isConnectabl
     }, [data.variables])
 
     return (
-        <Box>
-            <Box sx={{
-                position: 'absolute',
-                width: 'calc(100% + 10px)',
-                left: -5,
-                height: '100%',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-            }}>
-                <LogicHandle
-                    type="target"
-                    position={Position.Left}
-                    isConnectable={isConnectable}
-                    mode={EConnectionMode.NodeIncoming}
-                />
-                <LogicHandle
-                    type="source"
-                    position={Position.Right}
-                    isConnectable={isConnectable}
-                    mode={EConnectionMode.NodeOutgoing}
-                />
-            </Box>
-            <Box sx={{
-                padding: 1,
-                backgroundColor: EColor.black,
-                color: EFontColor.white,
-                width: 200,
-                height: 'fit-content',
-                display: 'flex',
-                flexDirection: 'column',
-                flex: 1,
-                borderWidth: 3,
-                borderColor: data.style.borderColor,
-                borderStyle: 'solid',
-            }}
-            >
-                <Input
-                    onChange={onFormulaChange}
-                    value={formula}
+        <>
+            <BaseNodeShapeContainer
+                params={{
+                    width: WIDTH,
+                    height: HEIGHT,
+                    clipPath: clipPath,
+                }}
+                node={props}>
+                <Box
                     sx={{
-                        color: EFontColor.white,
-                    }}/>
-                <Box sx={{
-                    display: 'flex',
-                    flex: 1,
-                    justifyContent: 'space-between',
-                }}>
-                    <Box
-                        sx={{
-                            flex: 1,
-                            height: 'fit-content',
-                        }}
-                    >
-                        <Typography sx={{
-                            flexShrink: 0,
-                        }}>
-                            list of inputs
-                        </Typography>
-                        <Box sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            flex: 1,
-                            height: contentHeight,
-                        }}
-                        >
-
-                            <Scroll>
-                                {data.variables?.map((variable, index) => (
-                                    <Typography key={index}>
-                                        {variable.variableName} = {variable.value}
-                                    </Typography>
-                                ))}
-                            </Scroll>
-
-                        </Box>
-                    </Box>
-
-                    <Box sx={{
-                        minWidth: 20,
-                    }}>
-                        = {result}
-                    </Box>
+                        flex: 1,
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                        clipPath: clipPath,
+                        background: EColor.black,
+                        py: 2,
+                        px: 2,
+                    }}
+                >
+                    <NodeStyle.Name type="small">
+                        Formula Name
+                    </NodeStyle.Name>
+                    <NodeStyle.Value>
+                        Formula Name
+                    </NodeStyle.Value>
+                    <NodeStyle.Name type="small">
+                        Formula Name
+                    </NodeStyle.Name>
                 </Box>
+            </BaseNodeShapeContainer>
 
-                {duplicateMessage && <Box>
-                    <Typography sx={{
-                        color: EFontColor.red
-                    }}>
-                        {duplicateMessage}
-                    </Typography>
-                </Box>}
-
-            </Box>
-        </Box>
+        </>
+        // <Box>
+        //     <Box sx={{
+        //         position: 'absolute',
+        //         width: 'calc(100% + 10px)',
+        //         left: -5,
+        //         height: '100%',
+        //         display: 'flex',
+        //         justifyContent: 'space-between',
+        //         alignItems: 'center',
+        //     }}>
+        //         <LogicHandle
+        //             type="target"
+        //             position={Position.Left}
+        //             isConnectable={isConnectable}
+        //             mode={EConnectionMode.NodeIncoming}
+        //         />
+        //         <LogicHandle
+        //             type="source"
+        //             position={Position.Right}
+        //             isConnectable={isConnectable}
+        //             mode={EConnectionMode.NodeOutgoing}
+        //         />
+        //     </Box>
+        //     <Box sx={{
+        //         padding: 1,
+        //         backgroundColor: EColor.black,
+        //         color: EFontColor.white,
+        //         width: 200,
+        //         height: 'fit-content',
+        //         display: 'flex',
+        //         flexDirection: 'column',
+        //         flex: 1,
+        //         borderWidth: 3,
+        //         borderColor: data.style.borderColor,
+        //         borderStyle: 'solid',
+        //     }}
+        //     >
+        //         <Input
+        //             onChange={onFormulaChange}
+        //             value={formula}
+        //             sx={{
+        //                 color: EFontColor.white,
+        //             }}/>
+        //         <Box sx={{
+        //             display: 'flex',
+        //             flex: 1,
+        //             justifyContent: 'space-between',
+        //         }}>
+        //             <Box
+        //                 sx={{
+        //                     flex: 1,
+        //                     height: 'fit-content',
+        //                 }}
+        //             >
+        //                 <Typography sx={{
+        //                     flexShrink: 0,
+        //                 }}>
+        //                     list of inputs
+        //                 </Typography>
+        //                 <Box sx={{
+        //                     display: 'flex',
+        //                     flexDirection: 'column',
+        //                     flex: 1,
+        //                     height: contentHeight,
+        //                 }}
+        //                 >
+        //
+        //                     <Scroll>
+        //                         {data.variables?.map((variable, index) => (
+        //                             <Typography key={index}>
+        //                                 {variable.variableName} = {variable.value}
+        //                             </Typography>
+        //                         ))}
+        //                     </Scroll>
+        //
+        //                 </Box>
+        //             </Box>
+        //
+        //             <Box sx={{
+        //                 minWidth: 20,
+        //             }}>
+        //                 = {result}
+        //             </Box>
+        //         </Box>
+        //
+        //         {duplicateMessage && <Box>
+        //             <Typography sx={{
+        //                 color: EFontColor.red
+        //             }}>
+        //                 {duplicateMessage}
+        //             </Typography>
+        //         </Box>}
+        //
+        //     </Box>
+        // </Box>
     );
 };
