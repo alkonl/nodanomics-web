@@ -10,7 +10,13 @@ import {ConnectionTypeParameter} from "../parameter/ConnectionTypeParameter";
 import {NodeTagParameter} from "../parameter/NodeTagParameter";
 import {ElementNameParameter} from "../parameter/ElementNameParameter";
 import {ConnectionVariableParameter} from "../parameter/ConnectionVariableParameter";
-import {DataFieldParameter, DatasetParameter, DatasetReadOnly, NodeConnectedNodesParameter} from "../parameter";
+import {
+    DataFieldParameter,
+    DatasetParameter,
+    DatasetReadOnly,
+    ForLoopLoopsParameter,
+    NodeConnectedNodesParameter
+} from "../parameter";
 import {NodeDataParametersContainer} from "../parameter/data/NodeDataParametersContainer";
 
 
@@ -38,10 +44,12 @@ export const PropertiesSection: React.FC<{
                     <NodeTagParameter nodeData={selectedElementData}/>}
 
                 {selectedElementData.elementType === EElementType.Node &&
-                selectedElementData.type === EDiagramNode.Data &&
-                <NodeDataParametersContainer nodeData={selectedElementData}/>}
+                    selectedElementData.type === EDiagramNode.Data &&
+                    <NodeDataParametersContainer nodeData={selectedElementData}/>}
 
                 {'trigger' in selectedElementData && <NodeTriggerModeParameter nodeData={selectedElementData}/>}
+                {selectedElementData.type === EDiagramNode.MicroLoop
+                    && <ForLoopLoopsParameter nodeData={selectedElementData}/>}
                 {'actionMode' in selectedElementData && <NodeActionParameter node={selectedElementData}/>}
                 {selectedElementData.elementType === EElementType.Node
                     && selectedElementData.type === EDiagramNode.DatasetDatafield
