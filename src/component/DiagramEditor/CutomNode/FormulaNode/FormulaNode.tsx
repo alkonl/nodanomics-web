@@ -1,17 +1,20 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {Box} from "@mui/material";
-import {IFormulaNodeData} from "../../../../interface";
+import {EConnectionMode, IFormulaNodeData} from "../../../../interface";
 import {EColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
 import {useUpdateNode} from "../../../../hooks";
 import {BaseNodeShapeContainer} from "../container";
 // eslint-disable-next-line import/named
-import {NodeProps} from "reactflow";
+import {NodeProps, Position} from "reactflow";
 import {NodeStyle} from "../styledComponent";
+import {EventHandle} from "../../CustomHandle/EventHandle";
+import {LogicHandle} from "../../CustomHandle";
 
 
 const HEIGHT = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 4
 const WIDTH = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 6
 const clipPath = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
+
 export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = (props) => {
     const {isConnectable, data} = props
     const [formula, setFormula] = useState<string | undefined>(data.formula || '')
@@ -60,6 +63,46 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = (props) => {
 
     return (
         <>
+            {/*connections*/}
+            <Box sx={{
+                position: 'absolute',
+                width: 'calc(100% + 28px)',
+                height: 'calc(100% + 28px)',
+                left: -14,
+                top: -14,
+            }}>
+                <Box sx={{
+                    width: '100%',
+                    position: 'absolute',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    bottom: 'calc(50% - 5px)',
+                }}>
+                    <EventHandle
+                        type="target"
+                        position={Position.Left}
+                        isConnectable={isConnectable}
+
+                    />
+                    <EventHandle
+                        type="source"
+                        position={Position.Right}
+                        isConnectable={isConnectable}
+                    />
+                </Box>
+                <Box sx={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 'calc(50% - 5px)',
+                }}>
+                    <LogicHandle
+                        type="source"
+                        position={Position.Right}
+                        isConnectable={isConnectable}
+                        mode={EConnectionMode.NodeOutgoing}
+                    />
+                </Box>
+            </Box>
             <BaseNodeShapeContainer
                 params={{
                     width: WIDTH,
@@ -81,13 +124,13 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = (props) => {
                     }}
                 >
                     <NodeStyle.Name type="small">
-                        Formula Name
+                        {data.name}
                     </NodeStyle.Name>
                     <NodeStyle.Value>
-                        Formula Name
+                        {result}
                     </NodeStyle.Value>
                     <NodeStyle.Name type="small">
-                        Formula Name
+                        {data.formula}
                     </NodeStyle.Name>
                 </Box>
             </BaseNodeShapeContainer>
