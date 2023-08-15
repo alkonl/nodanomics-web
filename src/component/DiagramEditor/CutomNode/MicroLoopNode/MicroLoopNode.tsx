@@ -104,7 +104,9 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                         alignItems: 'flex-end',
                         justifyContent: 'center',
                     }}>
-                        <NodeStyle.Name>
+                        <NodeStyle.Name sx={{
+                            color: EFontColor.white
+                        }}>
                             {data.name}
                         </NodeStyle.Name>
                     </Box>
@@ -117,6 +119,7 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                             <NodeStyle.Name
                                 type="small"
                                 sx={{
+                                    color: EFontColor.white,
                                     textAlign: 'end',
                                 }}>
                                 Loops
