@@ -11,6 +11,7 @@ import {GraphDataEdge} from "../GraphEdge";
 import {GraphBaseNode, GraphInteractiveNode} from "./abstracts";
 import {GraphOriginNode} from "./GraphOriginNode";
 import {RunManager} from "../RunManager";
+import {GraphNodeManager} from "../NodeManager";
 
 export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue {
@@ -18,8 +19,8 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     private _resourcesToProvide: IResource[] = [];
 
 
-    constructor(data: IDataNodeData, runManager: RunManager) {
-        super(data, runManager);
+    constructor(data: IDataNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
+        super(data, runManager, nodeManager);
     }
 
 

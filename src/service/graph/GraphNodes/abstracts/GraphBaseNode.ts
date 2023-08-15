@@ -1,17 +1,20 @@
 import {IDiagramNodeBaseData, INodeData, IUpdateGraphNodeState} from "../../../../interface";
 import {GraphBaseEdge} from "../../GraphEdge";
 import {RunManager} from "../../RunManager";
+import {GraphNodeManager} from "../../NodeManager";
 
 export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseData = INodeData>
- implements IUpdateGraphNodeState{
+    implements IUpdateGraphNodeState {
     protected _data: IGenericNodeData;
     private readonly _outgoingEdges: GraphBaseEdge[] = [];
     private readonly _incomingEdges: GraphBaseEdge[] = [];
     private readonly RunManager: RunManager;
+    readonly nodeManager: GraphNodeManager;
 
-    constructor(value: IGenericNodeData, runManager: RunManager) {
+    constructor(value: IGenericNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         this._data = value;
         this.RunManager = runManager
+        this.nodeManager = nodeManager
     }
 
 
@@ -22,6 +25,10 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
 
     get data() {
         return this._data;
+    }
+
+    get parentId() {
+        return this.data.parentId
     }
 
 

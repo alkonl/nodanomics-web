@@ -25,6 +25,7 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
     }
 
     updateState() {
+        super.updateState()
         this.checkIsLoopActive()
         this.updateVariables()
         this.updateVariablesToExternal()
@@ -73,4 +74,29 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
             })
         }
     }
+
+    updateChildrenNodesList() {
+        const children: string[] = this.nodeManager.nodes.filter(node => {
+            return node.parentId === this.data.id
+        }).map(node => node.data.name)
+        this._data = {
+            ...this.data,
+            children
+        }
+    }
+
+    updateConnectedNodes() {
+        this.updateChildrenNodesList()
+        super.updateConnectedNodes()
+        const children = this.data.children
+        const connectedNodes = this.data.connectedNodes
+        if (children && connectedNodes) {
+            const filteredNodes = connectedNodes.filter(connectedNode => !children.includes(connectedNode))
+            this._data = {
+                ...this.data,
+                connectedNodes: filteredNodes
+            }
+        }
+    }
+
 }

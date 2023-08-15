@@ -4,10 +4,11 @@ import {GraphDataNode} from "./GraphDataNode";
 import {GraphDataEdge} from "../GraphEdge";
 import {RunManager} from "../RunManager";
 import {generateResourceFromSource} from "../../diagram";
+import {GraphNodeManager} from "../NodeManager";
 
 export class GraphOriginNode extends GraphInteractiveNode<IOriginNodeData> {
-    constructor(data: IOriginNodeData, runManager: RunManager) {
-        super(data, runManager);
+    constructor(data: IOriginNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
+        super(data, runManager, nodeManager);
     }
 
     protected runAction() {

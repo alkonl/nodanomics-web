@@ -1,13 +1,14 @@
 import {GraphLoopNode} from "./abstracts";
 import {EConnectionMode, IMicroLoopNodeData, IUpdateGraphNodeState} from "../../../interface";
 import {RunManager} from "../RunManager";
+import {GraphNodeManager} from "../NodeManager";
 
 export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
 implements IUpdateGraphNodeState{
 
 
-    constructor(value: IMicroLoopNodeData, runManager: RunManager) {
-        super(value, runManager);
+    constructor(value: IMicroLoopNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
+        super(value, runManager, nodeManager);
     }
 
     get loopCurrentCount() {

@@ -9,9 +9,9 @@ export class GraphEventListenerNode extends GraphInvokableNode<IEventListenerNod
 
     private readonly graphNodeManager: GraphNodeManager;
 
-    constructor(value: IEventListenerNodeData, runManager: RunManager, nodes: GraphNodeManager) {
-        super(value, runManager);
-        this.graphNodeManager = nodes
+    constructor(value: IEventListenerNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
+        super(value, runManager, nodeManager);
+        this.graphNodeManager = nodeManager
     }
 
 

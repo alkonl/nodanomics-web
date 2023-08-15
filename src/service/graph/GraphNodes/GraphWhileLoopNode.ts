@@ -6,12 +6,13 @@ import {
     IWhileLoopNodeData
 } from "../../../interface";
 import {RunManager} from "../RunManager";
+import {GraphNodeManager} from "../NodeManager";
 
 export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
     implements IUpdateGraphNodeState {
 
-    constructor(value: IWhileLoopNodeData, runManager: RunManager) {
-        super(value, runManager)
+    constructor(value: IWhileLoopNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
+        super(value, runManager, nodeManager);
     }
 
 
