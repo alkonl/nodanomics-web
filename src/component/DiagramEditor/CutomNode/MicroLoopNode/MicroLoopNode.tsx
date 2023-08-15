@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";
 import {EConnectionMode, IMicroLoopNodeData} from "../../../../interface";
 import {BaseNodeContainer} from "../container/BaseNodeContainer";
 import {Box} from "@mui/material";
 import {EColor, EFontColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
-import {useExpandOrCollapse, useUpdateNode} from "../../../../hooks";
+import {useExpandOrCollapse} from "../../../../hooks";
 import {EventHandle} from "../../CustomHandle/EventHandle";
 import {LogicHandle} from "../../CustomHandle";
 import {NodeStyle} from "../styledComponent";
@@ -15,20 +15,6 @@ const WIDTH = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 5
 export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) => {
     const {data} = props;
 
-    const [loopCount, setLoopCount] = useState<number | undefined>(data.loopCount)
-    const {updateNodeData} = useUpdateNode<IMicroLoopNodeData>({
-        nodeId: data.id,
-    })
-
-    const onLoopCountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setLoopCount(Number(event.target.value))
-    }
-
-    useEffect(() => {
-        if (loopCount) {
-            updateNodeData({loopCount})
-        }
-    }, [loopCount])
     const isCollapsed = data.isCollapsed
     const {expandOrCollapse} = useExpandOrCollapse({
         nodeData: data,
