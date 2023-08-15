@@ -9,7 +9,7 @@ import {useExpandOrCollapse, useUpdateNode, useWidthAndHeight} from "../../../..
 import {EventHandle} from "../../CustomHandle/EventHandle";
 import {LogicHandle} from "../../CustomHandle";
 import {MicroLoopNodeHeader} from "./MicroLoopNodeHeader";
-import {NodeText} from "../styledComponent";
+import {NodeStyle} from "../styledComponent";
 
 export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) => {
     const {data} = props;
@@ -108,9 +108,9 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                                     position={Position.Left}
                                     mode={EConnectionMode.NodeIncoming}
                                 />
-                                <NodeText.Name>
+                                <NodeStyle.Name>
                                     data
-                                </NodeText.Name>
+                                </NodeStyle.Name>
                             </Box>
                         </Box>
 
@@ -132,9 +132,9 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                             alignItems: 'center',
                         }}>
                             <Box>
-                                <NodeText.Name>
+                                <NodeStyle.Name>
                                     {loopOutText}
-                                </NodeText.Name>
+                                </NodeStyle.Name>
                             </Box>
                             <EventHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
                         </Box>
@@ -147,9 +147,9 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                             alignItems: 'center',
                         }}>
                             <Box>
-                                <NodeText.Name>
+                                <NodeStyle.Name>
                                     out data
-                                </NodeText.Name>
+                                </NodeStyle.Name>
                             </Box>
                             <LogicHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
                         </Box>
@@ -187,9 +187,9 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                                     alignItems: 'center'
                                 }}>
                                     <Box>
-                                        <NodeText.Name type="small">
+                                        <NodeStyle.Name type="small">
                                             start Trigger
-                                        </NodeText.Name>
+                                        </NodeStyle.Name>
                                     </Box>
                                     <EventHandle type="source" position={Position.Right}
                                                  mode={EConnectionMode.LoopInnerToChildren}/>
@@ -199,9 +199,9 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                                     display: 'flex',
                                     justifyContent: 'space-between',
                                 }}>
-                                    <NodeText.Name type="small">
+                                    <NodeStyle.Name type="small">
                                         data
-                                    </NodeText.Name>
+                                    </NodeStyle.Name>
                                     <Box sx={{
                                         display: 'flex',
                                         flexDirection: 'column'
@@ -232,9 +232,9 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                                     position={Position.Left}
                                     mode={EConnectionMode.LoopChildrenToExternal}
                                 />
-                                <NodeText.Name>
+                                <NodeStyle.Name>
                                     data to out
-                                </NodeText.Name>
+                                </NodeStyle.Name>
 
                             </Box>
 

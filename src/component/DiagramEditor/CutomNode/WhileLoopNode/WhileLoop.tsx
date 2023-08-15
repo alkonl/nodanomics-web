@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {BaseNodeContainer} from "../container/BaseNodeContainer";
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";
 import {EConnectionMode, IWhileLoopNodeData} from "../../../../interface";
 import {EColor} from "../../../../constant";
 import {Box} from "@mui/material";
-import {NodeText} from "../styledComponent";
+import {NodeStyle} from "../styledComponent";
 import {EventHandle} from "../../CustomHandle/EventHandle";
 import {useExpandOrCollapse, useWidthAndHeight} from "../../../../hooks";
 import {MButton} from "../../../base";
@@ -50,9 +50,9 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                     justifyContent: 'space-between',
                 }}>
 
-                    <NodeText.Name type="header">
+                    <NodeStyle.Name type="header">
                         {data.name}
-                    </NodeText.Name>
+                    </NodeStyle.Name>
                     <MButton.Submit
                         onClick={changeExpandOrCollapse}
                     >
@@ -104,9 +104,9 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                                     position={Position.Left}
                                     mode={EConnectionMode.NodeIncoming}
                                 />
-                                <NodeText.Name>
+                                <NodeStyle.Name>
                                     data
-                                </NodeText.Name>
+                                </NodeStyle.Name>
                             </Box>
 
 
@@ -122,9 +122,9 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                             }}>
                                 <EventHandle type="target" position={Position.Left}
                                              mode={EConnectionMode.WhileLoopIncomingTrigger}/>
-                                <NodeText.Name>
+                                <NodeStyle.Name>
                                     {isActiveText}
-                                </NodeText.Name>
+                                </NodeStyle.Name>
                             </Box>
                         </Box>
 
@@ -146,9 +146,9 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                             alignItems: 'center',
                         }}>
                             <Box>
-                                <NodeText.Name>
+                                <NodeStyle.Name>
                                     {loopOutText}
-                                </NodeText.Name>
+                                </NodeStyle.Name>
                             </Box>
                             <EventHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
                         </Box>
@@ -161,9 +161,9 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                             alignItems: 'center',
                         }}>
                             <Box>
-                                <NodeText.Name>
+                                <NodeStyle.Name>
                                     out data
-                                </NodeText.Name>
+                                </NodeStyle.Name>
                             </Box>
                             <LogicHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
                         </Box>
@@ -200,9 +200,9 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                                     alignItems: 'center'
                                 }}>
                                     <Box>
-                                        <NodeText.Name type="small">
+                                        <NodeStyle.Name type="small">
                                             start Trigger
-                                        </NodeText.Name>
+                                        </NodeStyle.Name>
                                     </Box>
                                     <EventHandle type="source" position={Position.Right}
                                                  mode={EConnectionMode.LoopInnerToChildren}/>
@@ -212,9 +212,9 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                                     display: 'flex',
                                     justifyContent: 'space-between',
                                 }}>
-                                    <NodeText.Name type="small">
+                                    <NodeStyle.Name type="small">
                                         data
-                                    </NodeText.Name>
+                                    </NodeStyle.Name>
                                     <Box sx={{
                                         display: 'flex',
                                         flexDirection: 'column'
@@ -244,9 +244,9 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                                     position={Position.Left}
                                     mode={EConnectionMode.LoopChildrenToExternal}
                                 />
-                                <NodeText.Name>
+                                <NodeStyle.Name>
                                     data to out1
-                                </NodeText.Name>
+                                </NodeStyle.Name>
 
                             </Box>
 
