@@ -5,7 +5,7 @@ import {Box} from "@mui/material";
 import {EConnection, IDataNodeData} from "../../../../interface";
 import {NodeStyle} from "../styledComponent";
 import {EColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
-import {BaseNodeContainer} from "../container/BaseNodeContainer";
+import {BaseNodeContainer} from "../container";
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {useChangeNodeDataStep} from "../../../../hooks";
@@ -41,7 +41,7 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
             <BaseNodeContainer node={props}>
 
                 <Box sx={{
-
+                    backgroundColor: EColor.black,
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',

@@ -1,11 +1,13 @@
 import React from 'react';
 import {Box} from "@mui/material";
 // eslint-disable-next-line import/named
-import {Handle, NodeProps, Position} from "reactflow";
-import {EConnection, IOriginNodeData} from "../../../../interface";
+import {NodeProps, Position} from "reactflow";
+import {IOriginNodeData} from "../../../../interface";
 import {NodeTextName} from "../styledComponent";
 import {EColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
 import {BaseNodeShapeContainer} from "../container";
+import {EventHandle} from "../../CustomHandle/EventHandle";
+import {DataHandle} from "../../CustomHandle/DataHandle";
 
 const SIZE = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 4
 const clipPath = 'polygon(50% 0%, 100% 50%, 100% 100%, 0 100%, 0 50%)'
@@ -14,6 +16,45 @@ export const OriginNode: React.FC<NodeProps<IOriginNodeData>> = (props) => {
     const {isConnectable, data} = props
     return (
         <>
+            {/*connections*/}
+            <Box sx={{
+                position: 'absolute',
+                width: 'calc(100% + 28px)',
+                height: 'calc(100% + 28px)',
+                left: -14,
+                top: -14,
+            }}>
+                <Box sx={{
+                    width: '100%',
+                    position: 'absolute',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    bottom: 40,
+                }}>
+                    <EventHandle
+                        type="target"
+                        position={Position.Left}
+                        isConnectable={isConnectable}
+
+                    />
+                    <EventHandle
+                        type="source"
+                        position={Position.Right}
+                        isConnectable={isConnectable}
+                    />
+                </Box>
+                <Box sx={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 'calc(50% - 5px)',
+                }}>
+                    <DataHandle
+                        type="source"
+                        position={Position.Top}
+                        isConnectable={isConnectable}
+                    />
+                </Box>
+            </Box>
             <BaseNodeShapeContainer
                 params={{
                     width: SIZE,
@@ -21,33 +62,26 @@ export const OriginNode: React.FC<NodeProps<IOriginNodeData>> = (props) => {
                     clipPath: clipPath,
                 }}
                 node={props}>
+
+                {/*content*/}
                 <Box sx={{
                     flex: 1,
                     display: 'flex',
-                    // flexDirection: 'column',
                     justifyContent: 'center',
                     clipPath: clipPath,
                     background: EColor.black,
                 }}>
                     <NodeTextName sx={{
                         position: 'absolute',
-                        bottom: GAP_BETWEEN_EDITOR_CANVAS_DOTS * 1.25,
+                        top: GAP_BETWEEN_EDITOR_CANVAS_DOTS * 2.5,
+                        paddingLeft: 0.5,
+                        paddingRight: 0.5,
                     }}>
                         {data.name}
                     </NodeTextName>
                 </Box>
             </BaseNodeShapeContainer>
-            <Handle type="source" position={Position.Right} id={EConnection.DataConnection}
-                    isConnectable={isConnectable}/>
-            <Handle
-                type="target"
-                position={Position.Left}
-                id={EConnection.EventConnection}
-                isConnectable={isConnectable}
-                style={{
-                    background: EColor.orange,
-                }}
-            />
+
 
         </>
     );
