@@ -28,7 +28,7 @@ export const createBaseNode = ({type, position}: {
         id: nodeId,
         style: initialNodeDiagramElement,
         name: `node name ${nodeId}`,
-        isCollapsed: false,
+        isCollapsed: true,
     }
 
 

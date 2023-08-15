@@ -4,12 +4,13 @@ import {NodeProps, Position} from "reactflow";
 import {EConnectionMode, IMicroLoopNodeData} from "../../../../interface";
 import {BaseNodeContainer} from "../container/BaseNodeContainer";
 import {Box} from "@mui/material";
-import {EColor} from "../../../../constant";
-import {useExpandOrCollapse, useUpdateNode, useWidthAndHeight} from "../../../../hooks";
+import {EColor, EFontColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
+import {useExpandOrCollapse, useUpdateNode} from "../../../../hooks";
 import {EventHandle} from "../../CustomHandle/EventHandle";
 import {LogicHandle} from "../../CustomHandle";
-import {MicroLoopNodeHeader} from "./MicroLoopNodeHeader";
 import {NodeStyle} from "../styledComponent";
+
+const WIDTH = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 5
 
 export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) => {
     const {data} = props;
@@ -30,137 +31,130 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
     }, [loopCount])
     const isCollapsed = data.isCollapsed
     const {expandOrCollapse} = useExpandOrCollapse({
-         nodeData: data,
+        nodeData: data,
     })
 
     const changeExpandOrCollapse = () => {
         expandOrCollapse({parentId: data.id})
     }
 
-    const loopOutText = !data.isLoopWasActive ? 'was not active' : !data.isLoopActive ? 'finished' : 'running'
-    const {
-        elementSize: externalConnectionContainerSize,
-        elementRef: externalConnectionContainerRef
-    } = useWidthAndHeight()
+    const onDoubleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
+        console.log('onDoubleClick', event)
+        if (event.detail === 2) {
+            changeExpandOrCollapse()
+        }
+
+    }
 
     return (
         <BaseNodeContainer node={props}>
             <Box
+                onClick={onDoubleClick}
                 sx={{
-                    padding: 1,
                     boxSizing: 'border-box',
-                    width: isCollapsed ? 'fit-content' : data.style.width,
-                    height: isCollapsed ? 'fit-content' : data.style.height,
-                    backgroundColor: EColor.darkPurple,
+                    width: isCollapsed ? WIDTH : data.style.width,
+                    height: isCollapsed ? GAP_BETWEEN_EDITOR_CANVAS_DOTS * 3 : data.style.height,
+                    backgroundColor: EColor.lightPurple,
                     display: 'flex',
-                    flexDirection: 'column',
-                    gap: 2,
+                    position: 'relative',
                 }}
             >
-                <MicroLoopNodeHeader
-                    type="big"
-                    name={data.name}
-                    onLoopCountChange={onLoopCountChange}
-                    loopCount={loopCount}
-                    currentLoopCount={data.currentLoopCount}
-                    changeExpandOrCollapse={changeExpandOrCollapse}
-                />
-                <Box
-                    sx={{
-                        display: 'flex',
-                        height: externalConnectionContainerSize.height,
-                    }}>
-                    <Box
-                        ref={externalConnectionContainerRef}
-                        sx={{
-                            position: 'absolute',
-                            left: -14,
-                            height: 'fit-content',
-                            width: 'calc(100% + 14px)',
-                            display: 'flex',
-                            alignItems: 'space-between',
-                            borderRadius: 4,
-                            boxSizing: 'border-box'
-                        }}>
-                        <Box sx={{
-                            my: 0.3,
-                            marginRight: 0.5,
-                            marginLeft: 0.5,
-                            display: 'flex',
-                            flex: 1,
-                            gap: 1,
-                            flexDirection: 'column',
-                            justifyContent: 'space-between',
-                            alignItems: 'flex-start',
-                        }}>
-                            <Box sx={{
-                                position: 'relative',
-                                backgroundColor: EColor.white,
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 1,
-                                padding: 0.5,
-                                borderRadius: 4,
-                                width: 'fit-content',
-                            }}>
-                                <LogicHandle
-                                    type="target"
-                                    position={Position.Left}
-                                    mode={EConnectionMode.NodeIncoming}
-                                />
-                                <NodeStyle.Name>
-                                    data
-                                </NodeStyle.Name>
-                            </Box>
-                        </Box>
-
-                    </Box>
+                {/*Connections*/}
+                <Box sx={{
+                    position: 'absolute',
+                    width: 'calc(100% + 30px)',
+                    height: '100%',
+                    left: -15,
+                    display: 'flex',
+                    flex: 1,
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    cursor: 'none',
+                    pointerEvents: 'none',
+                }}>
                     <Box sx={{
-                        position: 'absolute',
-                        right: -14,
                         display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'flex-end',
-                        gap: 1,
+                        flex: 1,
+                        justifyContent: 'space-between',
                     }}>
                         <Box sx={{
-                            backgroundColor: EColor.white,
-                            padding: 0.5,
-                            borderRadius: 4,
-                            width: 'fit-content',
                             display: 'flex',
-                            alignItems: 'center',
+                            flexDirection: 'column',
+                            gap: 0.5,
                         }}>
-                            <Box>
-                                <NodeStyle.Name>
-                                    {loopOutText}
-                                </NodeStyle.Name>
-                            </Box>
-                            <EventHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
+                            <LogicHandle
+                                type="target"
+                                position={Position.Left}
+                                mode={EConnectionMode.NodeIncoming}
+                            />
+                            <EventHandle
+                                type="target"
+                                position={Position.Left}
+                                mode={EConnectionMode.NodeIncoming}
+                            />
                         </Box>
                         <Box sx={{
-                            backgroundColor: EColor.white,
-                            padding: 0.5,
-                            borderRadius: 4,
-                            width: 'fit-content',
                             display: 'flex',
-                            alignItems: 'center',
+                            flexDirection: 'column',
+                            gap: 0.5,
                         }}>
-                            <Box>
-                                <NodeStyle.Name>
-                                    out data
-                                </NodeStyle.Name>
-                            </Box>
+                            <EventHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
                             <LogicHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
                         </Box>
                     </Box>
+
                 </Box>
-                {/*<ExternalDataHandlers {...props}/>*/}
+                {/*Content*/}
+                {isCollapsed && <Box
+                    sx={{
+                        display: 'flex',
+                        flex: 1,
+                        flexDirection: 'column',
+                    }}>
+                    <Box sx={{
+                        height: 'calc(50% + 14px)',
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'flex-end',
+                        justifyContent: 'center',
+                    }}>
+                        <NodeStyle.Name>
+                            {data.name}
+                        </NodeStyle.Name>
+                    </Box>
+                    <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'end',
+                        paddingRight: 0.5,
+                    }}>
+                        <Box>
+                            <NodeStyle.Name
+                                type="small"
+                                sx={{
+                                    textAlign: 'end',
+                                }}>
+                                Loops
+                            </NodeStyle.Name>
+                            <NodeStyle.Name
+                                type="small"
+                                sx={{
+                                    textAlign: 'end',
+                                    fontWeight: 600,
+                                    color: EFontColor.white,
+                                }}>
+                                {data.loopCount}
+                            </NodeStyle.Name>
+                        </Box>
+                    </Box>
+                </Box>}
+                {/* inner connections*/}
                 {!isCollapsed &&
                     <Box
                         sx={{
                             display: 'flex',
                             justifyContent: 'space-between',
+                            alignItems: 'center',
+                            flex: 1,
                         }}
                     >
                         <Box sx={{

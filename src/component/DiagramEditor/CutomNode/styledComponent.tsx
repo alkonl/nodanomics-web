@@ -9,6 +9,7 @@ type ITextType = 'text' | 'header' | 'small'
 
 const baseSx: SxProps<Theme> = {
     wordBreak: 'break-all',
+    color: EFontColor.grey2,
 }
 
 const typeTextStyle: {
@@ -47,7 +48,7 @@ export const NodeTextName: React.FC<{
         ...baseSx,
         ...typeSx,
         ...outerSx,
-        color: EFontColor.grey2,
+        // color: EFontColor.grey2,
     } as TypographyProps['sx']
 
     return (<Typography

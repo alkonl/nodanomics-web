@@ -40,7 +40,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                     boxSizing: 'border-box',
                     width: isCollapsed ? 'fit-content' : data.style.width,
                     height: isCollapsed ? 'fit-content' : data.style.height,
-                    backgroundColor: EColor.darkGreen,
+                    backgroundColor: EColor.lightMarine,
                     display: 'flex',
                     flexDirection: 'column',
                     gap: 1,
