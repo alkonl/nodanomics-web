@@ -241,44 +241,6 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                         </Box>
                     </Box>
                 }
-                {/*<Box sx={{*/}
-                {/*    position: 'relative',*/}
-                {/*    flex: 1,*/}
-                {/*    display: 'flex',*/}
-                {/*    justifyContent: 'space-between',*/}
-                {/*    alignItems: 'center',*/}
-                {/*}}>*/}
-                {/*    <Box sx={{*/}
-                {/*        height: 20,*/}
-                {/*        display: 'flex',*/}
-                {/*        flexDirection: 'column',*/}
-                {/*        justifyContent: 'space-between',*/}
-                {/*    }}>*/}
-                {/*        <Box sx={{*/}
-                {/*            position: 'relative',*/}
-                {/*        }}>*/}
-                {/*            <EventHandle*/}
-                {/*                type="source"*/}
-                {/*                position={Position.Right}*/}
-                {/*                mode={EConnectionMode.LoopInnerToChildren}*/}
-                {/*            />*/}
-                {/*        </Box>*/}
-                {/*        <Box sx={{*/}
-                {/*            position: 'relative',*/}
-                {/*        }}>*/}
-                {/*            <LogicHandle*/}
-                {/*                type="source"*/}
-                {/*                position={Position.Right}*/}
-                {/*                mode={EConnectionMode.NodeOutgoing}*/}
-                {/*            />*/}
-                {/*        </Box>*/}
-                {/*    </Box>*/}
-                {/*    <EventHandle*/}
-                {/*        type="source"*/}
-                {/*        position={Position.Right}*/}
-                {/*        mode={EConnectionMode.NodeOutgoing}*/}
-                {/*    />*/}
-                {/*</Box>*/}
             </Box>
         </BaseNodeContainer>
     );

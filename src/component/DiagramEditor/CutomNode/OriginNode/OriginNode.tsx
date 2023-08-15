@@ -2,13 +2,13 @@ import React from 'react';
 import {Box} from "@mui/material";
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from "reactflow";
-import {EConnection, ISourceNodeData} from "../../../../interface";
+import {EConnection, IOriginNodeData} from "../../../../interface";
 import {NodeTextName} from "../styledComponent";
 import {InteractiveNodeContainer} from "../container";
 import {EColor} from "../../../../constant";
 import {BaseNodeContainer} from "../container/BaseNodeContainer";
 
-export const SourceNode: React.FC<NodeProps<ISourceNodeData>> = (props) => {
+export const OriginNode: React.FC<NodeProps<IOriginNodeData>> = (props) => {
     const {isConnectable, data} = props
     return (
         <InteractiveNodeContainer data={data}>
@@ -21,7 +21,7 @@ export const SourceNode: React.FC<NodeProps<ISourceNodeData>> = (props) => {
                 alignItems: 'center',
             }}>
                 <NodeTextName>
-                    Source
+                    Origin
                 </NodeTextName>
                 <NodeTextName>
                     trigger: {data.trigger.mode}

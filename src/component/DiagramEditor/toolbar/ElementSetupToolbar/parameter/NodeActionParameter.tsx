@@ -25,7 +25,7 @@ export const NodeActionParameter: React.FC<{
         })
     }
     const nodeActionModes = useMemo(() => {
-        if (selectedElementData?.type === EDiagramNode.Source) {
+        if (selectedElementData?.type === EDiagramNode.Origin) {
             return [ENodeAction.pushAll, ENodeAction.pushAny]
         }
         return Object.keys(ENodeAction)

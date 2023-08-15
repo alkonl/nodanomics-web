@@ -1,12 +1,12 @@
-import {ISourceNodeData} from "../../../interface";
+import {IOriginNodeData} from "../../../interface";
 import {GraphInteractiveNode} from "./abstracts";
 import {GraphDataNode} from "./GraphDataNode";
 import {GraphDataEdge} from "../GraphEdge";
 import {RunManager} from "../RunManager";
 import {generateResourceFromSource} from "../../diagram";
 
-export class GraphSourceNode extends GraphInteractiveNode<ISourceNodeData> {
-    constructor(data: ISourceNodeData, runManager: RunManager) {
+export class GraphOriginNode extends GraphInteractiveNode<IOriginNodeData> {
+    constructor(data: IOriginNodeData, runManager: RunManager) {
         super(data, runManager);
     }
 

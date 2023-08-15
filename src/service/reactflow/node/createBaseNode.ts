@@ -50,7 +50,7 @@ export const createBaseNode = ({type, position}: {
                 },
             }
         }
-        case EDiagramNode.Source: {
+        case EDiagramNode.Origin: {
             return {
                 ...baseParams,
                 data: {
