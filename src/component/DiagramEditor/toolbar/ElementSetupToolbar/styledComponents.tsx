@@ -36,7 +36,7 @@ export const ParameterText = styled(Typography)({
     fontWeight: 'bold',
 })
 
-const InputContainer: React.FC<InputProps> = ({sx,...props}) => {
+const InputContainer: React.FC<InputProps> = ({sx, ...props}) => {
 
     return <Input
         sx={{
@@ -53,9 +53,42 @@ const InputContainer: React.FC<InputProps> = ({sx,...props}) => {
         {...props}/>
 }
 
+export const ParameterList: React.FC<{
+    items?: string[]
+}> = ({items}) => {
+    return (<Box
+            sx={{
+                padding: 0.5,
+                height: 120,
+                flex: 1,
+                borderColor: EColor.grey2,
+                borderWidth: 3,
+                borderRadius: 0,
+                borderStyle: 'solid',
+                overflowX: 'hidden',
+                overflowY: 'auto',
+            }}
+        >
+            {items?.map((item) => (
+                <Typography
+                    sx={{
+                        color: EColor.grey4,
+                        fontSize: 14,
+                    }}
+                    key={item}
+                >
+                    {item}
+                </Typography>
+            ))}
+        </Box>
+
+    )
+}
+
 export const Parameter = {
     Container: ParameterContainer,
     Label: ParameterLabel,
     Text: ParameterText,
     Input: InputContainer,
+    List: ParameterList
 }

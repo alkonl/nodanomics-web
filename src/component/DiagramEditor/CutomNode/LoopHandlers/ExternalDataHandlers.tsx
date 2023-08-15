@@ -5,7 +5,7 @@ import {LogicHandle} from "../../CustomHandle";
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";
 import {EConnectionMode, ILoopNodeData} from "../../../../interface";
-import {NodeText} from "../styledComponent";
+import {NodeStyle} from "../styledComponent";
 import {EventHandle} from "../../CustomHandle/EventHandle";
 import {useWidthAndHeight} from "../../../../hooks";
 
@@ -60,9 +60,9 @@ export const ExternalDataHandlers: React.FC<NodeProps<ILoopNodeData>> = ({data})
                             position={Position.Left}
                             mode={EConnectionMode.NodeIncoming}
                         />
-                        <NodeText.Name>
+                        <NodeStyle.Name>
                             data
-                        </NodeText.Name>
+                        </NodeStyle.Name>
                     </Box>
 
 
@@ -78,9 +78,9 @@ export const ExternalDataHandlers: React.FC<NodeProps<ILoopNodeData>> = ({data})
                     }}>
                         <EventHandle type="target" position={Position.Left}
                                      mode={EConnectionMode.WhileLoopIncomingTrigger}/>
-                        <NodeText.Name>
+                        <NodeStyle.Name>
                             {isActiveText}
-                        </NodeText.Name>
+                        </NodeStyle.Name>
                     </Box>
                 </Box>
 
@@ -102,9 +102,9 @@ export const ExternalDataHandlers: React.FC<NodeProps<ILoopNodeData>> = ({data})
                     alignItems: 'center',
                 }}>
                     <Box>
-                        <NodeText.Name>
+                        <NodeStyle.Name>
                             {loopOutText}
-                        </NodeText.Name>
+                        </NodeStyle.Name>
                     </Box>
                     <EventHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
                 </Box>
@@ -117,9 +117,9 @@ export const ExternalDataHandlers: React.FC<NodeProps<ILoopNodeData>> = ({data})
                     alignItems: 'center',
                 }}>
                     <Box>
-                        <NodeText.Name>
+                        <NodeStyle.Name>
                             out data
-                        </NodeText.Name>
+                        </NodeStyle.Name>
                     </Box>
                     <LogicHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
                 </Box>

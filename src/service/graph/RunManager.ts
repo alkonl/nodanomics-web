@@ -1,5 +1,5 @@
 import {Graph} from "./Graph";
-import {GraphBaseNode, GraphInvokableNode, GraphSourceNode, GraphDataNode, GraphEventListenerNode} from "./GraphNodes";
+import {GraphBaseNode, GraphInvokableNode, GraphOriginNode, GraphDataNode, GraphEventListenerNode} from "./GraphNodes";
 import {EConnection, EConnectionMode, ENodeTrigger, isUpdateGraphNodeState} from "../../interface";
 import {GraphNodeManager} from "./NodeManager";
 import {GraphDataEdge} from "./GraphEdge";
@@ -56,7 +56,7 @@ export class RunManager {
 
     private getStartedNodes(): GraphBaseNode[] {
         return this.graph.nodes.filter(node => {
-            if (node instanceof GraphSourceNode) {
+            if (node instanceof GraphOriginNode) {
                 if (node.triggerMode === ENodeTrigger.enabling || node.triggerMode === ENodeTrigger.passive) {
                     return node.hasEventListeners
                 }

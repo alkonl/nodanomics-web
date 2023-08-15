@@ -9,8 +9,9 @@ import {
 } from "../../../interface";
 import {GraphDataEdge} from "../GraphEdge";
 import {GraphBaseNode, GraphInteractiveNode} from "./abstracts";
-import {GraphSourceNode} from "./GraphSourceNode";
+import {GraphOriginNode} from "./GraphOriginNode";
 import {RunManager} from "../RunManager";
+import {GraphNodeManager} from "../NodeManager";
 
 export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue {
@@ -18,8 +19,8 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     private _resourcesToProvide: IResource[] = [];
 
 
-    constructor(data: IDataNodeData, runManager: RunManager) {
-        super(data, runManager);
+    constructor(data: IDataNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
+        super(data, runManager, nodeManager);
     }
 
 
@@ -69,12 +70,8 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     get edgesFromSources(): GraphDataEdge[] {
         return this.incomingEdges
-            .filter(edge => edge.source instanceof GraphSourceNode)
+            .filter(edge => edge.source instanceof GraphOriginNode)
             .filter(edge => GraphDataEdge.baseEdgeIsData(edge)) as GraphDataEdge[];
-    }
-
-    get isSourceInIncomingEdges(): boolean {
-        return this.incomingEdges.some(edge => edge.source instanceof GraphSourceNode);
     }
 
     resetResourcesToProvide() {
@@ -271,7 +268,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
             this.edgesFromSources.forEach(edge => {
                 const countOfResourceToGenerate = edge.countOfResource
                 const source = edge.source;
-                if (source instanceof GraphSourceNode) {
+                if (source instanceof GraphOriginNode) {
                     const generatedResources = source.generateResourceFromSource(countOfResourceToGenerate)
                     const onSuccess = () => this.writeToEdgeIsResourcesWereTransferred(edge, true)
                     this.addResource(generatedResources, source.addingResourcesMode, {onSuccess})

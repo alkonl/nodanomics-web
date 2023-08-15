@@ -1,7 +1,6 @@
-import {EDiagramNode} from "../structures";
+import {EDiagramNode, ILoopNodeData} from "../structures";
 import {IDiagramNodeStyle} from "../../elementStyle";
 import {INodeSize} from "../additional";
-import {ILoopNodeData} from "../structures/loopNode";
 
 export type IMicroLoopNodeDataStyle = INodeSize & IDiagramNodeStyle;
 

@@ -170,8 +170,18 @@ export const diagramEditorSlice = createSlice({
             node: IReactFlowNode,
             parentNode: IReactFlowNode
         }>) => {
+            graph.updateNodeData(payload.node.data.id, {
+                ...payload.node.data,
+                parentId: payload.parentNode.data.id,
+            })
+            updateNodesFromGraph(state.diagramNodes)
             const node = state.diagramNodes.find(node => node.id === payload.node.id)
             if (node && node.parentNode === undefined) {
+
+                node.data = {
+                    ...node.data,
+                    parentId: payload.parentNode.id,
+                }
                 node.parentNode = payload.parentNode.id
                 node.position = {
                     x: payload.node.position.x - payload.parentNode.position.x,
@@ -181,6 +191,7 @@ export const diagramEditorSlice = createSlice({
                 node.extent = 'parent'
                 state.autoSaveCalled++
             }
+
         },
         updateNodeSize: (state, {payload}: PayloadAction<{
             nodeId: string,

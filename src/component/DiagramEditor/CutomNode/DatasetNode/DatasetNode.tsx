@@ -4,7 +4,7 @@ import {BaseNodeContainer} from "../container/BaseNodeContainer";
 import {NodeProps} from "reactflow";
 import {IDatasetDatafield} from "../../../../interface";
 import {Box} from "@mui/material";
-import {NodeText} from "../styledComponent";
+import {NodeStyle} from "../styledComponent";
 import {EColor} from "../../../../constant";
 
 export const DatasetNode: React.FC<NodeProps<IDatasetDatafield>> = (props) => {
@@ -42,19 +42,17 @@ export const DatasetNode: React.FC<NodeProps<IDatasetDatafield>> = (props) => {
                             borderStyle: 'solid',
                             borderColor: isDatasetConnected ? EColor.darkPurple : '',
                         }}/>}
-                        <NodeText.Name sx={{
+                        <NodeStyle.Name sx={{
                             padding: 1,
                         }}>
                             {props.data.name}
-                        </NodeText.Name>
+                        </NodeStyle.Name>
                     </Box>
 
                 </Box>
-                <NodeText.Name sx={{
-                    alignSelf: 'flex-start',
-                }} type='small'>
+                <NodeStyle.Name type='small'>
                     Tag: {props.data.tag}
-                </NodeText.Name>
+                </NodeStyle.Name>
             </Box>
 
         </BaseNodeContainer>

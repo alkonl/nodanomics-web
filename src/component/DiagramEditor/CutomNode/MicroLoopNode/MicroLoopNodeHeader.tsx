@@ -1,6 +1,6 @@
 import React from 'react';
 import {Box, Input} from "@mui/material";
-import {NodeText} from "../styledComponent";
+import {NodeStyle} from "../styledComponent";
 import {EFontColor} from "../../../../constant";
 import {MButton} from "../../../base";
 
@@ -38,17 +38,17 @@ export const MicroLoopNodeHeader: React.FC<MicroLoopNodeHeaderProps> = (
                     }}>
 
 
-                        <NodeText.Name type="header">
+                        <NodeStyle.Name type="header">
                             {name}
-                        </NodeText.Name>
+                        </NodeStyle.Name>
                         <Box sx={{
                             display: 'flex',
                             gap: 1,
                             alignItems: 'flex-end',
                         }}>
-                            <NodeText.Name>
+                            <NodeStyle.Name>
                                 total:
-                            </NodeText.Name>
+                            </NodeStyle.Name>
                             <Input
                                 onChange={onLoopCountChange}
                                 value={loopCount}
@@ -64,9 +64,9 @@ export const MicroLoopNodeHeader: React.FC<MicroLoopNodeHeaderProps> = (
                             gap: 1,
                             alignItems: 'flex-end',
                         }}>
-                            <NodeText.Name>
+                            <NodeStyle.Name>
                                 current: {currentLoopCount}
-                            </NodeText.Name>
+                            </NodeStyle.Name>
                         </Box>
                     </Box>
                     <MButton.Submit
@@ -87,7 +87,7 @@ export const MicroLoopNodeHeader: React.FC<MicroLoopNodeHeaderProps> = (
                             boxSizing: 'border-box',
                         }}
                     >
-                        <NodeText.Name
+                        <NodeStyle.Name
                             onClick={changeExpandOrCollapse}
                             type="header"
                             sx={{
@@ -95,15 +95,15 @@ export const MicroLoopNodeHeader: React.FC<MicroLoopNodeHeaderProps> = (
                             }}
                         >
                             {name}
-                        </NodeText.Name>
+                        </NodeStyle.Name>
                         <Box sx={{
                             display: 'flex',
                             gap: 1,
                             alignItems: 'flex-end',
                         }}>
-                            <NodeText.Name>
+                            <NodeStyle.Name>
                                 total:
-                            </NodeText.Name>
+                            </NodeStyle.Name>
                             <Input
                                 onChange={onLoopCountChange}
                                 value={loopCount}
@@ -119,9 +119,9 @@ export const MicroLoopNodeHeader: React.FC<MicroLoopNodeHeaderProps> = (
                             gap: 1,
                             alignItems: 'flex-end',
                         }}>
-                            <NodeText.Name>
+                            <NodeStyle.Name>
                                 current: {currentLoopCount}
-                            </NodeText.Name>
+                            </NodeStyle.Name>
                         </Box>
                     </Box>
                 </Box>

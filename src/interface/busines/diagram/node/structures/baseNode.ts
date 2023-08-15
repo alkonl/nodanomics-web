@@ -2,7 +2,7 @@ import {IDiagramBaseInteractiveElementData} from "../../diagramElement";
 
 export enum EDiagramNode {
     StaticVariable = 'StaticVariable',
-    Source = 'Source',
+    Origin = 'Source',
     Formula = 'Formula',
     // Variable it is DataNode
     Data = 'Variable',
@@ -17,7 +17,7 @@ export enum EDiagramNode {
 export interface IDiagramNodeBaseData extends IDiagramBaseInteractiveElementData {
     type: EDiagramNode;
     parentId?: string;
-    isCollapsed?: boolean;
+    isCollapsed: boolean;
     tag?: string;
     connectedNodes?: string[];
 }

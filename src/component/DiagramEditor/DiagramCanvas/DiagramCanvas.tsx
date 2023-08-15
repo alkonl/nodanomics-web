@@ -17,7 +17,7 @@ import {
     EventTriggerNode,
     FormulaNode,
     MicroLoopNode,
-    SourceNode,
+    OriginNode,
     StaticVariableNode,
     DataNode, WhileLoopNode
 } from "../CutomNode";
@@ -34,7 +34,7 @@ import {GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../constant";
 const nodeTypes = {
     [EDiagramNode.StaticVariable]: StaticVariableNode,
     [EDiagramNode.Formula]: FormulaNode,
-    [EDiagramNode.Source]: SourceNode,
+    [EDiagramNode.Origin]: OriginNode,
     [EDiagramNode.Data]: DataNode,
     [EDiagramNode.EventTrigger]: EventTriggerNode,
     [EDiagramNode.EventListener]: EventListenerNode,

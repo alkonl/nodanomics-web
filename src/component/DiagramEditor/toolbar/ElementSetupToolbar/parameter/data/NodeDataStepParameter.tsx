@@ -21,7 +21,7 @@ export const NodeDataStepParameter: React.FC<{
     }
 
     const {changeNodeDataStep} = useChangeNodeDataStep({
-        nodeId: nodeData.id,
+        nodeData,
     })
 
     const changeStep = (event: React.ChangeEvent<HTMLInputElement>) => {

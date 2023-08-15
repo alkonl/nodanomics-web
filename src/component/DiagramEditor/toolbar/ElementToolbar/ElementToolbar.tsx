@@ -17,34 +17,31 @@ export enum EElementShow {
 }
 
 const mockDiagramNodes: DiagramElementPreviewToolbar = {
-    [EElementShow.Node]: [{
-        elementType: EElementType.Node,
-        type: EDiagramNode.StaticVariable,
-        tooltip: 'Static Variable',
-        toolbarName: 'SV',
-    },
+    [EElementShow.Node]: [
         {
             elementType: EElementType.Node,
-            type: EDiagramNode.Source,
-            tooltip: 'no',
-            toolbarName: 'S',
-        },{
-            elementType: EElementType.Node,
             type: EDiagramNode.DatasetDatafield,
-            tooltip: 'DatasetDatafield',
-            toolbarName: 'D',
-        }, {
-            elementType: EElementType.Node,
-            type: EDiagramNode.Formula,
-            tooltip: 'Formula',
-            toolbarName: 'F',
+            tooltip: 'Dataset',
+            toolbarName: 'DS',
         },
         {
             elementType: EElementType.Node,
             type: EDiagramNode.Data,
             tooltip: 'Data',
             toolbarName: 'D',
-        }],
+        },
+        {
+            elementType: EElementType.Node,
+            type: EDiagramNode.Origin,
+            tooltip: 'Origin',
+            toolbarName: 'O',
+        }, {
+            elementType: EElementType.Node,
+            type: EDiagramNode.Formula,
+            tooltip: 'Formula',
+            toolbarName: 'F',
+        },
+        ],
     [EElementShow.Logic]: [{
         elementType: EElementType.Node,
         type: EDiagramNode.MicroLoop,

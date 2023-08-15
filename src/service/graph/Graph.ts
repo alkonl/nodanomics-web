@@ -1,5 +1,5 @@
 import {
-    IDiagramConnectionData,
+    IDiagramConnectionData, IDiagramNodeBaseData,
     INodeData,
 } from "../../interface";
 import {GraphBaseNode, GraphNodeFactory} from "./GraphNodes";

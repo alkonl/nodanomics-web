@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Input, Typography} from "@mui/material";
-import {EColor, EFontColor} from "../../../../constant";
+import {Box, Typography} from "@mui/material";
+import {EColor, EFontColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from "reactflow";
 import {EConnection, IEventTriggerNodeData} from "../../../../interface";
 import {useUpdateNode} from "../../../../hooks";
+import {NodeStyle} from "../styledComponent";
 
 export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({isConnectable, data}) => {
 
@@ -35,13 +36,18 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({is
     return (
         <Box
             sx={{
-                width: 200,
+                width: GAP_BETWEEN_EDITOR_CANVAS_DOTS * 6,
+                height: GAP_BETWEEN_EDITOR_CANVAS_DOTS * 3,
                 padding: 1,
-                borderRadius: 2,
-                backgroundColor: EColor.black,
                 display: 'flex',
                 flexDirection: 'column',
+                justifyContent: 'center',
                 gap: 1,
+                borderRadius: '14% 14% 14% 14%/28% 28% 28% 28%',
+                borderWidth: 3,
+                borderColor: data.style.borderColor,
+                backgroundColor: EColor.black,
+                borderStyle: 'solid',
             }}
         >
             <Handle
@@ -53,21 +59,25 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({is
                     background: EColor.darkRed,
                 }}
             />
-            <Input
+            <NodeStyle.Input
                 onChange={onEventNameChange}
                 placeholder="Insert event name"
                 value={eventName}
                 size="small"
                 sx={{
-                    color: EFontColor.white,
+                    // height:' 0.7em',
+                    // padding: 0,
+                    // color: EFontColor.white,
                 }}/>
-            <Input
+            <NodeStyle.Input
                 onChange={onConditionChange}
                 placeholder="Condition"
                 value={eventCondition}
                 size="small"
                 sx={{
-                    color: EFontColor.white,
+                    // // height:' 0.7em',
+                    // padding: 0,
+                    // color: EFontColor.white,
                 }}/>
             <Typography sx={{
                 color: EColor.orange

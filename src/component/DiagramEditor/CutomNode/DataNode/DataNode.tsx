@@ -3,7 +3,7 @@ import React from 'react';
 import {Handle, NodeProps, Position} from "reactflow";
 import {Box} from "@mui/material";
 import {EConnection, IDataNodeData} from "../../../../interface";
-import {NodeText} from "../styledComponent";
+import {NodeStyle} from "../styledComponent";
 import {EColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
 import {BaseNodeContainer} from "../container/BaseNodeContainer";
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -20,7 +20,7 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
     const isShowStep = data.isShowStep || false
 
     const {increaseNodeDataStep,decreaseNodeDataStep} = useChangeNodeDataStep({
-        nodeId: props.data.id,
+        nodeData: props.data,
     })
 
     return (
@@ -66,17 +66,17 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
                                 height: 18,
                                 color: EColor.white,
                             }}/>}
-                        <NodeText.Name sx={{
+                        <NodeStyle.Name sx={{
                             maxWidth: '100%',
                             overflow: 'hidden',
                             textAlign: 'center',
                             overflowWrap: 'break-word',
                         }}>
                             {data.name}
-                        </NodeText.Name>
-                        <NodeText.Value>
+                        </NodeStyle.Name>
+                        <NodeStyle.Value>
                             {currentResourcesValue}
-                        </NodeText.Value>
+                        </NodeStyle.Value>
                         {isShowStep && <KeyboardArrowDownIcon
                             onClick={decreaseNodeDataStep}
                             sx={{
@@ -97,20 +97,20 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
                         height: 1,
                     }}>
                         <Box>
-                            <NodeText.Name>
+                            <NodeStyle.Name>
                                 Max
-                            </NodeText.Name>
-                            <NodeText.Value>
+                            </NodeStyle.Name>
+                            <NodeStyle.Value>
                                 {maxRegisteredValue ? maxRegisteredValue : <br/>}
-                            </NodeText.Value>
+                            </NodeStyle.Value>
                         </Box>
                         <Box>
-                            <NodeText.Name>
+                            <NodeStyle.Name>
                                 Min
-                            </NodeText.Name>
-                            <NodeText.Value>
+                            </NodeStyle.Name>
+                            <NodeStyle.Value>
                                 {minRegisteredValue ? minRegisteredValue : <br/>}
-                            </NodeText.Value>
+                            </NodeStyle.Value>
                         </Box>
                     </Box>
                 </Box>

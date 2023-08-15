@@ -9,6 +9,7 @@ import {RunManager} from "../RunManager";
 import {GraphInvokableNode} from "./abstracts";
 import {GraphMatchManager} from "./helper";
 import {GraphLogicManager} from "./helper/GraphLogicManager";
+import {GraphNodeManager} from "../NodeManager";
 
 export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue {
@@ -16,8 +17,8 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
     private readonly matchManager: GraphMatchManager = new GraphMatchManager(this.incomingEdges)
     private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
 
-    constructor(value: IFormulaNodeData, runManager: RunManager) {
-        super(value, runManager);
+    constructor(value: IFormulaNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
+        super(value, runManager, nodeManager);
     }
 
     get formula() {

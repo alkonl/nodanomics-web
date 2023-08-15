@@ -10,7 +10,7 @@ export const nodeSetupToolbarNames: {
     [EDiagramNode.EventTrigger]: 'Event Trigger',
     [EDiagramNode.Formula]: 'Formula',
     [EDiagramNode.MicroLoop]: 'Micro Loop',
-    [EDiagramNode.Source]: 'Source',
+    [EDiagramNode.Origin]: 'Origin',
     [EDiagramNode.StaticVariable]: 'Static Variable',
     [EDiagramNode.WhileLoop]: 'While Loop',
     [EConnection.DataConnection]: 'Data Connection',

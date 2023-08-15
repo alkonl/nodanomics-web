@@ -2,7 +2,7 @@
 import {Node} from "reactflow";
 import {IDataNodeData} from "../dataNode";
 import {IFormulaNodeData} from "../formulaNode";
-import {ISourceNodeData} from "../sourceNode";
+import {IOriginNodeData} from "../originNode";
 import {IEventTriggerNodeData} from "../eventTriggerNode";
 import {IEventListenerNodeData} from "../eventListenerNode";
 import {IStaticVariableNodeData} from "../staticVariableNode";
@@ -13,7 +13,7 @@ import {IDatasetDatafield} from "../datasetDatafield";
 
 export type INodeData = IStaticVariableNodeData
     | IFormulaNodeData
-    | ISourceNodeData
+    | IOriginNodeData
     | IDataNodeData
     | IEventTriggerNodeData
     | IEventListenerNodeData
