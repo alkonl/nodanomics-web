@@ -17,7 +17,6 @@ export const BaseNodeContainer: React.FC<{
         <Box sx={{
             borderWidth: 3,
             borderColor: data.style.borderColor,
-            backgroundColor: EColor.black,
             borderStyle: 'solid',
         }}>
             {children}
