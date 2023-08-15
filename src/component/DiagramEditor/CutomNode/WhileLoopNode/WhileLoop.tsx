@@ -17,11 +17,13 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
     const isActiveText = data.isLoopActive ? 'active' : 'no active'
     const loopOutText = !data.isLoopWasActive ? 'was not active' : !data.isLoopActive ? 'finished' : 'running'
 
-    const {isExpanded, expandOrCollapse} = useExpandOrCollapse({
-        initialIsOpened: data.isCollapsed,
+    const {expandOrCollapse} = useExpandOrCollapse({
+        nodeData: data,
     })
 
+    const isCollapsed = data.isCollapsed
     const changeExpandOrCollapse = () => {
+        console.log('changeExpandOrCollapse.data', data)
         expandOrCollapse({parentId: data.id})
     }
 
@@ -36,8 +38,8 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                 sx={{
                     padding: 1,
                     boxSizing: 'border-box',
-                    width: isExpanded ? 'fit-content' : data.style.width,
-                    height: isExpanded ? 'fit-content' : data.style.height,
+                    width: isCollapsed ? 'fit-content' : data.style.width,
+                    height: isCollapsed ? 'fit-content' : data.style.height,
                     backgroundColor: EColor.darkGreen,
                     display: 'flex',
                     flexDirection: 'column',
@@ -169,7 +171,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                         </Box>
                     </Box>
                 </Box>
-                {!isExpanded &&
+                {!isCollapsed &&
                     <Box
                         sx={{
                             display: 'flex',

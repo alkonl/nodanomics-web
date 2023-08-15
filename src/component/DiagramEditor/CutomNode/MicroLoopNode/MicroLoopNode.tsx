@@ -28,9 +28,9 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
             updateNodeData({loopCount})
         }
     }, [loopCount])
-
-    const {isExpanded, expandOrCollapse} = useExpandOrCollapse({
-        initialIsOpened: data.isCollapsed,
+    const isCollapsed = data.isCollapsed
+    const {expandOrCollapse} = useExpandOrCollapse({
+         nodeData: data,
     })
 
     const changeExpandOrCollapse = () => {
@@ -49,8 +49,8 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                 sx={{
                     padding: 1,
                     boxSizing: 'border-box',
-                    width: isExpanded ? 'fit-content' : data.style.width,
-                    height: isExpanded ? 'fit-content' : data.style.height,
+                    width: isCollapsed ? 'fit-content' : data.style.width,
+                    height: isCollapsed ? 'fit-content' : data.style.height,
                     backgroundColor: EColor.darkPurple,
                     display: 'flex',
                     flexDirection: 'column',
@@ -156,7 +156,7 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                     </Box>
                 </Box>
                 {/*<ExternalDataHandlers {...props}/>*/}
-                {!isExpanded &&
+                {!isCollapsed &&
                     <Box
                         sx={{
                             display: 'flex',

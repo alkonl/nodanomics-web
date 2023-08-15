@@ -17,7 +17,7 @@ export enum EDiagramNode {
 export interface IDiagramNodeBaseData extends IDiagramBaseInteractiveElementData {
     type: EDiagramNode;
     parentId?: string;
-    isCollapsed?: boolean;
+    isCollapsed: boolean;
     tag?: string;
     connectedNodes?: string[];
 }

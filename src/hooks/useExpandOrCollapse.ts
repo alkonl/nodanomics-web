@@ -1,22 +1,21 @@
-import {IUpdateReactflowNode} from "../interface";
+import {IDiagramNodeBaseData, IUpdateReactflowNode} from "../interface";
 import {useGetChildrenNodes} from "./useGetChildrenNodes";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {useToggle} from "./useToggle";
 import {useGetNodesEdges} from "./useGetNodesEdges";
 
-export const useExpandOrCollapse = (props?: {
-    initialIsOpened?: boolean
+export const useExpandOrCollapse = ({nodeData}: {
+    nodeData: IDiagramNodeBaseData
 }) => {
-    const initialIsOpened = props?.initialIsOpened || false
     const dispatch = useAppDispatch()
     const {bulkUpdateNodes, bulkUpdateEdges} = diagramEditorActions
 
     const getChildrenNodes = useGetChildrenNodes()
 
 
-    const expandOrCollapseManager = useToggle({
-        initialState: initialIsOpened
-    })
+    // const expandOrCollapseManager = useToggle({
+    //     initialState: initialIsOpened
+    // })
 
     const {diagramNodes} = useDiagramEditorState()
     const getNodesEdges = useGetNodesEdges()
@@ -25,17 +24,18 @@ export const useExpandOrCollapse = (props?: {
         const parentNode = diagramNodes.find(node => node.id === parentId)
         const childrenNodes = getChildrenNodes({parentId})
         const childrenEdges = getNodesEdges({nodes: childrenNodes})
-        expandOrCollapseManager.toggle()
+        // expandOrCollapseManager.toggle()
+        const updatedIsCollapsed = !nodeData.isCollapsed
         const nodesToHide: IUpdateReactflowNode[] = childrenNodes.map((childNode) => {
             return {
                 id: childNode.id,
-                hidden: !expandOrCollapseManager.isOpened,
+                hidden: updatedIsCollapsed,
             }
         })
         const edgesToHide = childrenEdges.map((edge) => {
             return {
                 id: edge.id,
-                hidden: !expandOrCollapseManager.isOpened,
+                hidden: updatedIsCollapsed,
             }
         })
         if (parentNode) {
@@ -43,7 +43,7 @@ export const useExpandOrCollapse = (props?: {
                 id: parentId,
                 data: {
                     ...parentNode.data,
-                    isCollapsed: !expandOrCollapseManager.isOpened
+                    isCollapsed: updatedIsCollapsed,
                 }
             })
         }
@@ -53,6 +53,5 @@ export const useExpandOrCollapse = (props?: {
 
     return {
         expandOrCollapse: expandOrCollapse,
-        isExpanded: expandOrCollapseManager.isOpened
     }
 }
