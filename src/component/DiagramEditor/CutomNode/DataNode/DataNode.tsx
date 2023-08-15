@@ -20,7 +20,7 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
     const isShowStep = data.isShowStep || false
 
     const {increaseNodeDataStep,decreaseNodeDataStep} = useChangeNodeDataStep({
-        nodeId: props.data.id,
+        nodeData: props.data,
     })
 
     return (

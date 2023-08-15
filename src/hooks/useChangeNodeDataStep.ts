@@ -4,19 +4,24 @@ import {generateResourceFromSource} from "../service";
 import {useDiagramEditorState} from "../redux";
 
 export const useChangeNodeDataStep = ({
-                                          nodeId
+                                          nodeData
                                       }: {
-    nodeId: string
+    nodeData: IDataNodeData
 }) => {
-    const {diagramNodes} = useDiagramEditorState()
-    const updatedNode = diagramNodes.find(node => node.id === nodeId)
-    const nodeDataToUpdate = updatedNode?.data
-    if (!updatedNode || !nodeDataToUpdate || !isIDataNodeData(nodeDataToUpdate)) {
-        throw new Error(`Node type "Data" with id ${nodeId} not found`)
-    }
+    const nodeDataToUpdate = nodeData
+    // const {diagramNodes} = useDiagramEditorState()
+    // const updatedNode = diagramNodes.find(node => node.id === nodeId)
+    // const nodeDataToUpdate = updatedNode?.data
+    //
+    const {updateNodeData} = useUpdateNode<IDataNodeData>({
+        nodeId: nodeDataToUpdate.id,
+    })
+
+    // if (updatedNode || !nodeDataToUpdate || !isIDataNodeData(nodeDataToUpdate)) {
+    //     throw new Error(`Node type "Data" with id ${nodeId} not found`)
+    // }
     const step = nodeDataToUpdate.step || 0
 
-    const {updateNodeData} = useUpdateNode<IDataNodeData>({nodeId})
 
     const changeNodeDataStep = (value: number) => {
         updateNodeData({
