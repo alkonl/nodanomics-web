@@ -18,6 +18,7 @@ import {
     NodeConnectedNodesParameter
 } from "../parameter";
 import {NodeDataParametersContainer} from "../parameter/data/NodeDataParametersContainer";
+import {GeneralLoopChildrenNodesParameter} from "../parameter/generalLoop";
 
 
 export const PropertiesSection: React.FC<{
@@ -69,6 +70,8 @@ export const PropertiesSection: React.FC<{
                     <ConnectionVariableParameter selectedElementData={selectedElementData}/>}
                 {selectedElementData.elementType === EElementType.Node
                     && <NodeConnectedNodesParameter baseNodeData={selectedElementData}/>}
+                {selectedElementData.type === (EDiagramNode.MicroLoop || EDiagramNode.WhileLoop)
+                    && <GeneralLoopChildrenNodesParameter nodeData={selectedElementData}/>}
             </Grid>
         </BaseSection>
     );
