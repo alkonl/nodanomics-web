@@ -86,4 +86,5 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
             variables,
         }
     }
+
 }

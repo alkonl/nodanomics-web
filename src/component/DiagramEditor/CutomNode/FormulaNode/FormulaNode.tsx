@@ -11,9 +11,9 @@ import {EventHandle} from "../../CustomHandle/EventHandle";
 import {LogicHandle} from "../../CustomHandle";
 
 
-const HEIGHT = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 4
-const WIDTH = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 6
-const clipPath = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
+const HEIGHT = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 3.57
+const WIDTH = GAP_BETWEEN_EDITOR_CANVAS_DOTS *  6.5
+const clipPath = 'polygon(18% 0, 83% 0, 100% 50%, 83% 100%, 18% 100%, 0% 50%)'
 
 export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = (props) => {
     const {isConnectable, data} = props
@@ -92,14 +92,26 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = (props) => {
                 </Box>
                 <Box sx={{
                     position: 'absolute',
-                    bottom: 0,
+                    top: 0,
                     left: 'calc(50% - 5px)',
                 }}>
                     <LogicHandle
                         type="source"
-                        position={Position.Right}
+                        position={Position.Top}
                         isConnectable={isConnectable}
                         mode={EConnectionMode.NodeOutgoing}
+                    />
+                </Box>
+                <Box sx={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 'calc(50% - 5px)',
+                }}>
+                    <LogicHandle
+                        type="target"
+                        position={Position.Bottom}
+                        isConnectable={isConnectable}
+                        mode={EConnectionMode.NodeIncoming}
                     />
                 </Box>
             </Box>
