@@ -1,13 +1,13 @@
 import {GraphInvokableNode} from "./abstracts";
 import {IEventTriggerNodeData, INumberVariable, IUpdateGraphNodeState} from "../../../interface";
 import {RunManager} from "../RunManager";
-import {GraphMatchManager} from "./helper";
+import {GraphMatchManagerNode} from "./helper";
 import {GraphLogicManager} from "./helper/GraphLogicManager";
 import {GraphNodeManager} from "../NodeManager";
 
 export class GraphEventTriggerNode extends GraphInvokableNode<IEventTriggerNodeData>
     implements IUpdateGraphNodeState {
-    private readonly matchManager: GraphMatchManager = new GraphMatchManager(this.incomingEdges)
+    private readonly matchManager: GraphMatchManagerNode = new GraphMatchManagerNode(this.incomingEdges)
     private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
 
     constructor(value: IEventTriggerNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {

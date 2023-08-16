@@ -31,7 +31,7 @@ const chainConnection: Omit<IChainConnectionData, 'id' | 'targetId' | 'sourceId'
     type: EConnection.ChainConnection,
     label: 'chain label',
     style: initialNodeDiagramElement,
-    formula: 'true',
+    condition: 'true',
 }
 
 

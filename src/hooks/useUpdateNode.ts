@@ -2,8 +2,9 @@ import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../re
 import {
     EConnection,
     EElementType,
-    ENodeTrigger,
-    IDiagramConnectionData, IDiagramNodeBaseData,
+    ENodeTrigger, IDiagramConnectionBaseData,
+    IDiagramConnectionData,
+    IDiagramNodeBaseData,
     IDiagramNodeStyle,
     INodeData
 } from "../interface";
@@ -16,7 +17,7 @@ export const useUpdateNode = <IGenericNode extends IDiagramNodeBaseData = INodeD
     const {updateNodeData} = diagramEditorActions
     const {diagramNodes} = useDiagramEditorState()
     const selectedNode = diagramNodes.find(node => node.id === nodeId)
-    const updateNodeDataWrapper = <R extends  IGenericNode, P = R>(data: Partial<P>) => {
+    const updateNodeDataWrapper = <R extends IGenericNode, P = R>(data: Partial<P>) => {
         if (selectedNode) {
             dispatch(updateNodeData({
                 id: selectedNode.id,
@@ -78,7 +79,7 @@ export const useUpdateNode = <IGenericNode extends IDiagramNodeBaseData = INodeD
 }
 
 
-export const useUpdateEdgeData = ({edgeId}: {
+export const useUpdateEdgeData = <IGenericConnection extends IDiagramConnectionBaseData = IDiagramConnectionData>({edgeId}: {
     edgeId?: string
 }) => {
     const dispatch = useAppDispatch()
@@ -86,7 +87,7 @@ export const useUpdateEdgeData = ({edgeId}: {
     const {diagramEdges} = useDiagramEditorState()
     const selectedEdge = diagramEdges.find(edge => edge.id === edgeId)
 
-    const updateEdgeDataWrapper = (data: Partial<IDiagramConnectionData>) => {
+    const updateEdgeDataWrapper = <R extends IGenericConnection, P = R>(data: Partial<P>) => {
         if (selectedEdge && selectedEdge.data) {
             dispatch(updateEdgeData({
                 type: selectedEdge?.data.type,
@@ -96,12 +97,13 @@ export const useUpdateEdgeData = ({edgeId}: {
         }
     }
 
-    const updateEdgeStyle = (edgeStyle: Partial<IDiagramNodeStyle>) => {
+    const updateEdgeStyle = (edgeStyle: Partial<IGenericConnection['style']>) => {
         if (selectedEdge && selectedEdge.data) {
             updateEdgeDataWrapper({
                 ...selectedEdge.data,
+                type: selectedEdge.data.type,
                 style: {
-                    ...selectedEdge?.data.style,
+                    ...selectedEdge.data.style,
                     ...edgeStyle
                 }
             })

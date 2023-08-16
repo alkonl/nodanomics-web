@@ -1,6 +1,6 @@
 import {Graph} from "./Graph";
 import {GraphBaseNode, GraphDataNode, GraphEventListenerNode, GraphInvokableNode, GraphStartNode} from "./GraphNodes";
-import {EConnection, EConnectionMode, isUpdateGraphNodeState} from "../../interface";
+import {isUpdateGraphNodeState} from "../../interface";
 import {GraphNodeManager} from "./NodeManager";
 import {GraphChainEdge, GraphDataEdge} from "./GraphEdge";
 
@@ -57,7 +57,7 @@ export class RunManager {
     }
 
     private getStartedNodes() {
-        const startNodes = this.graph.nodes.filter(node =>{
+        const startNodes = this.graph.nodes.filter(node => {
             if (node instanceof GraphStartNode || node instanceof GraphEventListenerNode) {
                 return node
             }
@@ -125,7 +125,7 @@ export class RunManager {
     private getNodesChildren(node: GraphBaseNode): GraphBaseNode[] {
         const children = node.outgoingEdges.map(edge => {
             const target = edge.target
-            if (edge instanceof GraphChainEdge) {
+            if (edge instanceof GraphChainEdge && edge.isMeetCondition) {
                 return target
             }
             // const isHasEventIncomingConnection = target.incomingEdges.some(edge => edge.type === EConnection.ChainConnection)
