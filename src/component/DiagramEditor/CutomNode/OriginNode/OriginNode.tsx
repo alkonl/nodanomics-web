@@ -6,7 +6,7 @@ import {IOriginNodeData} from "../../../../interface";
 import {NodeStyle, NodeTextName} from "../styledComponent";
 import {EColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
 import {BaseNodeShapeContainer} from "../container";
-import {EventHandle} from "../../CustomHandle/EventHandle";
+import {ChainHandle} from "../../CustomHandle/ChainHandle";
 import {DataHandle} from "../../CustomHandle/DataHandle";
 
 const SIZE = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 4
@@ -31,13 +31,13 @@ export const OriginNode: React.FC<NodeProps<IOriginNodeData>> = (props) => {
                     justifyContent: 'space-between',
                     bottom: 40,
                 }}>
-                    <EventHandle
+                    <ChainHandle
                         type="target"
                         position={Position.Left}
                         isConnectable={isConnectable}
 
                     />
-                    <EventHandle
+                    <ChainHandle
                         type="source"
                         position={Position.Right}
                         isConnectable={isConnectable}

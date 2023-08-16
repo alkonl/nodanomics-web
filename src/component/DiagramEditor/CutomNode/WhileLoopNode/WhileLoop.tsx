@@ -6,7 +6,7 @@ import {EConnectionMode, IWhileLoopNodeData} from "../../../../interface";
 import {EColor} from "../../../../constant";
 import {Box} from "@mui/material";
 import {NodeStyle} from "../styledComponent";
-import {EventHandle} from "../../CustomHandle/EventHandle";
+import {ChainHandle} from "../../CustomHandle/ChainHandle";
 import {useExpandOrCollapse, useWidthAndHeight} from "../../../../hooks";
 import {MButton} from "../../../base";
 import {LogicHandle} from "../../CustomHandle";
@@ -122,7 +122,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                                 borderRadius: 4,
                                 width: 'fit-content',
                             }}>
-                                <EventHandle type="target" position={Position.Left}
+                                <ChainHandle type="target" position={Position.Left}
                                              mode={EConnectionMode.WhileLoopIncomingTrigger}/>
                                 <NodeStyle.Name>
                                     {isActiveText}
@@ -152,7 +152,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                                     {loopOutText}
                                 </NodeStyle.Name>
                             </Box>
-                            <EventHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
+                            <ChainHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
                         </Box>
                         <Box sx={{
                             backgroundColor: EColor.white,
@@ -206,7 +206,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                                             start Trigger
                                         </NodeStyle.Name>
                                     </Box>
-                                    <EventHandle type="source" position={Position.Right}
+                                    <ChainHandle type="source" position={Position.Right}
                                                  mode={EConnectionMode.LoopInnerToChildren}/>
                                 </Box>
                                 <Box sx={{

@@ -6,7 +6,7 @@ import {BaseNodeContainer} from "../container/BaseNodeContainer";
 import {Box} from "@mui/material";
 import {EColor, EFontColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
 import {useExpandOrCollapse} from "../../../../hooks";
-import {EventHandle} from "../../CustomHandle/EventHandle";
+import {ChainHandle} from "../../CustomHandle/ChainHandle";
 import {LogicHandle} from "../../CustomHandle";
 import {NodeStyle} from "../styledComponent";
 
@@ -73,7 +73,7 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                                 position={Position.Left}
                                 mode={EConnectionMode.NodeIncoming}
                             />
-                            <EventHandle
+                            <ChainHandle
                                 type="target"
                                 position={Position.Left}
                                 mode={EConnectionMode.NodeIncoming}
@@ -84,7 +84,7 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                             flexDirection: 'column',
                             gap: 0.5,
                         }}>
-                            <EventHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
+                            <ChainHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
                             <LogicHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
                         </Box>
                     </Box>
@@ -174,7 +174,7 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                                             start Trigger
                                         </NodeStyle.Name>
                                     </Box>
-                                    <EventHandle type="source" position={Position.Right}
+                                    <ChainHandle type="source" position={Position.Right}
                                                  mode={EConnectionMode.LoopInnerToChildren}/>
                                 </Box>
                                 <Box sx={{
