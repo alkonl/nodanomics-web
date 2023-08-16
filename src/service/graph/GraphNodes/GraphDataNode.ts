@@ -214,7 +214,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         }, 0)
     }
 
-    private takeCountResources(count: number): IResource[] | undefined {
+    takeCountResources(count: number): IResource[] | undefined {
         if (!this.minCapacity || this.currentResourcesCount - count >= this.minCapacity) {
             const deletedResourcesToProvide = this.resourcesToProvide.splice(0, count);
             this._data = {

@@ -51,7 +51,7 @@ export const SinkNode: React.FC<NodeProps<ISinkNodeData>> = (props) => {
                 }}>
                     <DataHandle
                         type="target"
-                        position={Position.Top}
+                        position={Position.Bottom}
                         isConnectable={isConnectable}
                     />
                 </Box>
