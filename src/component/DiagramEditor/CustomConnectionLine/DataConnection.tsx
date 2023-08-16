@@ -57,6 +57,8 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
                 const delay = index * 50
                 return (
                     <CircleResourcesAnimation
+                        sourcePosition={sourcePosition}
+                        targetPosition={targetPosition}
                         cx={sourceX}
                         cy={sourceY}
                         path={edgePath}

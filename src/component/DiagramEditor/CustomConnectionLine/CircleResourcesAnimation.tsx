@@ -1,6 +1,6 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useMemo} from "react";
+import {Position} from "reactflow";
 import {EColor} from "../../../constant";
-
 
 
 export const CircleResourcesAnimation: React.FC<{
@@ -13,7 +13,9 @@ export const CircleResourcesAnimation: React.FC<{
     cx: number
     cy: number
     path: string
-}> = ({parentId, id, begin, duration, play = false, infinite, cx, cy, path}) => {
+    sourcePosition: Position
+    targetPosition: Position
+}> = ({id, begin, duration, play = false, infinite, sourcePosition, targetPosition, path, cy, cx}) => {
     const animationRef = React.useRef<SVGAnimationElement>(null)
 
     useEffect(() => {
@@ -38,21 +40,39 @@ export const CircleResourcesAnimation: React.FC<{
     }, [animationRef, play, infinite]);
 
 
+    const getLastPoint = (path: string) => {
+        const pathArray = path.split(' ')
+        const lastPoint = pathArray[pathArray.length - 1]
+        const [x, y] = lastPoint.split(',')
+        return {x: parseFloat(x), y: parseFloat(y)}
+    }
+
+    const formattedPath = useMemo(() => {
+        let _formattedPath = path
+        const target = getLastPoint(path)
+        if (targetPosition === Position.Left) {
+            const updatedEnd = {x: target.x + 20, y: target.y}
+            _formattedPath = `${_formattedPath} L ${updatedEnd.x},${updatedEnd.y}`
+
+        }
+        return _formattedPath
+    }, [sourcePosition, targetPosition, path])
+
     return (
         <>
-            {play && <circle id={id} r="8" fill={EColor.black}
+            <circle id={id} r="8" fill={EColor.black}
             >
                 <animateMotion
                     repeatCount={0}
                     ref={animationRef}
                     dur={`${duration}.ms`}
                     begin={play ? `${begin}.ms` : 'indefinite'}
-                    fill={'freeze'}
-                    path={path}
+                    fill="freeze"
+                    path={formattedPath}
                 >
+                    <mpath href={formattedPath}/>
                 </animateMotion>
             </circle>
-            }
         </>
     )
 }
