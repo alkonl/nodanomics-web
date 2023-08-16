@@ -152,6 +152,19 @@ export const createBaseNode = ({type, position}: {
                 }
             }
         }
+        case EDiagramNode.Sink: {
+            return {
+                ...baseParams,
+                data: {
+                    ...baseData,
+                    type,
+                    trigger: {
+                        mode: ENodeTrigger.automatic,
+                    },
+                    actionMode: ENodeAction.pushAny,
+                }
+            }
+        }
         default :
             throw new Error(`Unknown node type: ${type}`);
     }

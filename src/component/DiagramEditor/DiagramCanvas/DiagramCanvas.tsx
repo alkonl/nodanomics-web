@@ -20,7 +20,7 @@ import {
     EventTriggerNode,
     FormulaNode,
     MicroLoopNode,
-    OriginNode,
+    OriginNode, SinkNode,
     StartNode,
     StaticVariableNode,
     WhileLoopNode
@@ -46,6 +46,7 @@ const nodeTypes = {
     [EDiagramNode.WhileLoop]: WhileLoopNode,
     [EDiagramNode.DatasetDatafield]: DatasetNode,
     [EDiagramNode.Start]: StartNode,
+    [EDiagramNode.Sink]: SinkNode,
 };
 
 const edgeTypes = {

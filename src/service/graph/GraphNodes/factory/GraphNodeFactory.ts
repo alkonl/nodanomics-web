@@ -12,6 +12,7 @@ import {GraphWhileLoopNode} from "../GraphWhileLoopNode";
 import {GraphMicroLoopNode} from "../GraphMicroLoopNode";
 import {GraphDatasetDatafieldNode} from "../GraphDatasetDatafieldNode";
 import {GraphStartNode} from "../GraphStartNode";
+import {GraphSinkNode} from "../GraphSinkNode";
 
 
 export type IGraphCreateSimpleNode = {
@@ -49,6 +50,8 @@ export class GraphNodeFactory {
                 return new GraphDatasetDatafieldNode(value.node, runManager, graph.nodesManager);
             case EDiagramNode.Start:
                 return new GraphStartNode(value.node, runManager, graph.nodesManager);
+            case EDiagramNode.Sink:
+                return new GraphSinkNode(value.node, runManager, graph.nodesManager);
             default:
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
