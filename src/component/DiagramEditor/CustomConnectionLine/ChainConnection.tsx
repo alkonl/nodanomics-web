@@ -26,7 +26,12 @@ export const ChainConnection: React.FC<EdgeProps<ILogicConnectionData>> = (
 
     return (
         <>
-            <BaseEdge path={edgePath} markerEnd={markerEnd} style={style}/>
+            <BaseEdge
+                path={edgePath}
+                markerEnd={markerEnd}
+                style={style}
+
+            />
         </>
     );
 };

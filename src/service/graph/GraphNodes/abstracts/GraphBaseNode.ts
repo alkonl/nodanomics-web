@@ -70,7 +70,8 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
     }
 
     private checkIfEdgeConnectedFromThisNodeToTargetNode(edge: GraphBaseEdge, target: GraphBaseNode): boolean {
-        return this._outgoingEdges.some(e => e.target === edge.target) && target._incomingEdges.some(e => e.source === edge.source);
+        return this._outgoingEdges.some(e => e.target === edge.target && edge.type === e.type)
+            && target._incomingEdges.some(e => e.source === edge.source && edge.type === e.type);
     }
 
 
@@ -97,10 +98,13 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
     updateConnectedNodes() {
         const outgoingNodeNames = this._outgoingEdges.map(e => e.target.data.name);
         const incomingNodeNames = this._incomingEdges.map(e => e.source.data.name);
-
+        // remove duplicates
+        const currentConnectedNodes = [...outgoingNodeNames, ...incomingNodeNames].filter((value, index, self) => {
+            return self.indexOf(value) === index;
+        });
         this._data = {
             ...this._data,
-            connectedNodes: [...outgoingNodeNames, ...incomingNodeNames]
+            connectedNodes: currentConnectedNodes
         }
     }
 }

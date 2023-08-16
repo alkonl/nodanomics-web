@@ -34,6 +34,8 @@ export class RunManager {
         this.incrementStep()
         this.resetIsTransferredResources()
         const nodes = this.sortedNodes()
+        console.log('graph: ', this.graph)
+        console.log('nodes.toInvoke: ', nodes)
         nodes.forEach(node => {
             if (node instanceof GraphInvokableNode) {
                 node.invokeStep()

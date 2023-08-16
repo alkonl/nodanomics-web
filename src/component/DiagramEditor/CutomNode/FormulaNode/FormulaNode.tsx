@@ -87,6 +87,7 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = (props) => {
                         type="source"
                         position={Position.Right}
                         isConnectable={isConnectable}
+                        mode={EConnectionMode.NodeOutgoing}
                     />
                 </Box>
                 <Box sx={{

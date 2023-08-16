@@ -6,7 +6,8 @@ import 'reactflow/dist/style.css';
 import {
     useAddStartNode,
     useEdgeUpdateManager,
-    useOnDrop, useOnNodeDrag,
+    useOnDrop, useOnEdgeClick,
+    useOnNodeDrag,
     useOnNodeDragStart,
     useOnNodeDragStop,
     useUploadDiagramOnServer
@@ -14,13 +15,15 @@ import {
 import styles from './DiagramCanvas.module.scss'
 import {EConnection, EDiagramNode} from "../../../interface";
 import {
+    DataNode,
     EventListenerNode,
     EventTriggerNode,
     FormulaNode,
     MicroLoopNode,
     OriginNode,
+    StartNode,
     StaticVariableNode,
-    DataNode, WhileLoopNode, StartNode
+    WhileLoopNode
 } from "../CutomNode";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../redux";
 import {Box} from "@mui/material";
@@ -92,6 +95,7 @@ export const DiagramCanvas = () => {
     // add Start node
     useAddStartNode()
 
+    const onEdgeClick = useOnEdgeClick()
 
     return (
         <Box
@@ -122,6 +126,7 @@ export const DiagramCanvas = () => {
                     onNodeDragStop={onNodeDragStop}
                     edgeTypes={edgeTypes}
                     connectionMode={ConnectionMode.Loose}
+                    onEdgeClick={onEdgeClick}
                 >
                     <Controls/>
                     <Background color="blue" gap={GAP_BETWEEN_EDITOR_CANVAS_DOTS}/>
