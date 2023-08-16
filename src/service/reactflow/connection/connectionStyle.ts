@@ -20,7 +20,7 @@ const logicConnection = {
     },
 }
 
-const eventConnection = {
+const chainConnection = {
     markerEnd: {
         type: MarkerType.ArrowClosed,
         width: 20,
@@ -34,5 +34,5 @@ export const connectionStyle: {
 } = {
     [EConnection.DataConnection]: dataConnection,
     [EConnection.LogicConnection]: logicConnection,
-    [EConnection.EventConnection]: eventConnection
+    [EConnection.ChainConnection]: chainConnection
 }

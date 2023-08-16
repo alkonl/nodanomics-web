@@ -14,6 +14,6 @@ export const nodeSetupToolbarNames: {
     [EDiagramNode.StaticVariable]: 'Static Variable',
     [EDiagramNode.WhileLoop]: 'While Loop',
     [EConnection.DataConnection]: 'Data Connection',
-    [EConnection.EventConnection]: 'Event Connection',
+    [EConnection.ChainConnection]: 'Event Connection',
     [EConnection.LogicConnection]: 'Logic Connection',
 }

@@ -111,17 +111,17 @@ export class RunManager {
     private getNodesChildren(node: GraphBaseNode): GraphBaseNode[] {
         const children = node.outgoingEdges.map(edge => {
             const target = edge.target
-            const isHasEventIncomingConnection = target.incomingEdges.some(edge => edge.type === EConnection.EventConnection)
-            const isHasOtherIncomingConnectionThenEvent = target.incomingEdges.some(edge => edge.type !== EConnection.EventConnection)
+            const isHasEventIncomingConnection = target.incomingEdges.some(edge => edge.type === EConnection.ChainConnection)
+            const isHasOtherIncomingConnectionThenEvent = target.incomingEdges.some(edge => edge.type !== EConnection.ChainConnection)
             const isHasIncomingEdges = target.incomingEdges.length > 0
             if (!isHasIncomingEdges) {
                 return edge.target
             }
-            if (isHasEventIncomingConnection && isHasOtherIncomingConnectionThenEvent && edge.type === EConnection.EventConnection) {
+            if (isHasEventIncomingConnection && isHasOtherIncomingConnectionThenEvent && edge.type === EConnection.ChainConnection) {
                 return edge.target
             }
 
-            if (isHasEventIncomingConnection && edge.type === EConnection.EventConnection) {
+            if (isHasEventIncomingConnection && edge.type === EConnection.ChainConnection) {
                 return edge.target
             }
 

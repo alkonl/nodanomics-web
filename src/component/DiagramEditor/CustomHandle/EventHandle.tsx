@@ -11,7 +11,7 @@ export const EventHandle: React.FC<Pick<HandleProps, 'isConnectable' | 'type' | 
 }> = (props) => {
 
     return (<BaseHandle
-            connectionMode={EConnection.EventConnection}
+            connectionMode={EConnection.ChainConnection}
             color={EColor.orange}
             {...props}
         />

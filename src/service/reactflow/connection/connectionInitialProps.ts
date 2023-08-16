@@ -2,7 +2,7 @@ import {
     EConnection,
     EElementType,
     IDataConnectionData,
-    IDiagramConnectionData, IEventConnectionData,
+    IDiagramConnectionData, IChainConnectionData,
     ILogicConnectionData
 } from "../../../interface";
 import {initialNodeDiagramElement} from "../../../constant";
@@ -12,7 +12,7 @@ const dataConnection: Omit<IDataConnectionData, 'id' | 'targetId' | 'sourceId'> 
     name: 'data connection',
     type: EConnection.DataConnection,
     formula: '1',
-    label: 'some label',
+    label: 'data label',
     style: initialNodeDiagramElement
 }
 
@@ -20,16 +20,16 @@ const logicConnection: Omit<ILogicConnectionData, 'id' | 'targetId' | 'sourceId'
     elementType: EElementType.Connection,
     name: 'logic connection',
     type: EConnection.LogicConnection,
-    label: 'some label',
+    label: 'logic label',
     variableName: 'a',
     style: initialNodeDiagramElement
 }
 
-const eventConnection: Omit<IEventConnectionData, 'id' | 'targetId' | 'sourceId'> = {
+const chainConnection: Omit<IChainConnectionData, 'id' | 'targetId' | 'sourceId'> = {
     elementType: EElementType.Connection,
-    name: 'event connection',
-    type: EConnection.EventConnection,
-    label: 'some label',
+    name: 'chain connection',
+    type: EConnection.ChainConnection,
+    label: 'chain label',
     style: initialNodeDiagramElement
 }
 
@@ -39,9 +39,9 @@ export const connectionInitialProps: {
 } = {
     [EConnection.DataConnection]: dataConnection,
     [EConnection.LogicConnection]: logicConnection,
-    [EConnection.EventConnection]: eventConnection
+    [EConnection.ChainConnection]: chainConnection
 } satisfies {
     [EConnection.DataConnection]: Omit<IDataConnectionData, 'id' | 'targetId' | 'sourceId'>,
     [EConnection.LogicConnection]: Omit<ILogicConnectionData, 'id' | 'targetId' | 'sourceId'>
-    [EConnection.EventConnection]: Omit<IEventConnectionData, 'id' | 'targetId' | 'sourceId'>
+    [EConnection.ChainConnection]: Omit<IChainConnectionData, 'id' | 'targetId' | 'sourceId'>
 }

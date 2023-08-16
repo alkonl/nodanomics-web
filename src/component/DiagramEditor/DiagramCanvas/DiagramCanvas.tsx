@@ -26,7 +26,7 @@ import {Box} from "@mui/material";
 import {DataConnection} from "../CustomConnectionLine/DataConnection";
 import {LogicConnection} from "../CustomConnectionLine/LogicConnection";
 import {useOnConnect} from "../../../hooks/useOnConnect";
-import {EventConnection} from "../CustomConnectionLine/EventConnection";
+import {ChainConnection} from "../CustomConnectionLine/ChainConnection";
 import {DatasetNode} from "../CutomNode/DatasetNode";
 import {GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../constant";
 
@@ -46,7 +46,7 @@ const nodeTypes = {
 const edgeTypes = {
     [EConnection.DataConnection]: DataConnection,
     [EConnection.LogicConnection]: LogicConnection,
-    [EConnection.EventConnection]: EventConnection,
+    [EConnection.ChainConnection]: ChainConnection,
 }
 
 

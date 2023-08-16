@@ -3,7 +3,7 @@ import React from 'react';
 import {BaseEdge, EdgeProps, getBezierPath} from 'reactflow';
 import {ILogicConnectionData} from "../../../interface";
 
-export const EventConnection: React.FC<EdgeProps<ILogicConnectionData>> = (
+export const ChainConnection: React.FC<EdgeProps<ILogicConnectionData>> = (
     {
         sourceX,
         sourceY,

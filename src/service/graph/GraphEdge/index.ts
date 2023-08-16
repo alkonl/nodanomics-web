@@ -1,5 +1,5 @@
 export * from './GraphDataEdge'
-export * from './GraphEventEdge'
+export * from './GraphChainEdge'
 export * from './GraphLogicEdge'
 export * from './abstracts'
 export * from './factory'

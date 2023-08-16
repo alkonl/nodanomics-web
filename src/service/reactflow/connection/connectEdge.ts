@@ -17,8 +17,8 @@ export const defineConnectionTypeBySourceAndTarget = ({targetHandle, sourceHandl
     const sourceType = sourceHandle.split('.')[0];
     if (targetType === EConnection.LogicConnection) {
         return EConnection.LogicConnection
-    } else if (targetType === EConnection.EventConnection || sourceType === EConnection.EventConnection) {
-        return EConnection.EventConnection
+    } else if (targetType === EConnection.ChainConnection || sourceType === EConnection.ChainConnection) {
+        return EConnection.ChainConnection
     }
     return EConnection.DataConnection
 }
