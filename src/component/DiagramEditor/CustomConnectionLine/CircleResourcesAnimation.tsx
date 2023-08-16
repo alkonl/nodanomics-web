@@ -1,6 +1,7 @@
 import React, {useEffect, useMemo} from "react";
 import {Position} from "reactflow";
 import {EColor} from "../../../constant";
+import {useDidMountEffect} from "../../../hooks";
 
 
 export const CircleResourcesAnimation: React.FC<{
@@ -16,6 +17,7 @@ export const CircleResourcesAnimation: React.FC<{
     sourcePosition: Position
     targetPosition: Position
 }> = ({id, begin, duration, play = false, infinite, sourcePosition, targetPosition, path, cy, cx}) => {
+    const [isMount, setIsMount] = React.useState<boolean>(false)
     const animationRef = React.useRef<SVGAnimationElement>(null)
 
     useEffect(() => {
@@ -46,21 +48,32 @@ export const CircleResourcesAnimation: React.FC<{
         const [x, y] = lastPoint.split(',')
         return {x: parseFloat(x), y: parseFloat(y)}
     }
+    const endPosition: {
+        [key in Position]: { x: number, y: number }
+    } = {
+        [Position.Left]: {x: 40, y: 0},
+        [Position.Right]: {x: -40, y: 0},
+        [Position.Top]: {x: 0, y: 40},
+        [Position.Bottom]: {x: 0, y: -40},
+    }
 
     const formattedPath = useMemo(() => {
         let _formattedPath = path
         const target = getLastPoint(path)
-        if (targetPosition === Position.Left) {
-            const updatedEnd = {x: target.x + 20, y: target.y}
-            _formattedPath = `${_formattedPath} L ${updatedEnd.x},${updatedEnd.y}`
+        const updatedEnd = {x: target.x + endPosition[targetPosition].x, y: target.y + endPosition[targetPosition].y}
+        _formattedPath = `${_formattedPath} L ${updatedEnd.x},${updatedEnd.y}`
 
-        }
+
         return _formattedPath
     }, [sourcePosition, targetPosition, path])
 
+    useDidMountEffect(() => {
+        animationRef.current?.beginElement()
+    }, [])
+
     return (
         <>
-            <circle id={id} r="8" fill={EColor.black}
+            {(play || infinite) && <circle id={id} r="8" fill={EColor.black}
             >
                 <animateMotion
                     repeatCount={0}
@@ -72,7 +85,7 @@ export const CircleResourcesAnimation: React.FC<{
                 >
                     <mpath href={formattedPath}/>
                 </animateMotion>
-            </circle>
+            </circle>}
         </>
     )
 }
