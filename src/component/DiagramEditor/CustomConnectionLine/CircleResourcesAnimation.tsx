@@ -1,6 +1,8 @@
 import React, {useEffect} from "react";
 import {EColor} from "../../../constant";
 
+
+
 export const CircleResourcesAnimation: React.FC<{
     parentId: string
     id: string
@@ -8,7 +10,10 @@ export const CircleResourcesAnimation: React.FC<{
     duration: number
     infinite?: boolean
     play?: boolean
-}> = ({parentId, id, begin, duration, play = false, infinite}) => {
+    cx: number
+    cy: number
+    path: string
+}> = ({parentId, id, begin, duration, play = false, infinite, cx, cy, path}) => {
     const animationRef = React.useRef<SVGAnimationElement>(null)
 
     useEffect(() => {
@@ -32,19 +37,22 @@ export const CircleResourcesAnimation: React.FC<{
         }
     }, [animationRef, play, infinite]);
 
+
     return (
         <>
-            <circle id={id} r="8" fill={EColor.black}>
+            {play && <circle id={id} r="8" fill={EColor.black}
+            >
                 <animateMotion
                     repeatCount={0}
                     ref={animationRef}
                     dur={`${duration}.ms`}
                     begin={play ? `${begin}.ms` : 'indefinite'}
+                    fill={'freeze'}
+                    path={path}
                 >
-                    <mpath xlinkHref={`#${parentId}`}></mpath>
                 </animateMotion>
             </circle>
-
+            }
         </>
     )
 }
