@@ -1,5 +1,5 @@
 import React from 'react';
-import {DiagramElementPreviewToolbar, EConnection, EDiagramNode, EElementType} from "../../../../interface";
+import {DiagramElementPreviewToolbar, EDiagramNode, EElementType} from "../../../../interface";
 import {Box} from "@mui/material";
 import {EColor} from "../../../../constant";
 import {ElementToolbarSection} from "./ElementToolbarSection";
@@ -11,7 +11,7 @@ import {ExecutionGraphPopUp} from "../../ExecutionGraph";
 
 export enum EElementShow {
     Node = 'Node',
-    Connection = 'Connection',
+    // Connection = 'Connection',
     Event = 'Event',
     Logic = 'Logic',
 }
@@ -64,13 +64,13 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
         tooltip: 'Listener',
         toolbarName: 'L',
     }],
-    [EElementType.Connection]: [
-        {
-            elementType: EElementType.Connection,
-            type: EConnection.LogicConnection,
-            tooltip: '2',
-            toolbarName: '2',
-        }],
+    // [EElementType.Connection]: [
+    //     {
+    //         elementType: EElementType.Connection,
+    //         type: EConnection.LogicConnection,
+    //         tooltip: '2',
+    //         toolbarName: '2',
+    //     }],
 
 }
 
@@ -97,15 +97,7 @@ export const ElementToolbar = () => {
                 py: 2,
                 backgroundColor: EColor.white,
             }}>
-                {formated.map(([sectionName, elements]) => {
-                    return <ElementToolbarSection
-                        key={sectionName}
-                        section={{
-                            elements,
-                            name: sectionName
-                        }}
-                    />
-                })}
+
                 <MButton.Submit
                     onClick={runStep}
                 >
@@ -123,6 +115,15 @@ export const ElementToolbar = () => {
                 <MButton.Submit onClick={executionGraphPopUp.open}>
                     Execution Graph
                 </MButton.Submit>
+                {formated.map(([sectionName, elements]) => {
+                    return <ElementToolbarSection
+                        key={sectionName}
+                        section={{
+                            elements,
+                            name: sectionName
+                        }}
+                    />
+                })}
             </Box>
         </>
     );

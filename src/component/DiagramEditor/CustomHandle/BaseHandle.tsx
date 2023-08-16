@@ -27,7 +27,7 @@ export const BaseHandle: React.FC<Pick<HandleProps, 'isConnectable' | 'type' | '
           color
       }) => {
     const id = `${connectionMode}.${mode}`;
-    // const translateLeftCoefficient = position === 'left' ? 25 : -25
+
     return (
         <Box sx={{
             position: 'relative',
