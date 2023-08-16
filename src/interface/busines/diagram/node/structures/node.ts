@@ -9,6 +9,7 @@ import {IStaticVariableNodeData} from "../staticVariableNode";
 import {IMicroLoopNodeData} from "../microLoop";
 import {IWhileLoopNodeData} from "../whileLoop";
 import {IDatasetDatafield} from "../datasetDatafield";
+import {IStartNodeData} from "../startNode";
 
 
 export type INodeData = IStaticVariableNodeData
@@ -20,6 +21,7 @@ export type INodeData = IStaticVariableNodeData
     | IMicroLoopNodeData
     | IWhileLoopNodeData
     | IDatasetDatafield
+    | IStartNodeData
 
 export type IReactFlowNode = Node<INodeData>
 

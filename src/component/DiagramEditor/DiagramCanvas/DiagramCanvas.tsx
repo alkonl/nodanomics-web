@@ -4,6 +4,7 @@ import ReactFlow, {Background, ConnectionMode, Controls, EdgeChange, NodeChange,
 import 'reactflow/dist/style.css';
 
 import {
+    useAddStartNode,
     useEdgeUpdateManager,
     useOnDrop, useOnNodeDrag,
     useOnNodeDragStart,
@@ -19,7 +20,7 @@ import {
     MicroLoopNode,
     OriginNode,
     StaticVariableNode,
-    DataNode, WhileLoopNode
+    DataNode, WhileLoopNode, StartNode
 } from "../CutomNode";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../redux";
 import {Box} from "@mui/material";
@@ -41,6 +42,7 @@ const nodeTypes = {
     [EDiagramNode.MicroLoop]: MicroLoopNode,
     [EDiagramNode.WhileLoop]: WhileLoopNode,
     [EDiagramNode.DatasetDatafield]: DatasetNode,
+    [EDiagramNode.Start]: StartNode,
 };
 
 const edgeTypes = {
@@ -86,6 +88,9 @@ export const DiagramCanvas = () => {
         onEdgeUpdateHandler,
         onEdgeUpdateEndHandler
     } = useEdgeUpdateManager()
+
+    // add Start node
+    useAddStartNode()
 
 
     return (

@@ -2,7 +2,7 @@ import {EDiagramNode} from "./structures";
 import {EConnection} from "../connection";
 
 export const nodeSetupToolbarNames: {
-    [key in (EDiagramNode | EConnection)]: string
+    [key in (EDiagramNode | EConnection)]?: string
 } = {
     [EDiagramNode.Data]: 'Data',
     [EDiagramNode.DatasetDatafield]: 'Dataset Datafield',

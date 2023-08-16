@@ -36,14 +36,6 @@ export const useOnDrop = ({flowWrapper, flowInstance}: {
                 if (newNode) {
                     dispatch(addNode(newNode))
                     setParent(newNode, flowInstance.getNodes())
-
-                    // if (newNode.type === ECreatedNodeType.MicroLoop) {
-                    //     dispatch(addCompoundNodes(newNode))
-                    // } else if (newNode) {
-                    //     dispatch(addNode(newNode.node))
-                    //     setParent(newNode.node, flowInstance.getNodes())
-                    // }
-
                 }
             }
         },
