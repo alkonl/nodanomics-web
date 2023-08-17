@@ -1,7 +1,8 @@
 import {GraphBaseEdge} from "./abstracts";
 import {IDataConnectionData} from "../../../interface";
-import {GraphBaseNode, GraphMatchManagerConnections} from "../GraphNodes";
+import {GraphBaseNode} from "../GraphNodes";
 import {GraphNodeManager} from "../NodeManager";
+import {GraphMatchManagerConnections} from "../GraphMatchManager";
 
 
 export class GraphDataEdge extends GraphBaseEdge<IDataConnectionData> {
@@ -26,6 +27,7 @@ export class GraphDataEdge extends GraphBaseEdge<IDataConnectionData> {
     static baseEdgeIsData(edge: GraphBaseEdge): edge is GraphDataEdge {
         return edge instanceof GraphDataEdge;
     }
+
     private calcFormula() {
         if (this.data.formula) {
             const res = this.matchManager.calculateFormula({formula: this.data.formula})

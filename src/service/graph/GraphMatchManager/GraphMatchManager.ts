@@ -1,8 +1,9 @@
 import * as Match from "mathjs";
-import {INumberVariable} from "../../../../../interface";
-import {GraphNodeManager} from "../../../NodeManager";
-import {GraphDatasetDatafieldNode} from "../../GraphDatasetDatafieldNode";
-import {GraphTagManager} from "../GraphTagManager";
+import {INumberVariable} from "../../../interface";
+import {GraphNodeManager} from "../NodeManager";
+import {GraphDatasetDatafieldNode} from "../GraphNodes/GraphDatasetDatafieldNode";
+import {GraphTagManager} from "../GraphNodes";
+
 
 export abstract class GraphMatchManager {
 

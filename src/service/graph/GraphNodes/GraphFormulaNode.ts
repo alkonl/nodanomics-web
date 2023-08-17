@@ -7,8 +7,9 @@ import {
 } from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphInvokableNode} from "./abstracts";
-import {GraphMatchManagerNode, GraphLogicManager} from "./helper";
+import { GraphLogicManager} from "./helper";
 import {GraphNodeManager} from "../NodeManager";
+import {GraphMatchManagerNode} from "../GraphMatchManager";
 
 export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue {

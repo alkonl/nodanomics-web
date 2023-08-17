@@ -1,9 +1,9 @@
 import {GraphInvokableNode} from "./abstracts";
 import {IEventTriggerNodeData, INumberVariable, IUpdateGraphNodeState} from "../../../interface";
 import {RunManager} from "../RunManager";
-import {GraphMatchManagerNode} from "./helper";
-import {GraphLogicManager} from "./helper/GraphLogicManager";
+import {GraphLogicManager} from "./helper";
 import {GraphNodeManager} from "../NodeManager";
+import {GraphMatchManagerNode} from "../GraphMatchManager";
 
 export class GraphEventTriggerNode extends GraphInvokableNode<IEventTriggerNodeData>
     implements IUpdateGraphNodeState {

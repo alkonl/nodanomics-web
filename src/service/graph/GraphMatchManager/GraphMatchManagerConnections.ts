@@ -1,7 +1,7 @@
 import {GraphMatchManager} from "./GraphMatchManager";
-import {GraphBaseEdge} from "../../../GraphEdge";
-import {INumberVariable, isIGetNodeExternalValue} from "../../../../../interface";
-import {GraphNodeManager} from "../../../NodeManager";
+import {GraphBaseEdge} from "../GraphEdge";
+import {INumberVariable, isIGetNodeExternalValue} from "../../../interface";
+import {GraphNodeManager} from "../NodeManager";
 
 export class GraphMatchManagerConnections extends GraphMatchManager {
 
