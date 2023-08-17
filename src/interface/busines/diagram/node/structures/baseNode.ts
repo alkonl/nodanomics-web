@@ -12,6 +12,7 @@ export enum EDiagramNode {
     WhileLoop = 'WhileLoop',
     DatasetDatafield = 'DatasetDatafield',
     Start = 'Start',
+    Sink = 'Sink',
 }
 
 

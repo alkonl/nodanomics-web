@@ -35,6 +35,11 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
             type: EDiagramNode.Origin,
             tooltip: 'Origin',
             toolbarName: 'O',
+        },{
+            elementType: EElementType.Node,
+            type: EDiagramNode.Sink,
+            tooltip: 'Sink',
+            toolbarName: 'S',
         }, {
             elementType: EElementType.Node,
             type: EDiagramNode.Formula,

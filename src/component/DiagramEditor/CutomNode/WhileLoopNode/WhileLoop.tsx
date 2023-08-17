@@ -1,5 +1,5 @@
 import React from 'react';
-import {BaseNodeContainer} from "../container/BaseNodeContainer";
+import {BaseNodeContainer} from "../container";
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";
 import {EConnectionMode, IWhileLoopNodeData} from "../../../../interface";
@@ -23,7 +23,6 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
 
     const isCollapsed = data.isCollapsed
     const changeExpandOrCollapse = () => {
-        console.log('changeExpandOrCollapse.data', data)
         expandOrCollapse({parentId: data.id})
     }
 

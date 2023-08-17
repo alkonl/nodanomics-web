@@ -10,7 +10,7 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                     resources: node.data.initialResources || [],
                     maxResources: undefined,
                     minResources: undefined,
-                    resourcesCountHistory: undefined,
+                    history: [],
 
                 }
             }
@@ -58,6 +58,15 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                     isLoopWasActive: undefined,
                     isLoopActive: undefined,
                     incomingVariables: [],
+                }
+            }
+        }
+        case EDiagramNode.Sink: {
+            return {
+                ...node,
+                data: {
+                    ...node.data,
+                    history: [],
                 }
             }
         }

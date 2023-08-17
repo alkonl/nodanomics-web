@@ -75,6 +75,7 @@ export const createBaseNode = ({type, position}: {
                     trigger: {
                         mode: ENodeTrigger.passive,
                     },
+                    history: [],
                 }
             }
         }
@@ -149,6 +150,20 @@ export const createBaseNode = ({type, position}: {
                 data: {
                     ...baseData,
                     type,
+                }
+            }
+        }
+        case EDiagramNode.Sink: {
+            return {
+                ...baseParams,
+                data: {
+                    ...baseData,
+                    type,
+                    trigger: {
+                        mode: ENodeTrigger.automatic,
+                    },
+                    actionMode: ENodeAction.pullAny,
+                    history: [],
                 }
             }
         }
