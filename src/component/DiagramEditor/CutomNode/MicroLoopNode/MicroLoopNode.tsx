@@ -25,7 +25,6 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
     }
 
     const onDoubleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
-        console.log('onDoubleClick', event)
         if (event.detail === 2) {
             changeExpandOrCollapse()
         }

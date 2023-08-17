@@ -10,7 +10,7 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                     resources: node.data.initialResources || [],
                     maxResources: undefined,
                     minResources: undefined,
-                    history: undefined,
+                    history: [],
 
                 }
             }
@@ -66,7 +66,7 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                 ...node,
                 data: {
                     ...node.data,
-                    history: undefined,
+                    history: [],
                 }
             }
         }

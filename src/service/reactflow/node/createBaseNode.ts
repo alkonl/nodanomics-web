@@ -75,6 +75,7 @@ export const createBaseNode = ({type, position}: {
                     trigger: {
                         mode: ENodeTrigger.passive,
                     },
+                    history: [],
                 }
             }
         }
@@ -161,7 +162,8 @@ export const createBaseNode = ({type, position}: {
                     trigger: {
                         mode: ENodeTrigger.automatic,
                     },
-                    actionMode: ENodeAction.pushAny,
+                    actionMode: ENodeAction.pullAny,
+                    history: [],
                 }
             }
         }

@@ -1,7 +1,7 @@
 import {IDiagramNodeBaseData} from "../structures";
 
 export interface INodeHistory {
-    history?: number[]
+    history: number[]
 }
 
 export const isINodeHistory = (obj: IDiagramNodeBaseData): obj is (IDiagramNodeBaseData & INodeHistory) => {

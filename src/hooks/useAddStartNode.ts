@@ -11,7 +11,6 @@ export const useAddStartNode = () => {
 
     useDidMountEffect(() => {
         const isEditorHasStartNode = diagramNodes.some(node => node.type === EDiagramNode.Start)
-        console.log('useAddStartNode', diagramNodes.map(node => node.type), currentDiagramId, isEditorHasStartNode)
 
         if (!isEditorHasStartNode) {
             const startNode = createBaseNode({

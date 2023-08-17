@@ -60,7 +60,6 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
                     type: 'number',
                     value: result,
                 })
-                console.log('result', result)
             } else if (result !== undefined) {
                 console.error(`Unknown result type ${JSON.stringify(this.data)} result: ${JSON.stringify(result, null, 2)}`)
             }

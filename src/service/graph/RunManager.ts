@@ -43,8 +43,7 @@ export class RunManager {
         this.incrementStep()
         this.resetIsTransferredResources()
         const nodes = this.sortedNodes()
-        console.log('graph: ', this.graph)
-        console.log('nodes.toInvoke: ', nodes)
+
         nodes.forEach(node => {
             if (node instanceof GraphInvokableNode) {
                 node.invokeStep()
@@ -91,7 +90,6 @@ export class RunManager {
 
     private sortedNodes(): GraphBaseNode[] {
         const startedNodes = this.getStartedNodes()
-        console.log('startedNodes: ', startedNodes)
         const childrenNodes = startedNodes.map(source => {
             return this.getNodesChildrenRecursive(source)
         })

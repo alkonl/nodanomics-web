@@ -22,7 +22,6 @@ export const useChangeNodeDataStep = ({
     }
 
     const increaseNodeDataStep = () => {
-        console.log('increaseNodeDataStep')
         const initialResources = nodeDataToUpdate.initialResources || []
         const newResources: IResource[] = generateResourceFromSource(step)
         const resourcesToUpdate = [...initialResources, ...newResources]
