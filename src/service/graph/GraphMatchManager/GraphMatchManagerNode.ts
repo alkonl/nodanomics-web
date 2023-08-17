@@ -1,7 +1,7 @@
-import {GraphBaseEdge} from "../../../GraphEdge";
-import {GraphLogicManager} from "../GraphLogicManager";
+import {GraphBaseEdge} from "../GraphEdge";
+import {GraphLogicManager} from "../GraphNodes/helper/GraphLogicManager";
 import {GraphMatchManager} from "./GraphMatchManager";
-import {GraphNodeManager} from "../../../NodeManager";
+import {GraphNodeManager} from "../NodeManager";
 
 // Match manager for Node
 export class GraphMatchManagerNode extends GraphMatchManager {

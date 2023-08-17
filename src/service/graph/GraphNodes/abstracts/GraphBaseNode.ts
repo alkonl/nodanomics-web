@@ -60,6 +60,10 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
         return this._incomingEdges;
     }
 
+    get tag() {
+        return this.data.tag
+    }
+
     addEdge(target: GraphBaseNode, edge: GraphBaseEdge) {
         if (!this.checkIfEdgeConnectedFromThisNodeToTargetNode(edge, target)) {
             this._outgoingEdges.push(edge);
