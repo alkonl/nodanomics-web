@@ -1,13 +1,14 @@
 import {GraphBaseEdge} from "../../../GraphEdge";
 import {GraphLogicManager} from "../GraphLogicManager";
 import {GraphMatchManager} from "./GraphMatchManager";
+import {GraphNodeManager} from "../../../NodeManager";
 
 // Match manager for Node
 export class GraphMatchManagerNode extends GraphMatchManager {
     private readonly logicManager: GraphLogicManager
 
-    constructor(incomingEdges: GraphBaseEdge[]) {
-        super()
+    constructor(incomingEdges: GraphBaseEdge[], nodeManager: GraphNodeManager) {
+        super(nodeManager)
         this.logicManager = new GraphLogicManager(incomingEdges)
     }
 

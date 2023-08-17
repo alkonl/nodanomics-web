@@ -1,6 +1,7 @@
 import {GraphBaseEdge} from "./abstracts";
 import {IChainConnectionData} from "../../../interface";
 import {GraphBaseNode, GraphMatchManagerConnections} from "../GraphNodes";
+import {GraphNodeManager} from "../NodeManager";
 
 export class GraphChainEdge extends GraphBaseEdge<IChainConnectionData> {
 
@@ -10,9 +11,10 @@ export class GraphChainEdge extends GraphBaseEdge<IChainConnectionData> {
         source: GraphBaseNode,
         target: GraphBaseNode,
         data: IChainConnectionData,
+        nodesManager: GraphNodeManager,
     ) {
         super(source, target, data);
-        this.matchManager = new GraphMatchManagerConnections(this);
+        this.matchManager = new GraphMatchManagerConnections(this, nodesManager);
     }
 
 

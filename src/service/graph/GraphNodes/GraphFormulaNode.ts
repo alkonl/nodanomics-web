@@ -13,11 +13,12 @@ import {GraphNodeManager} from "../NodeManager";
 export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue {
 
-    private readonly matchManager: GraphMatchManagerNode = new GraphMatchManagerNode(this.incomingEdges)
+    private readonly matchManager: GraphMatchManagerNode
     private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
 
     constructor(value: IFormulaNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(value, runManager, nodeManager);
+        this.matchManager = new GraphMatchManagerNode(this.incomingEdges, nodeManager)
     }
 
     get formula() {
