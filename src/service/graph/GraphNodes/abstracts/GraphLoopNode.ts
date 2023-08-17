@@ -1,6 +1,6 @@
 import {GraphInvokableNode} from "./GraphInvokable";
 import {EConnectionMode, IIsEventTriggered, ILoopNodeData} from "../../../../interface";
-import {GraphLogicManager} from "../helper/GraphLogicManager";
+import {GraphLogicManager} from "../helper";
 
 export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILoopNodeData> extends GraphInvokableNode<IGenericNodeData>
     implements IIsEventTriggered {

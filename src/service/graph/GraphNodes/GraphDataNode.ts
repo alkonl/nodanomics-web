@@ -5,7 +5,8 @@ import {
     IDiagramNodeBaseData,
     IGetNodeExternalValue,
     IResource,
-    IUpdateGraphNodeState, IUpdateGraphNodeStatePerStep
+    IUpdateGraphNodeState,
+    IUpdateGraphNodeStatePerStep
 } from "../../../interface";
 import {GraphDataEdge} from "../GraphEdge";
 import {GraphBaseNode, GraphInteractiveNode} from "./abstracts";
@@ -282,9 +283,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     private writeToEdgeIsResourcesWereTransferred(edge: GraphDataEdge, isTransferred: boolean) {
-        if (edge instanceof GraphDataEdge) {
-            edge.changeIsTransferredResources(isTransferred)
-        }
+        edge.changeIsTransferredResources(isTransferred)
     }
 
     static baseNodeIsData(baseNode: GraphBaseNode<IDiagramNodeBaseData>): baseNode is GraphDataNode {

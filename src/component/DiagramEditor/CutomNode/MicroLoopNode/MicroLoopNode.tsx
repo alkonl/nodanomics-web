@@ -2,7 +2,7 @@ import React from 'react';
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";
 import {EConnectionMode, IMicroLoopNodeData} from "../../../../interface";
-import {BaseNodeContainer} from "../container/BaseNodeContainer";
+import {BaseNodeContainer} from "../container";
 import {Box} from "@mui/material";
 import {EColor, EFontColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
 import {useExpandOrCollapse} from "../../../../hooks";
