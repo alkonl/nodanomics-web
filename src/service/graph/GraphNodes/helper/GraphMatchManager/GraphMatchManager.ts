@@ -1,18 +1,26 @@
 import * as Match from "mathjs";
 import {INumberVariable} from "../../../../../interface";
 import {GraphNodeManager} from "../../../NodeManager";
+import {GraphDatasetDatafieldNode} from "../../GraphDatasetDatafieldNode";
+import {GraphTagManager} from "../GraphTagManager";
 
 export abstract class GraphMatchManager {
 
     private readonly nodeManager: GraphNodeManager
+    private readonly tagManager: GraphTagManager
 
     constructor(nodeManager: GraphNodeManager) {
         this.nodeManager = nodeManager
+        this.tagManager = new GraphTagManager(nodeManager)
+    }
+
+    getValueFromTag({tag}: { tag: string }) {
+        this.tagManager.getNodeValueByTag({tag})
     }
 
     getValueFromDataset({datasetTag, x, y}: { datasetTag: string, x: number, y: number }) {
-        const dataset = this.nodeManager.getDatasetByTag({tag: datasetTag})
-        if (dataset) {
+        const dataset = this.nodeManager.getNodeByTag({tag: datasetTag})
+        if (dataset && dataset instanceof GraphDatasetDatafieldNode) {
             const value = dataset?.getValue({x, y})
         }
 
@@ -21,9 +29,10 @@ export abstract class GraphMatchManager {
     calculateFormula({formula, variables}: { formula: string, variables: INumberVariable[] }) {
         try {
             if (formula) {
-                this.getValueFromDataset({datasetTag: 'test', x: 2, y: 1})
+                const tagVariables = this.tagManager.getNodeTagVariables()
+                const allVariables = [...variables, ...tagVariables]
                 const compiledFormula = Match.compile(formula)
-                const mappedVariables = variables.reduce((acc: {
+                const mappedVariables = allVariables.reduce((acc: {
                     [key: string]: number
                 }, variable) => {
                     const variableName = variable.variableName || '-'
