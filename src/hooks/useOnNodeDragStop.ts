@@ -12,7 +12,7 @@ export const useOnNodeDragStop = () => {
     const {updateNodeParent} = diagramEditorActions
     return (event: ReactMouseEvent, node: IReactFlowNode) => {
         const parentNode = findParent(node, diagramNodes)
-        if (parentNode) {
+        if (parentNode && !parentNode.data.isCollapsed) {
             dispatch(updateNodeParent({
                 node,
                 parentNode
