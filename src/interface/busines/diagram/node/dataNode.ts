@@ -2,9 +2,10 @@ import {EDiagramNode, IDiagramNodeBaseData} from "./structures";
 import {IResource} from "../resource";
 import {INodeWithAction} from "../nodeAction";
 import {INodeWithTrigger} from "../nodeTrigger";
+import {INodeHistory} from "./additional";
 
 
-export interface IDataNodeData extends IDiagramNodeBaseData, INodeWithTrigger, INodeWithAction {
+export interface IDataNodeData extends IDiagramNodeBaseData, INodeWithTrigger, INodeWithAction, INodeHistory {
     type: EDiagramNode.Data
     resources: IResource[]
     initialResources?: IResource[]
@@ -15,9 +16,9 @@ export interface IDataNodeData extends IDiagramNodeBaseData, INodeWithTrigger, I
     roundingType?: string
     minCapacity?: number
     maxCapacity?: number
+    // TODO remove minResources and maxResources
     minResources?: number
     maxResources?: number
-    resourcesCountHistory?: number[]
 }
 
 export const isIDataNodeData = (data: IDiagramNodeBaseData): data is IDataNodeData => {

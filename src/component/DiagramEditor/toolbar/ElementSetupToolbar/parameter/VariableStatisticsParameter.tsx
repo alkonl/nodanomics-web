@@ -6,6 +6,7 @@ import {ApexOptions} from "apexcharts";
 import {useWidthAndHeight} from "../../../../../hooks";
 import {EColor} from "../../../../../constant";
 import {Parameter} from "../styledComponents";
+import {useDiagramEditorState} from "../../../../../redux";
 
 
 const options: ApexOptions = {
@@ -64,16 +65,16 @@ const options: ApexOptions = {
 
 export const VariableStatisticsParameter: React.FC<{
     resourcesCountHistory?: number[],
-    min?: number,
-    max?: number,
-}> = ({resourcesCountHistory, min, max}) => {
-
+}> = ({resourcesCountHistory = []}) => {
+    const {currentRunningDiagramStep} = useDiagramEditorState()
     const {series} = useMemo(() => {
+        const arrayWithZero = Array.from({length: currentRunningDiagramStep - resourcesCountHistory.length}, () => 0)
+        const formattedHistory = [...arrayWithZero, ...resourcesCountHistory]
         const chartData = [{
             name: 'Resources',
-            data: resourcesCountHistory || [],
+            data: formattedHistory || [],
         }]
-        const isShowChart = resourcesCountHistory && resourcesCountHistory?.length > 0
+        const isShowChart = formattedHistory.length > 0
         return {
             series: chartData,
             isShowChart,
@@ -83,6 +84,9 @@ export const VariableStatisticsParameter: React.FC<{
     const {elementRef, elementSize} = useWidthAndHeight()
 
     const avg = resourcesCountHistory && resourcesCountHistory.reduce((acc, b) => acc + b, 0) / resourcesCountHistory.length
+
+    const min = resourcesCountHistory && Math.min(...resourcesCountHistory)
+    const max = resourcesCountHistory && Math.max(...resourcesCountHistory)
 
     const avgFormatted = avg && avg.toFixed(2)
     const maxFormatted = max && max.toFixed(2)

@@ -28,6 +28,7 @@ const options: ApexOptions = {
             show: true
         },
         redrawOnParentResize: true,
+
     },
     stroke: {
         show: true,
@@ -52,6 +53,8 @@ const options: ApexOptions = {
 
 export const ExecutionGraph = () => {
 
+    const {currentRunningDiagramStep} = useDiagramEditorState()
+
     const {elementRef, elementSize} = useWidthAndHeight()
     const {diagramNodes} = useDiagramEditorState()
     const filtered = diagramNodes.map(node=>node.data).filter((nodeData) => {
@@ -62,19 +65,21 @@ export const ExecutionGraph = () => {
 
     const {series} = useMemo(() => {
         const chartData = filtered.map((data, index) => {
-            const history = data.resourcesCountHistory
+            const history = data.history || []
             const colorIndex = index % BASE_CHART_COLORS.length
+            const arrayWithZero = Array.from({length: currentRunningDiagramStep - history.length}, () => 0)
+            const formattedHistory = [...arrayWithZero, ...history]
             return {
                 name: data.name,
-                data: history || [],
+                data: formattedHistory,
                 color: BASE_CHART_COLORS[colorIndex],
             }
         })
         return {
             series: chartData,
-            isShowChart: true,
         }
     }, [filtered])
+
     return (
         <Box sx={{
             backgroundColor: EColor.white,

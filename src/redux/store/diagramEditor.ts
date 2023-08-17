@@ -31,7 +31,7 @@ export interface IDiagramEditorState {
         elementType: EElementType
         id: string
     }
-    currentRunningDiagramStep?: number
+    currentRunningDiagramStep: number
     isDiagramRunning: boolean
     isDiagramRunningInterval: boolean
 }
@@ -42,6 +42,7 @@ const initialState: IDiagramEditorState = {
     autoSaveCalled: 0,
     isDiagramRunning: false,
     isDiagramRunningInterval: false,
+    currentRunningDiagramStep: 0
 }
 
 const graph = new Graph()

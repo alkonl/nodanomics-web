@@ -135,8 +135,8 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     private updateResourcesCountHistory() {
         this._data = {
             ...this.data,
-            resourcesCountHistory: this.data.resourcesCountHistory
-                ? [...this.data.resourcesCountHistory, this.currentResourcesCount]
+            history: this.data.history
+                ? [...this.data.history, this.currentResourcesCount]
                 : [this.currentResourcesCount]
         }
     }
