@@ -5,7 +5,7 @@ import {
     IDiagramNodeBaseData,
     IGetNodeExternalValue,
     IResource,
-    IUpdateGraphNodeState
+    IUpdateGraphNodeState, IUpdateGraphNodeStatePerStep
 } from "../../../interface";
 import {GraphDataEdge} from "../GraphEdge";
 import {GraphBaseNode, GraphInteractiveNode} from "./abstracts";
@@ -14,7 +14,7 @@ import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
 
 export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
-    implements IUpdateGraphNodeState, IGetNodeExternalValue {
+    implements IUpdateGraphNodeState, IGetNodeExternalValue, IUpdateGraphNodeStatePerStep {
 
     private _resourcesToProvide: IResource[] = [];
 
@@ -78,9 +78,13 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         this._resourcesToProvide = [];
     }
 
+    updateStatePerStep() {
+        this.reCalculateMaxMinAvgValue()
+        this.updateResourcesCountHistory()
+    }
+
     updateState() {
         super.updateState()
-        this.reCalculateMaxMinAvgValue()
     }
 
 
@@ -139,7 +143,6 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     invokeStep() {
         super.invokeStep();
-        this.updateResourcesCountHistory()
     }
 
 

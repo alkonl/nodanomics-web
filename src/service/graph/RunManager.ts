@@ -1,6 +1,6 @@
 import {Graph} from "./Graph";
 import {GraphBaseNode, GraphDataNode, GraphEventListenerNode, GraphInvokableNode, GraphStartNode} from "./GraphNodes";
-import {isUpdateGraphNodeState} from "../../interface";
+import {isIUpdateGraphNodeStatePerStep, isUpdateGraphNodeState} from "../../interface";
 import {GraphNodeManager} from "./NodeManager";
 import {GraphChainEdge, GraphDataEdge} from "./GraphEdge";
 
@@ -22,10 +22,19 @@ export class RunManager {
     }
 
     updateState() {
-        const nodes = this.sortedNodes()
+        const nodes = this.graph.nodes
         nodes.forEach(node => {
             if (isUpdateGraphNodeState(node)) {
                 node.updateState()
+            }
+        })
+    }
+
+    updateNodePerStep() {
+        const nodes = this.graph.nodes
+        nodes.forEach(node => {
+            if (isIUpdateGraphNodeStatePerStep(node)) {
+                node.updateStatePerStep()
             }
         })
     }
@@ -43,6 +52,7 @@ export class RunManager {
             }
         })
         this.updateState()
+        this.updateNodePerStep()
         this.graph.nodes.forEach(node => {
             if (node instanceof GraphDataNode) {
                 node.updateRecoursesProvide()
