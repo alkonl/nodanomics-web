@@ -3,7 +3,7 @@ import {EElementType, IDiagramBaseInteractiveElementData} from "../../diagramEle
 export enum EConnection {
     DataConnection = 'DataConnection',
     LogicConnection = 'LogicConnection',
-    EventConnection = 'EventConnection',
+    ChainConnection = 'ChainConnection',
 }
 
 export enum EConnectionMode{

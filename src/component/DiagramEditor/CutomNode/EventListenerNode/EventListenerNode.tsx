@@ -34,7 +34,7 @@ export const EventListenerNode: React.FC<NodeProps<IEventListenerNodeData>> = ({
                 type="source"
                 position={Position.Right}
                 isConnectable={isConnectable}
-                id={EConnection.EventConnection}
+                id={EConnection.ChainConnection}
                 style={{
                     background: EColor.orange,
                 }}

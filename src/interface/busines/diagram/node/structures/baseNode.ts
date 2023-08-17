@@ -11,6 +11,7 @@ export enum EDiagramNode {
     MicroLoop = 'MicroLoop',
     WhileLoop = 'WhileLoop',
     DatasetDatafield = 'DatasetDatafield',
+    Start = 'Start',
 }
 
 

@@ -2,9 +2,9 @@
 import {Connection, Edge} from "reactflow";
 import {IDataConnectionData} from "../dataConnection";
 import {ILogicConnectionData} from "../logicConnection";
-import {IEventConnectionData} from "../eventConnection";
+import {IChainConnectionData} from "../chainConnection";
 
-export type IDiagramConnectionData = IDataConnectionData | ILogicConnectionData | IEventConnectionData;
+export type IDiagramConnectionData = IDataConnectionData | ILogicConnectionData | IChainConnectionData;
 
 export type IReactFlowEdge = Edge<IDiagramConnectionData>
 

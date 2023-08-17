@@ -17,8 +17,8 @@ export const defineConnectionTypeBySourceAndTarget = ({targetHandle, sourceHandl
     const sourceType = sourceHandle.split('.')[0];
     if (targetType === EConnection.LogicConnection) {
         return EConnection.LogicConnection
-    } else if (targetType === EConnection.EventConnection || sourceType === EConnection.EventConnection) {
-        return EConnection.EventConnection
+    } else if (targetType === EConnection.ChainConnection || sourceType === EConnection.ChainConnection) {
+        return EConnection.ChainConnection
     }
     return EConnection.DataConnection
 }
@@ -37,7 +37,9 @@ export const defineConnectionModeBySourceHandle = ({sourceHandle}: {
 export const connectEdge = ({connection}:
                                 {
                                     connection: Connection
-                                }): Connection & { data: IDiagramConnectionData } &
+                                }): Connection & {
+    data: IDiagramConnectionData
+} &
     Pick<Edge, 'type' | 'id' | 'markerEnd' | 'zIndex'> => {
     if (connection.sourceHandle === null || connection.targetHandle === null) {
         throw new Error('sourceHandle and targetHandle null')
@@ -55,7 +57,7 @@ export const connectEdge = ({connection}:
     const targetMode = parseConnectionHandleId(connection.targetHandle).mode;
 
     const edgeId = getEdgeId();
-    return {
+    return  {
         ...connectionStyle[type],
         ...connection,
         zIndex: EDGE_Z_INDEX,

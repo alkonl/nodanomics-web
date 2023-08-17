@@ -6,8 +6,8 @@ import {Box} from "@mui/material";
 import {EColor} from "../../../constant";
 
 const transformStyles: { [key in Position]: string } = {
-    left: 'translate(-25%, -50%)',
-    right: 'translate(25%, -50%)',
+    left: 'translate(25%, -50%)',
+    right: 'translate(-25%, -50%)',
     top: 'translate(-50%, 25%)',
     bottom: 'translate(-50%, -25%)',
 }

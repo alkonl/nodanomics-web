@@ -1,8 +1,8 @@
 import {Graph} from "./Graph";
-import {GraphBaseNode, GraphInvokableNode, GraphOriginNode, GraphDataNode, GraphEventListenerNode} from "./GraphNodes";
-import {EConnection, EConnectionMode, ENodeTrigger, isUpdateGraphNodeState} from "../../interface";
+import {GraphBaseNode, GraphDataNode, GraphEventListenerNode, GraphInvokableNode, GraphStartNode} from "./GraphNodes";
+import {isUpdateGraphNodeState} from "../../interface";
 import {GraphNodeManager} from "./NodeManager";
-import {GraphDataEdge} from "./GraphEdge";
+import {GraphChainEdge, GraphDataEdge} from "./GraphEdge";
 
 export class RunManager {
     private graph: Graph
@@ -34,6 +34,8 @@ export class RunManager {
         this.incrementStep()
         this.resetIsTransferredResources()
         const nodes = this.sortedNodes()
+        console.log('graph: ', this.graph)
+        console.log('nodes.toInvoke: ', nodes)
         nodes.forEach(node => {
             if (node instanceof GraphInvokableNode) {
                 node.invokeStep()
@@ -54,21 +56,32 @@ export class RunManager {
         this._currentStep++
     }
 
-    private getStartedNodes(): GraphBaseNode[] {
-        return this.graph.nodes.filter(node => {
-            if (node instanceof GraphOriginNode) {
-                if (node.triggerMode === ENodeTrigger.enabling || node.triggerMode === ENodeTrigger.passive) {
-                    return node.hasEventListeners
-                }
-                return node
-            } else if (node instanceof GraphEventListenerNode) {
+    private getStartedNodes() {
+        const startNodes = this.graph.nodes.filter(node => {
+            if (node instanceof GraphStartNode || node instanceof GraphEventListenerNode) {
                 return node
             }
         })
+        return startNodes
+        // if (startNode && startNode instanceof GraphStartNode) {
+        //     return startNode
+        // }
+        // throw new Error('Start node not found')
+        // return this.graph.nodes.filter(node => {
+        //     if (node instanceof GraphOriginNode) {
+        //         if (node.triggerMode === ENodeTrigger.enabling || node.triggerMode === ENodeTrigger.passive) {
+        //             return node.hasEventListeners
+        //         }
+        //         return node
+        //     } else if (node instanceof GraphEventListenerNode) {
+        //         return node
+        //     }
+        // })
     }
 
     private sortedNodes(): GraphBaseNode[] {
         const startedNodes = this.getStartedNodes()
+        console.log('startedNodes: ', startedNodes)
         const childrenNodes = startedNodes.map(source => {
             return this.getNodesChildrenRecursive(source)
         })
@@ -95,10 +108,11 @@ export class RunManager {
         })
 
         nodes.forEach(child => {
+
             const toNextEdges = child.outgoingEdges.filter(edge => {
-                if (edge.data.targetMode === EConnectionMode.LoopChildrenToExternal) {
-                    return false
-                }
+                // if (edge.data.targetMode === EConnectionMode.LoopChildrenToExternal) {
+                //     return false
+                // }
                 return true
             })
             if (toNextEdges.length > 0) {
@@ -111,23 +125,26 @@ export class RunManager {
     private getNodesChildren(node: GraphBaseNode): GraphBaseNode[] {
         const children = node.outgoingEdges.map(edge => {
             const target = edge.target
-            const isHasEventIncomingConnection = target.incomingEdges.some(edge => edge.type === EConnection.EventConnection)
-            const isHasOtherIncomingConnectionThenEvent = target.incomingEdges.some(edge => edge.type !== EConnection.EventConnection)
-            const isHasIncomingEdges = target.incomingEdges.length > 0
-            if (!isHasIncomingEdges) {
-                return edge.target
+            if (edge instanceof GraphChainEdge && edge.isMeetCondition) {
+                return target
             }
-            if (isHasEventIncomingConnection && isHasOtherIncomingConnectionThenEvent && edge.type === EConnection.EventConnection) {
-                return edge.target
-            }
-
-            if (isHasEventIncomingConnection && edge.type === EConnection.EventConnection) {
-                return edge.target
-            }
-
-            if (!isHasEventIncomingConnection) {
-                return edge.target
-            }
+            // const isHasEventIncomingConnection = target.incomingEdges.some(edge => edge.type === EConnection.ChainConnection)
+            // const isHasOtherIncomingConnectionThenEvent = target.incomingEdges.some(edge => edge.type !== EConnection.ChainConnection)
+            // const isHasIncomingEdges = target.incomingEdges.length > 0
+            // if (!isHasIncomingEdges) {
+            //     return edge.target
+            // }
+            // if (isHasEventIncomingConnection && isHasOtherIncomingConnectionThenEvent && edge.type === EConnection.ChainConnection) {
+            //     return edge.target
+            // }
+            //
+            // if (isHasEventIncomingConnection && edge.type === EConnection.ChainConnection) {
+            //     return edge.target
+            // }
+            //
+            // if (!isHasEventIncomingConnection) {
+            //     return edge.target
+            // }
 
         })
         return children.filter(item => item !== undefined) as GraphBaseNode[]

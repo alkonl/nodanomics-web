@@ -6,7 +6,7 @@ import {LogicHandle} from "../../CustomHandle";
 import {NodeProps, Position} from "reactflow";
 import {EConnectionMode, ILoopNodeData} from "../../../../interface";
 import {NodeStyle} from "../styledComponent";
-import {EventHandle} from "../../CustomHandle/EventHandle";
+import {ChainHandle} from "../../CustomHandle/ChainHandle";
 import {useWidthAndHeight} from "../../../../hooks";
 
 export const ExternalDataHandlers: React.FC<NodeProps<ILoopNodeData>> = ({data}) => {
@@ -76,7 +76,7 @@ export const ExternalDataHandlers: React.FC<NodeProps<ILoopNodeData>> = ({data})
                         borderRadius: 4,
                         width: 'fit-content',
                     }}>
-                        <EventHandle type="target" position={Position.Left}
+                        <ChainHandle type="target" position={Position.Left}
                                      mode={EConnectionMode.WhileLoopIncomingTrigger}/>
                         <NodeStyle.Name>
                             {isActiveText}
@@ -106,7 +106,7 @@ export const ExternalDataHandlers: React.FC<NodeProps<ILoopNodeData>> = ({data})
                             {loopOutText}
                         </NodeStyle.Name>
                     </Box>
-                    <EventHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
+                    <ChainHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
                 </Box>
                 <Box sx={{
                     backgroundColor: EColor.white,

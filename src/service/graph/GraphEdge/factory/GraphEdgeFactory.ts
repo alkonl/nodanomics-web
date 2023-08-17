@@ -2,7 +2,7 @@ import {EConnection, IDiagramConnectionData} from "../../../../interface";
 import {GraphBaseNode} from "../../GraphNodes";
 import {GraphDataEdge} from "../GraphDataEdge";
 import {GraphLogicEdge} from "../GraphLogicEdge";
-import {GraphEventEdge} from "../GraphEventEdge";
+import {GraphChainEdge} from "../GraphChainEdge";
 
 export class GraphEdgeFactory {
     static createEdge({source, target, edgeData}: {
@@ -16,8 +16,8 @@ export class GraphEdgeFactory {
                 return new GraphDataEdge(source, target, edgeData);
             case EConnection.LogicConnection:
                 return new GraphLogicEdge(source, target, edgeData);
-            case EConnection.EventConnection:
-                return new GraphEventEdge(source, target, edgeData);
+            case EConnection.ChainConnection:
+                return new GraphChainEdge(source, target, edgeData);
             default:
                 throw new Error(`Unknown edge type: ${edgeType}`);
         }

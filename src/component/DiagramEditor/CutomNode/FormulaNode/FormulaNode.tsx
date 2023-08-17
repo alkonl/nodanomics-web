@@ -6,7 +6,7 @@ import {BaseNodeShapeContainer} from "../container";
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";
 import {NodeStyle} from "../styledComponent";
-import {EventHandle} from "../../CustomHandle/EventHandle";
+import {ChainHandle} from "../../CustomHandle/ChainHandle";
 import {LogicHandle} from "../../CustomHandle";
 
 
@@ -77,16 +77,17 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = (props) => {
                     justifyContent: 'space-between',
                     bottom: 'calc(50% - 5px)',
                 }}>
-                    <EventHandle
+                    <ChainHandle
                         type="target"
                         position={Position.Left}
                         isConnectable={isConnectable}
 
                     />
-                    <EventHandle
+                    <ChainHandle
                         type="source"
                         position={Position.Right}
                         isConnectable={isConnectable}
+                        mode={EConnectionMode.NodeOutgoing}
                     />
                 </Box>
                 <Box sx={{

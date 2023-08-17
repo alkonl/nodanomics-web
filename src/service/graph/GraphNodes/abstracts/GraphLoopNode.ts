@@ -53,6 +53,8 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
         const variables = this.logicManager.getVariables({
             targetMode: EConnectionMode.NodeIncoming,
         })
+        console.log('updateVariables: ', variables)
+
         this._data = {
             ...this.data,
             incomingVariables: variables,

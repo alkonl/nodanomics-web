@@ -21,6 +21,7 @@ import {
 import {NodeDataParametersContainer} from "../parameter/data/NodeDataParametersContainer";
 import {GeneralLoopChildrenNodesParameter} from "../parameter/generalLoop";
 import {GeneralLoopEditLoopButton} from "../parameter/generalLoop/GeneralLoopEditLoopButton";
+import {ChainConnectionParametersContainer} from "../parameter/chainConnection/ChainConnectionParametersContainer";
 
 
 export const PropertiesSection: React.FC<{
@@ -49,6 +50,8 @@ export const PropertiesSection: React.FC<{
                 {selectedElementData.elementType === EElementType.Node &&
                     selectedElementData.type === EDiagramNode.Data &&
                     <NodeDataParametersContainer nodeData={selectedElementData}/>}
+                {selectedElementData.type === EConnection.ChainConnection &&
+                    <ChainConnectionParametersContainer edgeData={selectedElementData}/>}
                 {selectedElementData.type === EDiagramNode.Formula
                     && <NodeFormulaParameterContainer nodeData={selectedElementData}/>}
                 {'trigger' in selectedElementData && <NodeTriggerModeParameter nodeData={selectedElementData}/>}

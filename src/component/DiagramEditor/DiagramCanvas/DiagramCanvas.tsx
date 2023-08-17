@@ -4,8 +4,10 @@ import ReactFlow, {Background, ConnectionMode, Controls, EdgeChange, NodeChange,
 import 'reactflow/dist/style.css';
 
 import {
+    useAddStartNode,
     useEdgeUpdateManager,
-    useOnDrop, useOnNodeDrag,
+    useOnDrop, useOnEdgeClick,
+    useOnNodeDrag,
     useOnNodeDragStart,
     useOnNodeDragStop,
     useUploadDiagramOnServer
@@ -13,20 +15,22 @@ import {
 import styles from './DiagramCanvas.module.scss'
 import {EConnection, EDiagramNode} from "../../../interface";
 import {
+    DataNode,
     EventListenerNode,
     EventTriggerNode,
     FormulaNode,
     MicroLoopNode,
     OriginNode,
+    StartNode,
     StaticVariableNode,
-    DataNode, WhileLoopNode
+    WhileLoopNode
 } from "../CutomNode";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../redux";
 import {Box} from "@mui/material";
 import {DataConnection} from "../CustomConnectionLine/DataConnection";
 import {LogicConnection} from "../CustomConnectionLine/LogicConnection";
 import {useOnConnect} from "../../../hooks/useOnConnect";
-import {EventConnection} from "../CustomConnectionLine/EventConnection";
+import {ChainConnection} from "../CustomConnectionLine/ChainConnection";
 import {DatasetNode} from "../CutomNode/DatasetNode";
 import {GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../constant";
 
@@ -41,12 +45,13 @@ const nodeTypes = {
     [EDiagramNode.MicroLoop]: MicroLoopNode,
     [EDiagramNode.WhileLoop]: WhileLoopNode,
     [EDiagramNode.DatasetDatafield]: DatasetNode,
+    [EDiagramNode.Start]: StartNode,
 };
 
 const edgeTypes = {
     [EConnection.DataConnection]: DataConnection,
     [EConnection.LogicConnection]: LogicConnection,
-    [EConnection.EventConnection]: EventConnection,
+    [EConnection.ChainConnection]: ChainConnection,
 }
 
 
@@ -87,6 +92,10 @@ export const DiagramCanvas = () => {
         onEdgeUpdateEndHandler
     } = useEdgeUpdateManager()
 
+    // add Start node
+    useAddStartNode()
+
+    const onEdgeClick = useOnEdgeClick()
 
     return (
         <Box
@@ -117,6 +126,7 @@ export const DiagramCanvas = () => {
                     onNodeDragStop={onNodeDragStop}
                     edgeTypes={edgeTypes}
                     connectionMode={ConnectionMode.Loose}
+                    onEdgeClick={onEdgeClick}
                 >
                     <Controls/>
                     <Background color="blue" gap={GAP_BETWEEN_EDITOR_CANVAS_DOTS}/>

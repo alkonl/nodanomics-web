@@ -1,3 +1,5 @@
+import {useOnEdgeClick} from "./useOnEdgeClick";
+
 export * from './useTagsDashboardView'
 export * from './useWidthAndHeight'
 export * from './useDidMountEffect'
@@ -28,3 +30,5 @@ export * from './useExpandOrCollapse'
 export * from './useGetNodesEdges'
 export * from './useProjectDatasets'
 export * from './useChangeNodeDataStep'
+export * from './useAddStartNode'
+export * from './useOnEdgeClick'

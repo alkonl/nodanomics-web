@@ -7,14 +7,13 @@ import {
 } from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphInvokableNode} from "./abstracts";
-import {GraphMatchManager} from "./helper";
-import {GraphLogicManager} from "./helper/GraphLogicManager";
+import {GraphMatchManagerNode, GraphLogicManager} from "./helper";
 import {GraphNodeManager} from "../NodeManager";
 
 export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue {
 
-    private readonly matchManager: GraphMatchManager = new GraphMatchManager(this.incomingEdges)
+    private readonly matchManager: GraphMatchManagerNode = new GraphMatchManagerNode(this.incomingEdges)
     private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
 
     constructor(value: IFormulaNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
@@ -61,6 +60,7 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
                     type: 'number',
                     value: result,
                 })
+                console.log('result', result)
             } else if (result !== undefined) {
                 console.error(`Unknown result type ${JSON.stringify(this.data)} result: ${JSON.stringify(result, null, 2)}`)
             }
