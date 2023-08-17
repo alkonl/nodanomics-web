@@ -39,8 +39,15 @@ export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield> 
         x: number,
         y: number,
     }) {
-        const x = coordinates.x + this.xOffset
-        const y = coordinates.y + this.yOffset
+        try {
+            const x = coordinates.x + this.xOffset
+            const y = coordinates.y + this.yOffset
+            console.log('this.spreadsheet', this.spreadsheet, {x, y})
+            return this.spreadsheet?.rows[y][x]
+        }catch (e) {
+            console.error(e)
+        }
+
         // console.log('getValue', this.spreadsheet?.rows[y][x], {x, y}, {
         //     xOffset: this.xOffset,
         //     yOffset: this.yOffset

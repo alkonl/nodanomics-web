@@ -9,13 +9,7 @@ export interface IStructuredSpreadsheetData {
     xAxisIndex: number
     yAxisIndex: number
     name: string
-    rows: {
-        [key: string]: {
-            [key: string]: {
-                content: string
-            }
-        }
-    }
+    rows: (string | number)[][]
 }
 
 export interface IStructuredSpreadsheetsData {
