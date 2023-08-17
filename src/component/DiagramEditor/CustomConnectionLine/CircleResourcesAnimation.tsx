@@ -1,7 +1,6 @@
 import React, {useEffect, useMemo} from "react";
 import {Position} from "reactflow";
 import {EColor} from "../../../constant";
-import {useDidMountEffect} from "../../../hooks";
 
 
 export const CircleResourcesAnimation: React.FC<{
@@ -17,7 +16,7 @@ export const CircleResourcesAnimation: React.FC<{
     sourcePosition: Position
     targetPosition: Position
 }> = ({id, begin, duration, play = false, infinite, sourcePosition, targetPosition, path, cy, cx}) => {
-    const [isMount, setIsMount] = React.useState<boolean>(false)
+
     const animationRef = React.useRef<SVGAnimationElement>(null)
 
     useEffect(() => {
@@ -67,7 +66,7 @@ export const CircleResourcesAnimation: React.FC<{
         return _formattedPath
     }, [sourcePosition, targetPosition, path])
 
-    useDidMountEffect(() => {
+    useEffect(() => {
         animationRef.current?.beginElement()
     }, [])
 
