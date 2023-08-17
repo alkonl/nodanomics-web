@@ -1,4 +1,5 @@
 import {GraphBaseNode, GraphDataNode} from "../GraphNodes";
+import {GraphDatasetDatafieldNode} from "../GraphNodes/GraphDatasetDatafieldNode";
 
 export class GraphNodeManager {
     private _nodes: GraphBaseNode[] = [];
@@ -52,5 +53,9 @@ export class GraphNodeManager {
 
     includes(node: GraphBaseNode) {
         return this._nodes.includes(node);
+    }
+
+    getDatasetByTag({tag}: {tag: string}): GraphDatasetDatafieldNode {
+        return this._nodes.find(node => node.data.tag === tag && node instanceof GraphDatasetDatafieldNode) as GraphDatasetDatafieldNode;
     }
 }

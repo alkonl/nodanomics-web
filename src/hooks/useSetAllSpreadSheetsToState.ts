@@ -29,8 +29,17 @@ export const useSetAllSpreadSheetsToState = () => {
     useEffect(() => {
         if (projectSpreadsheets) {
             const formatted = projectSpreadsheets.reduce((accSpreadsheet, spreadsheet) => {
-                const xAxisIndex = spreadsheet.rows.findIndex((cells) => cells.values.some((cell) => cell.content === 'X Axis'))
+                // find y column index, where rows starts
                 const yAxisIndex = spreadsheet.rows.findIndex((cells) => cells.values.some((cell) => cell.content === 'Y Axis'))
+                // find x column index, where columns starts
+                let xAxisIndex = 0
+                spreadsheet.rows.find((cells, index) => {
+                    if (cells.values.some((cell) => cell.content === 'X Axis')) {
+                        xAxisIndex = index
+                        return true
+                    }
+                })
+                // const yAxisIndex = spreadsheet.rows.findIndex((cells) => cells.values.some((cell) => cell.content === 'Y Axis'))
                 const rows = spreadsheet.rows.reduce((acc, row, index) => {
                     return {
                         ...acc,
@@ -45,10 +54,12 @@ export const useSetAllSpreadSheetsToState = () => {
                     }
                 }, {})
                 return {
-                    [spreadsheet.name]: {
+                    [spreadsheet.id]: {
+                        name: spreadsheet.name,
                         xAxisIndex,
                         yAxisIndex,
                         rows,
+                        //
                     },
                     ...accSpreadsheet
                 }
@@ -59,5 +70,5 @@ export const useSetAllSpreadSheetsToState = () => {
                 })
             )
         }
-    }, [projectSpreadsheets]);
+    }, [projectSpreadsheets, resProjectInfo, spreadsheetsBaseInfo]);
 }

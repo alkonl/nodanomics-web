@@ -1,18 +1,17 @@
-import {
-    IDiagramConnectionData, IDiagramNodeBaseData,
-    INodeData,
-} from "../../interface";
+import {IDiagramConnectionData, INodeData, IStructuredSpreadsheetsData,} from "../../interface";
 import {GraphBaseNode, GraphNodeFactory} from "./GraphNodes";
 import {GraphBaseEdge, GraphEdgeFactory} from "./GraphEdge";
 import {Optionalize} from "../../utils";
 import {RunManager} from "./RunManager";
 import {GraphNodeManager} from "./NodeManager";
+import {GraphSpreadsheetManager} from "./GraphSpreadsheetManager";
 
 
 export class Graph {
     private readonly _nodeManager: GraphNodeManager = new GraphNodeManager();
     private _edges: GraphBaseEdge[] = [];
     private runManager?: RunManager;
+    private readonly graphSpreadsheetManager: GraphSpreadsheetManager = new GraphSpreadsheetManager();
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     constructor() {
@@ -28,6 +27,10 @@ export class Graph {
 
     get edges() {
         return this._edges;
+    }
+
+    get spreadsheetManager() {
+        return this.graphSpreadsheetManager;
     }
 
     attachRunManager(runManager: RunManager) {
@@ -87,7 +90,7 @@ export class Graph {
         const source = this.findNode(sourceId);
         const target = this.findNode(targetId);
         if (source && target) {
-            const edge = GraphEdgeFactory.createEdge({source, target, edgeData});
+            const edge = GraphEdgeFactory.createEdge({source, target, edgeData, graph: this});
             this._edges.push(edge);
             source.addEdge(target, edge);
         }
@@ -114,7 +117,7 @@ export class Graph {
                     const source = this.findNode(edge.sourceId);
                     const target = this.findNode(edge.targetId);
                     if (source && target) {
-                        const graphEdge = GraphEdgeFactory.createEdge({source, target, edgeData: edge});
+                        const graphEdge = GraphEdgeFactory.createEdge({source, target, edgeData: edge, graph: this});
                         this._edges.push(graphEdge);
                         source.addEdge(target, graphEdge);
                     }
@@ -176,5 +179,9 @@ export class Graph {
 
     resetResourcesToProvide() {
         this.nodesManager.resetResourcesToProvide();
+    }
+
+    setSpreadsheetsData({spreadsheetData}: { spreadsheetData: IStructuredSpreadsheetsData }) {
+        this.graphSpreadsheetManager.setSpreadsheets(spreadsheetData);
     }
 }

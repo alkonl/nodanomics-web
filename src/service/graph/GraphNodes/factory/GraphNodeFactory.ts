@@ -47,7 +47,7 @@ export class GraphNodeFactory {
             case EDiagramNode.MicroLoop:
                 return new GraphMicroLoopNode(value.node, runManager, graph.nodesManager);
             case EDiagramNode.DatasetDatafield:
-                return new GraphDatasetDatafieldNode(value.node, runManager, graph.nodesManager);
+                return new GraphDatasetDatafieldNode(value.node, runManager, graph.nodesManager, graph.spreadsheetManager);
             case EDiagramNode.Start:
                 return new GraphStartNode(value.node, runManager, graph.nodesManager);
             case EDiagramNode.Sink:

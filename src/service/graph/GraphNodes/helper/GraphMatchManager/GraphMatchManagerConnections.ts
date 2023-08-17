@@ -1,14 +1,16 @@
 import {GraphMatchManager} from "./GraphMatchManager";
 import {GraphBaseEdge} from "../../../GraphEdge";
 import {INumberVariable, isIGetNodeExternalValue} from "../../../../../interface";
+import {GraphNodeManager} from "../../../NodeManager";
 
 export class GraphMatchManagerConnections extends GraphMatchManager {
 
 
     constructor(
-        private readonly edge: GraphBaseEdge
+        private readonly edge: GraphBaseEdge,
+        nodeManager: GraphNodeManager
     ) {
-        super();
+        super(nodeManager);
     }
 
     calculateFormula({formula}: { formula: string }) {

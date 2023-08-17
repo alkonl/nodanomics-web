@@ -4,24 +4,30 @@ import {ElementParameter} from "../ElementParameter";
 // eslint-disable-next-line import/named
 import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
 import {IDatasetDatafield} from "../../../../../../interface";
-import {useProjectDatasets, useUpdateNode} from "../../../../../../hooks";
+import {useUpdateNode} from "../../../../../../hooks";
 import {useDiagramEditorState} from "../../../../../../redux";
 
 export const DatasetParameter: React.FC<{
     nodeData: IDatasetDatafield
 }> = ({nodeData}) => {
-    const {currentDiagramId} = useDiagramEditorState()
-    const projectDatasets = useProjectDatasets({
-        diagramId: currentDiagramId,
-    })
+    const {currentDiagramId, spreadsheets} = useDiagramEditorState()
+    // const projectDatasets = useProjectDatasets({
+    //     diagramId: currentDiagramId,
+    // })
     const {updateNodeData} = useUpdateNode<IDatasetDatafield>({
         nodeId: nodeData.id,
     })
 
-    const mappedProjectDatasets = projectDatasets?.data.map((projectDataset) => ({
-        value: projectDataset.id,
-        label: projectDataset.name,
-    })) || []
+    const mappedProjectDatasets = spreadsheets ? Object.entries(spreadsheets).map(([key, value]) => ({
+        value: key,
+        label: value.name,
+    })) : []
+
+
+    // const mappedProjectDatasets = projectDatasets?.data.map((projectDataset) => ({
+    //     value: projectDataset.id,
+    //     label: projectDataset.name,
+    // })) || []
 
 
     const changeDataset = (event: SelectChangeEvent) => {

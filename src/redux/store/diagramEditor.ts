@@ -8,6 +8,7 @@ import {
     IReactFlowEdgeConnection,
     IReactFlowNode,
     isINodeSize,
+    IStructuredSpreadsheetsData,
     IUpdateReactflowNode
 } from "../../interface";
 // eslint-disable-next-line import/named
@@ -16,21 +17,6 @@ import {Optionalize} from "../../utils";
 import {Graph, resetNodeStates, RunManager} from "../../service";
 import {canNodeHasChildren} from "../../service/reactflow/node/canNodeHasChildren";
 
-export interface IDiagramSpreadsheet {
-    xAxisIndex: number
-    yAxisIndex: number
-    rows: {
-        [key: string]: {
-            [key: string]: {
-                content: string
-            }
-        }
-    }
-}
-
-export interface IDiagramSpreadsheets {
-    [key: string]: IDiagramSpreadsheet
-}
 
 export interface IDiagramEditorState {
     currentDiagramId?: string
@@ -50,7 +36,7 @@ export interface IDiagramEditorState {
     currentRunningDiagramStep: number
     isDiagramRunning: boolean
     isDiagramRunningInterval: boolean
-    spreadsheets?: IDiagramSpreadsheets
+    spreadsheets?: IStructuredSpreadsheetsData
 }
 
 const initialState: IDiagramEditorState = {
@@ -347,9 +333,12 @@ export const diagramEditorSlice = createSlice({
 
         },
         setSpreadsheets: (state, {payload}: PayloadAction<{
-            spreadsheets: IDiagramSpreadsheets
+            spreadsheets: IStructuredSpreadsheetsData
         }> ) => {
             state.spreadsheets = payload.spreadsheets
+            graph.setSpreadsheetsData({
+                spreadsheetData: payload.spreadsheets
+            })
         },
         resetDiagramRun: (state) => {
             const resetNode = resetNodeStates(state.diagramNodes)
