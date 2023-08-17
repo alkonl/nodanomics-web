@@ -2,6 +2,10 @@ export interface IGetSpreadsheetRequests {
     spreadsheetId?: string;
 }
 
+export interface IGetManySpreadsheetRequests {
+    spreadsheetIds?: string[];
+}
+
 export interface IGetSpreadsheetResponse {
     createdAt: string;
     id: string;
@@ -28,3 +32,6 @@ export interface IGetSpreadsheetResponse {
         }[];
     }[]
 }
+
+export type IGetManySpreadsheetResponse = IGetSpreadsheetResponse[]
+

@@ -1,5 +1,5 @@
 import React from 'react';
-import {BaseNodeContainer} from "../container/BaseNodeContainer";
+import {BaseNodeContainer} from "../container";
 // eslint-disable-next-line import/named
 import {NodeProps} from "reactflow";
 import {IDatasetDatafield} from "../../../../interface";
@@ -21,6 +21,7 @@ export const DatasetNode: React.FC<NodeProps<IDatasetDatafield>> = (props) => {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
+                backgroundColor: EColor.black,
             }}>
                 <Box sx={{
                     flex: 1,

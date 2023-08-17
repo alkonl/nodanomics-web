@@ -141,7 +141,7 @@ export const UploadSpreadsheetForm: React.FC<{
             </Box>
             <Box>
                 <>
-                    {(uploadedFile || googleSheetId) && <MButton.Submit type="submit">Submit</MButton.Submit>}
+                    {googleSheetId && <MButton.Submit type="submit">Submit</MButton.Submit>}
                     {isSuccess && <Typography>Success</Typography>}
                     {isError && <Typography>Error</Typography>}
                 </>

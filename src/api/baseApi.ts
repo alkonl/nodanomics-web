@@ -22,7 +22,7 @@ import {
     IGetAllGoogleSpreadsheetResponse,
     IGetDiagramByIdResponse,
     IGetDiagramTagsRequest,
-    IGetDiagramTagsResponse,
+    IGetDiagramTagsResponse, IGetManySpreadsheetRequests, IGetManySpreadsheetResponse,
     IGetProjectInfoRequest,
     IGetProjectInfoResponse,
     IGetProjectsRequest,
@@ -575,6 +575,15 @@ export const baseApi = createApi({
                 }
             }
         }),
+        getManySpreadsheet: builder.query<IGetManySpreadsheetResponse, IGetManySpreadsheetRequests>({
+            query: (params: IGetManySpreadsheetRequests) => {
+                return {
+                    url: `/project/spreadsheets`,
+                    method: 'GET',
+                    params: params,
+                }
+            }
+        }),
         getAllUserGoogleSpreadSheet: builder.query<IGetAllGoogleSpreadsheetResponse, undefined>({
             query: () => {
                 return {
@@ -619,5 +628,6 @@ export const {
     useGetSpreadSheetsBaseInfoQuery,
     useGetSpreadSheetQuery,
     useGetAllUserGoogleSpreadSheetQuery,
+    useGetManySpreadsheetQuery,
 } = baseApi;
 

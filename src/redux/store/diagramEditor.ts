@@ -16,6 +16,22 @@ import {Optionalize} from "../../utils";
 import {Graph, resetNodeStates, RunManager} from "../../service";
 import {canNodeHasChildren} from "../../service/reactflow/node/canNodeHasChildren";
 
+export interface IDiagramSpreadsheet {
+    xAxisIndex: number
+    yAxisIndex: number
+    rows: {
+        [key: string]: {
+            [key: string]: {
+                content: string
+            }
+        }
+    }
+}
+
+export interface IDiagramSpreadsheets {
+    [key: string]: IDiagramSpreadsheet
+}
+
 export interface IDiagramEditorState {
     currentDiagramId?: string
     name?: string
@@ -34,6 +50,7 @@ export interface IDiagramEditorState {
     currentRunningDiagramStep: number
     isDiagramRunning: boolean
     isDiagramRunningInterval: boolean
+    spreadsheets?: IDiagramSpreadsheets
 }
 
 const initialState: IDiagramEditorState = {
@@ -328,6 +345,11 @@ export const diagramEditorSlice = createSlice({
                 state.isDiagramRunningInterval = isDiagramRunningInterval
             }
 
+        },
+        setSpreadsheets: (state, {payload}: PayloadAction<{
+            spreadsheets: IDiagramSpreadsheets
+        }> ) => {
+            state.spreadsheets = payload.spreadsheets
         },
         resetDiagramRun: (state) => {
             const resetNode = resetNodeStates(state.diagramNodes)
