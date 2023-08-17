@@ -6,7 +6,7 @@ import {GraphChainEdge} from "../GraphChainEdge";
 import {Graph} from "../../Graph";
 
 export class GraphEdgeFactory {
-    static createEdge({source, target, edgeData,graph}: {
+    static createEdge({source, target, edgeData, graph}: {
         source: GraphBaseNode,
         target: GraphBaseNode,
         edgeData: IDiagramConnectionData,
@@ -15,11 +15,11 @@ export class GraphEdgeFactory {
         const edgeType = edgeData.type;
         switch (edgeType) {
             case EConnection.DataConnection:
-                return new GraphDataEdge(source, target, edgeData);
+                return new GraphDataEdge(source, target, edgeData, graph.nodesManager);
             case EConnection.LogicConnection:
-                return new GraphLogicEdge(source, target, edgeData);
+                return new GraphLogicEdge(source, target, edgeData, graph.nodesManager);
             case EConnection.ChainConnection:
-                return new GraphChainEdge(source, target, edgeData,graph.nodesManager);
+                return new GraphChainEdge(source, target, edgeData, graph.nodesManager);
             default:
                 throw new Error(`Unknown edge type: ${edgeType}`);
         }
