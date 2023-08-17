@@ -1,5 +1,5 @@
 import * as Match from "mathjs";
-import {INumberVariable, IStructuredSpreadsheetData} from "../../../interface";
+import {INumberVariable, ISpreadsheetRowsData, IStructuredSpreadsheetData} from "../../../interface";
 import {GraphNodeManager} from "../NodeManager";
 import {GraphDatasetDatafieldNode} from "../GraphNodes/GraphDatasetDatafieldNode";
 import {GraphTagManager} from "../GraphNodes";
@@ -15,9 +15,22 @@ export abstract class GraphMatchManager {
         this.tagManager = new GraphTagManager(nodeManager)
     }
 
-     datasetData({datasetTag}: {datasetTag: string}):  IStructuredSpreadsheetData | undefined {
+    datasetData({datasetTag}: { datasetTag: string }): IStructuredSpreadsheetData | undefined {
         const dataset = this.nodeManager.getNodeByTag({tag: datasetTag}) as GraphDatasetDatafieldNode
         return dataset?.spreadsheet
+    }
+
+    getDatasetRowsByTags({tags}: { tags: string[] }): { [tag: string]: ISpreadsheetRowsData } {
+        const rowsPerTag: { [tag: string]: ISpreadsheetRowsData } = {}
+        for (const tag of tags) {
+            const dataset = this.datasetData({datasetTag: tag})
+            if (dataset && dataset.rows) {
+                rowsPerTag[tag] = [...dataset.rows]
+
+            }
+        }
+        return rowsPerTag
+
     }
 
     calculateFormula({formula, variables}: {
@@ -26,16 +39,16 @@ export abstract class GraphMatchManager {
     }) {
         try {
             if (formula) {
-                // const input = "(largerEq(playerMMR, mmrRangeDataset[0][6]) * smallerEq(playerMMR, mmrRangeDataset[1][6])";
-                // const datasetVariables = this.getDatasetValues({formula}) || []
-                // console.log('datasetVariables: ', datasetVariables)
-                const inputString = "largerEq(playerMMR, mmrRangeDataset[0][0]) * smallerEq(playerMMR, mmrRangeDataset[1][0])";
+                const pattern = /(\w+)\[\d+\]\[\d+\]/g;
+
+                const datasetTags = [...formula.matchAll(pattern)].map((match) => match[1])
+                    .filter((value, index, self) => self.indexOf(value) === index);
 
                 const transformedString = transformString(formula);
 
-                console.log('transformedString: ', transformedString);
                 const tagVariables = this.tagManager.getNodeTagVariables()
-                const dataset = this.datasetData({datasetTag: 'mmrRangeDataset'})
+                console.log('datasetTags', datasetTags)
+                const datasetRows = this.getDatasetRowsByTags({tags: datasetTags})
                 const allVariables = [...variables, ...tagVariables]
                 const compiledFormula = Match.compile(transformedString)
                 const mappedVariables = allVariables.reduce((acc: {
@@ -47,10 +60,8 @@ export abstract class GraphMatchManager {
                     }
                     return acc
                 }, {})
-                console.log('dataset: ', dataset?.rows)
-                const pre = dataset?.rows || []
-                const rows = [...pre]
-                return compiledFormula.evaluate({...mappedVariables, mmrRangeDataset: rows})
+
+                return compiledFormula.evaluate({...mappedVariables, ...datasetRows})
             }
         } catch (e) {
             console.error(e)
