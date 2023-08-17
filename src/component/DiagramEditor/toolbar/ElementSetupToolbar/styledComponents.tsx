@@ -1,5 +1,6 @@
 import React from "react";
-import {Box, Input, styled, Typography} from "@mui/material";
+// eslint-disable-next-line import/named
+import {Box, Input, styled, TextareaAutosize, TextareaAutosizeProps, TextField,TextFieldProps, Typography} from "@mui/material";
 import {EColor, EFontColor} from "../../../../constant";
 // eslint-disable-next-line import/named
 import {InputProps} from "@mui/material/Input/Input";
@@ -85,10 +86,24 @@ export const ParameterList: React.FC<{
     )
 }
 
+const TextArea: React.FC<TextFieldProps> = ({...props}) => {
+
+    return <TextField
+        multiline
+        rows={4}
+        sx={{
+            color: EFontColor.grey4,
+            borderColor: EColor.grey2,
+            borderStyle: 'solid',
+        }}
+        {...props}/>
+}
+
 export const Parameter = {
     Container: ParameterContainer,
     Label: ParameterLabel,
     Text: ParameterText,
     Input: InputContainer,
-    List: ParameterList
+    List: ParameterList,
+    TextArea: TextArea
 }

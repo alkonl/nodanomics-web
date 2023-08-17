@@ -1,46 +1,88 @@
 import React from 'react';
 import {Box} from "@mui/material";
 // eslint-disable-next-line import/named
-import {Handle, NodeProps, Position} from "reactflow";
-import {EConnection, IOriginNodeData} from "../../../../interface";
-import {NodeTextName} from "../styledComponent";
-import {InteractiveNodeContainer} from "../container";
-import {EColor} from "../../../../constant";
-import {BaseNodeContainer} from "../container/BaseNodeContainer";
+import {NodeProps, Position} from "reactflow";
+import {IOriginNodeData} from "../../../../interface";
+import {NodeStyle, NodeTextName} from "../styledComponent";
+import {EColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
+import {BaseNodeShapeContainer} from "../container";
+import {EventHandle} from "../../CustomHandle/EventHandle";
+import {DataHandle} from "../../CustomHandle/DataHandle";
+
+const SIZE = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 4
+const clipPath = 'polygon(50% 0%, 100% 50%, 100% 100%, 0 100%, 0 50%)'
 
 export const OriginNode: React.FC<NodeProps<IOriginNodeData>> = (props) => {
     const {isConnectable, data} = props
     return (
-        <InteractiveNodeContainer data={data}>
-            <BaseNodeContainer node={props}>
+        <>
+            {/*connections*/}
             <Box sx={{
-                padding: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
+                position: 'absolute',
+                width: 'calc(100% + 28px)',
+                height: 'calc(100% + 28px)',
+                left: -14,
+                top: -14,
             }}>
-                <NodeTextName>
-                    Origin
-                </NodeTextName>
-                <NodeTextName>
-                    trigger: {data.trigger.mode}
-                </NodeTextName>
-                <NodeTextName>
-                    action: {data.actionMode}
-                </NodeTextName>
+                <Box sx={{
+                    width: '100%',
+                    position: 'absolute',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    bottom: 40,
+                }}>
+                    <EventHandle
+                        type="target"
+                        position={Position.Left}
+                        isConnectable={isConnectable}
+
+                    />
+                    <EventHandle
+                        type="source"
+                        position={Position.Right}
+                        isConnectable={isConnectable}
+                    />
+                </Box>
+                <Box sx={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 'calc(50% - 5px)',
+                }}>
+                    <DataHandle
+                        type="source"
+                        position={Position.Top}
+                        isConnectable={isConnectable}
+                    />
+                </Box>
             </Box>
-            <Handle type="source" position={Position.Right} id={EConnection.DataConnection} isConnectable={isConnectable}/>
-            <Handle
-                type="target"
-                position={Position.Left}
-                id={EConnection.EventConnection}
-                isConnectable={isConnectable}
-                style={{
-                    background: EColor.orange,
+            <BaseNodeShapeContainer
+                params={{
+                    width: SIZE,
+                    height: SIZE,
+                    clipPath: clipPath,
                 }}
-            />
-            </BaseNodeContainer>
-        </InteractiveNodeContainer>
+                node={props}>
+
+                {/*content*/}
+                <Box sx={{
+                    flex: 1,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    clipPath: clipPath,
+                    background: EColor.black,
+                }}>
+                    <NodeStyle.Name sx={{
+                        position: 'absolute',
+                        top: GAP_BETWEEN_EDITOR_CANVAS_DOTS * 2.5,
+                        paddingLeft: 0.5,
+                        paddingRight: 0.5,
+                    }}>
+                        {data.name}
+                    </NodeStyle.Name>
+                </Box>
+            </BaseNodeShapeContainer>
+
+
+        </>
     );
 };
