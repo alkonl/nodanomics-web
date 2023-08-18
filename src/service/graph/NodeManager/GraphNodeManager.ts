@@ -58,4 +58,8 @@ export class GraphNodeManager {
     getNodeByTag({tag}: {tag: string}) {
         return this._nodes.find(node => node.data.tag === tag && node instanceof GraphDatasetDatafieldNode);
     }
+
+    has(node: GraphBaseNode) {
+        return this._nodes.includes(node);
+    }
 }

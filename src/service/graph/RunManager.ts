@@ -7,6 +7,7 @@ import {GraphChainEdge, GraphDataEdge} from "./GraphEdge";
 export interface IChainItem {
     target: GraphBaseNode
     edge?: GraphChainEdge
+    children?: IChainItem[]
 }
 
 export class RunManager {
@@ -47,14 +48,15 @@ export class RunManager {
     invokeStep() {
         this.incrementStep()
         this.resetIsTransferredResources()
-        const nodes = this.sortedNodes()
+        const nodes = this.getExecutionOrder()
         console.log('chain nodes: ', nodes)
+        this.executeChainOrder(nodes)
         nodes.forEach(node => {
             const target = node.target
             const chainConnection = node.edge
             if (target instanceof GraphInvokableNode && chainConnection?.isMeetCondition) {
                 target.invokeStep()
-                this.invokedNodes.add(target)
+                // this.invokedNodes.add(target)
             }
         })
         this.updateState()
@@ -65,6 +67,22 @@ export class RunManager {
             }
         })
         this.invokedNodes.clear()
+    }
+
+    private executeChainOrder(chainItems: IChainItem[]) {
+        chainItems.forEach(chainItem => {
+            const target = chainItem.target
+            const chainConnection = chainItem.edge
+            const isChainMeetCondition = chainConnection?.isMeetCondition === undefined  || chainConnection?.isMeetCondition
+            console.log('chainConnection: ', chainConnection?.isMeetCondition)
+            if (target instanceof GraphInvokableNode  && isChainMeetCondition && !this.invokedNodes.has(target)) {
+                target.invokeStep()
+                this.invokedNodes.add(target)
+                if(chainItem.children){
+                    this.executeChainOrder(chainItem.children)
+                }
+            }
+        })
     }
 
 
@@ -81,7 +99,7 @@ export class RunManager {
         return startNodes
     }
 
-    private sortedNodes(): IChainItem[] {
+    private getExecutionOrder(): IChainItem[] {
         const startedNodes = this.getStartedNodes()
         const childrenNodes = startedNodes.map(source => {
             return this.getNodesChildrenRecursive({
@@ -101,21 +119,20 @@ export class RunManager {
         }).flat()
     }
 
-    private getNodesChildrenRecursive(node: IChainItem, children: IChainItem[] = [node]) {
-        const nodes = this.getNodesChildren(node)
+    private getNodesChildrenRecursive(startedChainItem: IChainItem, children: IChainItem[] = [startedChainItem]) {
+        const childChainItem = this.getNodesChildren(startedChainItem)
 
-        nodes.forEach(child => {
-            if (!children.includes(child)) {
-                children.push(child)
-            }
-        })
+        startedChainItem.children = childChainItem
+        // nodes.forEach(child => {
+        //     if (!children.includes(child)) {
+        //         children.push(child)
+        //     }
+        // })
 
-        nodes.forEach(child => {
+        childChainItem.forEach(child => {
 
-            const toNextEdges = child.target.outgoingEdges.filter(edge => {
-                return true
-            })
-            if (toNextEdges.length > 0) {
+            const outgoingEdges = child.target.outgoingEdges
+            if (outgoingEdges.length > 0) {
                 this.getNodesChildrenRecursive(child, children)
             }
         })
