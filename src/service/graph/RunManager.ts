@@ -4,6 +4,11 @@ import {isIUpdateGraphNodeStatePerStep, isUpdateGraphNodeState} from "../../inte
 import {GraphNodeManager} from "./NodeManager";
 import {GraphChainEdge, GraphDataEdge} from "./GraphEdge";
 
+export interface IChainItem {
+    target: GraphBaseNode
+    edge?: GraphChainEdge
+}
+
 export class RunManager {
     private graph: Graph
     private _currentStep = 0
@@ -43,11 +48,13 @@ export class RunManager {
         this.incrementStep()
         this.resetIsTransferredResources()
         const nodes = this.sortedNodes()
-
+        console.log('chain nodes: ', nodes)
         nodes.forEach(node => {
-            if (node instanceof GraphInvokableNode) {
-                node.invokeStep()
-                this.invokedNodes.add(node)
+            const target = node.target
+            const chainConnection = node.edge
+            if (target instanceof GraphInvokableNode && chainConnection?.isMeetCondition) {
+                target.invokeStep()
+                this.invokedNodes.add(target)
             }
         })
         this.updateState()
@@ -72,31 +79,19 @@ export class RunManager {
             }
         })
         return startNodes
-        // if (startNode && startNode instanceof GraphStartNode) {
-        //     return startNode
-        // }
-        // throw new Error('Start node not found')
-        // return this.graph.nodes.filter(node => {
-        //     if (node instanceof GraphOriginNode) {
-        //         if (node.triggerMode === ENodeTrigger.enabling || node.triggerMode === ENodeTrigger.passive) {
-        //             return node.hasEventListeners
-        //         }
-        //         return node
-        //     } else if (node instanceof GraphEventListenerNode) {
-        //         return node
-        //     }
-        // })
     }
 
-    private sortedNodes(): GraphBaseNode[] {
+    private sortedNodes(): IChainItem[] {
         const startedNodes = this.getStartedNodes()
         const childrenNodes = startedNodes.map(source => {
-            return this.getNodesChildrenRecursive(source)
+            return this.getNodesChildrenRecursive({
+                target: source,
+            })
         })
         // nodes queue that start from trigger listener invoke in last step
         return childrenNodes.sort((a, b) => {
-            const aFirstNode = a[0]
-            const bFirstNode = b[0]
+            const aFirstNode = a[0].target
+            const bFirstNode = b[0].target
             if (aFirstNode instanceof GraphEventListenerNode && !(bFirstNode instanceof GraphEventListenerNode)) {
                 return -1
             } else if (!(aFirstNode instanceof GraphEventListenerNode) && bFirstNode instanceof GraphEventListenerNode) {
@@ -106,7 +101,7 @@ export class RunManager {
         }).flat()
     }
 
-    private getNodesChildrenRecursive(node: GraphBaseNode, children: GraphBaseNode[] = [node]) {
+    private getNodesChildrenRecursive(node: IChainItem, children: IChainItem[] = [node]) {
         const nodes = this.getNodesChildren(node)
 
         nodes.forEach(child => {
@@ -117,10 +112,7 @@ export class RunManager {
 
         nodes.forEach(child => {
 
-            const toNextEdges = child.outgoingEdges.filter(edge => {
-                // if (edge.data.targetMode === EConnectionMode.LoopChildrenToExternal) {
-                //     return false
-                // }
+            const toNextEdges = child.target.outgoingEdges.filter(edge => {
                 return true
             })
             if (toNextEdges.length > 0) {
@@ -130,14 +122,14 @@ export class RunManager {
         return children
     }
 
-    private getNodesChildren(node: GraphBaseNode): GraphBaseNode[] {
-        const children = node.outgoingEdges.map(edge => {
+    private getNodesChildren(node: IChainItem): IChainItem[] {
+        const children = node.target.outgoingEdges.map(edge => {
             const target = edge.target
-            if (edge instanceof GraphChainEdge && edge.isMeetCondition) {
-                return target
+            if (edge instanceof GraphChainEdge) {
+                return {target, edge}
             }
         })
-        return children.filter(item => item !== undefined) as GraphBaseNode[]
+        return children.filter(item => item !== undefined) as IChainItem[]
     }
 
     private resetIsTransferredResources() {
