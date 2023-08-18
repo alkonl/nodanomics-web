@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {DiagramCanvas} from "../DiagramCanvas";
 import style from './DiagramEditor.module.scss'
-import {ElementSetupToolbar, LeftToolbar, ElementToolbar} from "../toolbar";
+import {ElementSetupToolbar, LeftToolbar, ElementToolbar, ExecutionToolbar} from "../toolbar";
 import {useSetAllSpreadSheetsToState, useGetEditDiagramFromServer, useWidthAndHeight} from "../../../hooks";
 import {Box} from "@mui/material";
 import {DiagramEditorHeader} from "../DiagramEditorHeader";
@@ -67,6 +67,16 @@ export const DiagramEditor = () => {
                                 flex: 1,
                             }}
                         >
+                            <Box
+                                sx={{
+                                    position: 'absolute',
+                                    top: 10,
+                                    left: '50%',
+                                    transform: 'translateX(-50%)',
+                                }}
+                            >
+                                <ExecutionToolbar/>
+                            </Box>
                             <Box
                                 sx={{
                                     position: 'absolute',

@@ -3,10 +3,6 @@ import {DiagramElementPreviewToolbar, EDiagramNode, EElementType} from "../../..
 import {Box} from "@mui/material";
 import {EColor} from "../../../../constant";
 import {ElementToolbarSection} from "./ElementToolbarSection";
-import {useInvokeStep, useResetDiagramRun, useToggle} from "../../../../hooks";
-import {MButton} from '../../../base';
-import {RunningStep} from "./RunningStep";
-import {ExecutionGraphPopUp} from "../../ExecutionGraph";
 
 
 export enum EElementShow {
@@ -35,7 +31,7 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
             type: EDiagramNode.Origin,
             tooltip: 'Origin',
             toolbarName: 'O',
-        },{
+        }, {
             elementType: EElementType.Node,
             type: EDiagramNode.Sink,
             tooltip: 'Sink',
@@ -46,7 +42,7 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
             tooltip: 'Formula',
             toolbarName: 'F',
         },
-        ],
+    ],
     [EElementShow.Logic]: [{
         elementType: EElementType.Node,
         type: EDiagramNode.MicroLoop,
@@ -80,17 +76,10 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
 }
 
 export const ElementToolbar = () => {
-    const formated = Object.entries(mockDiagramNodes);
+    const formatted = Object.entries(mockDiagramNodes);
 
-    const {toggleStepInterval, isRunning, runStep} = useInvokeStep();
-    const {resetDiagramRun} = useResetDiagramRun();
-    const executionGraphPopUp = useToggle();
     return (
         <>
-            <ExecutionGraphPopUp
-                isShow={executionGraphPopUp.isOpened}
-                onClose={executionGraphPopUp.close}
-            />
             <Box sx={{
                 pointerEvents: 'auto',
                 display: 'flex',
@@ -102,25 +91,7 @@ export const ElementToolbar = () => {
                 py: 2,
                 backgroundColor: EColor.white,
             }}>
-
-                <MButton.Submit
-                    onClick={runStep}
-                >
-                    Step
-                </MButton.Submit>
-                <MButton.Submit
-                    onClick={toggleStepInterval}
-                >
-                    {isRunning ? 'Stop' : 'Start'}
-                </MButton.Submit>
-                <MButton.Submit onClick={resetDiagramRun}>
-                    Reset
-                </MButton.Submit>
-                <RunningStep/>
-                <MButton.Submit onClick={executionGraphPopUp.open}>
-                    Execution Graph
-                </MButton.Submit>
-                {formated.map(([sectionName, elements]) => {
+                {formatted.map(([sectionName, elements]) => {
                     return <ElementToolbarSection
                         key={sectionName}
                         section={{
