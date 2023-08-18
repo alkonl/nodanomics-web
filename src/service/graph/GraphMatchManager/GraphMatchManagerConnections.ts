@@ -19,11 +19,15 @@ export class GraphMatchManagerConnections extends GraphMatchManager {
         let formattedFormula = formula;
 
         if (isIGetNodeExternalValue(source)) {
-            formattedFormula = `_value ${formula}`;
-            variables.push({
-                variableName: '_value',
-                value: source.nodeExternalValue
-            })
+            const variableName = `_${source.data.name.replace(/\s/g, '')}Inner`;
+            formattedFormula = `${variableName} ${formula}`;
+            if (source.nodeExternalValue) {
+                variables.push({
+                    variableName: variableName,
+                    value: source.nodeExternalValue
+                })
+            }
+
         }
 
         try {

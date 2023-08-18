@@ -136,24 +136,6 @@ export class RunManager {
             if (edge instanceof GraphChainEdge && edge.isMeetCondition) {
                 return target
             }
-            // const isHasEventIncomingConnection = target.incomingEdges.some(edge => edge.type === EConnection.ChainConnection)
-            // const isHasOtherIncomingConnectionThenEvent = target.incomingEdges.some(edge => edge.type !== EConnection.ChainConnection)
-            // const isHasIncomingEdges = target.incomingEdges.length > 0
-            // if (!isHasIncomingEdges) {
-            //     return edge.target
-            // }
-            // if (isHasEventIncomingConnection && isHasOtherIncomingConnectionThenEvent && edge.type === EConnection.ChainConnection) {
-            //     return edge.target
-            // }
-            //
-            // if (isHasEventIncomingConnection && edge.type === EConnection.ChainConnection) {
-            //     return edge.target
-            // }
-            //
-            // if (!isHasEventIncomingConnection) {
-            //     return edge.target
-            // }
-
         })
         return children.filter(item => item !== undefined) as GraphBaseNode[]
     }
