@@ -17,7 +17,6 @@ export const useShouldLoadRoute = () => {
     }, [session]);
 
     return useMemo(() => {
-        console.log('session', session, isNoSessionMoreThan2Seconds)
 
         if (isNoSessionMoreThan2Seconds) {
             return {isLoading: false, hasInvalidClaims: true}

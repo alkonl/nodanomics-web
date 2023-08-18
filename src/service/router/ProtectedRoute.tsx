@@ -8,10 +8,6 @@ import {EColor} from "../../constant";
 export const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({children}) => {
     const canLoad = useShouldLoadRoute();
 
-    useEffect(() => {
-        console.log('canLoad', canLoad)
-    }, [canLoad]);
-
     if (canLoad.isLoading) {
         return <div>
             <CircularProgress sx={{

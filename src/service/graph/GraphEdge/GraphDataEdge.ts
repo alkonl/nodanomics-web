@@ -30,6 +30,7 @@ export class GraphDataEdge extends GraphBaseEdge<IDataConnectionData> {
 
     private calcFormula() {
         if (this.data.formula) {
+            console.log('DataEdge.formula: ', this.data.formula)
             const res = this.matchManager.calculateFormula({formula: this.data.formula})
             if (typeof res === 'number') {
                 return res;

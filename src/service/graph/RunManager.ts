@@ -49,7 +49,6 @@ export class RunManager {
         this.incrementStep()
         this.resetIsTransferredResources()
         const nodes = this.getExecutionOrder()
-        console.log('chain nodes: ', nodes)
         this.executeChainOrder(nodes)
         nodes.forEach(node => {
             const target = node.target
@@ -74,7 +73,6 @@ export class RunManager {
             const target = chainItem.target
             const chainConnection = chainItem.edge
             const isChainMeetCondition = chainConnection?.isMeetCondition === undefined  || chainConnection?.isMeetCondition
-            console.log('chainConnection: ', chainConnection?.isMeetCondition)
             if (target instanceof GraphInvokableNode  && isChainMeetCondition && !this.invokedNodes.has(target)) {
                 target.invokeStep()
                 this.invokedNodes.add(target)

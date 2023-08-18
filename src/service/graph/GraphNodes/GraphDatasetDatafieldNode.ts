@@ -46,11 +46,6 @@ export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield> 
         }catch (e) {
             console.error(e)
         }
-
-        // console.log('getValue', this.spreadsheet?.rows[y][x], {x, y}, {
-        //     xOffset: this.xOffset,
-        //     yOffset: this.yOffset
-        // }, this.spreadsheet?.rows)
     }
 
 }

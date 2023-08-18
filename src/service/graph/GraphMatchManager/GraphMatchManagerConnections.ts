@@ -18,10 +18,13 @@ export class GraphMatchManagerConnections extends GraphMatchManager {
         const variables: INumberVariable[] = [];
         let formattedFormula = formula;
 
-        const pattern = /[a-zA-Z]/; // Regular expression for any letter (uppercase or lowercase)
+        const letterPattern = /[a-zA-Z]/; // Regular expression for any letter (uppercase or lowercase)
+        const matchSignPatter = /=|==|===|>|>=|<|<=|!|!=|or|xor/; // Regular expression for specified operators
+
         // letter could be a variable name
-        const isAnyLetterInFormula = pattern.test(formattedFormula)
-        if (isIGetNodeExternalValue(source) && !isAnyLetterInFormula) {
+        const isAnyLetterInFormula = letterPattern.test(formattedFormula)
+        const isAnyMatchSignInFormula = matchSignPatter.test(formattedFormula)
+        if (isIGetNodeExternalValue(source) && !isAnyLetterInFormula && isAnyMatchSignInFormula) {
             const variableName = `_${source.data.name.replace(/\s/g, '')}Inner`;
             formattedFormula = `${variableName} ${formula}`;
             if (source.nodeExternalValue) {
