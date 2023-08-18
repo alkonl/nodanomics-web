@@ -1,6 +1,6 @@
 import {GraphBaseEdge} from "./abstracts";
 import {IDataConnectionData} from "../../../interface";
-import {GraphBaseNode} from "../GraphNodes";
+import {GraphBaseNode, GraphDataNode} from "../GraphNodes";
 import {GraphNodeManager} from "../NodeManager";
 import {GraphMatchManagerConnections} from "../GraphMatchManager";
 
@@ -14,7 +14,6 @@ export class GraphDataEdge extends GraphBaseEdge<IDataConnectionData> {
         target: GraphBaseNode,
         data: IDataConnectionData,
         nodesManager: GraphNodeManager,
-
     ) {
         super(source, target, data);
         this.matchManager = new GraphMatchManagerConnections(this, nodesManager);
@@ -30,6 +29,10 @@ export class GraphDataEdge extends GraphBaseEdge<IDataConnectionData> {
 
     private calcFormula() {
         if (this.data.formula) {
+            if (this.data.formula === 'all' && this.source instanceof GraphDataNode) {
+                return this.source.resourcesToProvideCount;
+            }
+            console.log('DataEdge.formula: ', this.data.formula)
             const res = this.matchManager.calculateFormula({formula: this.data.formula})
             if (typeof res === 'number') {
                 return res;
@@ -38,7 +41,7 @@ export class GraphDataEdge extends GraphBaseEdge<IDataConnectionData> {
     }
 
     changeIsTransferredResources(isTransferredResources: boolean) {
-        if(this._data){
+        if (this._data) {
             this._data = {
                 ...this._data,
                 isTransferredResources: isTransferredResources,

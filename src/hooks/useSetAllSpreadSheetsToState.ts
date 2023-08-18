@@ -1,6 +1,7 @@
 import {useGetManySpreadsheetQuery, useGetProjectInfoQuery, useGetSpreadSheetsBaseInfoQuery} from "../api";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {useEffect} from "react";
+import {IStructuredSpreadsheetsData} from "../interface";
 
 export const useSetAllSpreadSheetsToState = () => {
     const dispatch = useAppDispatch()
@@ -28,9 +29,10 @@ export const useSetAllSpreadSheetsToState = () => {
 
     useEffect(() => {
         if (projectSpreadsheets) {
-            const formatted = projectSpreadsheets.reduce((accSpreadsheet, spreadsheet) => {
+            const formatted: IStructuredSpreadsheetsData = projectSpreadsheets.reduce((accSpreadsheet, spreadsheet) => {
                 // find y column index, where rows starts
                 const yAxisIndex = spreadsheet.rows.findIndex((cells) => cells.values.some((cell) => cell.content === 'Y Axis'))
+
                 // find x column index, where columns starts
                 let xAxisIndex = 0
                 spreadsheet.rows.find((cells, index) => {
@@ -39,27 +41,45 @@ export const useSetAllSpreadSheetsToState = () => {
                         return true
                     }
                 })
+
                 // const yAxisIndex = spreadsheet.rows.findIndex((cells) => cells.values.some((cell) => cell.content === 'Y Axis'))
-                const rows = spreadsheet.rows.reduce((acc, row, index) => {
-                    return {
-                        ...acc,
-                        [index]: row.values.reduce((acc, value, valueIndex) => {
-                            return {
-                                ...acc,
-                                [valueIndex]: {
-                                    content: value.content,
-                                },
-                            }
-                        }, {})
+
+                const rows: (string | number)[][] = [];
+
+                for (let i = yAxisIndex + 1; i < spreadsheet.rows.length; i++) {
+                    const row = spreadsheet.rows[i];
+                    const newRow: (string | number)[] = [];
+
+                    for (let j = xAxisIndex + 1; j < row.values.length; j++) {
+                        const cell = row.values[j];
+                        const numContent = Number(cell.content);
+
+                        if (!isNaN(numContent)) {
+                            newRow.push(numContent);
+                        } else {
+                            newRow.push(cell.content);
+                        }
                     }
-                }, {})
+
+                    rows.push(newRow);
+                }
+
+                // const rows: (string | number)[][] = spreadsheet.rows.map((row) => {
+                //     return row.values.map((cell) => {
+                //         const numContent = Number(cell.content)
+                //         if (!isNaN(numContent)) {
+                //             return numContent
+                //         } else {
+                //             return cell.content
+                //         }
+                //     })
+                // })
                 return {
                     [spreadsheet.id]: {
                         name: spreadsheet.name,
                         xAxisIndex,
                         yAxisIndex,
                         rows,
-                        //
                     },
                     ...accSpreadsheet
                 }

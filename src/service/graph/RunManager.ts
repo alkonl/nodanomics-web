@@ -4,6 +4,12 @@ import {isIUpdateGraphNodeStatePerStep, isUpdateGraphNodeState} from "../../inte
 import {GraphNodeManager} from "./NodeManager";
 import {GraphChainEdge, GraphDataEdge} from "./GraphEdge";
 
+export interface IChainItem {
+    target: GraphBaseNode
+    edge?: GraphChainEdge
+    children?: IChainItem[]
+}
+
 export class RunManager {
     private graph: Graph
     private _currentStep = 0
@@ -42,12 +48,14 @@ export class RunManager {
     invokeStep() {
         this.incrementStep()
         this.resetIsTransferredResources()
-        const nodes = this.sortedNodes()
-
+        const nodes = this.getExecutionOrder()
+        this.executeChainOrder(nodes)
         nodes.forEach(node => {
-            if (node instanceof GraphInvokableNode) {
-                node.invokeStep()
-                this.invokedNodes.add(node)
+            const target = node.target
+            const chainConnection = node.edge
+            if (target instanceof GraphInvokableNode && chainConnection?.isMeetCondition) {
+                target.invokeStep()
+                // this.invokedNodes.add(target)
             }
         })
         this.updateState()
@@ -58,6 +66,21 @@ export class RunManager {
             }
         })
         this.invokedNodes.clear()
+    }
+
+    private executeChainOrder(chainItems: IChainItem[]) {
+        chainItems.forEach(chainItem => {
+            const target = chainItem.target
+            const chainConnection = chainItem.edge
+            const isChainMeetCondition = chainConnection?.isMeetCondition === undefined  || chainConnection?.isMeetCondition
+            if (target instanceof GraphInvokableNode  && isChainMeetCondition && !this.invokedNodes.has(target)) {
+                target.invokeStep()
+                this.invokedNodes.add(target)
+                if(chainItem.children){
+                    this.executeChainOrder(chainItem.children)
+                }
+            }
+        })
     }
 
 
@@ -72,31 +95,19 @@ export class RunManager {
             }
         })
         return startNodes
-        // if (startNode && startNode instanceof GraphStartNode) {
-        //     return startNode
-        // }
-        // throw new Error('Start node not found')
-        // return this.graph.nodes.filter(node => {
-        //     if (node instanceof GraphOriginNode) {
-        //         if (node.triggerMode === ENodeTrigger.enabling || node.triggerMode === ENodeTrigger.passive) {
-        //             return node.hasEventListeners
-        //         }
-        //         return node
-        //     } else if (node instanceof GraphEventListenerNode) {
-        //         return node
-        //     }
-        // })
     }
 
-    private sortedNodes(): GraphBaseNode[] {
+    private getExecutionOrder(): IChainItem[] {
         const startedNodes = this.getStartedNodes()
         const childrenNodes = startedNodes.map(source => {
-            return this.getNodesChildrenRecursive(source)
+            return this.getNodesChildrenRecursive({
+                target: source,
+            })
         })
         // nodes queue that start from trigger listener invoke in last step
         return childrenNodes.sort((a, b) => {
-            const aFirstNode = a[0]
-            const bFirstNode = b[0]
+            const aFirstNode = a[0].target
+            const bFirstNode = b[0].target
             if (aFirstNode instanceof GraphEventListenerNode && !(bFirstNode instanceof GraphEventListenerNode)) {
                 return -1
             } else if (!(aFirstNode instanceof GraphEventListenerNode) && bFirstNode instanceof GraphEventListenerNode) {
@@ -106,56 +117,34 @@ export class RunManager {
         }).flat()
     }
 
-    private getNodesChildrenRecursive(node: GraphBaseNode, children: GraphBaseNode[] = [node]) {
-        const nodes = this.getNodesChildren(node)
+    private getNodesChildrenRecursive(startedChainItem: IChainItem, children: IChainItem[] = [startedChainItem]) {
+        const childChainItem = this.getNodesChildren(startedChainItem)
 
-        nodes.forEach(child => {
-            if (!children.includes(child)) {
-                children.push(child)
-            }
-        })
+        startedChainItem.children = childChainItem
+        // nodes.forEach(child => {
+        //     if (!children.includes(child)) {
+        //         children.push(child)
+        //     }
+        // })
 
-        nodes.forEach(child => {
+        childChainItem.forEach(child => {
 
-            const toNextEdges = child.outgoingEdges.filter(edge => {
-                // if (edge.data.targetMode === EConnectionMode.LoopChildrenToExternal) {
-                //     return false
-                // }
-                return true
-            })
-            if (toNextEdges.length > 0) {
+            const outgoingEdges = child.target.outgoingEdges
+            if (outgoingEdges.length > 0) {
                 this.getNodesChildrenRecursive(child, children)
             }
         })
         return children
     }
 
-    private getNodesChildren(node: GraphBaseNode): GraphBaseNode[] {
-        const children = node.outgoingEdges.map(edge => {
+    private getNodesChildren(node: IChainItem): IChainItem[] {
+        const children = node.target.outgoingEdges.map(edge => {
             const target = edge.target
-            if (edge instanceof GraphChainEdge && edge.isMeetCondition) {
-                return target
+            if (edge instanceof GraphChainEdge) {
+                return {target, edge}
             }
-            // const isHasEventIncomingConnection = target.incomingEdges.some(edge => edge.type === EConnection.ChainConnection)
-            // const isHasOtherIncomingConnectionThenEvent = target.incomingEdges.some(edge => edge.type !== EConnection.ChainConnection)
-            // const isHasIncomingEdges = target.incomingEdges.length > 0
-            // if (!isHasIncomingEdges) {
-            //     return edge.target
-            // }
-            // if (isHasEventIncomingConnection && isHasOtherIncomingConnectionThenEvent && edge.type === EConnection.ChainConnection) {
-            //     return edge.target
-            // }
-            //
-            // if (isHasEventIncomingConnection && edge.type === EConnection.ChainConnection) {
-            //     return edge.target
-            // }
-            //
-            // if (!isHasEventIncomingConnection) {
-            //     return edge.target
-            // }
-
         })
-        return children.filter(item => item !== undefined) as GraphBaseNode[]
+        return children.filter(item => item !== undefined) as IChainItem[]
     }
 
     private resetIsTransferredResources() {

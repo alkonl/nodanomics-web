@@ -45,6 +45,7 @@ export class GraphSinkNode extends GraphInteractiveNode<ISinkNodeData> implement
             this.incomingEdges.forEach(edge => {
                 const source = edge.source;
                 if (edge instanceof GraphDataEdge && source instanceof GraphDataNode) {
+                    console.log('pullAny: ', edge.countOfResource)
                     const resources = source.takeCountResources(edge.countOfResource)
 
                     if (resources && resources.length > 0) {

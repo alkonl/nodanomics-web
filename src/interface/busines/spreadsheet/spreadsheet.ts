@@ -5,17 +5,13 @@ export interface ISpreadsheetInfo {
     createdAt: string;
 }
 
+export type ISpreadsheetRowsData = (string | number)[][]
+
 export interface IStructuredSpreadsheetData {
     xAxisIndex: number
     yAxisIndex: number
     name: string
-    rows: {
-        [key: string]: {
-            [key: string]: {
-                content: string
-            }
-        }
-    }
+    rows: ISpreadsheetRowsData
 }
 
 export interface IStructuredSpreadsheetsData {

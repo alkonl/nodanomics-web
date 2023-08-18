@@ -53,7 +53,7 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
 
     return (
         <>
-            {Array.from({length: circleCount}).map((_, index) => {
+            {Array.from({length: circleCount <= 30 ? circleCount : 30}).map((_, index) => {
                 const delay = index * 50
                 return (
                     <CircleResourcesAnimation

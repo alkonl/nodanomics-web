@@ -15,6 +15,7 @@ import {
 } from "../../pages";
 import {ELinks} from "./links";
 import {ProjectPage} from "../../pages/ProjectPage";
+import {ProtectedRoute} from "./ProtectedRoute";
 
 
 export const appRouter = createBrowserRouter([
@@ -64,6 +65,10 @@ export const appRouter = createBrowserRouter([
         element: <DiagramEditorPage/>
     },{
         path: `${ELinks.diagram}/:diagramId`,
-        element: <DiagramEditorPage/>
+        element: (
+            <ProtectedRoute>
+                <DiagramEditorPage/>
+            </ProtectedRoute>
+        )
     }
 ]);
