@@ -47,7 +47,6 @@ export abstract class GraphMatchManager {
                 const transformedString = transformString(formula);
 
                 const tagVariables = this.tagManager.getNodeTagVariables()
-                console.log('datasetTags', datasetTags)
                 const datasetRows = this.getDatasetRowsByTags({tags: datasetTags})
                 const allVariables = [...variables, ...tagVariables]
                 const compiledFormula = Match.compile(transformedString)
@@ -60,8 +59,11 @@ export abstract class GraphMatchManager {
                     }
                     return acc
                 }, {})
-
-                return compiledFormula.evaluate({...mappedVariables, ...datasetRows})
+              const res =  compiledFormula.evaluate({...mappedVariables, ...datasetRows})
+                if(typeof res === 'object' && 'entries' in res  && Array.isArray(res.entries)){
+                    return res.entries[0]
+                }
+                return res
             }
         } catch (e) {
             console.error(e)
