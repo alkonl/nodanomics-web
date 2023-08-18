@@ -1,4 +1,4 @@
-import Session from "supertokens-web-js/recipe/session";
+import Session from "supertokens-auth-react/recipe/session";
 import {useNavigate} from "react-router-dom";
 import {ELinks} from "../router";
 
