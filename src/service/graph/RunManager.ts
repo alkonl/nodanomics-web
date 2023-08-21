@@ -58,7 +58,7 @@ export class RunManager {
                 // this.invokedNodes.add(target)
             }
         })
-        this.updateState()
+        // this.updateState()
         this.updateNodePerStep()
         this.graph.nodes.forEach(node => {
             if (node instanceof GraphDataNode) {

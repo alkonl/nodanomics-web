@@ -8,11 +8,12 @@ import {BaseHandle} from "./BaseHandle";
 export const ChainHandle: React.FC<Pick<HandleProps, 'isConnectable' | 'type' | 'position'> & {
     style?: React.CSSProperties
     mode?: EConnectionMode
-}> = (props) => {
+    isActive?: boolean
+}> = ({isActive = true, ...props}) => {
 
     return (<BaseHandle
             connectionMode={EConnection.ChainConnection}
-            color={EColor.orange}
+            color={isActive ? EColor.orange : EColor.grey4}
             {...props}
         />
     )
