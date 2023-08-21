@@ -1,8 +1,8 @@
 import * as Match from "mathjs";
-import {INumberVariable, ISpreadsheetRowsData} from "../../../interface";
+import {IMatchManagerObject, INumberVariable, ISpreadsheetRowsData} from "../../../interface";
 import {GraphNodeManager} from "../NodeManager";
-import {GraphDatasetDatafieldNode} from "../GraphNodes/GraphDatasetDatafieldNode";
-import {GraphTagManager} from "../GraphNodes";
+import {GraphDatasetDatafieldNode, GraphTagManager} from "../GraphNodes";
+import {GraphMatchNodeAdapter} from "./GraphMatchNodeAdapter";
 
 
 export abstract class GraphMatchManager {
@@ -21,14 +21,12 @@ export abstract class GraphMatchManager {
 
     getDatasetRowsByTags({tags}: { tags: string[] }) {
         const rowsPerTag: { [tag: string]: ISpreadsheetRowsData } = {}
-        const datasetPerTag: { [tag: string]: any } = {}
+        const datasetPerTag: { [tag: string]: IMatchManagerObject } = {}
         for (const tag of tags) {
             const dataset = this.datasetData({datasetTag: tag})
             if (dataset && dataset.spreadsheet && dataset.spreadsheet?.rows) {
                 rowsPerTag[tag] = [...dataset.spreadsheet.rows]
-                datasetPerTag[`__${tag}`] = {
-                    lengthX: dataset.lengthX,
-                }
+                datasetPerTag[`__${tag}`] = GraphMatchNodeAdapter.adapt(dataset)
             }
         }
         return {rowsPerTag, datasetPerTag}
@@ -45,7 +43,6 @@ export abstract class GraphMatchManager {
             .filter((value, index, self) => self.indexOf(value) === index);
         const {rowsPerTag: datasetRows, datasetPerTag} = this.getDatasetRowsByTags({tags: datasetTags})
         const transformedString = this.transformString(formula);
-        console.log('datasetRows: ', datasetPerTag)
         try {
 
             if (formula) {
@@ -61,14 +58,8 @@ export abstract class GraphMatchManager {
                     }
                     return acc
                 }, {})
-                const dataset = {
-                    lengthX: 12,
-                    lengthY: 23,
-                    IndexOf: (value: string) => {
-                        return value + 2
-                    }
-                }
-                const res = compiledFormula.evaluate({...mappedVariables, ...datasetRows, ...datasetPerTag, dataset})
+
+                const res = compiledFormula.evaluate({...mappedVariables, ...datasetRows, ...datasetPerTag})
                 if (typeof res === 'object' && 'entries' in res && Array.isArray(res.entries)) {
                     return res.entries[0]
                 }
@@ -80,16 +71,16 @@ export abstract class GraphMatchManager {
     }
 
     transformString(input: string): string {
-        const pattern = /(\w+)\[(\d+)\]\[(\d+)\]/g;
+        const pattern = /\[(\d+)\]\[(\d+)\]/g;
 
-        const transformed = input.replace(pattern, (match, variableName, num1, num2) => {
+        const transformed = input.replace(pattern, (match,  num1, num2) => {
             const newNum1 = parseInt(num1) + 1;
             const newNum2 = parseInt(num2) + 1;
-            return `${variableName}[${newNum2},${newNum1}]`;
+            return `[${newNum2},${newNum1}]`;
         });
 
 
-
+        // replace dataset tags with __datasetTag
         return transformed.replace(/(\w+\.\w+)/g, "__$1");
     }
 }

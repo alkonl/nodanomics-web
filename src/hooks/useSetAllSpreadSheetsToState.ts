@@ -69,8 +69,6 @@ export const useSetAllSpreadSheetsToState = () => {
                     xAxisIndex,
                     yAxisIndex,
                     rows,
-                    // TODO remove hardcode
-                    lengthX: 10,
                 }
 
                 return {

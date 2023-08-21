@@ -32,7 +32,6 @@ export class GraphDataEdge extends GraphBaseEdge<IDataConnectionData> {
             if (this.data.formula === 'all' && this.source instanceof GraphDataNode) {
                 return this.source.resourcesToProvideCount;
             }
-            console.log('DataEdge.formula: ', this.data.formula)
             const res = this.matchManager.calculateFormula({formula: this.data.formula})
             if (typeof res === 'number') {
                 return res;
