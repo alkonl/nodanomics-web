@@ -11,7 +11,7 @@ import {LogicHandle} from "../../CustomHandle";
 
 
 const HEIGHT = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 3.57
-const WIDTH = GAP_BETWEEN_EDITOR_CANVAS_DOTS *  6.5
+const WIDTH = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 6.5
 const clipPath = 'polygon(18% 0, 83% 0, 100% 50%, 83% 100%, 18% 100%, 0% 50%)'
 
 export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = (props) => {
@@ -20,7 +20,8 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = (props) => {
 
     const result = useMemo(() => {
         if (data.result && data.result.type === 'number') {
-            return data.result.value
+            const value = data.result.value
+            return data.isShowDecimal ? value.toFixed(data.decimalDigits) : value
         }
     }, [data])
 

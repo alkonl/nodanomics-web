@@ -1,29 +1,29 @@
 import React from 'react';
-import {ElementParameter} from "../ElementParameter";
+import {ElementParameter} from "./ElementParameter";
 import {Box, Checkbox} from "@mui/material";
-import {EColor} from "../../../../../../constant";
-import {Parameter} from "../../styledComponents";
-import {IDataNodeData} from "../../../../../../interface";
-import {useUpdateNode} from "../../../../../../hooks";
+import {EColor} from "../../../../../constant";
+import {Parameter} from "../styledComponents";
+import {IDiagramNodeBaseData, INodeDecimal} from "../../../../../interface";
+import {useUpdateNode} from "../../../../../hooks";
 
-export const NodeDataDecimalParameter: React.FC<{
-    nodeData: IDataNodeData
+export const NodeDecimalParameter: React.FC<{
+    nodeData: IDiagramNodeBaseData & INodeDecimal
 }> = ({nodeData}) => {
 
-    const {updateNodeData} = useUpdateNode<IDataNodeData>({
+    const {updateNodeData} = useUpdateNode<IDiagramNodeBaseData & INodeDecimal>({
         nodeId: nodeData.id,
     })
 
     const changeIsShowDecimals = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
         updateNodeData({
-            isShowStep: checked
+            isShowDecimal: checked
         })
     }
 
     const changeDigits = (event: React.ChangeEvent<HTMLInputElement>) => {
         const decimals = Number(event.target.value)
         updateNodeData({
-            isShowStep: decimals
+            decimalDigits: decimals
         })
     }
 
