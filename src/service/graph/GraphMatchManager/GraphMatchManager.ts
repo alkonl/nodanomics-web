@@ -70,18 +70,29 @@ export abstract class GraphMatchManager {
         }
     }
 
-    transformString(input: string): string {
+    private allTags() {
+        return this.nodeManager.nodes.map(node => node.tag).filter(Boolean) as string[]
+    }
+
+    private transformString(input: string): string {
         const pattern = /\[(\d+)\]\[(\d+)\]/g;
 
-        const transformed = input.replace(pattern, (match,  num1, num2) => {
+        const transformed = input.replace(pattern, (match, num1, num2) => {
             const newNum1 = parseInt(num1) + 1;
             const newNum2 = parseInt(num2) + 1;
             return `[${newNum2},${newNum1}]`;
         });
 
-
+        const allTags: string[] = this.allTags()
         // replace dataset tags with __datasetTag
-        return transformed.replace(/(\w+\.\w+)/g, "__$1");
+        const transformedWithTags = transformed.replace(/(\w+\.\w+)/g, (match) => {
+            if (allTags.includes(match)) {
+                return `__${match}`;
+            }
+            return match;
+        });
+
+        return transformedWithTags;
     }
 }
 
