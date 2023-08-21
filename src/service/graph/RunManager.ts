@@ -1,5 +1,12 @@
 import {Graph} from "./Graph";
-import {GraphBaseNode, GraphDataNode, GraphEventListenerNode, GraphInvokableNode, GraphStartNode} from "./GraphNodes";
+import {
+    GraphBaseNode,
+    GraphDataNode,
+    GraphEventListenerNode,
+    GraphEventTriggerNode,
+    GraphInvokableNode,
+    GraphStartNode
+} from "./GraphNodes";
 import {isIUpdateGraphNodeStatePerStep, isUpdateGraphNodeState} from "../../interface";
 import {GraphNodeManager} from "./NodeManager";
 import {GraphChainEdge, GraphDataEdge} from "./GraphEdge";
@@ -50,14 +57,20 @@ export class RunManager {
         this.resetIsTransferredResources()
         const nodes = this.getExecutionOrder()
         this.executeChainOrder(nodes)
-        nodes.forEach(node => {
-            const target = node.target
-            const chainConnection = node.edge
-            if (target instanceof GraphInvokableNode && chainConnection?.isMeetCondition) {
-                target.invokeStep()
-                // this.invokedNodes.add(target)
-            }
-        })
+        // nodes.forEach(node => {
+        //     const target = node.target
+        //     const chainConnection = node.edge
+        //     if (target instanceof GraphInvokableNode && chainConnection?.isMeetCondition) {
+        //         if(target instanceof GraphEventTriggerNode){
+        //             if(target.checkEventCondition()){
+        //                 target.invokeStep()
+        //             }
+        //         } else {
+        //             target.invokeStep()
+        //         }
+        //         // this.invokedNodes.add(target)
+        //     }
+        // })
         // this.updateState()
         this.updateNodePerStep()
         this.graph.nodes.forEach(node => {
@@ -68,17 +81,30 @@ export class RunManager {
         this.invokedNodes.clear()
     }
 
+    private executeNode(node: IChainItem) {
+        if (node.target instanceof GraphInvokableNode) {
+            node.target.invokeStep()
+            this.invokedNodes.add(node.target)
+            if (node.children) {
+                this.executeChainOrder(node.children)
+            }
+        }
+    }
+
     private executeChainOrder(chainItems: IChainItem[]) {
         chainItems.forEach(chainItem => {
             const target = chainItem.target
             const chainConnection = chainItem.edge
-            const isChainMeetCondition = chainConnection?.isMeetCondition === undefined  || chainConnection?.isMeetCondition
-            if (target instanceof GraphInvokableNode  && isChainMeetCondition && !this.invokedNodes.has(target)) {
-                target.invokeStep()
-                this.invokedNodes.add(target)
-                if(chainItem.children){
-                    this.executeChainOrder(chainItem.children)
+            const isChainMeetCondition = chainConnection?.isMeetCondition === undefined || chainConnection?.isMeetCondition
+            if (target instanceof GraphInvokableNode && isChainMeetCondition && !this.invokedNodes.has(target)) {
+                if (target instanceof GraphEventTriggerNode) {
+                    if (target.checkEventCondition()) {
+                        this.executeNode(chainItem)
+                    }
+                } else {
+                    this.executeNode(chainItem)
                 }
+
             }
         })
     }

@@ -1,5 +1,6 @@
 import {GraphBaseNode, GraphDataNode} from "../GraphNodes";
 import {GraphDatasetDatafieldNode} from "../GraphNodes/GraphDatasetDatafieldNode";
+import {IDiagramNodeBaseData, INodeData} from "../../../interface";
 
 export class GraphNodeManager {
     private _nodes: GraphBaseNode[] = [];
