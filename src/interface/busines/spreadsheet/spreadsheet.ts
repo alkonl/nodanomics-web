@@ -11,9 +11,10 @@ export interface IStructuredSpreadsheetData {
     xAxisIndex: number
     yAxisIndex: number
     name: string
+    lengthX: number,
     rows: ISpreadsheetRowsData
 }
 
 export interface IStructuredSpreadsheetsData {
-    [key: string]: IStructuredSpreadsheetData
+    [key: string]: IStructuredSpreadsheetData,
 }

@@ -27,6 +27,10 @@ export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield> 
         }
     }
 
+    get lengthX() {
+        return 121
+    }
+
     get yOffset() {
         return (this.spreadsheet?.yAxisIndex || 0) + 1
     }
