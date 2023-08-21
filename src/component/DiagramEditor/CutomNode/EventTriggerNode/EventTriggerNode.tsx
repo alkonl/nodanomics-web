@@ -11,29 +11,29 @@ import {LogicHandle} from "../../CustomHandle";
 
 export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({isConnectable, data}) => {
 
-    const [eventName, setEventName] = useState<string>(data.eventName)
-    const [eventCondition, setEventCondition] = useState<string>(data.eventCondition || '')
-
-    const {updateNodeData} = useUpdateNode({
-        nodeId: data.id,
-    })
-
-
-    useEffect(() => {
-        updateNodeData({eventName})
-    }, [eventName])
-
-    useEffect(() => {
-        updateNodeData({eventCondition})
-    }, [eventCondition])
-
-    const onEventNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEventName(event.target.value)
-    }
-
-    const onConditionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEventCondition(event.target.value)
-    }
+    // const [eventName, setEventName] = useState<string>(data.eventName)
+    // const [eventCondition, setEventCondition] = useState<string>(data.eventCondition || '')
+    //
+    // const {updateNodeData} = useUpdateNode({
+    //     nodeId: data.id,
+    // })
+    //
+    //
+    // useEffect(() => {
+    //     updateNodeData({eventName})
+    // }, [eventName])
+    //
+    // useEffect(() => {
+    //     updateNodeData({eventCondition})
+    // }, [eventCondition])
+    //
+    // const onEventNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     setEventName(event.target.value)
+    // }
+    //
+    // const onConditionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     setEventCondition(event.target.value)
+    // }
 
     return (
         <>
@@ -85,9 +85,9 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({is
             >
 
                 <NodeStyle.Input
-                    onChange={onEventNameChange}
+                    // onChange={onEventNameChange}
                     placeholder="Insert event name"
-                    value={eventName}
+                    value={data.eventName}
                     size="small"
                     sx={{
                         // height:' 0.7em',
@@ -95,9 +95,9 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({is
                         // color: EFontColor.white,
                     }}/>
                 <NodeStyle.Input
-                    onChange={onConditionChange}
+                    // onChange={onConditionChange}
                     placeholder="Condition"
-                    value={eventCondition}
+                    value={data.eventCondition}
                     size="small"
                     sx={{
                         // // height:' 0.7em',
