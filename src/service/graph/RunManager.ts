@@ -70,11 +70,11 @@ export class RunManager {
         this.executeChainOrder(nodes)
 
         this.updateNodePerStep()
-        this.graph.nodes.forEach(node => {
-            if (node instanceof GraphDataNode) {
-                node.updateRecoursesProvide()
-            }
-        })
+        // this.graph.nodes.forEach(node => {
+        //     if (node instanceof GraphDataNode) {
+        //         node.updateRecoursesProvide()
+        //     }
+        // })
         this.invokedNodes.clear()
     }
 

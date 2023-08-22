@@ -22,14 +22,18 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         IUpdateGraphNodeStatePerStep, ITriggeredEvent, IIsEventConditionMet,
         IResetNodeNoStoreProperties {
 
-    private _resourcesToProvide: IResource[] = [];
+    // private _resourcesToProvide: IResource[]
     private previousStepResourcesCount?: number
     private currentStepResourcesCount?: number
 
     constructor(data: IDataNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(data, runManager, nodeManager);
+
     }
 
+    private get _resourcesToProvide(): IResource[] {
+        return this.data.resourcesToProvide
+    }
 
     get maxCapacity() {
         const maxCapacity = Number(this.data.maxCapacity);
@@ -82,14 +86,10 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     resetNodeNoStoreProperties() {
-        this.resetResourcesToProvide()
         this.currentStepResourcesCount = undefined
         this.previousStepResourcesCount = undefined
     }
 
-    private resetResourcesToProvide() {
-        this._resourcesToProvide = [];
-    }
 
     updateStatePerStep() {
         this.reCalculateMaxMinAvgValue()
@@ -97,9 +97,8 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         this.updatePreviousResourcesCount()
     }
 
-    updateState() {
-        super.updateState()
-    }
+
+
 
 
     addResource(resources?: IResource[], mode?: EModeAddResourcesToDataNode, params?: {
@@ -156,8 +155,14 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     }
 
+    private updateResourcesToProvide() {
+        this.updateNode({
+            resourcesToProvide: [...this.data.resources]
+        })
+    }
+
     private addResourcesToNode(resources: IResource[]) {
-        this._resourcesToProvide = [...this.data.resources];
+        this.updateResourcesToProvide()
         this._data = {
             ...this.data,
             resources: [...this.data.resources, ...resources]
@@ -167,11 +172,12 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     private updateResourcesCountHistory() {
+       const numToWrite = this.currentResourcesCount
         this._data = {
             ...this.data,
             history: this.data.history
-                ? [...this.data.history, this.currentResourcesCount]
-                : [this.currentResourcesCount]
+                ? [...this.data.history, numToWrite]
+                : [numToWrite]
         }
     }
 
@@ -188,19 +194,6 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         this.pullAllResourcesFromData()
     }
 
-    updateRecoursesProvide() {
-        this._resourcesToProvide = [...this.data.resources];
-    }
-
-    updateNode(data: Partial<IDataNodeData>) {
-        super.updateNode(data);
-    }
-
-    initResourcesToProvide() {
-        if (this._resourcesToProvide.length === 0 && this.data.resources.length > 0) {
-            this._resourcesToProvide = [...this.data.resources];
-        }
-    }
 
     private updatePreviousResourcesCount() {
         if (this.currentResourcesCount > 0) {
@@ -270,13 +263,15 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     takeCountResources(count: number): IResource[] | undefined {
         if (!this.minCapacity || this.currentResourcesCount - count >= this.minCapacity) {
-            const deletedResourcesToProvide = this.resourcesToProvide.splice(0, count);
+            const deletedResourcesToProvide = this.resourcesToProvide.slice(0, count);
+            const leftResources = this.resources.filter(resource => {
+                return !deletedResourcesToProvide.some(deletedResource => deletedResource.id === resource.id)
+            })
             this.updatePreviousResourcesCount()
             this._data = {
                 ...this.data,
-                resources: this.resources.filter(resource => {
-                    return !deletedResourcesToProvide.some(deletedResource => deletedResource.id === resource.id)
-                })
+                resources: leftResources,
+               resourcesToProvide: leftResources
             }
             return deletedResourcesToProvide
         }

@@ -9,6 +9,7 @@ export interface IDataNodeData extends IDiagramNodeBaseData, INodeWithTrigger, I
     type: EDiagramNode.Data
     resources: IResource[]
     initialResources?: IResource[]
+    resourcesToProvide: IResource[]
     isShowStep?: boolean
     step?: number
     roundingType?: string

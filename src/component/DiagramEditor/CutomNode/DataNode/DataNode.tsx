@@ -14,12 +14,17 @@ import {useChangeNodeDataStep} from "../../../../hooks";
 export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
     const {isConnectable, data} = props
     const currentResourcesValue = data.resources?.length.toFixed(1) || 0
-    const maxRegisteredValue = data.maxResources
-    const minRegisteredValue = data.minResources
+
+    const maxRegisteredValue = data.history.length > 0
+        ? data.history.reduce((acc, cur) => Math.max(acc, cur), 0)
+        : undefined
+    const minRegisteredValue = data.history.length > 0
+        ? data.history.reduce((acc, cur) => Math.min(acc, cur), Infinity)
+        : undefined
 
     const isShowStep = data.isShowStep || false
 
-    const {increaseNodeDataStep,decreaseNodeDataStep} = useChangeNodeDataStep({
+    const {increaseNodeDataStep, decreaseNodeDataStep} = useChangeNodeDataStep({
         nodeData: props.data,
     })
 
@@ -109,7 +114,7 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
                                 Min
                             </NodeStyle.Name>
                             <NodeStyle.Value>
-                                {minRegisteredValue ? minRegisteredValue : <br/>}
+                                {minRegisteredValue !== undefined ? minRegisteredValue : <br/>}
                             </NodeStyle.Value>
                         </Box>
                     </Box>

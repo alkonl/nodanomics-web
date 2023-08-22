@@ -1,6 +1,7 @@
 import {useUpdateNode} from "./useUpdateNode";
 import {IDataNodeData, IResource} from "../interface";
 import {generateResourceFromSource} from "../service";
+import React from "react";
 
 export const useChangeNodeDataStep = ({
                                           nodeData
@@ -28,6 +29,7 @@ export const useChangeNodeDataStep = ({
         updateNodeData({
             resources: resourcesToUpdate,
             initialResources: resourcesToUpdate,
+            resourcesToProvide: resourcesToUpdate,
         })
     }
 
@@ -38,13 +40,24 @@ export const useChangeNodeDataStep = ({
             updateNodeData({
                 resources: resourcesToUpdate,
                 initialResources: resourcesToUpdate,
+                resourcesToProvide: resourcesToUpdate,
             })
         }
+    }
+
+    const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const countToGenerate = Number(event.target.value)
+        const newResources: IResource[] = generateResourceFromSource(countToGenerate)
+        updateNodeData({
+            resources: newResources,
+            initialResources: newResources,
+        })
     }
 
     return {
         changeNodeDataStep,
         increaseNodeDataStep,
-        decreaseNodeDataStep
+        decreaseNodeDataStep,
+        changeValue,
     }
 }

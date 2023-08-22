@@ -71,6 +71,7 @@ export const createBaseNode = ({type, position}: {
                     ...baseData,
                     type,
                     resources: [],
+                    resourcesToProvide: [],
                     actionMode: ENodeAction.pullAny,
                     trigger: {
                         mode: ENodeTrigger.passive,
