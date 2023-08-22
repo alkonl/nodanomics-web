@@ -29,6 +29,7 @@ import {GeneralLoopChildrenNodesParameter} from "../parameter/generalLoop";
 import {GeneralLoopEditLoopButton} from "../parameter/generalLoop/GeneralLoopEditLoopButton";
 import {ChainConnectionParametersContainer} from "../parameter/chainConnection/ChainConnectionParametersContainer";
 import {NodeEventTriggerParametersContainer} from "../parameter/eventTrigger";
+import {NodeEventListenerParametersContainer} from "../parameter/eventListener";
 
 
 export const PropertiesSection: React.FC<{
@@ -64,6 +65,8 @@ export const PropertiesSection: React.FC<{
                     && <NodeFormulaParameterContainer nodeData={selectedElementData}/>}
                 {selectedElementData.type === EDiagramNode.EventTrigger
                     && <NodeEventTriggerParametersContainer nodeData={selectedElementData}/>}
+                {selectedElementData.type === EDiagramNode.EventListener
+                    && <NodeEventListenerParametersContainer nodeData={selectedElementData}/>}
                 {'trigger' in selectedElementData && <NodeTriggerModeParameter nodeData={selectedElementData}/>}
                 {selectedElementData.type === EDiagramNode.MicroLoop
                     && <ForLoopLoopsParameter nodeData={selectedElementData}/>}

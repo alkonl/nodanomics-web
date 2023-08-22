@@ -9,7 +9,7 @@ export const NodeEventTriggerParametersContainer: React.FC<{
     return (
         <>
             <NodeEventNameParameter nodeData={nodeData}/>
-            <NodeEventConditionParameter     nodeData={nodeData}/>
+            <NodeEventConditionParameter nodeData={nodeData}/>
         </>
     );
 };
