@@ -2,14 +2,14 @@ import {MouseEvent as ReactMouseEvent, useCallback} from "react";
 import {IReactFlowNode, isINodeSize} from "../interface";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {loopSize} from "../constant";
-import {useGetChildrenNodes} from "./useGetChildrenNodes";
+import {useGetFlatChildrenNodes} from "./useGetFlatChildrenNodes";
 import {findParent} from "../service";
 
 
 export const useOnNodeDrag = () => {
     const dispatch = useAppDispatch()
     const {diagramNodes} = useDiagramEditorState()
-    const getChildrenNodes = useGetChildrenNodes()
+    const getChildrenNodes = useGetFlatChildrenNodes()
     return useCallback((event: ReactMouseEvent, node: IReactFlowNode) => {
         findParent(node, diagramNodes)
         if (!node.parentNode) return

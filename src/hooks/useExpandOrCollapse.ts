@@ -1,8 +1,7 @@
 import {IDiagramNodeBaseData, IUpdateReactflowNode} from "../interface";
-import {useGetChildrenNodes} from "./useGetChildrenNodes";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
-import {useToggle} from "./useToggle";
 import {useGetNodesEdges} from "./useGetNodesEdges";
+import {geAllChildrenNodes} from "./useGeAllChildrenNodes";
 
 export const useExpandOrCollapse = ({nodeData}: {
     nodeData: IDiagramNodeBaseData
@@ -10,7 +9,7 @@ export const useExpandOrCollapse = ({nodeData}: {
     const dispatch = useAppDispatch()
     const {bulkUpdateNodes, bulkUpdateEdges} = diagramEditorActions
 
-    const getChildrenNodes = useGetChildrenNodes()
+    // const getChildrenNodes = useGetFlatChildrenNodes()
 
 
     // const expandOrCollapseManager = useToggle({
@@ -22,7 +21,7 @@ export const useExpandOrCollapse = ({nodeData}: {
 
     const expandOrCollapse = ({parentId}: { parentId: string }) => {
         const parentNode = diagramNodes.find(node => node.id === parentId)
-        const childrenNodes = getChildrenNodes({parentId})
+        const childrenNodes = geAllChildrenNodes({parentId, nodes: diagramNodes})
         const childrenEdges = getNodesEdges({nodes: childrenNodes})
         // expandOrCollapseManager.toggle()
         const updatedIsCollapsed = !nodeData.isCollapsed
