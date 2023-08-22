@@ -189,7 +189,7 @@ export const diagramEditorSlice = createSlice({
                     x: payload.node.position.x - parrentPosition.x,
                     y: payload.node.position.y - parrentPosition.y,
                 }
-                node.zIndex = 100
+                node.zIndex = 1200
                 node.extent = 'parent'
                 state.autoSaveCalled++
             }
