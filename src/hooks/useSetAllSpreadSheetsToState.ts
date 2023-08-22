@@ -1,7 +1,7 @@
 import {useGetManySpreadsheetQuery, useGetProjectInfoQuery, useGetSpreadSheetsBaseInfoQuery} from "../api";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {useEffect} from "react";
-import {IStructuredSpreadsheetsData} from "../interface";
+import {IStructuredSpreadsheetData, IStructuredSpreadsheetsData} from "../interface";
 
 export const useSetAllSpreadSheetsToState = () => {
     const dispatch = useAppDispatch()
@@ -64,23 +64,15 @@ export const useSetAllSpreadSheetsToState = () => {
                     rows.push(newRow);
                 }
 
-                // const rows: (string | number)[][] = spreadsheet.rows.map((row) => {
-                //     return row.values.map((cell) => {
-                //         const numContent = Number(cell.content)
-                //         if (!isNaN(numContent)) {
-                //             return numContent
-                //         } else {
-                //             return cell.content
-                //         }
-                //     })
-                // })
+                const newSpreadsheet: IStructuredSpreadsheetData = {
+                    name: spreadsheet.name,
+                    xAxisIndex,
+                    yAxisIndex,
+                    rows,
+                }
+
                 return {
-                    [spreadsheet.id]: {
-                        name: spreadsheet.name,
-                        xAxisIndex,
-                        yAxisIndex,
-                        rows,
-                    },
+                    [spreadsheet.id]: newSpreadsheet,
                     ...accSpreadsheet
                 }
             }, {})

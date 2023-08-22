@@ -2,7 +2,13 @@ import React, {useEffect} from 'react';
 import {BaseSection} from "./BaseSection";
 import {useToggle} from "../../../../../hooks";
 import {Grid} from "@mui/material";
-import {EConnection, EDiagramNode, EElementType, IDiagramConnectionData, INodeData} from "../../../../../interface";
+import {
+    EConnection,
+    EDiagramNode,
+    EElementType,
+    IDiagramConnectionData,
+    INodeData,
+} from "../../../../../interface";
 import {ConnectionFormulaParameter} from "../parameter/ConnectionFormulaParameter";
 import {NodeTriggerModeParameter} from "../parameter/NodeTriggerModeParameter";
 import {NodeActionParameter} from "../parameter/NodeActionParameter";
@@ -50,6 +56,7 @@ export const PropertiesSection: React.FC<{
                 {selectedElementData.elementType === EElementType.Node &&
                     selectedElementData.type === EDiagramNode.Data &&
                     <NodeDataParametersContainer nodeData={selectedElementData}/>}
+
                 {selectedElementData.type === EConnection.ChainConnection &&
                     <ChainConnectionParametersContainer edgeData={selectedElementData}/>}
                 {selectedElementData.type === EDiagramNode.Formula

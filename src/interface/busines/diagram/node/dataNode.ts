@@ -2,17 +2,15 @@ import {EDiagramNode, IDiagramNodeBaseData} from "./structures";
 import {IResource} from "../resource";
 import {INodeWithAction} from "../nodeAction";
 import {INodeWithTrigger} from "../nodeTrigger";
-import {INodeHistory} from "./additional";
+import {INodeDecimal, INodeHistory} from "./additional";
 
 
-export interface IDataNodeData extends IDiagramNodeBaseData, INodeWithTrigger, INodeWithAction, INodeHistory {
+export interface IDataNodeData extends IDiagramNodeBaseData, INodeWithTrigger, INodeWithAction, INodeHistory, INodeDecimal {
     type: EDiagramNode.Data
     resources: IResource[]
     initialResources?: IResource[]
     isShowStep?: boolean
     step?: number
-    isShowDecimal?: boolean
-    decimalDigits?: number
     roundingType?: string
     minCapacity?: number
     maxCapacity?: number

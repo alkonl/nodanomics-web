@@ -6,8 +6,8 @@ import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
 
 export const ParametersSelect: React.FC<{
     currentValue?: string,
-    onChange: (event: SelectChangeEvent) => void,
-    values: string[] | {
+    onChange?: (event: SelectChangeEvent) => void,
+    values?: string[] | {
         value: string,
         label: string,
     }[],
@@ -44,7 +44,7 @@ export const ParametersSelect: React.FC<{
                     padding: 0,
                 }}
             >
-                {values.map((item) => {
+                {values?.map((item) => {
                     if (typeof item === 'string') {
                         return (
                             <MenuItem

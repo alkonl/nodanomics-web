@@ -15,5 +15,5 @@ export interface IStructuredSpreadsheetData {
 }
 
 export interface IStructuredSpreadsheetsData {
-    [key: string]: IStructuredSpreadsheetData
+    [key: string]: IStructuredSpreadsheetData,
 }
