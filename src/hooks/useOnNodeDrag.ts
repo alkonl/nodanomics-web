@@ -3,6 +3,7 @@ import {IReactFlowNode, isINodeSize} from "../interface";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {loopSize} from "../constant";
 import {useGetChildrenNodes} from "./useGetChildrenNodes";
+import {findParent} from "../service";
 
 
 export const useOnNodeDrag = () => {
@@ -10,6 +11,7 @@ export const useOnNodeDrag = () => {
     const {diagramNodes} = useDiagramEditorState()
     const getChildrenNodes = useGetChildrenNodes()
     return useCallback((event: ReactMouseEvent, node: IReactFlowNode) => {
+        findParent(node, diagramNodes)
         if (!node.parentNode) return
         const childrenNodes = getChildrenNodes({parentId: node.parentNode})
 

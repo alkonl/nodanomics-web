@@ -166,10 +166,6 @@ export const diagramEditorSlice = createSlice({
             updateNodesFromGraph(state.diagramNodes)
             state.autoSaveCalled++
         },
-        // TODO FIX Sometimes when moving a node,
-        //  we update the parent of the node by simply moving it.
-        //  This causes a bug, the node teleports after we stop moving it.
-        //  This is now fixed with the following code node.parentNode === undefined
         updateNodeParent: (state, {payload}: PayloadAction<{
             node: IReactFlowNode,
             parentNode: IReactFlowNode
@@ -180,6 +176,7 @@ export const diagramEditorSlice = createSlice({
             })
             updateNodesFromGraph(state.diagramNodes)
             const node = state.diagramNodes.find(node => node.id === payload.node.id)
+            console.log('updateNodeParent', {...node})
             if (node && node.parentNode === undefined) {
 
                 node.data = {
@@ -191,6 +188,10 @@ export const diagramEditorSlice = createSlice({
                     x: payload.node.position.x - payload.parentNode.position.x,
                     y: payload.node.position.y - payload.parentNode.position.y,
                 }
+                // node.positionAbsolute = {
+                //     x: payload.node.position.x - payload.parentNode.position.x,
+                //     y: payload.node.position.y - payload.parentNode.position.y,
+                // }
                 node.zIndex = 1100
                 node.extent = 'parent'
                 state.autoSaveCalled++
@@ -204,6 +205,7 @@ export const diagramEditorSlice = createSlice({
                 height: number
             }
         }>) => {
+            console.log('updateNodeSize', payload)
             const stateNodeIndex = state.diagramNodes.findIndex(node => node.id === payload.nodeId)
             const stateNode = state.diagramNodes[stateNodeIndex]
             if (stateNode && isINodeSize(stateNode.data.style)) {
@@ -334,7 +336,7 @@ export const diagramEditorSlice = createSlice({
         },
         setSpreadsheets: (state, {payload}: PayloadAction<{
             spreadsheets: IStructuredSpreadsheetsData
-        }> ) => {
+        }>) => {
             state.spreadsheets = payload.spreadsheets
             graph.setSpreadsheetsData({
                 spreadsheetData: payload.spreadsheets

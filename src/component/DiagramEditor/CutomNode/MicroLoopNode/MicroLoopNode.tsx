@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";
 import {EConnectionMode, IMicroLoopNodeData} from "../../../../interface";
@@ -14,7 +14,9 @@ const WIDTH = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 5
 
 export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) => {
     const {data} = props;
-
+    useEffect(() => {
+        console.log('MicroLoopNode', props.xPos, props.yPos)
+    }, [props]);
     const isCollapsed = data.isCollapsed
     const {expandOrCollapse} = useExpandOrCollapse({
         nodeData: data,

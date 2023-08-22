@@ -128,6 +128,7 @@ export const DiagramCanvas = () => {
                     edgeTypes={edgeTypes}
                     connectionMode={ConnectionMode.Loose}
                     onEdgeClick={onEdgeClick}
+
                 >
                     <Controls/>
                     <Background color="blue" gap={GAP_BETWEEN_EDITOR_CANVAS_DOTS}/>
