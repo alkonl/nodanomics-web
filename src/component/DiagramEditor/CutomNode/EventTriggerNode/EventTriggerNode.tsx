@@ -68,6 +68,7 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({is
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
+                    alignItems: 'center',
                     gap: 1,
                     borderRadius: '14% 14% 14% 14%/28% 28% 28% 28%',
                     borderWidth: 3,

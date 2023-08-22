@@ -7,7 +7,7 @@ import {
     GraphInvokableNode,
     GraphStartNode
 } from "./GraphNodes";
-import {isIUpdateGraphNodeStatePerStep, isUpdateGraphNodeState} from "../../interface";
+import {isIIsEventTriggered, isIUpdateGraphNodeStatePerStep, isUpdateGraphNodeState} from "../../interface";
 import {GraphNodeManager} from "./NodeManager";
 import {GraphChainEdge, GraphDataEdge} from "./GraphEdge";
 
@@ -97,8 +97,8 @@ export class RunManager {
             const chainConnection = chainItem.edge
             const isChainMeetCondition = chainConnection?.isMeetCondition === undefined || chainConnection?.isMeetCondition
             if (target instanceof GraphInvokableNode && isChainMeetCondition && !this.invokedNodes.has(target)) {
-                if (target instanceof GraphEventTriggerNode) {
-                    if (target.checkEventCondition()) {
+                if (isIIsEventTriggered(target)) {
+                    if (target.isEventTriggered()) {
                         this.executeNode(chainItem)
                     }
                 } else {
