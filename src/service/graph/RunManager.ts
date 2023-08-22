@@ -3,11 +3,15 @@ import {
     GraphBaseNode,
     GraphDataNode,
     GraphEventListenerNode,
-    GraphEventTriggerNode,
     GraphInvokableNode,
     GraphStartNode
 } from "./GraphNodes";
-import {isIIsEventTriggered, isIUpdateGraphNodeStatePerStep, isUpdateGraphNodeState} from "../../interface";
+import {
+    isIIsEventTriggered,
+    isITriggeredEvent,
+    isIUpdateGraphNodeStatePerStep,
+    isUpdateGraphNodeState
+} from "../../interface";
 import {GraphNodeManager} from "./NodeManager";
 import {GraphChainEdge, GraphDataEdge} from "./GraphEdge";
 
@@ -78,8 +82,8 @@ export class RunManager {
         const target = node.target
         if (target instanceof GraphInvokableNode) {
             target.invokeStep()
-            if (target instanceof GraphEventTriggerNode) {
-                const triggeredEventName = target.triggeredEvent
+            if (isITriggeredEvent(target)) {
+                const triggeredEventName = target.getTriggeredEvent()
                 const listenerNodes = this.executionOrder
                     .filter(node => node.target instanceof GraphEventListenerNode
                         && node.target.eventName === triggeredEventName)
@@ -149,11 +153,6 @@ export class RunManager {
         const childChainItem = this.getNodesChildren(startedChainItem)
 
         startedChainItem.children = childChainItem
-        // nodes.forEach(child => {
-        //     if (!children.includes(child)) {
-        //         children.push(child)
-        //     }
-        // })
 
         childChainItem.forEach(child => {
 
@@ -168,7 +167,7 @@ export class RunManager {
     private getNodesChildren(node: IChainItem): IChainItem[] {
         const children = node.target.outgoingEdges.map(edge => {
             const target = edge.target
-            if (edge instanceof GraphChainEdge) {
+            if (edge instanceof GraphChainEdge || target instanceof GraphDataNode) {
                 return {target, edge}
             }
         })

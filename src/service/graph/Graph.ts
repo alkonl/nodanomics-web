@@ -98,7 +98,7 @@ export class Graph {
 
     setDiagramElements({nodes, edges}: { nodes: INodeData[], edges: IDiagramConnectionData[] }) {
         this._edges = [];
-
+        this.nodesManager.clear()
 
         const runManager = this.runManager;
         if (runManager) {

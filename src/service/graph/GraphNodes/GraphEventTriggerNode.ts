@@ -1,12 +1,20 @@
 import {GraphInvokableNode} from "./abstracts";
-import {IEventTriggerNodeData, IIsEventTriggered, INumberVariable, IUpdateGraphNodeState} from "../../../interface";
+import {
+    IEventTriggerNodeData,
+    IIsEventConditionMet,
+    IIsEventTriggered,
+    INumberVariable,
+    ITriggeredEvent,
+    IUpdateGraphNodeState
+} from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphLogicManager} from "./helper";
 import {GraphNodeManager} from "../NodeManager";
 import {GraphMatchManagerNode} from "../GraphMatchManager";
 
 export class GraphEventTriggerNode extends GraphInvokableNode<IEventTriggerNodeData>
-    implements IUpdateGraphNodeState, IIsEventTriggered {
+    implements IUpdateGraphNodeState, IIsEventTriggered, ITriggeredEvent, IIsEventConditionMet {
+
     private readonly matchManager: GraphMatchManagerNode
     private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
 
@@ -24,7 +32,7 @@ export class GraphEventTriggerNode extends GraphInvokableNode<IEventTriggerNodeD
     }
 
     get isEventConditionMet() {
-        return this.data.isEventConditionMet;
+        return this.data.isEventConditionMet || false;
     }
 
 
@@ -39,7 +47,7 @@ export class GraphEventTriggerNode extends GraphInvokableNode<IEventTriggerNodeD
         return this.data.isEventConditionMet || false
     }
 
-    get triggeredEvent(): string | undefined {
+    getTriggeredEvent(): string | undefined {
         if (this.data.isEventConditionMet) {
             return this.data.eventName
         }

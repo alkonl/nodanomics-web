@@ -1,6 +1,5 @@
-import {GraphBaseNode, GraphDataNode} from "../GraphNodes";
-import {GraphDatasetDatafieldNode} from "../GraphNodes/GraphDatasetDatafieldNode";
-import {IDiagramNodeBaseData, INodeData} from "../../../interface";
+import {GraphBaseNode, GraphDatasetDatafieldNode} from "../GraphNodes";
+import {isIResetNodeNoStoreProperties} from "../../../interface";
 
 export class GraphNodeManager {
     private _nodes: GraphBaseNode[] = [];
@@ -19,16 +18,13 @@ export class GraphNodeManager {
 
     findById({nodeId}: {
         nodeId: string
-             }): GraphBaseNode | undefined {
+    }): GraphBaseNode | undefined {
         return this._nodes.find(node => node.data.id === nodeId);
 
     }
 
-    // setNewNodes(nodes: GraphBaseNode[]) {
-    //     this._nodes = nodes;
-    // }
 
-    deleteNode({nodeId}:{nodeId: string}) {
+    deleteNode({nodeId}: { nodeId: string }) {
         const node = this.findById({nodeId});
         if (node) {
             node.delete();
@@ -42,8 +38,8 @@ export class GraphNodeManager {
 
     resetResourcesToProvide() {
         this._nodes.forEach(node => {
-            if (node instanceof GraphDataNode) {
-                node.resetResourcesToProvide();
+            if (isIResetNodeNoStoreProperties(node)) {
+                node.resetNodeNoStoreProperties();
             }
         });
     }
@@ -56,7 +52,7 @@ export class GraphNodeManager {
         return this._nodes.includes(node);
     }
 
-    getNodeByTag({tag}: {tag: string}) {
+    getNodeByTag({tag}: { tag: string }) {
         return this._nodes.find(node => node.data.tag === tag && node instanceof GraphDatasetDatafieldNode);
     }
 

@@ -1,7 +1,11 @@
 import {GraphBaseNode, GraphInvokableNode} from "./abstracts";
-import {IEventListenerNodeData, IIsEventTriggered, IUpdateGraphNodeState} from "../../../interface";
+import {
+    IEventListenerNodeData,
+    IIsEventTriggered,
+    isIIsEventConditionMet,
+    IUpdateGraphNodeState
+} from "../../../interface";
 import {RunManager} from "../RunManager";
-import {GraphEventTriggerNode} from "./GraphEventTriggerNode";
 import {GraphNodeManager} from "../NodeManager";
 
 export class GraphEventListenerNode extends GraphInvokableNode<IEventListenerNodeData>
@@ -36,7 +40,7 @@ export class GraphEventListenerNode extends GraphInvokableNode<IEventListenerNod
 
     get triggeredNodes() {
         return this.graphNodes.filter(node => {
-            if (node instanceof GraphEventTriggerNode) {
+            if (isIIsEventConditionMet(node)) {
                 return node.eventName === this.eventName && node.isEventConditionMet
             }
             return false

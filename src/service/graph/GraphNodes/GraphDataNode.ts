@@ -4,7 +4,10 @@ import {
     IDataNodeData,
     IDiagramNodeBaseData,
     IGetNodeExternalValue,
+    IIsEventConditionMet,
+    IResetNodeNoStoreProperties,
     IResource,
+    ITriggeredEvent,
     IUpdateGraphNodeState,
     IUpdateGraphNodeStatePerStep
 } from "../../../interface";
@@ -15,10 +18,13 @@ import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
 
 export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
-    implements IUpdateGraphNodeState, IGetNodeExternalValue, IUpdateGraphNodeStatePerStep {
+    implements IUpdateGraphNodeState, IGetNodeExternalValue,
+        IUpdateGraphNodeStatePerStep, ITriggeredEvent, IIsEventConditionMet,
+        IResetNodeNoStoreProperties {
 
     private _resourcesToProvide: IResource[] = [];
-
+    private previousStepResourcesCount?: number
+    private currentStepResourcesCount?: number
 
     constructor(data: IDataNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(data, runManager, nodeManager);
@@ -75,13 +81,20 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
             .filter(edge => GraphDataEdge.baseEdgeIsData(edge)) as GraphDataEdge[];
     }
 
-    resetResourcesToProvide() {
+    resetNodeNoStoreProperties() {
+        this.resetResourcesToProvide()
+        this.currentStepResourcesCount = undefined
+        this.previousStepResourcesCount = undefined
+    }
+
+    private resetResourcesToProvide() {
         this._resourcesToProvide = [];
     }
 
     updateStatePerStep() {
         this.reCalculateMaxMinAvgValue()
         this.updateResourcesCountHistory()
+        this.updatePreviousResourcesCount()
     }
 
     updateState() {
@@ -110,6 +123,24 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         }
     }
 
+    get eventName() {
+        return `${this.data.tag}.OnValueChanged`
+    }
+
+    get isEventConditionMet() {
+        return this.isValueChanged
+    }
+
+    getTriggeredEvent() {
+        if (this.isValueChanged) {
+            return this.eventName
+        }
+    }
+
+    private get isValueChanged() {
+        return this.previousStepResourcesCount !== this.currentStepResourcesCount
+    }
+
     private addResourceWithCapacity(resources?: IResource[], mode?: EModeAddResourcesToDataNode): IDataNodeData | undefined {
         if (resources && resources.length > 0) {
             if (!this.maxCapacity) {
@@ -127,10 +158,12 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     private addResourcesToNode(resources: IResource[]) {
         this._resourcesToProvide = [...this.data.resources];
-        return this._data = {
+        this._data = {
             ...this.data,
             resources: [...this.data.resources, ...resources]
         }
+        this.updatePreviousResourcesCount()
+        return this.data
     }
 
     private updateResourcesCountHistory() {
@@ -157,6 +190,23 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     updateRecoursesProvide() {
         this._resourcesToProvide = [...this.data.resources];
+    }
+
+    updateNode(data: Partial<IDataNodeData>) {
+        super.updateNode(data);
+    }
+
+    initResourcesToProvide() {
+        if (this._resourcesToProvide.length === 0 && this.data.resources.length > 0) {
+            this._resourcesToProvide = [...this.data.resources];
+        }
+    }
+
+    private updatePreviousResourcesCount() {
+        if (this.currentResourcesCount > 0) {
+            this.previousStepResourcesCount = this.currentStepResourcesCount
+            this.currentStepResourcesCount = this.currentResourcesCount
+        }
     }
 
     private reCalculateMaxMinAvgValue() {
@@ -221,6 +271,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     takeCountResources(count: number): IResource[] | undefined {
         if (!this.minCapacity || this.currentResourcesCount - count >= this.minCapacity) {
             const deletedResourcesToProvide = this.resourcesToProvide.splice(0, count);
+            this.updatePreviousResourcesCount()
             this._data = {
                 ...this.data,
                 resources: this.resources.filter(resource => {
