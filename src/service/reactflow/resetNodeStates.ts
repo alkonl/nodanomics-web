@@ -27,7 +27,7 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                 ...node,
                 data: {
                     ...node.data,
-                    isEventTriggered: undefined,
+                    isEventTriggered: false,
                 }
             }
         case EDiagramNode.EventTrigger:
@@ -35,7 +35,7 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                 ...node,
                 data: {
                     ...node.data,
-                    isEventConditionMet: undefined,
+                    isEventConditionMet: false,
                 }
             }
         case EDiagramNode.MicroLoop:{

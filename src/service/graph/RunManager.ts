@@ -21,6 +21,7 @@ export class RunManager {
     private graph: Graph
     private _currentStep = 0
     private invokedNodes: GraphNodeManager = new GraphNodeManager()
+    private executionOrder: IChainItem[] = []
 
     constructor(graph: Graph) {
         this.graph = graph
@@ -52,26 +53,18 @@ export class RunManager {
         })
     }
 
+    private setExecutionOrder(nodes: IChainItem[]) {
+        this.executionOrder = nodes
+    }
+
     invokeStep() {
         this.incrementStep()
         this.resetIsTransferredResources()
         const nodes = this.getExecutionOrder()
+
+        this.setExecutionOrder(nodes)
         this.executeChainOrder(nodes)
-        // nodes.forEach(node => {
-        //     const target = node.target
-        //     const chainConnection = node.edge
-        //     if (target instanceof GraphInvokableNode && chainConnection?.isMeetCondition) {
-        //         if(target instanceof GraphEventTriggerNode){
-        //             if(target.checkEventCondition()){
-        //                 target.invokeStep()
-        //             }
-        //         } else {
-        //             target.invokeStep()
-        //         }
-        //         // this.invokedNodes.add(target)
-        //     }
-        // })
-        // this.updateState()
+
         this.updateNodePerStep()
         this.graph.nodes.forEach(node => {
             if (node instanceof GraphDataNode) {
@@ -82,8 +75,16 @@ export class RunManager {
     }
 
     private executeNode(node: IChainItem) {
-        if (node.target instanceof GraphInvokableNode) {
-            node.target.invokeStep()
+        const target = node.target
+        if (target instanceof GraphInvokableNode) {
+            target.invokeStep()
+            if (target instanceof GraphEventTriggerNode) {
+                const triggeredEventName = target.triggeredEvent
+                const listenerNodes = this.executionOrder
+                    .filter(node => node.target instanceof GraphEventListenerNode
+                        && node.target.eventName === triggeredEventName)
+                this.executeChainOrder(listenerNodes)
+            }
             this.invokedNodes.add(node.target)
             if (node.children) {
                 this.executeChainOrder(node.children)
@@ -130,13 +131,14 @@ export class RunManager {
                 target: source,
             })
         })
+        console.log('startedNodes: ', startedNodes.map(node => node.data.name))
         // nodes queue that start from trigger listener invoke in last step
         return childrenNodes.sort((a, b) => {
             const aFirstNode = a[0].target
             const bFirstNode = b[0].target
-            if (aFirstNode instanceof GraphEventListenerNode && !(bFirstNode instanceof GraphEventListenerNode)) {
+            if (aFirstNode instanceof GraphStartNode && !(bFirstNode instanceof GraphEventListenerNode)) {
                 return -1
-            } else if (!(aFirstNode instanceof GraphEventListenerNode) && bFirstNode instanceof GraphEventListenerNode) {
+            } else if (!(aFirstNode instanceof GraphStartNode) && bFirstNode instanceof GraphEventListenerNode) {
                 return 1
             }
             return 0

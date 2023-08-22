@@ -25,6 +25,7 @@ export class GraphEventListenerNode extends GraphInvokableNode<IEventListenerNod
     }
 
     isEventTriggered(): boolean {
+        this.checkIsEventTriggered()
         return this.data.isEventTriggered || false
     }
 
