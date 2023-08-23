@@ -1,22 +1,6 @@
 import {MouseEvent} from "react";
 import {ILoopNodeData, IReactFlowNode, isILoopNodeData} from "../../../interface";
-
-export const findRightestChild = (childrenNodes: IReactFlowNode[], node: IReactFlowNode) => {
-    return childrenNodes.reduce((prev, current) => {
-        if (prev.width !== null && current.width !== null && prev.width && current.width) {
-            return (prev.position.x + prev.width > current.position.x + current.width) ? prev : current
-        }
-        return current
-    }, node)
-}
-
-export const findMostBottomChild = (childrenNodes: IReactFlowNode[], node: IReactFlowNode) => {
-    return childrenNodes.reduce((prev, current) => {
-        const prevBottom = prev.position.y + (typeof prev.height === 'number' ? prev.height : 0)
-        const currentBottom = current.position.y + (typeof current.height === 'number' ? current.height : 0)
-        return prevBottom > currentBottom ? prev : current
-    }, node)
-}
+import {isMostBottomOrRightestChild} from "./findOuterMost";
 
 
 export const calcWidth = ({child, offsetX, parentNode}: {
@@ -79,23 +63,15 @@ export const resizeParentOnDrag = (
     const parentNode = diagramNodes.find((diagramNode) => diagramNode.id === node.parentNode)
 
     if (parentNode && isILoopNodeData(parentNode.data) && node.width && node.height) {
-        const parentSize = {
-            width: parentNode.data.style.width,
-            height: parentNode.data.style.height
-        }
-        const rightestChild = findRightestChild(childrenNodes, node)
 
-        const mostBottomChild = findMostBottomChild(childrenNodes, node)
-
-        const isRightestChild = rightestChild?.id === node.id
-        const isMostBottomChild = mostBottomChild?.id === node.id
+        const {isRightestChild, isMostBottomChild} = isMostBottomOrRightestChild(childrenNodes, node)
 
         const updatedWidth = isRightestChild
-            ? calcWidth({child: rightestChild, offsetX: event.movementX, parentNode: parentNode.data})
+            ? calcWidth({child: node, offsetX: event.movementX, parentNode: parentNode.data})
             : parentNode.data.style.width
 
         const updatedHeight = isMostBottomChild
-            ? calcHeight({child: mostBottomChild, offsetY: event.movementY, parentNode: parentNode.data})
+            ? calcHeight({child: node, offsetY: event.movementY, parentNode: parentNode.data})
             : parentNode.data.style.height
 
         if (isRightestChild || isMostBottomChild) {
