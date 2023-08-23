@@ -47,7 +47,7 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                     backgroundColor: EColor.lightPurple,
                     display: 'flex',
                     position: 'relative',
-                    transition: 'width 0.2s ease-out, height 0.2s ease-out',
+                    transition: 'width 0.3s ease-out, height 0.3s ease-out',
                 }}
             >
                 {/*Connections*/}

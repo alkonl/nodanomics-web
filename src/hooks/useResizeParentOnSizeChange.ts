@@ -16,8 +16,10 @@ export const useResizeParentOnSizeChange = (params: NodeProps<IMicroLoopNodeData
         dispatch(diagramEditorActions.updateNodeSize(params))
     }
 
+    const node = diagramNodes.find(node => node.id === params.id)
+
     useEffect(() => {
-        const node = diagramNodes.find(node => node.id === params.id)
+
         if (node?.parentNode) {
             console.log('useResizeParentOnSizeChange', node)
             resizeParent({
@@ -28,5 +30,5 @@ export const useResizeParentOnSizeChange = (params: NodeProps<IMicroLoopNodeData
                 updateNodeSize
             })
         }
-    }, [params.data.style.width, params.data.style.height]);
+    }, [node?.width, node?.height]);
 }

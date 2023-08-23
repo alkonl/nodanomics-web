@@ -20,6 +20,7 @@ export const createBaseNode = ({type, position}: {
         id: nodeId,
         type,
         position,
+        zIndex: 99999,
     }
     const baseData: IDiagramNodeBaseData = {
         elementType: EElementType.Node,
