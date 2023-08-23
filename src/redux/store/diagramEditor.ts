@@ -184,12 +184,12 @@ export const diagramEditorSlice = createSlice({
                     parentId: payload.parentNode.id,
                 }
                 node.parentNode = payload.parentNode.id
-                const parrentPosition = payload.parentNode.positionAbsolute || payload.parentNode.position
+                const parentPosition = payload.parentNode.positionAbsolute || payload.parentNode.position
                 node.position = {
-                    x: payload.node.position.x - parrentPosition.x,
-                    y: payload.node.position.y - parrentPosition.y,
+                    x: payload.node.position.x - parentPosition.x,
+                    y: payload.node.position.y - parentPosition.y,
                 }
-                node.zIndex = 1200
+                node.zIndex = payload.parentNode.zIndex ? payload.parentNode.zIndex  + 1 : 1000
                 node.extent = 'parent'
                 state.autoSaveCalled++
             }
@@ -215,7 +215,7 @@ export const diagramEditorSlice = createSlice({
                             width: payload.size.width,
                             height: payload.size.height,
                         }
-                    }
+                    },
                 }
                 graph.updateNodeData(payload.nodeId, newNode.data)
                 updateNodesFromGraph(state.diagramNodes)

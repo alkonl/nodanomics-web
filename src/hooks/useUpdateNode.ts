@@ -5,7 +5,6 @@ import {
     ENodeTrigger, IDiagramConnectionBaseData,
     IDiagramConnectionData,
     IDiagramNodeBaseData,
-    IDiagramNodeStyle,
     INodeData
 } from "../interface";
 import {connectionInitialProps, connectionStyle} from "../service";

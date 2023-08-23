@@ -20,7 +20,6 @@ export const createBaseNode = ({type, position}: {
         id: nodeId,
         type,
         position,
-        zIndex: 99999,
     }
     const baseData: IDiagramNodeBaseData = {
         elementType: EElementType.Node,
@@ -105,7 +104,6 @@ export const createBaseNode = ({type, position}: {
         case EDiagramNode.MicroLoop: {
             return {
                 ...baseParams,
-                zIndex: 0,
                 data: {
                     ...baseData,
                     type,
