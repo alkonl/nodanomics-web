@@ -86,6 +86,7 @@ export const createBaseNode = ({type, position}: {
                     ...baseData,
                     type,
                     eventName: '',
+                    isEventConditionMet: false,
                 }
             }
         }
@@ -95,6 +96,7 @@ export const createBaseNode = ({type, position}: {
                 data: {
                     ...baseData,
                     type,
+                    isEventTriggered: false,
                 }
             }
         }
@@ -149,6 +151,7 @@ export const createBaseNode = ({type, position}: {
                 ...baseParams,
                 data: {
                     ...baseData,
+                    name: 'Start node',
                     type,
                 }
             }

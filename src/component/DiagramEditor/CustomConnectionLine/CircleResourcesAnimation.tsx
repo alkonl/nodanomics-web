@@ -72,7 +72,7 @@ export const CircleResourcesAnimation: React.FC<{
 
     return (
         <>
-            {(play || infinite) && <circle id={id} r="8" fill={EColor.black}
+            {play && <circle id={id} r="8" fill={EColor.black}
             >
                 <animateMotion
                     repeatCount={0}
