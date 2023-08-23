@@ -5,10 +5,11 @@ import {EConnectionMode, IMicroLoopNodeData} from "../../../../interface";
 import {BaseNodeContainer} from "../container";
 import {Box} from "@mui/material";
 import {EColor, EFontColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
-import {useExpandOrCollapse} from "../../../../hooks";
+import {useExpandOrCollapse, useResizeParentOnSizeChange} from "../../../../hooks";
 import {ChainHandle} from "../../CustomHandle/ChainHandle";
 import {LogicHandle} from "../../CustomHandle";
 import {NodeStyle} from "../styledComponent";
+import {resizeParent} from "../../../../service";
 
 const WIDTH = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 5
 
@@ -23,7 +24,7 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
     })
 
     const changeExpandOrCollapse = () => {
-        expandOrCollapse({parentId: data.id})
+        expandOrCollapse()
     }
 
     const onDoubleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
@@ -32,6 +33,8 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
         }
 
     }
+
+    useResizeParentOnSizeChange(props)
 
     return (
         <BaseNodeContainer node={props}>
@@ -44,6 +47,7 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                     backgroundColor: EColor.lightPurple,
                     display: 'flex',
                     position: 'relative',
+                    transition: 'width 0.2s ease-out, height 0.2s ease-out',
                 }}
             >
                 {/*Connections*/}

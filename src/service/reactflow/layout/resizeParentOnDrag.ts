@@ -39,6 +39,53 @@ export const calcHeight = ({child, offsetY, parentNode}: {
     }
 }
 
+export const resizeParent = (
+    {
+        diagramNodes,
+        updateNodeSize,
+        node,
+        addWidth,
+        addHeight
+    }: {
+        node: IReactFlowNode,
+        diagramNodes: IReactFlowNode[]
+        addWidth: number,
+        addHeight: number,
+        updateNodeSize: (params: {
+            nodeId: string,
+            size: {
+                width: number,
+                height: number
+            }
+        }) => void
+    }) => {
+    if (!node.parentNode) return
+    const childrenNodes = diagramNodes.filter((diagramNode) => diagramNode.parentNode === node.parentNode)
+    const parentNode = diagramNodes.find((diagramNode) => diagramNode.id === node.parentNode)
+
+    if (parentNode && isILoopNodeData(parentNode.data) && node.width && node.height) {
+
+        const {isRightestChild, isMostBottomChild} = isMostBottomOrRightestChild(childrenNodes, node)
+
+        const updatedWidth = isRightestChild
+            ? calcWidth({child: node, offsetX: addWidth, parentNode: parentNode.data})
+            : parentNode.data.style.width
+
+        const updatedHeight = isMostBottomChild
+            ? calcHeight({child: node, offsetY: addHeight, parentNode: parentNode.data})
+            : parentNode.data.style.height
+
+        if (isRightestChild || isMostBottomChild) {
+            updateNodeSize({
+                nodeId: parentNode.id,
+                size: {
+                    width: updatedWidth || parentNode.data.style.width,
+                    height: updatedHeight || parentNode.data.style.height
+                }
+            })
+        }
+    }
+}
 
 export const resizeParentOnDrag = (
     {
@@ -58,30 +105,11 @@ export const resizeParentOnDrag = (
             }
         }) => void
     }) => {
-    if (!node.parentNode) return
-    const childrenNodes = diagramNodes.filter((diagramNode) => diagramNode.parentNode === node.parentNode)
-    const parentNode = diagramNodes.find((diagramNode) => diagramNode.id === node.parentNode)
-
-    if (parentNode && isILoopNodeData(parentNode.data) && node.width && node.height) {
-
-        const {isRightestChild, isMostBottomChild} = isMostBottomOrRightestChild(childrenNodes, node)
-
-        const updatedWidth = isRightestChild
-            ? calcWidth({child: node, offsetX: event.movementX, parentNode: parentNode.data})
-            : parentNode.data.style.width
-
-        const updatedHeight = isMostBottomChild
-            ? calcHeight({child: node, offsetY: event.movementY, parentNode: parentNode.data})
-            : parentNode.data.style.height
-
-        if (isRightestChild || isMostBottomChild) {
-            updateNodeSize({
-                nodeId: parentNode.id,
-                size: {
-                    width: updatedWidth || parentNode.data.style.width,
-                    height: updatedHeight || parentNode.data.style.height
-                }
-            })
-        }
-    }
+    resizeParent({
+        node,
+        diagramNodes,
+        updateNodeSize,
+        addWidth: event.movementX,
+        addHeight: event.movementY
+    })
 }

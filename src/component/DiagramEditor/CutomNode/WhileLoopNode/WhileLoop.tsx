@@ -23,7 +23,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
 
     const isCollapsed = data.isCollapsed
     const changeExpandOrCollapse = () => {
-        expandOrCollapse({parentId: data.id})
+        expandOrCollapse()
     }
 
     const {

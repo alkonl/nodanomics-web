@@ -2,6 +2,7 @@ import {IDiagramNodeBaseData, IUpdateReactflowNode} from "../interface";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {useGetNodesEdges} from "./useGetNodesEdges";
 import {geAllChildrenNodes} from "./useGeAllChildrenNodes";
+import {resizeParent} from "../service";
 
 export const useExpandOrCollapse = ({nodeData}: {
     nodeData: IDiagramNodeBaseData
@@ -9,19 +10,20 @@ export const useExpandOrCollapse = ({nodeData}: {
     const dispatch = useAppDispatch()
     const {bulkUpdateNodes, bulkUpdateEdges} = diagramEditorActions
 
-    // const getChildrenNodes = useGetFlatChildrenNodes()
-
-
-    // const expandOrCollapseManager = useToggle({
-    //     initialState: initialIsOpened
-    // })
-
     const {diagramNodes} = useDiagramEditorState()
     const getNodesEdges = useGetNodesEdges()
 
-    const expandOrCollapse = ({parentId}: { parentId: string }) => {
-        const parentNode = diagramNodes.find(node => node.id === parentId)
-        const childrenNodes = geAllChildrenNodes({parentId, nodes: diagramNodes})
+    const updateNodeSize = (params: {
+        nodeId: string,
+        size: { width: number, height: number }
+    }) => {
+        dispatch(diagramEditorActions.updateNodeSize(params))
+    }
+
+    const expandOrCollapse = () => {
+        const nodeId= nodeData.id
+        const parentNode = diagramNodes.find(node => node.id === nodeId)
+        const childrenNodes = geAllChildrenNodes({parentId: nodeId, nodes: diagramNodes})
         const childrenEdges = getNodesEdges({nodes: childrenNodes})
         // expandOrCollapseManager.toggle()
         const updatedIsCollapsed = !nodeData.isCollapsed
@@ -39,7 +41,7 @@ export const useExpandOrCollapse = ({nodeData}: {
         })
         if (parentNode) {
             nodesToHide.push({
-                id: parentId,
+                id: nodeId,
                 data: {
                     ...parentNode.data,
                     isCollapsed: updatedIsCollapsed,
@@ -48,6 +50,7 @@ export const useExpandOrCollapse = ({nodeData}: {
         }
         dispatch(bulkUpdateEdges(edgesToHide))
         dispatch(bulkUpdateNodes(nodesToHide))
+
     }
 
     return {

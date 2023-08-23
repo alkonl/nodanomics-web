@@ -11,13 +11,15 @@ export const useOnNodeDrag = () => {
     const {diagramNodes} = useDiagramEditorState()
     const getChildrenNodes = useGetFlatChildrenNodes()
 
+    const updateNodeSize = (params: {
+        nodeId: string,
+        size: { width: number, height: number }
+    }) => {
+        dispatch(diagramEditorActions.updateNodeSize(params))
+    }
+
     return useCallback((event: ReactMouseEvent, node: IReactFlowNode) => {
-        const updateNodeSize = (params: {
-            nodeId: string,
-            size: { width: number, height: number }
-        }) => {
-            dispatch(diagramEditorActions.updateNodeSize(params))
-        }
+
         resizeParentOnDrag({diagramNodes, node, event, updateNodeSize})
     }, [dispatch, diagramNodes])
 }
