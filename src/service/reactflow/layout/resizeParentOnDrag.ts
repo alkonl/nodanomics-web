@@ -1,6 +1,5 @@
 import {MouseEvent} from "react";
-import {IReactFlowNode, isINodeSize} from "../../../interface";
-import {loopSize} from "../../../constant";
+import {ILoopNodeData, IReactFlowNode, isILoopNodeData} from "../../../interface";
 
 export const findRightestChild = (childrenNodes: IReactFlowNode[], node: IReactFlowNode) => {
     return childrenNodes.reduce((prev, current) => {
@@ -20,6 +19,42 @@ export const findMostBottomChild = (childrenNodes: IReactFlowNode[], node: IReac
 }
 
 
+export const calcWidth = ({child, offsetX, parentNode}: {
+    parentNode: ILoopNodeData,
+    child: IReactFlowNode,
+    offsetX: number,
+}): number | undefined => {
+    const parentWidth = parentNode.style.width
+    if (typeof child.width !== 'number') return undefined
+    const preCalculatedWidth = parentWidth + offsetX
+    const widthBetween = parentWidth - child.position.x - child.width
+
+    if (offsetX < 0 && widthBetween > 20) {
+        return preCalculatedWidth
+    } else if (widthBetween < 40) {
+        const additionalIncrease = widthBetween < 20 ? 10 : 0
+        return preCalculatedWidth + additionalIncrease
+    }
+}
+
+export const calcHeight = ({child, offsetY, parentNode}: {
+    parentNode: ILoopNodeData,
+    child: IReactFlowNode,
+    offsetY: number,
+}): number | undefined => {
+    const parentHeight = parentNode.style.height
+    if (typeof child.height !== 'number') return undefined
+    const preCalculatedHeight = parentHeight + offsetY
+    const heightBetween = parentHeight - child.position.y - child.height
+
+    if (offsetY < 0 && heightBetween > 20) {
+        return preCalculatedHeight
+    } else if (heightBetween < 40) {
+        const additionalIncrease = heightBetween < 20 ? 10 : 0
+        return preCalculatedHeight + additionalIncrease
+    }
+}
+
 
 export const resizeParentOnDrag = (
     {
@@ -33,14 +68,17 @@ export const resizeParentOnDrag = (
         diagramNodes: IReactFlowNode[]
         updateNodeSize: (params: {
             nodeId: string,
-            size: { width: number, height: number }
+            size: {
+                width: number,
+                height: number
+            }
         }) => void
     }) => {
     if (!node.parentNode) return
     const childrenNodes = diagramNodes.filter((diagramNode) => diagramNode.parentNode === node.parentNode)
     const parentNode = diagramNodes.find((diagramNode) => diagramNode.id === node.parentNode)
 
-    if (parentNode && isINodeSize(parentNode.data.style) && node.width && node.height) {
+    if (parentNode && isILoopNodeData(parentNode.data) && node.width && node.height) {
         const parentSize = {
             width: parentNode.data.style.width,
             height: parentNode.data.style.height
@@ -49,35 +87,16 @@ export const resizeParentOnDrag = (
 
         const mostBottomChild = findMostBottomChild(childrenNodes, node)
 
-        let updatedWidth: number | undefined
-        let updatedHeight: number | undefined
-
         const isRightestChild = rightestChild?.id === node.id
         const isMostBottomChild = mostBottomChild?.id === node.id
 
-        const preCalculatedWidth = parentNode.data.style.width + event.movementX
-        if (isRightestChild && preCalculatedWidth >= loopSize.minWidth && rightestChild.width) {
-            const widthBetween = parentSize.width - rightestChild.position.x - rightestChild.width
+        const updatedWidth = isRightestChild
+            ? calcWidth({child: rightestChild, offsetX: event.movementX, parentNode: parentNode.data})
+            : parentNode.data.style.width
 
-            if (event.movementX < 0 && widthBetween > 20) {
-                updatedWidth = preCalculatedWidth
-            } else if (widthBetween < 40) {
-                const additionalIncrease = widthBetween < 20 ? 10 : 0
-                updatedWidth = preCalculatedWidth + additionalIncrease
-            }
-
-        }
-
-        const preCalculatedHeight = parentNode.data.style.height + event.movementY
-        if (isMostBottomChild && preCalculatedHeight >= loopSize.minHeight && mostBottomChild.height) {
-            const heightBetween = parentSize.height - mostBottomChild.position.y - mostBottomChild.height
-            if (event.movementY < 0 && heightBetween > 20) {
-                updatedHeight = preCalculatedHeight
-            } else if (heightBetween < 40) {
-                const additionalIncrease = heightBetween < 20 ? 10 : 0
-                updatedHeight = preCalculatedHeight + additionalIncrease
-            }
-        }
+        const updatedHeight = isMostBottomChild
+            ? calcHeight({child: mostBottomChild, offsetY: event.movementY, parentNode: parentNode.data})
+            : parentNode.data.style.height
 
         if (isRightestChild || isMostBottomChild) {
             updateNodeSize({
