@@ -2,7 +2,7 @@ import {MouseEvent} from "react";
 import {IReactFlowNode, isINodeSize} from "../../../interface";
 import {loopSize} from "../../../constant";
 
-export const rightestChild = (childrenNodes: IReactFlowNode[], node: IReactFlowNode) => {
+export const findRightestChild = (childrenNodes: IReactFlowNode[], node: IReactFlowNode) => {
     return childrenNodes.reduce((prev, current) => {
         if (prev.width !== null && current.width !== null && prev.width && current.width) {
             return (prev.position.x + prev.width > current.position.x + current.width) ? prev : current
@@ -10,6 +10,15 @@ export const rightestChild = (childrenNodes: IReactFlowNode[], node: IReactFlowN
         return current
     }, node)
 }
+
+export const findMostBottomChild = (childrenNodes: IReactFlowNode[], node: IReactFlowNode) => {
+    return childrenNodes.reduce((prev, current) => {
+        const prevBottom = prev.position.y + (typeof prev.height === 'number' ? prev.height : 0)
+        const currentBottom = current.position.y + (typeof current.height === 'number' ? current.height : 0)
+        return prevBottom > currentBottom ? prev : current
+    }, node)
+}
+
 
 
 export const resizeParentOnDrag = (
@@ -36,18 +45,9 @@ export const resizeParentOnDrag = (
             width: parentNode.data.style.width,
             height: parentNode.data.style.height
         }
-        const rightestChild = childrenNodes.reduce((prev, current) => {
-            if (prev.width !== null && current.width !== null && prev.width && current.width) {
-                return (prev.position.x + prev.width > current.position.x + current.width) ? prev : current
-            }
-            return current
-        }, node)
+        const rightestChild = findRightestChild(childrenNodes, node)
 
-        const mostBottomChild = childrenNodes.reduce((prev, current) => {
-            const prevBottom = prev.position.y + (typeof prev.height === 'number' ? prev.height : 0)
-            const currentBottom = current.position.y + (typeof current.height === 'number' ? current.height : 0)
-            return prevBottom > currentBottom ? prev : current
-        }, node)
+        const mostBottomChild = findMostBottomChild(childrenNodes, node)
 
         let updatedWidth: number | undefined
         let updatedHeight: number | undefined
