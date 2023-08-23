@@ -3,7 +3,6 @@ import {IReactFlowNode, isINodeSize} from "../interface";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {loopSize} from "../constant";
 import {useGetFlatChildrenNodes} from "./useGetFlatChildrenNodes";
-import {findParent} from "../service";
 
 
 export const useOnNodeDrag = () => {
@@ -11,7 +10,6 @@ export const useOnNodeDrag = () => {
     const {diagramNodes} = useDiagramEditorState()
     const getChildrenNodes = useGetFlatChildrenNodes()
     return useCallback((event: ReactMouseEvent, node: IReactFlowNode) => {
-        findParent(node, diagramNodes)
         if (!node.parentNode) return
         const childrenNodes = getChildrenNodes({parentId: node.parentNode})
 
@@ -29,7 +27,12 @@ export const useOnNodeDrag = () => {
                 return current
             }, node)
 
-            const mostBottomChild = childrenNodes.reduce((prev, current) => (prev.position.y > current.position.y) ? prev : current, node)
+            const mostBottomChild = childrenNodes.reduce((prev, current) => {
+                const prevBottom = prev.position.y + (typeof prev.height === 'number' ? prev.height : 0)
+                const currentBottom = current.position.y + (typeof current.height === 'number' ? current.height : 0)
+                return prevBottom > currentBottom ? prev : current
+            }, node)
+
             let updatedWidth: number | undefined
             let updatedHeight: number | undefined
 
