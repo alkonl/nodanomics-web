@@ -21,6 +21,7 @@ export const useOnNodeDragStop = () => {
                     data: {
                         ...node.data,
                         parentId: parentNode.id,
+                        defaultZIndex: parentNode.zIndex ? parentNode.zIndex + 1 : 11,
                     },
                     parentNode: parentNode.id,
                     position: {
@@ -32,9 +33,14 @@ export const useOnNodeDragStop = () => {
                 }
 
                 const updateChildren: IUpdateChildrenFunc = ({parentNode, node}) => {
+                    console.log('useOnNodeDragStop.updateChildren', parentNode, node)
                     return {
                         ...node,
                         zIndex: parentNode.zIndex ? parentNode.zIndex + 1 : 12,
+                        data:{
+                            ...node.data,
+                            defaultZIndex: parentNode.data.defaultZIndex ? parentNode.data.defaultZIndex + 1 : 12,
+                        }
                     }
                 }
 

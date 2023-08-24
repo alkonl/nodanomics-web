@@ -40,19 +40,18 @@ export const useOnSelectionChange = () => {
             const zIndex = node.zIndex || 0
             return {
                 ...node,
-                zIndex: node.defaultZIndex,
+                zIndex: node.data.defaultZIndex,
             }
         })
 
         const updateChildrenFunc: IUpdateChildrenFunc = ({parentNode, node}) => {
-            const parentZIndex = parentNode.zIndex || 1000
-            const nodeZIndex = node.zIndex || 1
-            const newZIndex = parentZIndex + nodeZIndex
+            const parentZIndex = parentNode.data.defaultZIndex || 0
+            const nodeZIndex = node.data.defaultZIndex || 0
+            const newZIndex = parentZIndex + nodeZIndex + 1001
             console.log('zIndex: ', newZIndex)
             return {
                 ...node,
                 zIndex: newZIndex,
-                defaultZIndex: nodeZIndex,
             }
         }
         const selectedChanged = {

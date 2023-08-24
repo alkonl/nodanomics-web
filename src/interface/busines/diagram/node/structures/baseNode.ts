@@ -22,4 +22,5 @@ export interface IDiagramNodeBaseData extends IDiagramBaseInteractiveElementData
     isCollapsed: boolean;
     tag?: string;
     connectedNodes?: string[];
+    defaultZIndex?: number;
 }
