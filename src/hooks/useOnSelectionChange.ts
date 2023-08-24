@@ -1,21 +1,18 @@
 import {IReactFlowEdge, IReactFlowNode} from "../interface";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {useCallback, useEffect, useRef} from "react";
+import {IUpdateChildrenFunc, recursiveUpdateChildren} from "../service";
 
-export type IUpdateChildrenFunc = (params: {
-    parentNode: IReactFlowNode,
-    node: IReactFlowNode,
-}) => IReactFlowNode
 
-const recursiveUpdateChildren = (nodes: IReactFlowNode[], parentNode: IReactFlowNode, func: IUpdateChildrenFunc): IReactFlowNode[] => {
-    const childrenNodes = nodes.filter(node => node.data.parentId === parentNode.id)
-    const updatedNodes: IReactFlowNode[] = childrenNodes.map(node => func({
-        parentNode: parentNode,
-        node: node,
-    }))
-
-    return updatedNodes.concat(...childrenNodes.map(node => recursiveUpdateChildren(nodes, node, func)))
-}
+// export const recursiveUpdateChildren = (nodes: IReactFlowNode[], parentNode: IReactFlowNode, func: IUpdateChildrenFunc): IReactFlowNode[] => {
+//     const childrenNodes = nodes.filter(node => node.data.parentId === parentNode.id)
+//     const updatedNodes: IReactFlowNode[] = childrenNodes.map(node => func({
+//         parentNode: parentNode,
+//         node: node,
+//     }))
+//
+//     return updatedNodes.concat(...childrenNodes.map(node => recursiveUpdateChildren(nodes, node, func)))
+// }
 
 export const useOnSelectionChange = () => {
     const dispatch = useAppDispatch()
@@ -40,33 +37,38 @@ export const useOnSelectionChange = () => {
         const updatedPrevChangedNodes: IReactFlowNode[] = refDiagramNodes.current.filter(node => {
             return refPrevChangedNodes.current.includes(node.id)
         }).map(node => {
-            const zIndex = node.zIndex
+            const zIndex = node.zIndex || 0
             return {
                 ...node,
-                zIndex: zIndex ? zIndex - 1000 : undefined,
+                zIndex: node.defaultZIndex,
             }
         })
 
         const updateChildrenFunc: IUpdateChildrenFunc = ({parentNode, node}) => {
-            const zIndex = parentNode.zIndex || 0
+            const parentZIndex = parentNode.zIndex || 1000
+            const nodeZIndex = node.zIndex || 1
+            const newZIndex = parentZIndex + nodeZIndex
+            console.log('zIndex: ', newZIndex)
             return {
                 ...node,
-                zIndex: zIndex >= 2001 ? zIndex + 1 : 2001,
+                zIndex: newZIndex,
+                defaultZIndex: nodeZIndex,
             }
         }
         const selectedChanged = {
             ...selectedNode,
-            zIndex: 1000,
         }
         const updatedChildNodes = recursiveUpdateChildren(refDiagramNodes.current, selectedChanged, updateChildrenFunc)
+        console.log('selectedNode.zIndex', selectedChanged.zIndex, updatedChildNodes)
 
         // const filteredPrevChangedNodes = updatedPrevChangedNodes.filter(node => !updatedChildNodes.find(childNode => childNode.id === node.id))
 
-        console.log("useOnSelectionChange.toUpdate", updatedChildNodes);
-        const updatedNodes: IReactFlowNode[] = [selectedChanged, ...updatedChildNodes]
 
-        dispatch(diagramEditorActions.bulkUpdateNodes(updatedNodes))
+        const updatedNodes: IReactFlowNode[] = [selectedChanged, ...updatedChildNodes]
+        console.log("useOnSelectionChange.toUpdate", updatedNodes);
         dispatch(diagramEditorActions.bulkUpdateNodes(updatedPrevChangedNodes))
+        dispatch(diagramEditorActions.bulkUpdateNodes(updatedNodes))
+
         refPrevChangedNodes.current = updatedNodes.map(node => node.id)
     }, [dispatch])
 }
