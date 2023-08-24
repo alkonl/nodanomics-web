@@ -10,7 +10,7 @@ export interface ILoopNodeData extends IDiagramNodeBaseData {
     isLoopActive?: boolean;
     incomingVariables: INumberVariable[];
     outgoingVariables: INumberVariable[];
-    children?: string[];
+    children?: { name: string, id: string }[];
     style: ILoopNodeDataStyle
 }
 
