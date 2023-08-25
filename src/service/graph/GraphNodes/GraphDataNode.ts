@@ -98,13 +98,13 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         this.updatePreviousResourcesCount()
     }
 
-    addResource(resources?: IResource[], mode?: EModeAddResourcesToDataNode, params?: {
-        onSuccess?: () => void,
+    addResource(resources: IResource[], mode?: EModeAddResourcesToDataNode, params?: {
+        onSuccess?: (resourcesCount: number) => void,
     }) {
         const updatedResources = this.addResourceWithCapacity(resources, mode)
         const isAdded = updatedResources !== undefined;
         if (isAdded && params?.onSuccess) {
-            params.onSuccess()
+            params.onSuccess(resources.length)
         }
     }
 
@@ -203,8 +203,13 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
                     const isPossibleToAddResources = this.isPossibleToAddResource(source.resources, source.addingResourcesMode)
                     if (isPossibleToAddResources) {
                         const resources = source.takeCountResources(edge.countOfResource)
-                        const onSuccess = () => this.writeToEdgeIsResourcesWereTransferred(edge, true)
-                        this.addResource(resources, source.addingResourcesMode, {onSuccess})
+                        if (resources) {
+                            const onSuccess = (resourceCount: number) => {
+                                edge.changeIsTransferredResources(true, resourceCount)
+                            }
+                            this.addResource(resources, source.addingResourcesMode, {onSuccess})
+                        }
+
                     }
                 }
             })
@@ -219,11 +224,13 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
                     const isPossibleToAddResources = this.isPossibleToAddResource(source.resources, source.addingResourcesMode)
                     if (source.resourcesToProvideCount >= edge.countOfResource && isPossibleToAddResources) {
                         const resources = source.takeCountResources(edge.countOfResource)
-                        const onSuccess = () => this.writeToEdgeIsResourcesWereTransferred(edge, true)
-                        this.addResource(resources, source.addingResourcesMode, {onSuccess})
-                        this.writeToEdgeIsResourcesWereTransferred(edge, true)
+                        if (resources) {
+                            const onSuccess = (resourceCount: number) => {
+                                edge.changeIsTransferredResources(true, resourceCount)
+                            }
+                            this.addResource(resources, source.addingResourcesMode, {onSuccess})
+                        }
                     }
-                    this.writeToEdgeIsResourcesWereTransferred(edge, false)
                 }
             })
         }
@@ -263,8 +270,11 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
                     const isPossibleToAddResources = source.isPossibleToAddResource(this.resources, source.addingResourcesMode)
                     if (isPossibleToAddResources) {
                         const resources = this.takeCountResources(edge.countOfResource)
-                        const onSuccess = () => edge.changeIsTransferredResources(true)
-                        source.addResource(resources, source.addingResourcesMode, {onSuccess})
+                        if (resources) {
+                            const onSuccess = (resourcesCount: number) =>
+                                edge.changeIsTransferredResources(true, resourcesCount)
+                            source.addResource(resources, source.addingResourcesMode, {onSuccess})
+                        }
                     }
                 }
             })
@@ -280,8 +290,12 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
                         const isPossibleToAddResources = source.isPossibleToAddResource(this.resources, source.addingResourcesMode)
                         if (isPossibleToAddResources) {
                             const resources = this.takeCountResources(edge.countOfResource)
-                            const onSuccess = () => edge.changeIsTransferredResources(true)
-                            source.addResource(resources, source.addingResourcesMode, {onSuccess})
+                            if (resources) {
+                                const onSuccess = (resourceCount: number) => {
+                                    edge.changeIsTransferredResources(true, resourceCount)
+                                }
+                                source.addResource(resources, source.addingResourcesMode, {onSuccess})
+                            }
                         }
                     }
                 })
@@ -297,16 +311,13 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
                 const source = edge.source;
                 if (source instanceof GraphOriginNode) {
                     const generatedResources = source.generateResourceFromSource(countOfResourceToGenerate)
-                    const onSuccess = () => this.writeToEdgeIsResourcesWereTransferred(edge, true)
+                    const onSuccess = (resourceCount: number) => {
+                        edge.changeIsTransferredResources(true, resourceCount)
+                    }
                     this.addResource(generatedResources, source.addingResourcesMode, {onSuccess})
                 }
-                this.writeToEdgeIsResourcesWereTransferred(edge, false)
             })
         }
-    }
-
-    private writeToEdgeIsResourcesWereTransferred(edge: GraphDataEdge, isTransferred: boolean) {
-        edge.changeIsTransferredResources(isTransferred)
     }
 
     static baseNodeIsData(baseNode: GraphBaseNode<IDiagramNodeBaseData>): baseNode is GraphDataNode {

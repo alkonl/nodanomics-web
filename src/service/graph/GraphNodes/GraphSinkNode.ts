@@ -30,7 +30,7 @@ export class GraphSinkNode extends GraphInteractiveNode<ISinkNodeData>  {
                 if (edge instanceof GraphDataEdge && source instanceof GraphDataNode) {
                     const resources = source.takeCountResources(edge.countOfResource)
                     if (resources && resources.length > 0) {
-                        edge.changeIsTransferredResources(true)
+                        edge.changeIsTransferredResources(true, resources.length)
                     }
                     this.historyManager.updateCurrentStepHistory(resources?.length)
                 }
@@ -46,7 +46,7 @@ export class GraphSinkNode extends GraphInteractiveNode<ISinkNodeData>  {
                     if (source.resourcesToProvideCount >= edge.countOfResource) {
                         const resources = source.takeCountResources(edge.countOfResource)
                         if (resources && resources.length > 0) {
-                            edge.changeIsTransferredResources(true)
+                            edge.changeIsTransferredResources(true, resources.length)
                         }
                         this.historyManager.updateCurrentStepHistory(resources?.length)
                     }

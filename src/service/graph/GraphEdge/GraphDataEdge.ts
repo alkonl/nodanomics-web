@@ -39,11 +39,13 @@ export class GraphDataEdge extends GraphBaseEdge<IDataConnectionData> {
         }
     }
 
-    changeIsTransferredResources(isTransferredResources: boolean) {
+    changeIsTransferredResources(isTransferredResources: boolean, howManyWasTransferred: number) {
+        console.log('changeIsTransferredResources', howManyWasTransferred)
         if (this._data) {
             this._data = {
                 ...this._data,
                 isTransferredResources: isTransferredResources,
+                howManyWasTransferred: howManyWasTransferred
             }
         }
 

@@ -42,11 +42,12 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
     }
     const animationCircleId = `animation-circle-${id}`
 
-    const [circleCount, setCircleCount] = useState<number>(data?.formula ? parseInt(data.formula) : 0)
+    const [circleCount, setCircleCount] = useState<number>(data?.howManyWasTransferred ?Math.floor(data.howManyWasTransferred)  : 0)
 
     useEffect(() => {
-        setCircleCount(data?.formula ? parseInt(data.formula) : 0)
-    }, [data?.formula]);
+        setCircleCount(data?.howManyWasTransferred ? Math.floor(data.howManyWasTransferred) : 0)
+        console.log('howManyWasTransferred: ', data?.howManyWasTransferred)
+    }, [data?.howManyWasTransferred]);
 
 
     const isPlay = isDiagramRunning && data?.isTransferredResources
