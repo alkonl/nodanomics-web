@@ -3,6 +3,22 @@ import {Position} from "reactflow";
 import {EColor} from "../../../constant";
 
 
+const endPosition: {
+    [key in Position]: { x: number, y: number }
+} = {
+    [Position.Left]: {x: 40, y: 0},
+    [Position.Right]: {x: -40, y: 0},
+    [Position.Top]: {x: 0, y: 40},
+    [Position.Bottom]: {x: 0, y: -40},
+}
+
+const getLastPoint = (path: string) => {
+    const pathArray = path.split(' ')
+    const lastPoint = pathArray[pathArray.length - 1]
+    const [x, y] = lastPoint.split(',')
+    return {x: parseFloat(x), y: parseFloat(y)}
+}
+
 export const CircleResourcesAnimation: React.FC<{
     parentId: string
     id: string
@@ -18,51 +34,50 @@ export const CircleResourcesAnimation: React.FC<{
 }> = ({id, begin, duration, play = false, infinite, sourcePosition, targetPosition, path, cy, cx}) => {
 
     const animationRef = React.useRef<SVGAnimationElement>(null)
+    const [isAnimationRunning, setIsAnimationRunning] = React.useState<boolean>(false)
+
+    const isInfinitiInitialStarter = React.useRef<boolean>(false)
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout | undefined
         let interval: NodeJS.Timeout | undefined
         if (animationRef.current && play) {
+            setIsAnimationRunning(true)
             if (!infinite) {
+                animationRef.current?.beginElement()
                 timeOut = setTimeout(() => {
-                    animationRef.current?.beginElement()
-                }, begin)
+                    setIsAnimationRunning(false)
+                }, duration)
             } else {
+                setIsAnimationRunning(true)
+                animationRef.current?.beginElement()
                 interval = setInterval(() => {
-                    animationRef.current?.beginElement()
+                    if (isInfinitiInitialStarter.current) {
+                        setIsAnimationRunning(true)
+                        animationRef.current?.beginElement()
+                    }
+                    isInfinitiInitialStarter.current = true
                 }, duration + begin)
             }
+        } else {
+            isInfinitiInitialStarter.current = false
         }
         return () => {
             clearInterval(interval)
             clearTimeout(timeOut)
-
         }
-    }, [animationRef, play, infinite]);
+    }, [play, begin]);
 
+    // useEffect(() => {
+    //     console.log('isAnimationRunning: ', isAnimationRunning, duration + begin)
+    // }, [isAnimationRunning])
 
-    const getLastPoint = (path: string) => {
-        const pathArray = path.split(' ')
-        const lastPoint = pathArray[pathArray.length - 1]
-        const [x, y] = lastPoint.split(',')
-        return {x: parseFloat(x), y: parseFloat(y)}
-    }
-    const endPosition: {
-        [key in Position]: { x: number, y: number }
-    } = {
-        [Position.Left]: {x: 40, y: 0},
-        [Position.Right]: {x: -40, y: 0},
-        [Position.Top]: {x: 0, y: 40},
-        [Position.Bottom]: {x: 0, y: -40},
-    }
 
     const formattedPath = useMemo(() => {
         let _formattedPath = path
         const target = getLastPoint(path)
         const updatedEnd = {x: target.x + endPosition[targetPosition].x, y: target.y + endPosition[targetPosition].y}
         _formattedPath = `${_formattedPath} L ${updatedEnd.x},${updatedEnd.y}`
-
-
         return _formattedPath
     }, [sourcePosition, targetPosition, path])
 
@@ -72,19 +87,20 @@ export const CircleResourcesAnimation: React.FC<{
 
     return (
         <>
-            {play && <circle id={id} r="8" fill={EColor.black}
+            <circle id={id} r={isAnimationRunning ? 8 : 3} fill={EColor.black}
             >
                 <animateMotion
                     repeatCount={0}
                     ref={animationRef}
                     dur={`${duration}.ms`}
-                    begin={play ? `${begin}.ms` : 'indefinite'}
+                    begin={isAnimationRunning ? `${begin}.ms` : 'indefinite'}
+                    // begin={'indefinite'}
                     fill="freeze"
                     path={formattedPath}
                 >
                     <mpath href={formattedPath}/>
                 </animateMotion>
-            </circle>}
+            </circle>
         </>
     )
 }

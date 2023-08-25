@@ -9,6 +9,7 @@ export const useInvokeStep = () => {
     const {invokeStep, setIsDiagramRunning} = diagramEditorActions
 
     const runStep = () => {
+        console.log('runStep')
         dispatch(invokeStep())
     }
 
