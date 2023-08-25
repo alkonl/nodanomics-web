@@ -1,20 +1,19 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";
 import {EConnectionMode, IMicroLoopNodeData} from "../../../../interface";
-import {BaseNodeContainer} from "../container";
+import {LoopContainer} from "../container";
 import {Box} from "@mui/material";
 import {EColor, EFontColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
-import {useExpandOrCollapse, useResizeParentOnSizeChange, useUpdateNode} from "../../../../hooks";
+import {useExpandOrCollapse, useResizeParentOnSizeChange} from "../../../../hooks";
 import {ChainHandle} from "../../CustomHandle/ChainHandle";
 import {LogicHandle} from "../../CustomHandle";
 import {NodeStyle} from "../styledComponent";
-import {diagramEditorActions, useAppDispatch} from "../../../../redux";
 
 const WIDTH = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 5
 
 export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) => {
-    const {data, xPos, yPos} = props;
+    const {data} = props;
 
     const isCollapsed = data.isCollapsed
     const {expandOrCollapse} = useExpandOrCollapse({
@@ -34,21 +33,8 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
     useResizeParentOnSizeChange(props)
 
 
-    const dispatch = useAppDispatch()
-
-    useEffect(() => {
-        dispatch(diagramEditorActions.onNodesChange([{
-            id: props.id,
-            type: 'position',
-            positionAbsolute: {
-                x: xPos,
-                y: yPos,
-            }
-        }]))
-    }, [xPos, yPos])
-
     return (
-        <BaseNodeContainer node={props}>
+        <LoopContainer node={props}>
             <Box
                 onClick={onDoubleClick}
                 sx={{
@@ -241,6 +227,6 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                     </Box>
                 }
             </Box>
-        </BaseNodeContainer>
+        </LoopContainer>
     );
 };

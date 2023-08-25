@@ -51,12 +51,5 @@ export const useSetParentNode = () => {
                 dispatch(bulkUpdateNodes(nodesToUpdate))
             }
         }
-        // const parentNode = findParent(node, nodes)
-        // if (parentNode) {
-        //     dispatch(updateNodeParent({
-        //         node,
-        //         parentNode
-        //     }))
-        // }
     }, [dispatch])
 }

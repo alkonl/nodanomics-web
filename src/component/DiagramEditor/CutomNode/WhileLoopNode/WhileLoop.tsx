@@ -1,5 +1,5 @@
 import React from 'react';
-import {BaseNodeContainer} from "../container";
+import {LoopContainer} from "../container";
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";
 import {EConnectionMode, IWhileLoopNodeData} from "../../../../interface";
@@ -32,7 +32,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
     } = useWidthAndHeight()
 
     return (
-        <BaseNodeContainer node={props}>
+        <LoopContainer node={props}>
             <Box
                 sx={{
                     padding: 1,
@@ -255,6 +255,6 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                     </Box>
                 }
             </Box>
-        </BaseNodeContainer>
+        </LoopContainer>
     );
 };
