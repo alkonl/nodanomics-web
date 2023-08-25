@@ -16,6 +16,7 @@ import {addEdge, applyEdgeChanges, applyNodeChanges, Connection, EdgeChange, Nod
 import {Optionalize} from "../../utils";
 import {Graph, resetNodeStates, RunManager} from "../../service";
 import {canNodeHasChildren} from "../../service/reactflow/node/canNodeHasChildren";
+import {geAllChildrenNodes} from "../../hooks/useGeAllChildrenNodes";
 
 
 export interface IDiagramEditorState {
@@ -189,7 +190,7 @@ export const diagramEditorSlice = createSlice({
                     x: payload.node.position.x - parentPosition.x,
                     y: payload.node.position.y - parentPosition.y,
                 }
-                node.zIndex = payload.parentNode.zIndex ? payload.parentNode.zIndex  + 1 : 10
+                node.zIndex = payload.parentNode.zIndex ? payload.parentNode.zIndex + 1 : 10
                 node.extent = 'parent'
                 state.autoSaveCalled++
             }
@@ -227,14 +228,15 @@ export const diagramEditorSlice = createSlice({
         }>) => {
             const node = state.diagramNodes.find(node => node.id === payload.nodeId)
             if (node && canNodeHasChildren(node.data.type)) {
-                const toDeleteNodes: string[] = []
-                state.diagramNodes = state.diagramNodes.filter(node => {
-                    const toDelete = node.id === payload.nodeId || node.parentNode === payload.nodeId
-                    if (toDelete) {
-                        toDeleteNodes.push(node.id)
-                    }
-                    return !toDelete
+                const nodesToDelete = geAllChildrenNodes({
+                    parentId: payload.nodeId,
+                    nodes: state.diagramNodes,
                 })
+                nodesToDelete.push(node)
+                state.diagramNodes = state.diagramNodes.filter(node => {
+                    return !nodesToDelete.some(childNode => childNode.id === node.id)
+                })
+                const toDeleteNodes: string[] = nodesToDelete.map(node => node.id)
                 graph.deleteBulkNodes(toDeleteNodes)
 
             } else {
