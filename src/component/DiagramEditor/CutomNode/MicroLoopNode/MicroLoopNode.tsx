@@ -5,19 +5,17 @@ import {EConnectionMode, IMicroLoopNodeData} from "../../../../interface";
 import {BaseNodeContainer} from "../container";
 import {Box} from "@mui/material";
 import {EColor, EFontColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
-import {useExpandOrCollapse, useResizeParentOnSizeChange} from "../../../../hooks";
+import {useExpandOrCollapse, useResizeParentOnSizeChange, useUpdateNode} from "../../../../hooks";
 import {ChainHandle} from "../../CustomHandle/ChainHandle";
 import {LogicHandle} from "../../CustomHandle";
 import {NodeStyle} from "../styledComponent";
-import {resizeParent} from "../../../../service";
+import {diagramEditorActions, useAppDispatch} from "../../../../redux";
 
 const WIDTH = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 5
 
 export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) => {
-    const {data} = props;
-    useEffect(() => {
-        console.log('MicroLoopNode', props.xPos, props.yPos)
-    }, [props]);
+    const {data, xPos, yPos} = props;
+
     const isCollapsed = data.isCollapsed
     const {expandOrCollapse} = useExpandOrCollapse({
         nodeData: data,
@@ -31,10 +29,23 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
         if (event.detail === 2) {
             changeExpandOrCollapse()
         }
-
     }
 
     useResizeParentOnSizeChange(props)
+
+
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        dispatch(diagramEditorActions.onNodesChange([{
+            id: props.id,
+            type: 'position',
+            positionAbsolute: {
+                x: xPos,
+                y: yPos,
+            }
+        }]))
+    }, [xPos, yPos])
 
     return (
         <BaseNodeContainer node={props}>
