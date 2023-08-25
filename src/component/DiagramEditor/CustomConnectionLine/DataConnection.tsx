@@ -50,7 +50,7 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
 
 
     const isPlay = isDiagramRunning && data?.isTransferredResources
-
+    console.log('tt_1.1: ', data?.isTransferredResources)
     return (
         <>
             {Array.from({length: circleCount <= 30 ? circleCount : 30}).map((_, index) => {
@@ -64,7 +64,7 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
                         path={edgePath}
                         infinite={isDiagramRunningInterval}
                         play={isPlay}
-                        duration={DIAGRAM_RUN_DURATION - delay - 100}
+                        duration={DIAGRAM_RUN_DURATION - delay}
                         begin={delay}
                         key={index} parentId={animationCircleId}
                         id={`${animationCircleId}-${index}`}

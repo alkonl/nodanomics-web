@@ -33,7 +33,11 @@ export const useInvokeStep = () => {
     useEffect(() => {
         let interval: NodeJS.Timer | undefined
         if (isDiagramRunningInterval) {
-            interval = setInterval(runStep, DIAGRAM_RUN_DURATION)
+            console.time('runStep')
+            interval = setInterval(()=>{
+                runStep()
+                console.timeLog('runStep')
+            }, DIAGRAM_RUN_DURATION)
         } else {
             if (interval) {
                 clearInterval(interval)

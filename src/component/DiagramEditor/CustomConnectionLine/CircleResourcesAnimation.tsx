@@ -51,8 +51,9 @@ export const CircleResourcesAnimation: React.FC<{
             } else {
                 setIsAnimationRunning(true)
                 animationRef.current?.beginElement()
+
                 interval = setInterval(() => {
-                    if (isInfinitiInitialStarter.current) {
+                    if (isInfinitiInitialStarter.current && play) {
                         setIsAnimationRunning(true)
                         animationRef.current?.beginElement()
                     }
@@ -68,9 +69,9 @@ export const CircleResourcesAnimation: React.FC<{
         }
     }, [play, begin]);
 
-    // useEffect(() => {
-    //     console.log('isAnimationRunning: ', isAnimationRunning, duration + begin)
-    // }, [isAnimationRunning])
+    useEffect(() => {
+        console.log('isAnimationRunning: ', isAnimationRunning)
+    }, [isAnimationRunning])
 
 
     const formattedPath = useMemo(() => {

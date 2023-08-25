@@ -1,1 +1,1 @@
-export const DIAGRAM_RUN_DURATION = 2000;
+export const DIAGRAM_RUN_DURATION = 1000;

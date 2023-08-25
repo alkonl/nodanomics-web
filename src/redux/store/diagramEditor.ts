@@ -348,14 +348,16 @@ export const diagramEditorSlice = createSlice({
             graph.resetResourcesToProvide()
             graph.updateNodesState(resetNode.map(node => node.data))
             runManager.updateState()
-            runManager.resetCurrentStep()
+            runManager.resetRun()
             updateNodesFromGraph(state.diagramNodes)
+            updateEdgesFromGraph(state.diagramEdges)
             state.currentRunningDiagramStep = runManager.currentStep
         },
         // using this action to render new values like variableName
         renderState: (state) => {
             runManager.updateState()
             updateNodesFromGraph(state.diagramNodes)
+            updateEdgesFromGraph(state.diagramEdges)
         },
         setExecutionGridProperties: (state, {payload}: PayloadAction<ApexOptions>) => {
             state.executionGrid = {
