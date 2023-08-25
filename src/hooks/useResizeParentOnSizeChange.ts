@@ -2,10 +2,10 @@ import {useEffect} from "react";
 import {resizeParent} from "../service";
 // eslint-disable-next-line import/named
 import {NodeProps} from "reactflow";
-import {IMicroLoopNodeData} from "../interface";
+import {IMicroLoopNodeData, IWhileLoopNodeData} from "../interface";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 
-export const useResizeParentOnSizeChange = (params: NodeProps<IMicroLoopNodeData>) => {
+export const useResizeParentOnSizeChange = (params: NodeProps<IMicroLoopNodeData | IWhileLoopNodeData>) => {
     const dispatch = useAppDispatch()
     const {diagramNodes} = useDiagramEditorState()
 

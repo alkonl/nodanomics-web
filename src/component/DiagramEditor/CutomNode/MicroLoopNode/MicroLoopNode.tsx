@@ -30,7 +30,7 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
         }
     }
 
-    useResizeParentOnSizeChange(props)
+
 
 
     return (
