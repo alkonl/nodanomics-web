@@ -32,6 +32,14 @@ export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionB
         return this._data;
     }
 
+    get targetMode() {
+        return this.data.targetMode;
+    }
+
+    get sourceMode() {
+        return this.data.sourceMode;
+    }
+
     deleteFromNodes() {
         this._source.deleteEdge(this);
         this._target.deleteEdge(this);

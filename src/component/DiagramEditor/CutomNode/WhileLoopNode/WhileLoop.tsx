@@ -122,7 +122,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                                 width: 'fit-content',
                             }}>
                                 <ChainHandle type="target" position={Position.Left}
-                                             mode={EConnectionMode.WhileLoopIncomingTrigger}/>
+                                             mode={EConnectionMode.NodeIncoming}/>
                                 <NodeStyle.Name>
                                     {isActiveText}
                                 </NodeStyle.Name>

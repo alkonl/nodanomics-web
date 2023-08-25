@@ -33,7 +33,7 @@ export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
     isEventTriggered(mode?: EConnectionMode) {
         if (mode === EConnectionMode.NodeOutgoing) {
             return this.isLoopWasActive && !this.isLoopActive
-        } else if (mode === EConnectionMode.WhileLoopIncomingTrigger) {
+        } else if (mode === EConnectionMode.NodeIncoming) {
             return this.isTriggeredIncomingNodes
         } else if (mode === EConnectionMode.LoopInnerToChildren) {
             return this.isTriggeredIncomingNodes

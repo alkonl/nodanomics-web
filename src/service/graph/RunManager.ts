@@ -1,12 +1,7 @@
 import {Graph} from "./Graph";
+import {GraphBaseNode, GraphDataNode, GraphEventListenerNode, GraphInvokableNode, GraphStartNode} from "./GraphNodes";
 import {
-    GraphBaseNode,
-    GraphDataNode,
-    GraphEventListenerNode,
-    GraphInvokableNode,
-    GraphStartNode
-} from "./GraphNodes";
-import {
+    EConnectionMode,
     isIIsEventTriggered,
     isITriggeredEvent,
     isIUpdateGraphNodeStatePerStep,
@@ -65,21 +60,18 @@ export class RunManager {
         this.incrementStep()
         this.resetIsTransferredResources()
         const nodes = this.getExecutionOrder()
-
+        console.log('executeChainOrder: ', nodes)
         this.setExecutionOrder(nodes)
         this.executeChainOrder(nodes)
 
         this.updateNodePerStep()
-        // this.graph.nodes.forEach(node => {
-        //     if (node instanceof GraphDataNode) {
-        //         node.updateRecoursesProvide()
-        //     }
-        // })
         this.invokedNodes.clear()
     }
 
     private executeNode(node: IChainItem) {
+        console.log('executeNode: ', node.target.data.name)
         const target = node.target
+
         if (target instanceof GraphInvokableNode) {
             target.invokeStep()
             if (isITriggeredEvent(target)) {
@@ -103,7 +95,8 @@ export class RunManager {
             const isChainMeetCondition = chainConnection?.isMeetCondition === undefined || chainConnection?.isMeetCondition
             if (target instanceof GraphInvokableNode && isChainMeetCondition && !this.invokedNodes.has(target)) {
                 if (isIIsEventTriggered(target)) {
-                    if (target.isEventTriggered()) {
+                    console.log('mode: ', chainConnection?.sourceMode, chainConnection?.targetMode)
+                    if (target.isEventTriggered(chainConnection?.targetMode)) {
                         this.executeNode(chainItem)
                     }
                 } else {
@@ -131,11 +124,10 @@ export class RunManager {
     private getExecutionOrder(): IChainItem[] {
         const startedNodes = this.getStartedNodes()
         const childrenNodes = startedNodes.map(source => {
-            return this.getNodesChildrenRecursive({
+            return this.getChainChildrenRecursive({
                 target: source,
             })
         })
-        console.log('startedNodes: ', startedNodes.map(node => node.data.name))
         // nodes queue that start from trigger listener invoke in last step
         return childrenNodes.sort((a, b) => {
             const aFirstNode = a[0].target
@@ -149,8 +141,8 @@ export class RunManager {
         }).flat()
     }
 
-    private getNodesChildrenRecursive(startedChainItem: IChainItem, children: IChainItem[] = [startedChainItem]) {
-        const childChainItem = this.getNodesChildren(startedChainItem)
+    private getChainChildrenRecursive(startedChainItem: IChainItem, children: IChainItem[] = [startedChainItem]) {
+        const childChainItem = this.getChainChildren(startedChainItem)
 
         startedChainItem.children = childChainItem
 
@@ -158,20 +150,27 @@ export class RunManager {
 
             const outgoingEdges = child.target.outgoingEdges
             if (outgoingEdges.length > 0) {
-                this.getNodesChildrenRecursive(child, children)
+                this.getChainChildrenRecursive(child, children)
             }
         })
         return children
     }
 
-    private getNodesChildren(node: IChainItem): IChainItem[] {
-        const children = node.target.outgoingEdges.map(edge => {
+    private getChainChildren(chainItem: IChainItem): IChainItem[] {
+        const children = chainItem.target.outgoingEdges.map(edge => {
             const target = edge.target
             if (edge instanceof GraphChainEdge || target instanceof GraphDataNode) {
                 return {target, edge}
             }
+        }).filter(item => item !== undefined) as IChainItem[]
+
+      return  children.sort(chainItem => {
+            const edge = chainItem.edge
+            if (edge?.sourceMode === EConnectionMode.NodeOutgoing) {
+                return 1
+            }
+            return -1
         })
-        return children.filter(item => item !== undefined) as IChainItem[]
     }
 
     private resetIsTransferredResources() {

@@ -77,7 +77,7 @@ export const ExternalDataHandlers: React.FC<NodeProps<ILoopNodeData>> = ({data})
                         width: 'fit-content',
                     }}>
                         <ChainHandle type="target" position={Position.Left}
-                                     mode={EConnectionMode.WhileLoopIncomingTrigger}/>
+                                     mode={EConnectionMode.LoopInnerToChildren}/>
                         <NodeStyle.Name>
                             {isActiveText}
                         </NodeStyle.Name>
