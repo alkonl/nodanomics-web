@@ -46,12 +46,10 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
 
     useEffect(() => {
         setCircleCount(data?.howManyWasTransferred ? Math.floor(data.howManyWasTransferred) : 0)
-        console.log('howManyWasTransferred: ', data?.howManyWasTransferred)
     }, [data?.howManyWasTransferred]);
 
 
     const isPlay = isDiagramRunning && data?.isTransferredResources
-    console.log('tt_1.1: ', data?.isTransferredResources)
     return (
         <>
             {Array.from({length: circleCount <= 30 ? circleCount : 30}).map((_, index) => {

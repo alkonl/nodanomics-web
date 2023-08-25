@@ -31,12 +31,11 @@ export const CircleResourcesAnimation: React.FC<{
     path: string
     sourcePosition: Position
     targetPosition: Position
-}> = ({id, begin, duration, play = false, infinite, sourcePosition, targetPosition, path, cy, cx}) => {
+}> = ({id, begin, duration, play = false, infinite, sourcePosition, targetPosition, path}) => {
 
     const animationRef = React.useRef<SVGAnimationElement>(null)
     const [isAnimationRunning, setIsAnimationRunning] = React.useState<boolean>(false)
 
-    // const isInfinitiInitialStarter = React.useRef<boolean>(false)
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout | undefined
@@ -62,17 +61,12 @@ export const CircleResourcesAnimation: React.FC<{
         } else {
             setIsAnimationRunning(false)
 
-            // isInfinitiInitialStarter.current = false
         }
         return () => {
             clearInterval(interval)
             clearTimeout(timeOut)
         }
     }, [play, begin]);
-
-    useEffect(() => {
-        console.log('isAnimationRunning: ', isAnimationRunning)
-    }, [isAnimationRunning])
 
 
     const formattedPath = useMemo(() => {
@@ -96,7 +90,6 @@ export const CircleResourcesAnimation: React.FC<{
                     ref={animationRef}
                     dur={`${duration}.ms`}
                     begin={isAnimationRunning ? `${begin}.ms` : 'indefinite'}
-                    // begin={'indefinite'}
                     fill="freeze"
                     path={formattedPath}
                 >
