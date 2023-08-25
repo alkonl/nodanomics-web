@@ -36,7 +36,7 @@ export const CircleResourcesAnimation: React.FC<{
     const animationRef = React.useRef<SVGAnimationElement>(null)
     const [isAnimationRunning, setIsAnimationRunning] = React.useState<boolean>(false)
 
-    const isInfinitiInitialStarter = React.useRef<boolean>(false)
+    // const isInfinitiInitialStarter = React.useRef<boolean>(false)
 
     useEffect(() => {
         let timeOut: NodeJS.Timeout | undefined
@@ -57,11 +57,13 @@ export const CircleResourcesAnimation: React.FC<{
                         setIsAnimationRunning(true)
                         animationRef.current?.beginElement()
                     }
-                    isInfinitiInitialStarter.current = true
+                    // isInfinitiInitialStarter.current = true
                 }, duration + begin)
             }
         } else {
-            isInfinitiInitialStarter.current = false
+            setIsAnimationRunning(false)
+
+            // isInfinitiInitialStarter.current = false
         }
         return () => {
             clearInterval(interval)
@@ -88,7 +90,7 @@ export const CircleResourcesAnimation: React.FC<{
 
     return (
         <>
-            <circle id={id} r={isAnimationRunning ? 8 : 3} fill={EColor.black}
+            <circle id={id} r={isAnimationRunning ? 8 : 0} fill={EColor.black}
             >
                 <animateMotion
                     repeatCount={0}
