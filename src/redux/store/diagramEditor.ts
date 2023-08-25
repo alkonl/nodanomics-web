@@ -38,6 +38,7 @@ export interface IDiagramEditorState {
     currentRunningDiagramStep: number
     isDiagramRunning: boolean
     isDiagramRunningInterval: boolean
+    isStepFinished: boolean
     spreadsheets?: IStructuredSpreadsheetsData
     executionGrid?: {
         options?: ApexOptions
@@ -50,6 +51,7 @@ const initialState: IDiagramEditorState = {
     autoSaveCalled: 0,
     isDiagramRunning: false,
     isDiagramRunningInterval: false,
+    isStepFinished: false,
     currentRunningDiagramStep: 0,
 }
 
@@ -323,9 +325,10 @@ export const diagramEditorSlice = createSlice({
             updateEdgesFromGraph(state.diagramEdges)
             state.currentRunningDiagramStep = runManager.currentStep
         },
-        setIsDiagramRunning: (state, {payload: {isDiagramRunningInterval, isRunning}}: PayloadAction<{
+        setIsDiagramRunning: (state, {payload: {isDiagramRunningInterval, isRunning, isStepFinished}}: PayloadAction<{
             isRunning?: boolean
             isDiagramRunningInterval?: boolean
+            isStepFinished?: boolean
         }>) => {
             if (isRunning !== undefined) {
                 state.isDiagramRunning = isRunning
@@ -333,11 +336,13 @@ export const diagramEditorSlice = createSlice({
             if (isDiagramRunningInterval !== undefined) {
                 state.isDiagramRunningInterval = isDiagramRunningInterval
             }
-
+            if (isStepFinished !== undefined) {
+                state.isStepFinished = isStepFinished
+            }
         },
         setSpreadsheets: (state, {payload}: PayloadAction<{
             spreadsheets: IStructuredSpreadsheetsData
-        }>) => {
+        }> ) => {
             state.spreadsheets = payload.spreadsheets
             graph.setSpreadsheetsData({
                 spreadsheetData: payload.spreadsheets

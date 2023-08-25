@@ -57,7 +57,6 @@ export const CircleResourcesAnimation: React.FC<{
                         setIsAnimationRunning(true)
                         animationRef.current?.beginElement()
                     }
-                    // isInfinitiInitialStarter.current = true
                 }, duration + begin)
             }
         } else {
