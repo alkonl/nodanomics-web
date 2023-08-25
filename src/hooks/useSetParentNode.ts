@@ -2,6 +2,7 @@ import {useCallback} from "react";
 import {IReactFlowNode} from "../interface";
 import {diagramEditorActions, useAppDispatch} from "../redux";
 import {findParent, IUpdateChildrenFunc, recursiveUpdateChildren} from "../service";
+import {isNodeCanBeParent} from "../interface/busines/diagram/canBeParent";
 
 const updateLoopChildren: IUpdateChildrenFunc = ({parentNode, node}) => {
     return {
@@ -23,12 +24,16 @@ export const useSetParentNode = () => {
             if (parentNode && !parentNode.data.isCollapsed) {
 
                 const parentPosition = parentNode.positionAbsolute || parentNode.position
+                const isCanBeParent = isNodeCanBeParent(node.data.type)
+                const zIndex = isCanBeParent
+                    ? parentNode.zIndex ? parentNode.zIndex + 15 : 15
+                    : parentNode.zIndex ? parentNode.zIndex + 11 : 11
                 const childNode: IReactFlowNode = {
                     ...node,
                     data: {
                         ...node.data,
                         parentId: parentNode.id,
-                        defaultZIndex: parentNode.zIndex ? parentNode.zIndex + 1 : 11,
+                        defaultZIndex: zIndex,
                     },
                     parentNode: parentNode.id,
                     position: {
@@ -36,7 +41,7 @@ export const useSetParentNode = () => {
                         y: node.position.y - parentPosition.y,
                     },
                     extent: 'parent',
-                    zIndex: parentNode.zIndex ? parentNode.zIndex + 1 : 11,
+                    zIndex: zIndex
                 }
 
 
