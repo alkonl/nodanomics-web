@@ -53,7 +53,7 @@ export const CircleResourcesAnimation: React.FC<{
                 animationRef.current?.beginElement()
 
                 interval = setInterval(() => {
-                    if (isInfinitiInitialStarter.current && play) {
+                    if (play) {
                         setIsAnimationRunning(true)
                         animationRef.current?.beginElement()
                     }
