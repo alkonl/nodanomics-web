@@ -32,6 +32,7 @@ implements IUpdateGraphNodeState{
 
 
     isEventTriggered(mode: EConnectionMode): boolean  {
+        console.log('isEventTriggered: ', mode)
         if(EConnectionMode.LoopInnerToChildren === mode){
             return this.isLoopActive
         }

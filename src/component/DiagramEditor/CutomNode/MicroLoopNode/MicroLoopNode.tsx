@@ -211,6 +211,7 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                                 display: 'flex',
                                 alignItems: 'center',
                                 height: 'fit-content',
+                                gap: 1,
                             }}>
                                 <LogicHandle
                                     type="target"
@@ -222,7 +223,22 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                                 </NodeStyle.Name>
 
                             </Box>
+                            <Box sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                height: 'fit-content',
+                                gap: 0.5,
+                            }}>
+                                <ChainHandle
+                                    type="target"
+                                    position={Position.Left}
+                                    mode={EConnectionMode.LoopChildrenToExternal}
+                                />
+                                <NodeStyle.Name>
+                                  end
+                                </NodeStyle.Name>
 
+                            </Box>
                         </Box>
                     </Box>
                 }
