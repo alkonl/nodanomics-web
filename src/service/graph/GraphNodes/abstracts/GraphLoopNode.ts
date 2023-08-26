@@ -1,11 +1,20 @@
 import {GraphInvokableNode} from "./GraphInvokable";
 import {EConnectionMode, IIsEventTriggered, ILoopNodeData} from "../../../../interface";
 import {GraphLogicManager} from "../helper";
+import {GraphMatchManagerNode} from "../../GraphMatchManager";
+import {RunManager} from "../../RunManager";
+import {GraphNodeManager} from "../../NodeManager";
 
 export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILoopNodeData> extends GraphInvokableNode<IGenericNodeData>
     implements IIsEventTriggered {
 
     private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
+    protected readonly matchManager: GraphMatchManagerNode
+
+    constructor(value: IGenericNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
+        super(value, runManager, nodeManager);
+        this.matchManager = new GraphMatchManagerNode(this.incomingEdges, nodeManager)
+    }
 
     abstract isEventTriggered(mode?: EConnectionMode): boolean;
 

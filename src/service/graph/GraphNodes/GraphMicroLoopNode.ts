@@ -4,52 +4,75 @@ import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
 
 export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
-implements IUpdateGraphNodeState{
+    implements IUpdateGraphNodeState {
 
 
     constructor(value: IMicroLoopNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(value, runManager, nodeManager);
     }
 
-    get loopCurrentCount() {
-        return this.data.currentLoopCount || 0;
+    get currentLoopCount() {
+        return this.data.currentLoopCount;
     }
 
-    get loopCount() {
-        return this.data.loopCount || 0;
+    get loopCount(): number {
+        console.log('loopCount.loopFormula: ', this.data.loopFormula)
+        if (this.data.loopFormula) {
+            const result = this.matchManager.calculateFormula({
+                formula: this.data.loopFormula,
+            })
+            console.log('totalLoopCount: ', result)
+
+            if (typeof result === 'number') {
+                return result
+            }
+        }
+        return 0
     }
 
 
     protected checkIsLoopActive() {
-        if (this.loopCount === 0) {
-            this.setIsLoopActive(false)
-        } else {
-            const isLoopActive = this.loopCurrentCount < this.loopCount
-            this.setIsLoopActive(isLoopActive)
-        }
+        const isLoopActive = this.currentLoopCount < this.loopCount
+        this.setIsLoopActive(isLoopActive)
+        return isLoopActive
     }
 
 
+    isEventTriggered(mode: EConnectionMode): boolean {
 
-    isEventTriggered(mode: EConnectionMode): boolean  {
-        console.log('isEventTriggered: ', mode)
-        if(EConnectionMode.LoopInnerToChildren === mode){
-            return this.isLoopActive
+        if (EConnectionMode.LoopInnerToChildren === mode) {
+            return this.checkIsLoopActive()
         }
         return true
     }
 
-    invokeStep() {
+    resetLoopStep() {
+        this.updateNode({currentLoopCount: 0})
+        console.log('resetStep: ', this.data.currentLoopCount)
+        this.checkIsLoopActive()
+    }
+
+    count = 0
+
+    invokeStep(invokeParams?: {
+        addStep?: boolean
+    }) {
+        this.count += 1
+        console.log(`invoke count ${this.data.name}`, this.count)
         super.invokeStep()
-        if (this.isLoopActive) {
+        if (this.data.name === 'innerLoop') {
+            console.log('invokeStep', this.data)
+        }
+
+        if (this.checkIsLoopActive()) {
             this.addStep()
         }
     }
 
     private addStep() {
-        const updatedLoopCount = this.loopCurrentCount + 1
+        const updatedLoopCount = this.currentLoopCount + 1
         const isPossibleToAddStep = updatedLoopCount <= this.loopCount
-        if(isPossibleToAddStep){
+        if (isPossibleToAddStep) {
             this.updateNode({currentLoopCount: updatedLoopCount})
         }
     }

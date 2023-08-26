@@ -133,7 +133,7 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                                     fontWeight: 600,
                                     color: EFontColor.white,
                                 }}>
-                                {data.loopCount}
+                                {data.loopFormula}
                             </NodeStyle.Name>
                         </Box>
                     </Box>

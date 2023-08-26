@@ -11,7 +11,11 @@ export class GraphOriginNode extends GraphInteractiveNode<IOriginNodeData> {
         super(data, runManager, nodeManager);
     }
 
+
+    count = 0
     protected runAction() {
+        this.count += 1
+        console.log(`invoke count ${this.data.name}`, this.count)
         this.pushAllOrAnyResources()
     }
 

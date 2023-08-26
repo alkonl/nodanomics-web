@@ -106,11 +106,14 @@ export const resizeParentOnDrag = (
         }) => void
     }) => {
 
+    const updateX = event.movementX + 20
+    const updateY = event.movementY + 20
+
     resizeParent({
         node,
         diagramNodes,
         updateNodeSize,
-        addWidth: event.movementX,
-        addHeight: event.movementY
+        addWidth: updateX,
+        addHeight: updateY
     })
 }

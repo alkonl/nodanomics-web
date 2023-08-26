@@ -8,6 +8,7 @@ import {
     isUpdateGraphNodeState
 } from "../../interface";
 import {GraphChainEdge, GraphDataEdge} from "./GraphEdge";
+import {GraphMicroLoopNode} from "./GraphNodes/GraphMicroLoopNode";
 
 export interface IChainItem {
     target: GraphBaseNode
@@ -87,15 +88,15 @@ export class RunManager {
         this.incrementStep()
         this.resetIsTransferredResources()
         const nodes = this.getExecutionOrder()
-        console.log('executeChainOrder: ', nodes)
+        console.log('execution order', nodes)
         this.setExecutionOrder(nodes)
         this.executeChainOrder(nodes)
-
         this.updateNodePerStep()
     }
 
     private executeNode(chainItem: IChainItem) {
         const target = chainItem.target
+        console.log('execute node', target.data.name)
         if (target instanceof GraphInvokableNode) {
             target.invokeStep()
             if (isITriggeredEvent(target)) {
@@ -108,6 +109,13 @@ export class RunManager {
             if (chainItem.end && chainItem.end.edge && !chainItem.end.edge.isMeetCondition) {
                 const chainItemToExecute = this.findDeepChainItemByNode(chainItem.end.target)
                 if (chainItemToExecute && chainItemToExecute.inner) {
+
+                    chainItemToExecute.inner.forEach(item => {
+                        if (item.target instanceof GraphMicroLoopNode) {
+                            item.target.resetLoopStep()
+                            console.log('inner item', item.target.currentLoopCount)
+                        }
+                    })
                     this.executeChainOrder(chainItemToExecute.inner)
                 }
             }
@@ -180,7 +188,8 @@ export class RunManager {
 
         startedChainItem.outgoingConnected = childChainItem.outgoingConnected
         startedChainItem.inner = childChainItem.inner
-
+        startedChainItem.end = childChainItem.endChainItem
+        console.log('startedChainItem.inner', startedChainItem.inner)
         const nextChildren = [...childChainItem.outgoingConnected, ...childChainItem.inner]
 
         nextChildren.forEach(child => {
@@ -193,15 +202,26 @@ export class RunManager {
 
             }
         })
+        startedChainItem.inner.sort((a, b) => {
+            if (!a.end && b.end) {
+                return -1;
+            } else if (a.end && !b.end) {
+                return 1;
+            }
+            return 0;
+        });
         return children
     }
 
     private getChainChildren(chainItem: IChainItem): {
         outgoingConnected: IChainItem[]
         inner: IChainItem[]
+        endChainItem: IChainItem | undefined
     } {
         const outgoingConnected: IChainItem[] = []
         const inner: IChainItem[] = []
+        let endChainItem: IChainItem | undefined
+
         chainItem.target.outgoingEdges.forEach(edge => {
             const target = edge.target
             console.log(`edge: ${edge.target.data.name}`, edge)
@@ -213,16 +233,18 @@ export class RunManager {
                 if (edge.sourceMode === EConnectionMode.LoopInnerToChildren) {
                     inner.push(newChainItem)
                 } else if (edge.targetMode === EConnectionMode.LoopChildrenToExternal) {
-                    chainItem.end = newChainItem
+                    // chainItem.end = newChainItem
+                    endChainItem = newChainItem
                 } else {
                     outgoingConnected.push(newChainItem)
                 }
             }
         })
-        console.log(`outgoingConnected: ${chainItem.target.data.name} `, outgoingConnected, 'inner: ', inner, chainItem)
+
         return {
             outgoingConnected,
             inner,
+            endChainItem,
         }
     }
 
