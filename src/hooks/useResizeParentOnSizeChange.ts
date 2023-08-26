@@ -21,7 +21,6 @@ export const useResizeParentOnSizeChange = (params: NodeProps<IMicroLoopNodeData
     useEffect(() => {
 
         if (node?.parentNode) {
-            console.log('useResizeParentOnSizeChange', node)
             resizeParent({
                 node,
                 addHeight: 200,

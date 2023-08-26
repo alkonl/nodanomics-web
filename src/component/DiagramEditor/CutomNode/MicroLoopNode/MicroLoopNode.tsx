@@ -5,7 +5,7 @@ import {EConnectionMode, IMicroLoopNodeData} from "../../../../interface";
 import {LoopContainer} from "../container";
 import {Box} from "@mui/material";
 import {EColor, EFontColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
-import {useExpandOrCollapse, useResizeParentOnSizeChange} from "../../../../hooks";
+import {useExpandOrCollapse} from "../../../../hooks";
 import {ChainHandle} from "../../CustomHandle/ChainHandle";
 import {LogicHandle} from "../../CustomHandle";
 import {NodeStyle} from "../styledComponent";

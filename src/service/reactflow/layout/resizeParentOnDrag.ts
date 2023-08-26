@@ -105,6 +105,7 @@ export const resizeParentOnDrag = (
             }
         }) => void
     }) => {
+
     resizeParent({
         node,
         diagramNodes,

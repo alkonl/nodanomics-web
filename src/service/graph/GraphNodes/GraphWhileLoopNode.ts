@@ -1,10 +1,5 @@
 import {GraphLoopNode} from "./abstracts";
-import {
-    EConnectionMode,
-    isIIsEventTriggered,
-    IUpdateGraphNodeState,
-    IWhileLoopNodeData
-} from "../../../interface";
+import {EConnectionMode, isIIsEventTriggered, IUpdateGraphNodeState, IWhileLoopNodeData} from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
 
@@ -31,13 +26,9 @@ export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
     }
 
     isEventTriggered(mode?: EConnectionMode) {
-        if (mode === EConnectionMode.NodeOutgoing) {
-            return this.isLoopWasActive && !this.isLoopActive
-        } else if (mode === EConnectionMode.NodeIncoming) {
-            return this.isTriggeredIncomingNodes
-        } else if (mode === EConnectionMode.LoopInnerToChildren) {
+        if (mode === EConnectionMode.LoopInnerToChildren) {
             return this.isTriggeredIncomingNodes
         }
-        throw new Error(`isEventTriggered: unknown or empty mode ${mode}`)
+        return true
     }
 }

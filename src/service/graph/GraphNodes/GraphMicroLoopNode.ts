@@ -32,12 +32,10 @@ implements IUpdateGraphNodeState{
 
 
     isEventTriggered(mode: EConnectionMode): boolean  {
-        if(EConnectionMode.LoopInnerToChildren === mode || EConnectionMode.NodeIncoming === mode){
+        if(EConnectionMode.LoopInnerToChildren === mode){
             return this.isLoopActive
-        }else if(EConnectionMode.NodeOutgoing === mode){
-            return !this.isLoopActive
         }
-        return false
+        return true
     }
 
     invokeStep() {
