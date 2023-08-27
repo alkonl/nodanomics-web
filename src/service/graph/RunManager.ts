@@ -87,9 +87,11 @@ export class RunManager {
     invokeStep() {
         this.incrementStep()
         this.resetIsTransferredResources()
-        const nodes = this.getExecutionOrder()
-        this.setExecutionOrder(nodes)
-        this.executeChainOrder(nodes)
+        const chain = this.getExecutionOrder()
+        this.setExecutionOrder(chain)
+        // remove listener nodes from execution order
+        const startChain = chain.filter(chainItem => chainItem.target instanceof GraphStartNode)
+        this.executeChainOrder(startChain)
         this.updateNodePerStep()
     }
 
@@ -142,7 +144,6 @@ export class RunManager {
                 } else {
                     this.executeNode(chainItem)
                 }
-
             }
         })
     }
