@@ -39,13 +39,13 @@ export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield> 
         }, 0)
     }
 
-    indexOf(value: string| number): undefined | [number, number] {
+    indexOf(value: string | number): undefined | [number, number] {
         if (this.spreadsheet?.rows) {
             return findIndex2D(this.spreadsheet?.rows, value)
         }
     }
 
-    where(value: string| number): undefined | [number, number][] {
+    where(value: string | number): undefined | [number, number][] {
         if (this.spreadsheet?.rows) {
             return this.spreadsheet?.rows.reduce((acc: [number, number][], row, y) => {
                 const x = row.indexOf(value)
@@ -79,4 +79,47 @@ export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield> 
         }
     }
 
+
+    getDynamicVariables() {
+        return this.spreadsheet?.rows.reduce((acc: {
+            [key: string]: number | boolean
+        }, row) => {
+            const newRow = this.buildRow(row)
+            return {
+                ...acc,
+                ...newRow,
+            }
+        }, {})
+    }
+
+    getColumns() {
+        return this.spreadsheet?.columns
+    }
+
+    private buildRow(row: (string | number | boolean)[]) {
+        const columns = this.getColumns()
+        const object: {
+            [key: string]: number | boolean
+        } = {}
+        // the texts value in row
+        const anchors: string[] = []
+        row.forEach((value) => {
+            if (typeof value === 'string') {
+                anchors.push(value)
+            }
+        })
+        row.forEach((value, index) => {
+            if (typeof value !== 'string') {
+                anchors.forEach((anchor) => {
+                    const columnName = columns?.[index]
+                    const name = `${anchor}${columnName}`
+                        .replace(/\s+(\w)/g, (_, match) => match.toUpperCase())
+                        .replace(/^\w/, match => match.toLowerCase())
+                        .trim()
+                    object[name] = value
+                })
+            }
+        })
+        return object
+    }
 }

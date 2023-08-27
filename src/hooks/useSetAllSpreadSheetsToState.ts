@@ -44,6 +44,10 @@ export const useSetAllSpreadSheetsToState = () => {
 
                 // const yAxisIndex = spreadsheet.rows.findIndex((cells) => cells.values.some((cell) => cell.content === 'Y Axis'))
 
+                const columns = spreadsheet.rows[yAxisIndex].values
+                    .map((cell) => cell.content)
+                    .filter((content) => content !== 'Y Axis')
+
                 const rows: (string | number)[][] = [];
 
                 for (let i = yAxisIndex + 1; i < spreadsheet.rows.length; i++) {
@@ -69,6 +73,7 @@ export const useSetAllSpreadSheetsToState = () => {
                     xAxisIndex,
                     yAxisIndex,
                     rows,
+                    columns,
                 }
 
                 return {

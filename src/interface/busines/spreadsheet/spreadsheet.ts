@@ -12,6 +12,7 @@ export interface IStructuredSpreadsheetData {
     yAxisIndex: number
     name: string
     rows: ISpreadsheetRowsData
+    columns: string[]
 }
 
 export interface IStructuredSpreadsheetsData {

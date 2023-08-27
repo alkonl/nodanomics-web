@@ -26,6 +26,7 @@ export abstract class GraphMatchManager {
             const dataset = this.datasetData({datasetTag: tag})
             if (dataset && dataset.spreadsheet && dataset.spreadsheet?.rows) {
                 rowsPerTag[tag] = [...dataset.spreadsheet.rows]
+                dataset.getDynamicVariables()
                 datasetPerTag[`__${tag}`] = GraphMatchNodeAdapter.adapt(dataset)
             }
         }
