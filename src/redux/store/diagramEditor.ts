@@ -177,7 +177,6 @@ export const diagramEditorSlice = createSlice({
             })
             updateNodesFromGraph(state.diagramNodes)
             const node = state.diagramNodes.find(node => node.id === payload.node.id)
-            console.log('updateNodeParent', {...node})
             if (node && node.parentNode === undefined) {
 
                 node.data = {
@@ -203,7 +202,6 @@ export const diagramEditorSlice = createSlice({
                 height: number
             }
         }>) => {
-            console.log('updateNodeSize', payload)
             const stateNodeIndex = state.diagramNodes.findIndex(node => node.id === payload.nodeId)
             const stateNode = state.diagramNodes[stateNodeIndex]
             if (stateNode && isINodeSize(stateNode.data.style)) {

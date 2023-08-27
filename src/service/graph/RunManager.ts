@@ -88,7 +88,6 @@ export class RunManager {
         this.incrementStep()
         this.resetIsTransferredResources()
         const nodes = this.getExecutionOrder()
-        console.log('execution order', nodes)
         this.setExecutionOrder(nodes)
         this.executeChainOrder(nodes)
         this.updateNodePerStep()
@@ -96,7 +95,6 @@ export class RunManager {
 
     private executeNode(chainItem: IChainItem) {
         const target = chainItem.target
-        console.log('execute node', target.data.name)
         if (target instanceof GraphInvokableNode) {
             target.invokeStep()
             if (isITriggeredEvent(target)) {
@@ -113,7 +111,6 @@ export class RunManager {
                     chainItemToExecute.inner.forEach(item => {
                         if (item.target instanceof GraphMicroLoopNode) {
                             item.target.resetLoopStep()
-                            console.log('inner item', item.target.currentLoopCount)
                         }
                     })
                     this.executeChainOrder(chainItemToExecute.inner)
@@ -189,7 +186,6 @@ export class RunManager {
         startedChainItem.outgoingConnected = childChainItem.outgoingConnected
         startedChainItem.inner = childChainItem.inner
         startedChainItem.end = childChainItem.endChainItem
-        console.log('startedChainItem.inner', startedChainItem.inner)
         const nextChildren = [...childChainItem.outgoingConnected, ...childChainItem.inner]
 
         nextChildren.forEach(child => {
@@ -224,7 +220,6 @@ export class RunManager {
 
         chainItem.target.outgoingEdges.forEach(edge => {
             const target = edge.target
-            console.log(`edge: ${edge.target.data.name}`, edge)
             if (edge instanceof GraphChainEdge || target instanceof GraphDataNode) {
                 const newChainItem: IChainItem = {
                     target: target,

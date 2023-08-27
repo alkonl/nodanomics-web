@@ -36,7 +36,6 @@ export const useOnSelectionChange = () => {
             const parentZIndex = parentNode.data.defaultZIndex || 0
             const nodeZIndex = node.data.defaultZIndex || 0
             const newZIndex = parentZIndex + nodeZIndex + 1001
-            console.log('zIndex: ', newZIndex)
             return {
                 ...node,
                 zIndex: newZIndex,

@@ -16,13 +16,10 @@ export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
     }
 
     get loopCount(): number {
-        console.log('loopCount.loopFormula: ', this.data.loopFormula)
         if (this.data.loopFormula) {
             const result = this.matchManager.calculateFormula({
                 formula: this.data.loopFormula,
             })
-            console.log('totalLoopCount: ', result)
-
             if (typeof result === 'number') {
                 return result
             }
@@ -48,21 +45,12 @@ export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
 
     resetLoopStep() {
         this.updateNode({currentLoopCount: 0})
-        console.log('resetStep: ', this.data.currentLoopCount)
         this.checkIsLoopActive()
     }
 
-    count = 0
-
-    invokeStep(invokeParams?: {
-        addStep?: boolean
-    }) {
-        this.count += 1
-        console.log(`invoke count ${this.data.name}`, this.count)
+    invokeStep() {
         super.invokeStep()
-        if (this.data.name === 'innerLoop') {
-            console.log('invokeStep', this.data)
-        }
+
 
         if (this.checkIsLoopActive()) {
             this.addStep()

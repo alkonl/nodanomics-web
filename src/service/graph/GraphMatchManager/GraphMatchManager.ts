@@ -42,13 +42,13 @@ export abstract class GraphMatchManager {
         const datasetTags = [...formula.matchAll(datasetPattern)].map((match) => match[1])
             .filter((value, index, self) => self.indexOf(value) === index);
         const {rowsPerTag: datasetRows, datasetPerTag} = this.getDatasetRowsByTags({tags: datasetTags})
-        const transformedString = this.transformString(formula);
+        const transformedFormula = this.transformString(formula);
         try {
 
             if (formula) {
                 const tagVariables = this.tagManager.getNodeTagVariables()
                 const allVariables = [...variables, ...tagVariables]
-                const compiledFormula = Match.compile(transformedString)
+                const compiledFormula = Match.compile(transformedFormula)
                 const mappedVariables = allVariables.reduce((acc: {
                     [key: string]: number
                 }, variable) => {
@@ -60,13 +60,15 @@ export abstract class GraphMatchManager {
                 }, {})
 
                 const res = compiledFormula.evaluate({...mappedVariables, ...datasetRows, ...datasetPerTag})
+                console.info('formula', {transformedFormula: transformedFormula}, {variables}, {datasetTags}, datasetPerTag, {datasetRows})
+
                 if (typeof res === 'object' && 'entries' in res && Array.isArray(res.entries)) {
                     return res.entries[0]
                 }
                 return res
             }
         } catch (e) {
-            console.error(e, {transformedString}, {variables}, {datasetTags}, {datasetRows})
+            console.error(e, {transformedFormula: transformedFormula}, {variables}, {datasetTags}, datasetPerTag, {datasetRows})
         }
     }
 
@@ -84,10 +86,12 @@ export abstract class GraphMatchManager {
         });
 
         const allTags: string[] = this.allTags()
+        console.log('allTags', allTags)
         // replace dataset tags with __datasetTag
         const transformedWithTags = transformed.replace(/(\w+\.\w+)/g, (match) => {
-            if (allTags.includes(match)) {
-                return `__${match}`;
+            const [firstPart, secondPart] = match.split('.')
+            if (allTags.includes(firstPart)) {
+                return `__${firstPart}.${secondPart}`;
             }
             return match;
         });

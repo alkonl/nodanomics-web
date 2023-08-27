@@ -25,7 +25,6 @@ export const findParent = (node: IReactFlowNode, nodes: IReactFlowNode[]) => {
                 isPosY2)
         }
     });
-    console.log('candidates', candidates.map((c) => c.data.name))
     // find the most top parent
     const topParent = candidates.reduce((prev, current) => {
         if (prev.id === current.parentNode) {
@@ -33,24 +32,5 @@ export const findParent = (node: IReactFlowNode, nodes: IReactFlowNode[]) => {
         }
         return prev
     }, candidates[0])
-    console.log('topParent', topParent?.data.name)
     return topParent
-    // return nodes.find((nds: IReactFlowNode) => {
-    //     if (nds.id !== node.id && isNodeCanBeParent(nds.data.type) && isINodeSize(nds.data.style)) {
-    //         const ndsSize = {
-    //             width: nds.data.style.width,
-    //             height: nds.data.style.height
-    //         }
-    //         if (
-    //             nds.position.x <= node.position.x &&
-    //             nds.position.x + parseInt(ndsSize.width?.toString() || "0") >=
-    //             node.position.x &&
-    //             nds.position.y <= node.position.y &&
-    //             nds.position.y + parseInt(ndsSize.height?.toString() || "0") >=
-    //             node.position.y
-    //         ) {
-    //             return nds
-    //         }
-    //     }
-    // });
 }
