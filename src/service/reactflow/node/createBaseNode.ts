@@ -87,7 +87,7 @@ export const createBaseNode = ({type, position}: {
                     ...baseData,
                     type,
                     eventName: '',
-                    isEventConditionMet: false,
+                    // isEventConditionMet: false,
                 }
             }
         }
