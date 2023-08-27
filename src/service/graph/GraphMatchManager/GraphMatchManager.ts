@@ -61,7 +61,6 @@ export abstract class GraphMatchManager {
                 }, {})
 
                 const res = compiledFormula.evaluate({...mappedVariables, ...datasetRows, ...datasetPerTag})
-                console.info('formula', {transformedFormula: transformedFormula}, {variables}, {datasetTags}, datasetPerTag, {datasetRows})
 
                 if (typeof res === 'object' && 'entries' in res && Array.isArray(res.entries)) {
                     return res.entries[0]
@@ -87,7 +86,7 @@ export abstract class GraphMatchManager {
         });
 
         const allTags: string[] = this.allTags()
-        console.log('allTags', allTags)
+
         // replace dataset tags with __datasetTag
         const transformedWithTags = transformed.replace(/(\w+\.\w+)/g, (match) => {
             const [firstPart, secondPart] = match.split('.')

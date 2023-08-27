@@ -97,29 +97,28 @@ export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield> 
     }
 
     private buildRow(row: (string | number | boolean)[]) {
-        const columns = this.getColumns()
-        const object: {
-            [key: string]: number | boolean
-        } = {}
-        // the texts value in row
-        const anchors: string[] = []
-        row.forEach((value) => {
-            if (typeof value === 'string') {
-                anchors.push(value)
-            }
-        })
-        row.forEach((value, index) => {
-            if (typeof value !== 'string') {
-                anchors.forEach((anchor) => {
-                    const columnName = columns?.[index]
-                    const name = `${anchor}${columnName}`
-                        .replace(/\s+(\w)/g, (_, match) => match.toUpperCase())
-                        .replace(/^\w/, match => match.toLowerCase())
-                        .trim()
-                    object[name] = value
-                })
-            }
-        })
-        return object
+        const columns = this.getColumns();
+        const object: { [key: string]: number | boolean } = {};
+
+        const anchors = row.filter(value => typeof value === 'string') as  string[];
+
+        anchors.forEach(anchor => {
+            row.forEach((value, index) => {
+                const columnName = columns?.[index];
+                if (typeof value !== 'string' && columnName) {
+                    const name = this.composeObjectName(anchor, columnName);
+                    object[name] = value;
+                }
+            });
+        });
+        return object;
     }
+
+    private composeObjectName(achor: string, columnName: string) {
+        return `${achor}${columnName}`
+            .replace(/\s+(\w)/g, (_, match) => match.toUpperCase())
+            .replace(/^\w/, match => match.toLowerCase())
+            .trim()
+    }
+
 }
