@@ -16,6 +16,7 @@ import {GraphBaseNode, GraphInteractiveNode} from "./abstracts";
 import {GraphOriginNode} from "./GraphOriginNode";
 import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
+import {GraphHistoryManager} from "../GraphHistoryManager";
 
 export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue,
@@ -25,6 +26,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     // private _resourcesToProvide: IResource[]
     private previousStepResourcesCount?: number
     private currentStepResourcesCount?: number
+    private historyManager: GraphHistoryManager = new GraphHistoryManager(this);
 
     constructor(data: IDataNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(data, runManager, nodeManager);
@@ -58,12 +60,12 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     get maxResources() {
-        return this.data.maxResources;
+        return this.historyManager.max
     }
 
 
     get minResources() {
-        return this.data.minResources;
+        return this.historyManager.min
     }
 
     get currentResourcesCount() {
@@ -92,14 +94,9 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
 
     updateStatePerStep() {
-        this.reCalculateMaxMinAvgValue()
         this.updateResourcesCountHistory()
         this.updatePreviousResourcesCount()
     }
-
-
-
-
 
     addResource(resources?: IResource[], mode?: EModeAddResourcesToDataNode, params?: {
         onSuccess?: () => void,
@@ -172,13 +169,14 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     private updateResourcesCountHistory() {
-       const numToWrite = this.currentResourcesCount
-        this._data = {
-            ...this.data,
-            history: this.data.history
-                ? [...this.data.history, numToWrite]
-                : [numToWrite]
-        }
+        const numToWrite = this.currentResourcesCount
+        this.historyManager.updateHistory(numToWrite)
+        // this._data = {
+        //     ...this.data,
+        //     history: this.data.history
+        //         ? [...this.data.history, numToWrite]
+        //         : [numToWrite]
+        // }
     }
 
     invokeStep() {
@@ -199,21 +197,6 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         if (this.currentResourcesCount > 0) {
             this.previousStepResourcesCount = this.currentStepResourcesCount
             this.currentStepResourcesCount = this.currentResourcesCount
-        }
-    }
-
-    private reCalculateMaxMinAvgValue() {
-        if (this.maxResources === undefined || this.maxResources <= this.currentResourcesCount) {
-            this._data = {
-                ...this.data,
-                maxResources: this.currentResourcesCount
-            }
-        }
-        if (this.minResources === undefined || this.minResources >= this.currentResourcesCount) {
-            this._data = {
-                ...this.data,
-                minResources: this.currentResourcesCount
-            }
         }
     }
 
@@ -271,7 +254,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
             this._data = {
                 ...this.data,
                 resources: leftResources,
-               resourcesToProvide: leftResources
+                resourcesToProvide: leftResources
             }
             return deletedResourcesToProvide
         }

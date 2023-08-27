@@ -3,19 +3,22 @@ import {
     IFormulaResult,
     IGetNodeExternalValue,
     INumberVariable,
-    IUpdateGraphNodeState
+    IUpdateGraphNodeState,
+    IUpdateGraphNodeStatePerStep
 } from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphInvokableNode} from "./abstracts";
-import { GraphLogicManager} from "./helper";
+import {GraphLogicManager} from "./helper";
 import {GraphNodeManager} from "../NodeManager";
 import {GraphMatchManagerNode} from "../GraphMatchManager";
+import {GraphHistoryManager} from "../GraphHistoryManager";
 
 export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
-    implements IUpdateGraphNodeState, IGetNodeExternalValue {
+    implements IUpdateGraphNodeState, IGetNodeExternalValue, IUpdateGraphNodeStatePerStep {
 
     private readonly matchManager: GraphMatchManagerNode
     private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
+    private readonly historyManager: GraphHistoryManager = new GraphHistoryManager(this);
 
     constructor(value: IFormulaNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(value, runManager, nodeManager);
@@ -24,6 +27,10 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
 
     get formula() {
         return this.data.formula;
+    }
+
+    get history() {
+        return this.data.history
     }
 
     get nodeExternalValue() {
@@ -46,6 +53,9 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
         this.updateResult()
     }
 
+    updateStatePerStep() {
+        this.updateHistory()
+    }
 
     private updateResult() {
         if (this.formula) {
@@ -88,4 +98,10 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
         }
     }
 
+    private updateHistory() {
+        const result = this.result
+        if (result?.type === 'number') {
+            this.historyManager.updateHistory(result.value)
+        }
+    }
 }

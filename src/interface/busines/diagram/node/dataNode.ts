@@ -15,9 +15,6 @@ export interface IDataNodeData extends IDiagramNodeBaseData, INodeWithTrigger, I
     roundingType?: string
     minCapacity?: number
     maxCapacity?: number
-    // TODO remove minResources and maxResources
-    minResources?: number
-    maxResources?: number
 }
 
 export const isIDataNodeData = (data: IDiagramNodeBaseData): data is IDataNodeData => {

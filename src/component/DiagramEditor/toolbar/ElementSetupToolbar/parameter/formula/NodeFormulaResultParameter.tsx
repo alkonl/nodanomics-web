@@ -1,6 +1,5 @@
-import React, {ChangeEventHandler} from 'react';
+import React from 'react';
 import {IFormulaNodeData} from "../../../../../../interface";
-import {useUpdateNode} from "../../../../../../hooks";
 import {ElementParameter} from "../ElementParameter";
 import {Parameter} from "../../styledComponents";
 

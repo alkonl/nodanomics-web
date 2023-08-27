@@ -6,7 +6,6 @@ import {NodeProps, Position} from "reactflow";
 import {EConnectionMode, IEventTriggerNodeData} from "../../../../interface";
 import {NodeStyle} from "../styledComponent";
 import {ChainHandle} from "../../CustomHandle/ChainHandle";
-import {LogicHandle} from "../../CustomHandle";
 
 export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({isConnectable, data}) => {
 

@@ -48,6 +48,7 @@ export const createBaseNode = ({type, position}: {
                 data: {
                     ...baseData,
                     type,
+                    history: [],
                 },
             }
         }
