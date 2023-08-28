@@ -7,6 +7,7 @@ import {useDiagramEditorState} from "../../../../redux";
 import {ParameterExecutionGraphSetup} from "./styledComponent";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
+import {MButton} from "../../../base";
 
 
 enum EFormFields {
@@ -23,7 +24,7 @@ type IValidationSchema = z.infer<typeof validationSchema>;
 
 export const ExecutionGraphSetup = () => {
 
-    const {changeGridColor} = useSetupExecutionGraph();
+    const {updateExecutionGridProperties} = useSetupExecutionGraph();
     const {properties} = useDiagramEditorState()?.executionGrid || {}
 
 
@@ -34,15 +35,29 @@ export const ExecutionGraphSetup = () => {
     useEffect(() => {
         form.reset({
             [EFormFields.gridColor]: properties?.gridColor,
+            [EFormFields.xAxisTitle]: properties?.xAxisTitle,
         })
     }, [properties]);
+
+    const onSubmit = (data: IValidationSchema) => {
+        updateExecutionGridProperties({
+            gridColor: data.gridColor,
+            xAxisTitle: data.xAxisTitle,
+        });
+    }
 
     return (
         <Box sx={{
             display: 'flex',
             flexDirection: 'column',
             gap: 2,
-        }}>
+        }}
+             onSubmit={(e) => {
+                 e.preventDefault();
+                 form.handleSubmit(onSubmit)();
+             }}
+             component="form"
+        >
             <Box>
                 <Typography sx={{
                     fontWeight: 'bold',
@@ -64,6 +79,11 @@ export const ExecutionGraphSetup = () => {
                         form={form}
                     />
                 </ParameterExecutionGraphSetup.Element>
+                <MButton.Submit
+                    type="submit"
+                >
+                    Save
+                </MButton.Submit>
             </ParameterExecutionGraphSetup.Container>
         </Box>
     );

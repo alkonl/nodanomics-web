@@ -1,18 +1,19 @@
 import {useUpdateExecutionGraphPropertiesMutation} from "../api";
 import {useDiagramEditorState} from "../redux";
+import {IUpdateExecutionGraphPropertiesResponse} from "../interface";
 
 export const useSetupExecutionGraph = () => {
     const {currentDiagramId} = useDiagramEditorState()
     const [updateExecutionProperties] = useUpdateExecutionGraphPropertiesMutation();
-    const changeGridColor = (color?: string) => {
-        if (currentDiagramId && color) {
+    const updateExecutionGridProperties = (params?: Omit<IUpdateExecutionGraphPropertiesResponse, 'diagramId'>) => {
+        if (currentDiagramId && params) {
             updateExecutionProperties({
-                gridColor: color,
                 diagramId: currentDiagramId,
+                ...params
             })
         }
     }
     return {
-        changeGridColor,
+        updateExecutionGridProperties,
     }
 }
