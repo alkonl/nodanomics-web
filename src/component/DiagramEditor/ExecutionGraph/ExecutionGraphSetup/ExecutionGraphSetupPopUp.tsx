@@ -13,7 +13,7 @@ export const ExecutionGraphSetupPopUp: React.FC<{
             <BasePopUp>
                 <Dialog.Panel>
                     <Box sx={{
-                        height: '50vw',
+                        height: '50vh',
                         minWidth: {
                             xs: '95vw',
                             sm: '50vw',

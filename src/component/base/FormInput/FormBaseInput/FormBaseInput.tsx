@@ -6,7 +6,10 @@ import {IBaseInputProps} from "../../Input";
 
 
 
-export type IBaseFormInput = Pick<IBaseInputProps, 'value' | 'onChange'>
+export type IBaseFormInput = {
+    onChange?: (value: any) => void;
+    value?: any;
+}
 
 export interface IFormBaseInputProps {
     name: string;

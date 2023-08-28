@@ -1,5 +1,5 @@
 import React from "react";
-import {ElementParameterContainer, ParameterInput, ParametersContainer} from "../../../base";
+import {ElementParameterContainer, ParameterInput, ParameterInputForm, ParametersContainer} from "../../../base";
 
 const StyledParametersContainer: React.FC<{
     children: React.ReactNode
@@ -33,5 +33,5 @@ const StyledParameterElement: React.FC<{
 export const ParameterExecutionGraphSetup = {
     Container: StyledParametersContainer,
     Element: StyledParameterElement,
-    Input: ParameterInput,
+    Input: ParameterInputForm,
 }

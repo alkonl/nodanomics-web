@@ -2,6 +2,7 @@ import React from 'react';
 import {IEventListenerNodeData, IEventTriggerNodeData} from "../../../../../../interface";
 import {ElementParameter} from "../ElementParameter";
 import {useUpdateNode} from "../../../../../../hooks";
+import {Parameter} from "../../../../../base";
 
 export const NodeEventNameParameter: React.FC<{
     nodeData: IEventTriggerNodeData | IEventListenerNodeData
@@ -24,7 +25,6 @@ export const NodeEventNameParameter: React.FC<{
                 value={nodeData.eventName || ''}
                 onChange={onChangeEventName}
             />
-
         </ElementParameter>
     )
 }

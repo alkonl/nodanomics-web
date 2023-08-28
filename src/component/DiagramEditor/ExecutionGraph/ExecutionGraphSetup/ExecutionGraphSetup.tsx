@@ -1,16 +1,41 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {z} from "zod";
 import {Box, Typography} from "@mui/material";
 import {useSetupExecutionGraph} from "../../../../hooks";
-import {ColorPicker} from "../../../ColorPicker";
+import {ColorPickerForm} from "../../../ColorPicker";
 import {useDiagramEditorState} from "../../../../redux";
-import {ParameterInput} from "../../../base";
 import {ParameterExecutionGraphSetup} from "./styledComponent";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+
+
+enum EFormFields {
+    gridColor = 'gridColor',
+    xAxisTitle = 'xAxisTitle',
+}
+
+const validationSchema = z.object({
+    [EFormFields.gridColor]: z.string(),
+    [EFormFields.xAxisTitle]: z.string(),
+})
+
+type IValidationSchema = z.infer<typeof validationSchema>;
 
 export const ExecutionGraphSetup = () => {
 
     const {changeGridColor} = useSetupExecutionGraph();
-    const {executionGrid} = useDiagramEditorState()
-    const {gridColor} = executionGrid?.properties || {};
+    const {properties} = useDiagramEditorState()?.executionGrid || {}
+
+
+    const form = useForm<IValidationSchema>({
+        resolver: zodResolver(validationSchema),
+    });
+
+    useEffect(() => {
+        form.reset({
+            [EFormFields.gridColor]: properties?.gridColor,
+        })
+    }, [properties]);
 
     return (
         <Box sx={{
@@ -26,20 +51,20 @@ export const ExecutionGraphSetup = () => {
                     Grid setup
                 </Typography>
             </Box>
-            <Box>
-                <ParameterExecutionGraphSetup.Container>
-                    <ParameterExecutionGraphSetup.Element label="Grid color">
-                        <ColorPicker
-                            onClose={changeGridColor}
-                            value={gridColor}
-                        />
-                    </ParameterExecutionGraphSetup.Element>
-                    <ParameterExecutionGraphSetup.Element label="X axis title">
-                        <ParameterInput/>
-                    </ParameterExecutionGraphSetup.Element>
-                </ParameterExecutionGraphSetup.Container>
-            </Box>
-
+            <ParameterExecutionGraphSetup.Container>
+                <ParameterExecutionGraphSetup.Element label="Grid color">
+                    <ColorPickerForm
+                        name={EFormFields.gridColor}
+                        form={form}
+                    />
+                </ParameterExecutionGraphSetup.Element>
+                <ParameterExecutionGraphSetup.Element label="X axis title">
+                    <ParameterExecutionGraphSetup.Input
+                        name={EFormFields.xAxisTitle}
+                        form={form}
+                    />
+                </ParameterExecutionGraphSetup.Element>
+            </ParameterExecutionGraphSetup.Container>
         </Box>
     );
 };
