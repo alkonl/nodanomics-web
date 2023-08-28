@@ -1,7 +1,7 @@
 import React from 'react';
 import {IFormulaNodeData} from "../../../../../../interface";
 import {ElementParameter} from "../ElementParameter";
-import {Parameter} from "../../styledComponents";
+import {Parameter} from "../../../../../base";
 
 
 

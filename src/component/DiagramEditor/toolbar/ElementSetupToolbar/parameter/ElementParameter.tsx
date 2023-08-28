@@ -1,5 +1,5 @@
 import React from 'react';
-import {Parameter} from "../styledComponents";
+import {Parameter} from "../../../../base";
 import {Grid} from "@mui/material";
 
 export const ElementParameter: React.FC<{

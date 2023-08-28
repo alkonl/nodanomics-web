@@ -1,7 +1,7 @@
 import React from 'react';
 import {ElementParameter} from "../ElementParameter";
 import {IMicroLoopNodeData} from "../../../../../../interface";
-import {Parameter} from "../../styledComponents";
+import {Parameter} from "../../../../../base";
 import {useUpdateNode} from "../../../../../../hooks";
 
 export const ForLoopLoopsParameter: React.FC<{

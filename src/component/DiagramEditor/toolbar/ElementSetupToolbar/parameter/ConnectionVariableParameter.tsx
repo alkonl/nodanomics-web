@@ -3,7 +3,8 @@ import {EFontColor} from "../../../../../constant";
 import {ILogicConnectionData} from "../../../../../interface";
 import {useUpdateEdgeData} from "../../../../../hooks";
 import {ElementParameter} from "./ElementParameter";
-import {Parameter} from "../styledComponents";
+import {Parameter} from "../../../../base";
+
 export const ConnectionVariableParameter: React.FC<{
     selectedElementData: ILogicConnectionData,
 }> = ({selectedElementData}) => {

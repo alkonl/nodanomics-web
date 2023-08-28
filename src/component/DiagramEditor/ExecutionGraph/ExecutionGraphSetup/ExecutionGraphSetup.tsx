@@ -3,6 +3,8 @@ import {Box, Typography} from "@mui/material";
 import {useSetupExecutionGraph} from "../../../../hooks";
 import {ColorPicker} from "../../../ColorPicker";
 import {useDiagramEditorState} from "../../../../redux";
+import {ParameterInput} from "../../../base";
+import {ParameterExecutionGraphSetup} from "./styledComponent";
 
 export const ExecutionGraphSetup = () => {
 
@@ -24,24 +26,20 @@ export const ExecutionGraphSetup = () => {
                     Grid setup
                 </Typography>
             </Box>
-            <Box sx={{
-                display: 'flex',
-                gap: 1,
-                alignItems: 'flex-end',
-            }}>
-                <Typography>
-                    Grid color
-                </Typography>
-                <Box sx={{
-                    width: 100
-                }}>
-                    <ColorPicker
-                        onClose={changeGridColor}
-                        value={gridColor}
-                    />
-                </Box>
-
+            <Box>
+                <ParameterExecutionGraphSetup.Container>
+                    <ParameterExecutionGraphSetup.Element label="Grid color">
+                        <ColorPicker
+                            onClose={changeGridColor}
+                            value={gridColor}
+                        />
+                    </ParameterExecutionGraphSetup.Element>
+                    <ParameterExecutionGraphSetup.Element label="X axis title">
+                        <ParameterInput/>
+                    </ParameterExecutionGraphSetup.Element>
+                </ParameterExecutionGraphSetup.Container>
             </Box>
+
         </Box>
     );
 };

@@ -1,8 +1,8 @@
 import React from 'react';
-import {Parameter} from "../styledComponents";
 import {useUpdateNode} from "../../../../../hooks";
 import {ENodeTrigger, INodeData} from "../../../../../interface";
 import {ElementParameter} from "./ElementParameter";
+import {Parameter} from "../../../../base";
 
 export const NodeTagParameter: React.FC<{
     nodeData: INodeData

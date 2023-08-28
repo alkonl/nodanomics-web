@@ -1,7 +1,7 @@
 import React from "react";
 import {Accordion, AccordionDetails, AccordionSummary} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {ElementSetupToolbarSectionTitle} from "../styledComponents";
+import {ElementSetupToolbarSectionTitle} from "../../../../base";
 
 export const BaseSection: React.FC<{
     children: React.ReactNode;

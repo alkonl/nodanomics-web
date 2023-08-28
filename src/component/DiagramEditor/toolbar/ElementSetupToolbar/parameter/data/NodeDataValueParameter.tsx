@@ -1,8 +1,8 @@
 import React from 'react';
 import {IDataNodeData} from "../../../../../../interface";
 import {ElementParameter} from "../ElementParameter";
-import {Parameter} from "../../styledComponents";
 import {useChangeNodeDataStep} from "../../../../../../hooks";
+import {Parameter} from "../../../../../base";
 
 export const NodeDataValueParameter: React.FC<{
     nodeData: IDataNodeData

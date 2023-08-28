@@ -2,7 +2,7 @@ import React, {ChangeEventHandler} from 'react';
 import {IFormulaNodeData} from "../../../../../../interface";
 import {useUpdateNode} from "../../../../../../hooks";
 import {ElementParameter} from "../ElementParameter";
-import {Parameter} from "../../styledComponents";
+import {Parameter} from "../../../../../base";
 
 
 
@@ -23,6 +23,7 @@ export const NodeFormulaExpressionParameter: React.FC<{
 
     return (
         <ElementParameter label="Expression">
+
             <Parameter.TextArea
                 value={nodeData.formula || ''}
                 onChange={onChangeExpression}

@@ -18,7 +18,6 @@ export const ColorPicker: React.FC<{
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        console.log('event.currentTarget', event.currentTarget)
         setAnchorEl(event.currentTarget);
     };
 

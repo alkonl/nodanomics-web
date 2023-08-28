@@ -19,6 +19,12 @@ const baseChartOptions = {
     tooltip: {
         enabled: true
     },
+    xaxis: {
+        title: {
+            offsetX: 0,
+            text: 'Step',
+        }
+    },
     chart: {
         background: EColor.grey,
         zoom: {

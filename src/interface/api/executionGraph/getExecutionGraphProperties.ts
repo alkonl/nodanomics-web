@@ -4,5 +4,6 @@ export interface IGetExecutionGraphPropertiesRequest {
 
 export interface IGetExecutionGraphPropertiesResponse {
     diagramId: string;
-    gridColor: string;
+    gridColor?: string;
+    xAxisTitle?: string;
 }

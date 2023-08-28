@@ -2,7 +2,7 @@ import React from 'react';
 import {ElementParameter} from "./ElementParameter";
 import {Box, Checkbox} from "@mui/material";
 import {EColor} from "../../../../../constant";
-import {Parameter} from "../styledComponents";
+import {Parameter} from "../../../../base";
 import {IDiagramNodeBaseData, INodeDecimal} from "../../../../../interface";
 import {useUpdateNode} from "../../../../../hooks";
 

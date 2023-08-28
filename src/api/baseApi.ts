@@ -43,7 +43,7 @@ import {
     ISessionUserDataResponse,
     ISignUpRequest,
     ISubmitNewPasswordRequest,
-    IUpdateExecutionGraphPropertiesRequest,
+    IUpdateExecutionGraphPropertiesRequest, IUpdateExecutionGraphPropertiesResponse,
     IUpdateUserDataRequest,
     IUpdateUserDataResponse,
     IUploadSpreadSheetRequest
@@ -601,7 +601,7 @@ export const baseApi = createApi({
                 }
             }
         }),
-        updateExecutionGraphProperties: builder.mutation<unknown, IUpdateExecutionGraphPropertiesRequest>({
+        updateExecutionGraphProperties: builder.mutation<IUpdateExecutionGraphPropertiesResponse, IUpdateExecutionGraphPropertiesRequest>({
             query: (params: IUpdateExecutionGraphPropertiesRequest) => {
                 return {
                     url: `/diagram/update/execution-graph`,
