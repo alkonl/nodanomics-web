@@ -2,7 +2,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
     EElementType,
-    IDiagramConnectionData,
+    IDiagramConnectionData, IExecutionGridProperties,
     INodeData,
     IReactFlowEdge,
     IReactFlowEdgeConnection,
@@ -38,6 +38,9 @@ export interface IDiagramEditorState {
     isDiagramRunning: boolean
     isDiagramRunningInterval: boolean
     spreadsheets?: IStructuredSpreadsheetsData
+    executionGrid?: {
+        properties: IExecutionGridProperties
+    }
 }
 
 const initialState: IDiagramEditorState = {

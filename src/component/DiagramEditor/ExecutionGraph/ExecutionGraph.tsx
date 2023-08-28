@@ -2,11 +2,12 @@ import React, {useMemo} from 'react';
 import {Box, Typography} from "@mui/material";
 import {BASE_CHART_COLORS, EColor} from "../../../constant";
 import ReactApexChart from "react-apexcharts";
-import {useWidthAndHeight} from "../../../hooks";
+import {useToggle, useWidthAndHeight} from "../../../hooks";
 import {useDiagramEditorState} from "../../../redux";
 import {EDiagramNode, IDataNodeData} from "../../../interface";
 import {ApexOptions} from "apexcharts";
-
+import {ExecutionGraphSetupPopUp} from "./ExecutionGraphSetup";
+import {MButton} from "../../base";
 
 
 const options: ApexOptions = {
@@ -53,11 +54,13 @@ const options: ApexOptions = {
 
 export const ExecutionGraph = () => {
 
+    const graphSetupPopUpManager = useToggle()
+
     const {currentRunningDiagramStep} = useDiagramEditorState()
 
     const {elementRef, elementSize} = useWidthAndHeight()
     const {diagramNodes} = useDiagramEditorState()
-    const filtered = diagramNodes.map(node=>node.data).filter((nodeData) => {
+    const filtered = diagramNodes.map(node => node.data).filter((nodeData) => {
         if (nodeData.type === EDiagramNode.Data) {
             return true
         }
@@ -89,11 +92,26 @@ export const ExecutionGraph = () => {
             width: '100%',
             height: '100%',
         }}>
-            <Typography sx={{
+            <ExecutionGraphSetupPopUp
+                isShow={graphSetupPopUpManager.isOpened}
+                onClose={graphSetupPopUpManager.close}
+            />
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
                 paddingBottom: 1,
             }}>
-                Graph
-            </Typography>
+                <Typography>
+                    Graph
+                </Typography>
+                <MButton.Submit
+                    onClick={graphSetupPopUpManager.open}
+                >
+                    Setup
+                </MButton.Submit>
+            </Box>
+
             <Box
                 sx={{
                     width: '100%',

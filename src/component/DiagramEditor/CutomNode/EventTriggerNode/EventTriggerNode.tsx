@@ -28,12 +28,6 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({is
                     gap: 1,
                     pointerEvents: 'none',
                 }}>
-                    {/*<LogicHandle*/}
-                    {/*    type="target"*/}
-                    {/*    position={Position.Left}*/}
-                    {/*    isConnectable={isConnectable}*/}
-                    {/*    mode={EConnectionMode.NodeIncoming}*/}
-                    {/*/>*/}
                     <ChainHandle
                         type="target"
                         position={Position.Left}
