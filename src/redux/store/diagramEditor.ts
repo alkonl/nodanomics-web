@@ -3,7 +3,6 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
     EElementType,
     IDiagramConnectionData,
-    IExecutionGridProperties,
     INodeData,
     IReactFlowEdge,
     IReactFlowEdgeConnection,
@@ -18,6 +17,7 @@ import {Optionalize} from "../../utils";
 import {Graph, resetNodeStates, RunManager} from "../../service";
 import {canNodeHasChildren} from "../../service/reactflow/node/canNodeHasChildren";
 import {geAllChildrenNodes} from "../../hooks/useGeAllChildrenNodes";
+import {ApexOptions} from "apexcharts";
 
 
 export interface IDiagramEditorState {
@@ -40,7 +40,7 @@ export interface IDiagramEditorState {
     isDiagramRunningInterval: boolean
     spreadsheets?: IStructuredSpreadsheetsData
     executionGrid?: {
-        properties: IExecutionGridProperties
+        options?: ApexOptions
     }
 }
 
@@ -50,7 +50,7 @@ const initialState: IDiagramEditorState = {
     autoSaveCalled: 0,
     isDiagramRunning: false,
     isDiagramRunningInterval: false,
-    currentRunningDiagramStep: 0
+    currentRunningDiagramStep: 0,
 }
 
 const graph = new Graph()
@@ -357,9 +357,10 @@ export const diagramEditorSlice = createSlice({
             runManager.updateState()
             updateNodesFromGraph(state.diagramNodes)
         },
-        setExecutionGridProperties: (state, {payload}: PayloadAction<IExecutionGridProperties>) => {
+        setExecutionGridProperties: (state, {payload}: PayloadAction<ApexOptions>) => {
             state.executionGrid = {
-                properties: payload
+                ...state.executionGrid,
+                options: payload
             }
         }
     }

@@ -25,7 +25,7 @@ type IValidationSchema = z.infer<typeof validationSchema>;
 export const ExecutionGraphSetup = () => {
 
     const {updateExecutionGridProperties} = useSetupExecutionGraph();
-    const {properties} = useDiagramEditorState()?.executionGrid || {}
+    const {options} = useDiagramEditorState()?.executionGrid || {}
 
 
     const form = useForm<IValidationSchema>({
@@ -34,10 +34,10 @@ export const ExecutionGraphSetup = () => {
 
     useEffect(() => {
         form.reset({
-            [EFormFields.gridColor]: properties?.gridColor,
-            [EFormFields.xAxisTitle]: properties?.xAxisTitle,
+            [EFormFields.gridColor]: options?.grid?.borderColor,
+            [EFormFields.xAxisTitle]: options?.xaxis?.title?.text,
         })
-    }, [properties]);
+    }, [options]);
 
     const onSubmit = (data: IValidationSchema) => {
         updateExecutionGridProperties({

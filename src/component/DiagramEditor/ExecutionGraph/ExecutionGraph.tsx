@@ -1,83 +1,20 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useMemo} from 'react';
 import {Box, Typography} from "@mui/material";
+import lodash from 'lodash'
 import {BASE_CHART_COLORS, EColor} from "../../../constant";
 import ReactApexChart from "react-apexcharts";
-import {useGetExecutionGraphPropertiesFromServer, useToggle, useWidthAndHeight} from "../../../hooks";
+import {useToggle, useWidthAndHeight} from "../../../hooks";
 import {useDiagramEditorState} from "../../../redux";
 import {EDiagramNode, IDataNodeData} from "../../../interface";
-import {ApexOptions} from "apexcharts";
 import {ExecutionGraphSetupPopUp} from "./ExecutionGraphSetup";
 import {MButton} from "../../base";
-
-
-const baseChartOptions = {
-    colors: [EColor.darkRed],
-    legend: {
-        show: true,
-        position: 'right',
-    },
-    tooltip: {
-        enabled: true
-    },
-    xaxis: {
-        title: {
-            offsetX: 0,
-            text: 'Step',
-        }
-    },
-    chart: {
-        background: EColor.grey,
-        zoom: {
-            enabled: true
-        },
-        parentHeightOffset: 0,
-        toolbar: {
-            show: true
-        },
-        redrawOnParentResize: true,
-
-    },
-    stroke: {
-        show: true,
-        lineCap: 'butt',
-        colors: undefined,
-        width: 2,
-        dashArray: 0,
-    },
-    grid: {
-        borderColor: `${EColor.black}`,
-        xaxis: {
-
-            lines: {
-                offsetX: 1,
-                offsetY: 1,
-                show: true
-            }
-        },
-    }
-} satisfies ApexOptions
+import {ApexOptions} from "apexcharts";
 
 
 export const ExecutionGraph = () => {
-    const {currentDiagramId} = useDiagramEditorState()
-
-    useGetExecutionGraphPropertiesFromServer({
-        diagramId: currentDiagramId,
-    })
-
-    const [chartOptions, setChartOptions] = useState(baseChartOptions)
 
     const {executionGrid} = useDiagramEditorState()
 
-    const executionGridProperties = executionGrid?.properties
-
-    useEffect(() => {
-        const updatedChartOptions = chartOptions
-        if (executionGridProperties?.gridColor) {
-            updatedChartOptions.grid.borderColor = executionGridProperties.gridColor
-        }
-        setChartOptions(updatedChartOptions)
-    }, [executionGridProperties]);
 
     const graphSetupPopUpManager = useToggle()
 
@@ -107,6 +44,13 @@ export const ExecutionGraph = () => {
             series: chartData,
         }
     }, [filtered])
+
+
+    const options = useMemo<ApexOptions | undefined>(() => {
+        if (executionGrid?.options) {
+            return lodash.cloneDeep(executionGrid.options)
+        }
+    }, [executionGrid?.options])
 
     return (
         <Box sx={{
@@ -152,7 +96,7 @@ export const ExecutionGraph = () => {
                 <ReactApexChart
                     width={elementSize.width}
                     height={elementSize.height}
-                    options={baseChartOptions}
+                    options={options}
                     series={series}
                     type="line"
                 />
