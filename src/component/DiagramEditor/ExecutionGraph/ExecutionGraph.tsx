@@ -1,8 +1,8 @@
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Box, Typography} from "@mui/material";
 import {BASE_CHART_COLORS, EColor} from "../../../constant";
 import ReactApexChart from "react-apexcharts";
-import {useToggle, useWidthAndHeight} from "../../../hooks";
+import {useGetExecutionGraphPropertiesFromServer, useToggle, useWidthAndHeight} from "../../../hooks";
 import {useDiagramEditorState} from "../../../redux";
 import {EDiagramNode, IDataNodeData} from "../../../interface";
 import {ApexOptions} from "apexcharts";
@@ -10,7 +10,7 @@ import {ExecutionGraphSetupPopUp} from "./ExecutionGraphSetup";
 import {MButton} from "../../base";
 
 
-const options: ApexOptions = {
+const baseChartOptions = {
     colors: [EColor.darkRed],
     legend: {
         show: true,
@@ -39,7 +39,7 @@ const options: ApexOptions = {
         dashArray: 0,
     },
     grid: {
-        borderColor: EColor.black,
+        borderColor: `${EColor.black}`,
         xaxis: {
 
             lines: {
@@ -49,10 +49,29 @@ const options: ApexOptions = {
             }
         },
     }
-}
+} satisfies ApexOptions
 
 
 export const ExecutionGraph = () => {
+    const {currentDiagramId} = useDiagramEditorState()
+
+    useGetExecutionGraphPropertiesFromServer({
+        diagramId: currentDiagramId,
+    })
+
+    const [chartOptions, setChartOptions] = useState(baseChartOptions)
+
+    const {executionGrid} = useDiagramEditorState()
+
+    const executionGridProperties = executionGrid?.properties
+
+    useEffect(() => {
+        const updatedChartOptions = chartOptions
+        if (executionGridProperties?.gridColor) {
+            updatedChartOptions.grid.borderColor = executionGridProperties.gridColor
+        }
+        setChartOptions(updatedChartOptions)
+    }, [executionGridProperties]);
 
     const graphSetupPopUpManager = useToggle()
 
@@ -127,7 +146,7 @@ export const ExecutionGraph = () => {
                 <ReactApexChart
                     width={elementSize.width}
                     height={elementSize.height}
-                    options={options}
+                    options={baseChartOptions}
                     series={series}
                     type="line"
                 />

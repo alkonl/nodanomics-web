@@ -2,10 +2,14 @@ import React from 'react';
 import {Box, Typography} from "@mui/material";
 import {useSetupExecutionGraph} from "../../../../hooks";
 import {ColorPicker} from "../../../ColorPicker";
-import {EColor} from "../../../../constant";
+import {useDiagramEditorState} from "../../../../redux";
 
 export const ExecutionGraphSetup = () => {
+
     const {changeGridColor} = useSetupExecutionGraph();
+    const {executionGrid} = useDiagramEditorState()
+    const {gridColor} = executionGrid?.properties || {};
+
     return (
         <Box sx={{
             display: 'flex',
@@ -32,16 +36,12 @@ export const ExecutionGraphSetup = () => {
                     width: 100
                 }}>
                     <ColorPicker
-                        onChange={changeGridColor}
-                        value={EColor.white}
+                        onClose={changeGridColor}
+                        value={gridColor}
                     />
                 </Box>
 
             </Box>
-            <ColorPicker
-                onChange={changeGridColor}
-                value={EColor.white}
-            />
         </Box>
     );
 };

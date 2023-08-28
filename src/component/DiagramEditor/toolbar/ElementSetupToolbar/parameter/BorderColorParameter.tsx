@@ -14,7 +14,7 @@ export const BorderColorParameter: React.FC<{
         elementType: elementData.elementType,
     })
 
-    const onBorderColorChange = (color: string) => {
+    const onBorderColorChange = (color?: string) => {
         if (elementData.elementType === EElementType.Node) {
             updateNodeStyle({
                 borderColor: color,

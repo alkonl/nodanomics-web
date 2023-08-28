@@ -2,7 +2,8 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
     EElementType,
-    IDiagramConnectionData, IExecutionGridProperties,
+    IDiagramConnectionData,
+    IExecutionGridProperties,
     INodeData,
     IReactFlowEdge,
     IReactFlowEdgeConnection,
@@ -356,6 +357,11 @@ export const diagramEditorSlice = createSlice({
             runManager.updateState()
             updateNodesFromGraph(state.diagramNodes)
         },
+        setExecutionGridProperties: (state, {payload}: PayloadAction<IExecutionGridProperties>) => {
+            state.executionGrid = {
+                properties: payload
+            }
+        }
     }
 })
 
