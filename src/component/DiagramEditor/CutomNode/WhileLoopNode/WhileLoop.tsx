@@ -1,5 +1,5 @@
 import React from 'react';
-import {BaseNodeContainer} from "../container";
+import {LoopContainer} from "../container";
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";
 import {EConnectionMode, IWhileLoopNodeData} from "../../../../interface";
@@ -23,7 +23,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
 
     const isCollapsed = data.isCollapsed
     const changeExpandOrCollapse = () => {
-        expandOrCollapse({parentId: data.id})
+        expandOrCollapse()
     }
 
     const {
@@ -32,7 +32,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
     } = useWidthAndHeight()
 
     return (
-        <BaseNodeContainer node={props}>
+        <LoopContainer node={props}>
             <Box
                 sx={{
                     padding: 1,
@@ -122,7 +122,7 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                                 width: 'fit-content',
                             }}>
                                 <ChainHandle type="target" position={Position.Left}
-                                             mode={EConnectionMode.WhileLoopIncomingTrigger}/>
+                                             mode={EConnectionMode.NodeIncoming}/>
                                 <NodeStyle.Name>
                                     {isActiveText}
                                 </NodeStyle.Name>
@@ -255,6 +255,6 @@ export const WhileLoopNode: React.FC<NodeProps<IWhileLoopNodeData>> = (props) =>
                     </Box>
                 }
             </Box>
-        </BaseNodeContainer>
+        </LoopContainer>
     );
 };

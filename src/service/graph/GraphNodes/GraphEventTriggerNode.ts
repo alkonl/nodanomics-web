@@ -3,36 +3,26 @@ import {
     IEventTriggerNodeData,
     IIsEventConditionMet,
     IIsEventTriggered,
-    INumberVariable,
     ITriggeredEvent,
     IUpdateGraphNodeState
 } from "../../../interface";
 import {RunManager} from "../RunManager";
-import {GraphLogicManager} from "./helper";
 import {GraphNodeManager} from "../NodeManager";
-import {GraphMatchManagerNode} from "../GraphMatchManager";
 
 export class GraphEventTriggerNode extends GraphInvokableNode<IEventTriggerNodeData>
     implements IUpdateGraphNodeState, IIsEventTriggered, ITriggeredEvent, IIsEventConditionMet {
 
-    private readonly matchManager: GraphMatchManagerNode
-    private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
 
     constructor(value: IEventTriggerNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(value, runManager, nodeManager);
-        this.matchManager = new GraphMatchManagerNode(this.incomingEdges, nodeManager)
     }
 
     get eventName() {
         return this.data.eventName;
     }
 
-    get eventCondition() {
-        return this.data.eventCondition;
-    }
-
     get isEventConditionMet() {
-        return this.data.isEventConditionMet || false;
+        return true;
     }
 
 
@@ -42,51 +32,10 @@ export class GraphEventTriggerNode extends GraphInvokableNode<IEventTriggerNodeD
     }
 
     isEventTriggered() {
-        this.updateVariables()
-        this.updateResult()
-        return this.data.isEventConditionMet || false
+        return true
     }
 
     getTriggeredEvent(): string | undefined {
-        if (this.data.isEventConditionMet) {
             return this.data.eventName
-        }
-    }
-
-    updateState() {
-        this.updateVariables()
-        this.updateResult()
-    }
-
-    private updateVariables() {
-        const variables = this.logicManager.getVariables()
-        this.setVariables(variables)
-    }
-
-    private updateResult() {
-        if (this.eventCondition) {
-            const result = this.matchManager.calculateFormula({
-                formula: this.eventCondition,
-            })
-            if (typeof result === 'boolean') {
-                this.setResult(result)
-            } else if (result !== undefined) {
-                console.error(`Unknown result type ${JSON.stringify(this.data, null, 2)} result: ${JSON.stringify(result, null, 2)} `)
-            }
-        }
-    }
-
-    private setVariables(variables: INumberVariable[]) {
-        this._data = {
-            ...this.data,
-            variables,
-        }
-    }
-
-    private setResult(result: boolean) {
-        this._data = {
-            ...this.data,
-            isEventConditionMet: result,
-        }
     }
 }

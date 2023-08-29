@@ -3,6 +3,7 @@ import React from 'react';
 import {NodeProps} from "reactflow";
 import {INodeData} from "../../../../interface";
 import {Box} from "@mui/material";
+// eslint-disable-next-line import/named
 import {SxProps} from "@mui/system/styleFunctionSx";
 
 export const BaseNodeShapeContainer: React.FC<{

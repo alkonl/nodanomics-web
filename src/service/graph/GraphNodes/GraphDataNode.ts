@@ -16,20 +16,26 @@ import {GraphBaseNode, GraphInteractiveNode} from "./abstracts";
 import {GraphOriginNode} from "./GraphOriginNode";
 import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
+import {GraphHistoryManager} from "../GraphHistoryManager";
 
 export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue,
         IUpdateGraphNodeStatePerStep, ITriggeredEvent, IIsEventConditionMet,
         IResetNodeNoStoreProperties {
 
-    private _resourcesToProvide: IResource[] = [];
+    // private _resourcesToProvide: IResource[]
     private previousStepResourcesCount?: number
     private currentStepResourcesCount?: number
+    private historyManager: GraphHistoryManager = new GraphHistoryManager(this);
 
     constructor(data: IDataNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(data, runManager, nodeManager);
+
     }
 
+    private get _resourcesToProvide(): IResource[] {
+        return this.data.resourcesToProvide
+    }
 
     get maxCapacity() {
         const maxCapacity = Number(this.data.maxCapacity);
@@ -54,12 +60,12 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     get maxResources() {
-        return this.data.maxResources;
+        return this.historyManager.max
     }
 
 
     get minResources() {
-        return this.data.minResources;
+        return this.historyManager.min
     }
 
     get currentResourcesCount() {
@@ -82,25 +88,15 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     resetNodeNoStoreProperties() {
-        this.resetResourcesToProvide()
         this.currentStepResourcesCount = undefined
         this.previousStepResourcesCount = undefined
     }
 
-    private resetResourcesToProvide() {
-        this._resourcesToProvide = [];
-    }
 
     updateStatePerStep() {
-        this.reCalculateMaxMinAvgValue()
         this.updateResourcesCountHistory()
         this.updatePreviousResourcesCount()
     }
-
-    updateState() {
-        super.updateState()
-    }
-
 
     addResource(resources?: IResource[], mode?: EModeAddResourcesToDataNode, params?: {
         onSuccess?: () => void,
@@ -156,8 +152,14 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     }
 
+    private updateResourcesToProvide() {
+        this.updateNode({
+            resourcesToProvide: [...this.data.resources]
+        })
+    }
+
     private addResourcesToNode(resources: IResource[]) {
-        this._resourcesToProvide = [...this.data.resources];
+        this.updateResourcesToProvide()
         this._data = {
             ...this.data,
             resources: [...this.data.resources, ...resources]
@@ -167,12 +169,8 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     private updateResourcesCountHistory() {
-        this._data = {
-            ...this.data,
-            history: this.data.history
-                ? [...this.data.history, this.currentResourcesCount]
-                : [this.currentResourcesCount]
-        }
+        const numToWrite = this.currentResourcesCount
+        this.historyManager.updateHistory(numToWrite)
     }
 
     invokeStep() {
@@ -188,39 +186,11 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         this.pullAllResourcesFromData()
     }
 
-    updateRecoursesProvide() {
-        this._resourcesToProvide = [...this.data.resources];
-    }
-
-    updateNode(data: Partial<IDataNodeData>) {
-        super.updateNode(data);
-    }
-
-    initResourcesToProvide() {
-        if (this._resourcesToProvide.length === 0 && this.data.resources.length > 0) {
-            this._resourcesToProvide = [...this.data.resources];
-        }
-    }
 
     private updatePreviousResourcesCount() {
         if (this.currentResourcesCount > 0) {
             this.previousStepResourcesCount = this.currentStepResourcesCount
             this.currentStepResourcesCount = this.currentResourcesCount
-        }
-    }
-
-    private reCalculateMaxMinAvgValue() {
-        if (this.maxResources === undefined || this.maxResources <= this.currentResourcesCount) {
-            this._data = {
-                ...this.data,
-                maxResources: this.currentResourcesCount
-            }
-        }
-        if (this.minResources === undefined || this.minResources >= this.currentResourcesCount) {
-            this._data = {
-                ...this.data,
-                minResources: this.currentResourcesCount
-            }
         }
     }
 
@@ -270,13 +240,15 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     takeCountResources(count: number): IResource[] | undefined {
         if (!this.minCapacity || this.currentResourcesCount - count >= this.minCapacity) {
-            const deletedResourcesToProvide = this.resourcesToProvide.splice(0, count);
+            const deletedResourcesToProvide = this.resourcesToProvide.slice(0, count);
+            const leftResources = this.resources.filter(resource => {
+                return !deletedResourcesToProvide.some(deletedResource => deletedResource.id === resource.id)
+            })
             this.updatePreviousResourcesCount()
             this._data = {
                 ...this.data,
-                resources: this.resources.filter(resource => {
-                    return !deletedResourcesToProvide.some(deletedResource => deletedResource.id === resource.id)
-                })
+                resources: leftResources,
+                resourcesToProvide: leftResources
             }
             return deletedResourcesToProvide
         }

@@ -3,7 +3,6 @@ import {Box} from "@mui/material";
 import {INodeData} from "../../../../interface";
 // eslint-disable-next-line import/named
 import {NodeProps} from "reactflow";
-import {EColor} from "../../../../constant";
 
 export const BaseNodeContainer: React.FC<{
     children: React.ReactNode

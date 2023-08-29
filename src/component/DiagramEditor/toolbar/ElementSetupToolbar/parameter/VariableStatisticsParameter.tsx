@@ -2,10 +2,9 @@ import React, {useMemo} from "react";
 import {Box} from "@mui/material";
 import ReactApexChart from "react-apexcharts";
 import {ApexOptions} from "apexcharts";
-
+import {Parameter} from "../../../../base";
 import {useWidthAndHeight} from "../../../../../hooks";
 import {EColor} from "../../../../../constant";
-import {Parameter} from "../styledComponents";
 import {useDiagramEditorState} from "../../../../../redux";
 
 

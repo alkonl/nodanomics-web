@@ -1,26 +1,29 @@
 import React from 'react';
-import {IDataNodeData, IResource} from "../../../../../../interface";
+import {IDataNodeData} from "../../../../../../interface";
 import {ElementParameter} from "../ElementParameter";
-import {Parameter} from "../../styledComponents";
-import {useUpdateNode} from "../../../../../../hooks";
-import {generateResourceFromSource} from "../../../../../../service";
+import {useChangeNodeDataStep} from "../../../../../../hooks";
+import {Parameter} from "../../../../../base";
 
 export const NodeDataValueParameter: React.FC<{
     nodeData: IDataNodeData
 }> = ({nodeData}) => {
 
-    const {updateNodeData} = useUpdateNode<IDataNodeData>({
-        nodeId: nodeData.id,
-    })
 
-    const onChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const countToGenerate = Number(event.target.value)
-        const newResources: IResource[] = generateResourceFromSource(countToGenerate)
-        updateNodeData({
-            resources: newResources,
-            initialResources: newResources,
-        })
-    }
+    const {changeValue} = useChangeNodeDataStep({
+        nodeData,
+    })
+    // const {updateNodeData} = useUpdateNode<IDataNodeData>({
+    //     nodeId: nodeData.id,
+    // })
+    //
+    // const onChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     const countToGenerate = Number(event.target.value)
+    //     const newResources: IResource[] = generateResourceFromSource(countToGenerate)
+    //     updateNodeData({
+    //         resources: newResources,
+    //         initialResources: newResources,
+    //     })
+    // }
 
 
     return (
@@ -28,7 +31,7 @@ export const NodeDataValueParameter: React.FC<{
             <Parameter.Input
                 type="number"
                 value={nodeData.resources.length || ''}
-                onChange={onChangeValue}
+                onChange={changeValue}
             />
 
         </ElementParameter>

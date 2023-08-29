@@ -2,7 +2,7 @@ import React from 'react';
 import {useUpdateEdgeData} from "../../../../../hooks";
 import {IDataConnectionData} from "../../../../../interface";
 import {ElementParameter} from "./ElementParameter";
-import {Parameter} from "../styledComponents";
+import {Parameter} from "../../../../base";
 
 export const ConnectionFormulaParameter: React.FC<{
     connection: IDataConnectionData

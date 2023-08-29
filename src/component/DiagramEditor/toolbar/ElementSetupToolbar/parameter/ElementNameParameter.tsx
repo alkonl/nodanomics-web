@@ -1,4 +1,4 @@
-import {Parameter} from "../styledComponents";
+import {Parameter} from "../../../../base";
 import React from "react";
 import {IDiagramConnectionData, INodeData} from "../../../../../interface";
 import {useUpdateElement} from "../../../../../hooks";

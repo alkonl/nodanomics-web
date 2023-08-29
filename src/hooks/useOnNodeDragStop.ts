@@ -1,23 +1,15 @@
 // eslint-disable-next-line import/named
-import {EDiagramNode, IReactFlowNode, isINodeSize} from "../interface";
+import {IReactFlowNode} from "../interface";
 import {MouseEvent as ReactMouseEvent} from "react";
-import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
-import {findParent} from "../service";
-
+import {useDiagramEditorState} from "../redux";
+import {useSetParentNode} from "./useSetParentNode";
 
 
 export const useOnNodeDragStop = () => {
     const {diagramNodes} = useDiagramEditorState()
-    const dispatch = useAppDispatch()
-    const {updateNodeParent} = diagramEditorActions
+    const setParent = useSetParentNode()
     return (event: ReactMouseEvent, node: IReactFlowNode) => {
-        const parentNode = findParent(node, diagramNodes)
-        if (parentNode && !parentNode.data.isCollapsed) {
-            dispatch(updateNodeParent({
-                node,
-                parentNode
-            }))
-        }
+        setParent(node, diagramNodes)
     }
 }
 

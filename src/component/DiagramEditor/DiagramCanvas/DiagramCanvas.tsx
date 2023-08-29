@@ -6,10 +6,12 @@ import 'reactflow/dist/style.css';
 import {
     useAddStartNode,
     useEdgeUpdateManager,
-    useOnDrop, useOnEdgeClick,
+    useOnDrop,
+    useOnEdgeClick,
     useOnNodeDrag,
     useOnNodeDragStart,
     useOnNodeDragStop,
+    useOnSelectionChange,
     useUploadDiagramOnServer
 } from "../../../hooks";
 import styles from './DiagramCanvas.module.scss'
@@ -20,7 +22,8 @@ import {
     EventTriggerNode,
     FormulaNode,
     MicroLoopNode,
-    OriginNode, SinkNode,
+    OriginNode,
+    SinkNode,
     StartNode,
     StaticVariableNode,
     WhileLoopNode
@@ -61,7 +64,7 @@ export const DiagramCanvas = () => {
     const dispatch = useAppDispatch()
 
     const {diagramNodes, diagramEdges} = useDiagramEditorState()
-
+    const onSelectionChange = useOnSelectionChange()
     const onNodeDragStop = useOnNodeDragStop()
     const onNodeDrag = useOnNodeDrag()
 
@@ -98,6 +101,7 @@ export const DiagramCanvas = () => {
 
     const onEdgeClick = useOnEdgeClick()
 
+
     return (
         <Box
             className={styles.canvasContainer}
@@ -128,6 +132,7 @@ export const DiagramCanvas = () => {
                     edgeTypes={edgeTypes}
                     connectionMode={ConnectionMode.Loose}
                     onEdgeClick={onEdgeClick}
+                    onSelectionChange={onSelectionChange}
                 >
                     <Controls/>
                     <Background color="blue" gap={GAP_BETWEEN_EDITOR_CANVAS_DOTS}/>

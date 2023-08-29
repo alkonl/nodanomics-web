@@ -1,7 +1,7 @@
 import React from 'react';
 import {ElementParameter} from "../ElementParameter";
 import {IMicroLoopNodeData} from "../../../../../../interface";
-import {Parameter} from "../../styledComponents";
+import {Parameter} from "../../../../../base";
 import {useUpdateNode} from "../../../../../../hooks";
 
 export const ForLoopLoopsParameter: React.FC<{
@@ -12,18 +12,14 @@ export const ForLoopLoopsParameter: React.FC<{
         nodeId: nodeData.id,
     })
     const onLoopCountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const loopCount = parseInt(event.target.value)
-        if (loopCount > 0) {
             updateNodeData({
-                loopCount: loopCount,
+                loopFormula: event.target.value,
             })
-        }
     }
     return (
         <ElementParameter label="Loops">
             <Parameter.Input
-                type="number"
-                value={nodeData.loopCount || ''}
+                value={nodeData.loopFormula || ''}
                 onChange={onLoopCountChange}
             />
         </ElementParameter>

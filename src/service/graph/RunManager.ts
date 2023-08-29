@@ -1,30 +1,53 @@
 import {Graph} from "./Graph";
+import {GraphBaseNode, GraphDataNode, GraphEventListenerNode, GraphInvokableNode, GraphStartNode} from "./GraphNodes";
 import {
-    GraphBaseNode,
-    GraphDataNode,
-    GraphEventListenerNode,
-    GraphInvokableNode,
-    GraphStartNode
-} from "./GraphNodes";
-import {
+    EConnectionMode,
     isIIsEventTriggered,
     isITriggeredEvent,
     isIUpdateGraphNodeStatePerStep,
     isUpdateGraphNodeState
 } from "../../interface";
-import {GraphNodeManager} from "./NodeManager";
 import {GraphChainEdge, GraphDataEdge} from "./GraphEdge";
+import {GraphMicroLoopNode} from "./GraphNodes/GraphMicroLoopNode";
 
 export interface IChainItem {
     target: GraphBaseNode
     edge?: GraphChainEdge
-    children?: IChainItem[]
+    outgoingConnected?: IChainItem[]
+    inner?: IChainItem[]
+    end?: IChainItem
+}
+
+function findChainItemByTarget(chain: IChainItem[], target: GraphBaseNode): IChainItem | undefined {
+    for (const chainItem of chain) {
+        if (chainItem.target === target) {
+            return chainItem;
+        }
+
+        // Check outgoingConnected chain items recursively
+        if (chainItem.outgoingConnected) {
+            const outgoingResult = findChainItemByTarget(chainItem.outgoingConnected, target);
+            if (outgoingResult) {
+                return outgoingResult;
+            }
+        }
+
+        // Check inner connected chain items recursively
+        if (chainItem.inner) {
+            const innerResult = findChainItemByTarget(chainItem.inner, target);
+            if (innerResult) {
+                return innerResult;
+            }
+        }
+    }
+
+    return undefined; // Item not found
 }
 
 export class RunManager {
     private graph: Graph
     private _currentStep = 0
-    private invokedNodes: GraphNodeManager = new GraphNodeManager()
+    // private invokedNodes: GraphNodeManager = new GraphNodeManager()
     private executionOrder: IChainItem[] = []
 
     constructor(graph: Graph) {
@@ -64,22 +87,16 @@ export class RunManager {
     invokeStep() {
         this.incrementStep()
         this.resetIsTransferredResources()
-        const nodes = this.getExecutionOrder()
-
-        this.setExecutionOrder(nodes)
-        this.executeChainOrder(nodes)
-
+        const chain = this.getExecutionOrder()
+        this.setExecutionOrder(chain)
+        // remove listener nodes from execution order
+        const startChain = chain.filter(chainItem => chainItem.target instanceof GraphStartNode)
+        this.executeChainOrder(startChain)
         this.updateNodePerStep()
-        this.graph.nodes.forEach(node => {
-            if (node instanceof GraphDataNode) {
-                node.updateRecoursesProvide()
-            }
-        })
-        this.invokedNodes.clear()
     }
 
-    private executeNode(node: IChainItem) {
-        const target = node.target
+    private executeNode(chainItem: IChainItem) {
+        const target = chainItem.target
         if (target instanceof GraphInvokableNode) {
             target.invokeStep()
             if (isITriggeredEvent(target)) {
@@ -89,11 +106,29 @@ export class RunManager {
                         && node.target.eventName === triggeredEventName)
                 this.executeChainOrder(listenerNodes)
             }
-            this.invokedNodes.add(node.target)
-            if (node.children) {
-                this.executeChainOrder(node.children)
+            if (chainItem.end && chainItem.end.edge && !chainItem.end.edge.isMeetCondition) {
+                const chainItemToExecute = this.findDeepChainItemByNode(chainItem.end.target)
+                if (chainItemToExecute && chainItemToExecute.inner) {
+
+                    chainItemToExecute.inner.forEach(item => {
+                        if (item.target instanceof GraphMicroLoopNode) {
+                            item.target.resetLoopStep()
+                        }
+                    })
+                    this.executeChainOrder(chainItemToExecute.inner)
+                }
+            }
+            if (chainItem.inner) {
+                this.executeChainOrder(chainItem.inner)
+            }
+            if (chainItem.outgoingConnected) {
+                this.executeChainOrder(chainItem.outgoingConnected)
             }
         }
+    }
+
+    private findDeepChainItemByNode(node: GraphBaseNode): IChainItem | undefined {
+        return findChainItemByTarget(this.executionOrder, node);
     }
 
     private executeChainOrder(chainItems: IChainItem[]) {
@@ -101,15 +136,14 @@ export class RunManager {
             const target = chainItem.target
             const chainConnection = chainItem.edge
             const isChainMeetCondition = chainConnection?.isMeetCondition === undefined || chainConnection?.isMeetCondition
-            if (target instanceof GraphInvokableNode && isChainMeetCondition && !this.invokedNodes.has(target)) {
+            if (target instanceof GraphInvokableNode && isChainMeetCondition) {
                 if (isIIsEventTriggered(target)) {
-                    if (target.isEventTriggered()) {
+                    if (target.isEventTriggered(chainConnection?.sourceMode)) {
                         this.executeNode(chainItem)
                     }
                 } else {
                     this.executeNode(chainItem)
                 }
-
             }
         })
     }
@@ -120,23 +154,21 @@ export class RunManager {
     }
 
     private getStartedNodes() {
-        const startNodes = this.graph.nodes.filter(node => {
+        return this.graph.nodes.filter(node => {
             if (node instanceof GraphStartNode || node instanceof GraphEventListenerNode) {
                 return node
             }
         })
-        return startNodes
     }
 
     private getExecutionOrder(): IChainItem[] {
         const startedNodes = this.getStartedNodes()
         const childrenNodes = startedNodes.map(source => {
-            return this.getNodesChildrenRecursive({
+            return this.getChainChildrenRecursive({
                 target: source,
             })
         })
-        console.log('startedNodes: ', startedNodes.map(node => node.data.name))
-        // nodes queue that start from trigger listener invoke in last step
+
         return childrenNodes.sort((a, b) => {
             const aFirstNode = a[0].target
             const bFirstNode = b[0].target
@@ -149,29 +181,67 @@ export class RunManager {
         }).flat()
     }
 
-    private getNodesChildrenRecursive(startedChainItem: IChainItem, children: IChainItem[] = [startedChainItem]) {
-        const childChainItem = this.getNodesChildren(startedChainItem)
+    private getChainChildrenRecursive(startedChainItem: IChainItem, children: IChainItem[] = [startedChainItem]) {
+        const childChainItem = this.getChainChildren(startedChainItem)
 
-        startedChainItem.children = childChainItem
+        startedChainItem.outgoingConnected = childChainItem.outgoingConnected
+        startedChainItem.inner = childChainItem.inner
+        startedChainItem.end = childChainItem.endChainItem
+        const nextChildren = [...childChainItem.outgoingConnected, ...childChainItem.inner]
 
-        childChainItem.forEach(child => {
+        nextChildren.forEach(child => {
+            if (!(child.edge?.targetMode === EConnectionMode.LoopChildrenToExternal)) {
 
-            const outgoingEdges = child.target.outgoingEdges
-            if (outgoingEdges.length > 0) {
-                this.getNodesChildrenRecursive(child, children)
+                const outgoingEdges = child.target.outgoingEdges
+                if (outgoingEdges.length > 0) {
+                    this.getChainChildrenRecursive(child, children)
+                }
+
             }
         })
+        startedChainItem.inner.sort((a, b) => {
+            if (!a.end && b.end) {
+                return -1;
+            } else if (a.end && !b.end) {
+                return 1;
+            }
+            return 0;
+        });
         return children
     }
 
-    private getNodesChildren(node: IChainItem): IChainItem[] {
-        const children = node.target.outgoingEdges.map(edge => {
+    private getChainChildren(chainItem: IChainItem): {
+        outgoingConnected: IChainItem[]
+        inner: IChainItem[]
+        endChainItem: IChainItem | undefined
+    } {
+        const outgoingConnected: IChainItem[] = []
+        const inner: IChainItem[] = []
+        let endChainItem: IChainItem | undefined
+
+        chainItem.target.outgoingEdges.forEach(edge => {
             const target = edge.target
             if (edge instanceof GraphChainEdge || target instanceof GraphDataNode) {
-                return {target, edge}
+                const newChainItem: IChainItem = {
+                    target: target,
+                    edge: edge as GraphChainEdge,
+                }
+                if (edge.sourceMode === EConnectionMode.LoopInnerToChildren) {
+                    inner.push(newChainItem)
+                } else if (edge.targetMode === EConnectionMode.LoopChildrenToExternal) {
+                    // chainItem.end = newChainItem
+                    endChainItem = newChainItem
+                } else {
+                    outgoingConnected.push(newChainItem)
+                }
             }
         })
-        return children.filter(item => item !== undefined) as IChainItem[]
+
+        return {
+            outgoingConnected,
+            inner,
+            endChainItem,
+        }
     }
 
     private resetIsTransferredResources() {

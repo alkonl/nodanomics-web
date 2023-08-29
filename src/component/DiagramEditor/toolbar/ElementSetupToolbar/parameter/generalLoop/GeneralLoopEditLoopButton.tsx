@@ -15,7 +15,7 @@ export const GeneralLoopEditLoopButton: React.FC<{
     })
 
     const onClickEditLoop = () => {
-        expandOrCollapse({parentId: nodeData.id})
+        expandOrCollapse()
     }
 
     return (

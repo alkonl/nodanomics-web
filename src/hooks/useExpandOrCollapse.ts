@@ -1,8 +1,8 @@
-import {IDiagramNodeBaseData, IUpdateReactflowNode} from "../interface";
-import {useGetChildrenNodes} from "./useGetChildrenNodes";
+import {IDiagramNodeBaseData} from "../interface";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
-import {useToggle} from "./useToggle";
 import {useGetNodesEdges} from "./useGetNodesEdges";
+import {geAllChildrenNodes} from "./useGeAllChildrenNodes";
+import {IUpdateChildrenFunc, recursiveUpdateChildren} from "../service";
 
 export const useExpandOrCollapse = ({nodeData}: {
     nodeData: IDiagramNodeBaseData
@@ -10,28 +10,35 @@ export const useExpandOrCollapse = ({nodeData}: {
     const dispatch = useAppDispatch()
     const {bulkUpdateNodes, bulkUpdateEdges} = diagramEditorActions
 
-    const getChildrenNodes = useGetChildrenNodes()
-
-
-    // const expandOrCollapseManager = useToggle({
-    //     initialState: initialIsOpened
-    // })
-
     const {diagramNodes} = useDiagramEditorState()
     const getNodesEdges = useGetNodesEdges()
 
-    const expandOrCollapse = ({parentId}: { parentId: string }) => {
-        const parentNode = diagramNodes.find(node => node.id === parentId)
-        const childrenNodes = getChildrenNodes({parentId})
+    const expandOrCollapse = () => {
+        const nodeId = nodeData.id
+        const parentNode = diagramNodes.find(node => node.id === nodeId)
+
+        if (!parentNode) return
+
+        const childrenNodes = geAllChildrenNodes({parentId: nodeId, nodes: diagramNodes})
         const childrenEdges = getNodesEdges({nodes: childrenNodes})
-        // expandOrCollapseManager.toggle()
+
         const updatedIsCollapsed = !nodeData.isCollapsed
-        const nodesToHide: IUpdateReactflowNode[] = childrenNodes.map((childNode) => {
+        const updateChildrenFunc: IUpdateChildrenFunc = ({parentNode, node}) => {
+            const isToHide = parentNode.id === nodeId ? updatedIsCollapsed : true;
+
             return {
-                id: childNode.id,
-                hidden: updatedIsCollapsed,
+                ...node,
+                id: node.id,
+                hidden: isToHide,
+                data: {
+                    ...node.data,
+                    isCollapsed: true,
+                }
             }
-        })
+        }
+
+        const nodesToHide = recursiveUpdateChildren(diagramNodes, parentNode, updateChildrenFunc)
+
         const edgesToHide = childrenEdges.map((edge) => {
             return {
                 id: edge.id,
@@ -40,7 +47,8 @@ export const useExpandOrCollapse = ({nodeData}: {
         })
         if (parentNode) {
             nodesToHide.push({
-                id: parentId,
+                ...parentNode,
+                id: nodeId,
                 data: {
                     ...parentNode.data,
                     isCollapsed: updatedIsCollapsed,
@@ -49,9 +57,10 @@ export const useExpandOrCollapse = ({nodeData}: {
         }
         dispatch(bulkUpdateEdges(edgesToHide))
         dispatch(bulkUpdateNodes(nodesToHide))
+
     }
 
     return {
-        expandOrCollapse: expandOrCollapse,
+        expandOrCollapse,
     }
 }

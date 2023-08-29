@@ -8,10 +8,8 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                 data: {
                     ...node.data,
                     resources: node.data.initialResources || [],
-                    maxResources: undefined,
-                    minResources: undefined,
+                    resourcesToProvide: node.data.initialResources || [],
                     history: [],
-
                 }
             }
         case EDiagramNode.Formula:
@@ -20,6 +18,7 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                 data: {
                     ...node.data,
                     result: undefined,
+                    history: [],
                 }
             }
         case EDiagramNode.EventListener:
@@ -35,7 +34,6 @@ const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                 ...node,
                 data: {
                     ...node.data,
-                    isEventConditionMet: false,
                 }
             }
         case EDiagramNode.MicroLoop:{

@@ -2,7 +2,7 @@ import React from 'react';
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";
 import {EConnectionMode, IMicroLoopNodeData} from "../../../../interface";
-import {BaseNodeContainer} from "../container";
+import {LoopContainer} from "../container";
 import {Box} from "@mui/material";
 import {EColor, EFontColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
 import {useExpandOrCollapse} from "../../../../hooks";
@@ -21,18 +21,20 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
     })
 
     const changeExpandOrCollapse = () => {
-        expandOrCollapse({parentId: data.id})
+        expandOrCollapse()
     }
 
     const onDoubleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
         if (event.detail === 2) {
             changeExpandOrCollapse()
         }
-
     }
 
+
+
+
     return (
-        <BaseNodeContainer node={props}>
+        <LoopContainer node={props}>
             <Box
                 onClick={onDoubleClick}
                 sx={{
@@ -42,6 +44,7 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                     backgroundColor: EColor.lightPurple,
                     display: 'flex',
                     position: 'relative',
+                    transition: 'width 0.3s ease-out, height 0.3s ease-out',
                 }}
             >
                 {/*Connections*/}
@@ -130,7 +133,7 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                                     fontWeight: 600,
                                     color: EFontColor.white,
                                 }}>
-                                {data.loopCount}
+                                {data.loopFormula}
                             </NodeStyle.Name>
                         </Box>
                     </Box>
@@ -208,6 +211,7 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                                 display: 'flex',
                                 alignItems: 'center',
                                 height: 'fit-content',
+                                gap: 1,
                             }}>
                                 <LogicHandle
                                     type="target"
@@ -219,11 +223,26 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                                 </NodeStyle.Name>
 
                             </Box>
+                            <Box sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                height: 'fit-content',
+                                gap: 0.5,
+                            }}>
+                                <ChainHandle
+                                    type="target"
+                                    position={Position.Left}
+                                    mode={EConnectionMode.LoopChildrenToExternal}
+                                />
+                                <NodeStyle.Name>
+                                  end
+                                </NodeStyle.Name>
 
+                            </Box>
                         </Box>
                     </Box>
                 }
             </Box>
-        </BaseNodeContainer>
+        </LoopContainer>
     );
 };

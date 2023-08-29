@@ -22,7 +22,9 @@ import {
     IGetAllGoogleSpreadsheetResponse,
     IGetDiagramByIdResponse,
     IGetDiagramTagsRequest,
-    IGetDiagramTagsResponse, IGetManySpreadsheetRequests, IGetManySpreadsheetResponse,
+    IGetDiagramTagsResponse,
+    IGetManySpreadsheetRequests,
+    IGetManySpreadsheetResponse,
     IGetProjectInfoRequest,
     IGetProjectInfoResponse,
     IGetProjectsRequest,
@@ -41,6 +43,7 @@ import {
     ISessionUserDataResponse,
     ISignUpRequest,
     ISubmitNewPasswordRequest,
+    IUpdateExecutionGraphPropertiesRequest, IUpdateExecutionGraphPropertiesResponse,
     IUpdateUserDataRequest,
     IUpdateUserDataResponse,
     IUploadSpreadSheetRequest
@@ -52,6 +55,10 @@ import moment from "moment";
 import {EEventDiagramServer, EEventDiagramWeb} from "../constant";
 import {GetDiagramsByProjectIdResponse} from "../interface/api/project/getDiagramsByProjectId";
 import {IDeleteTeamMemberFromProjectTeamRequest} from "../interface/api/team/deleteTeamMember";
+import {
+    IGetExecutionGraphPropertiesRequest,
+    IGetExecutionGraphPropertiesResponse
+} from "../interface/api/executionGraph/getExecutionGraphProperties";
 
 
 const baseQuery = fetchBaseQuery(({
@@ -104,6 +111,7 @@ export const baseApi = createApi({
         ERTKTags.Projects,
         ERTKTags.ProjectTeamMember,
         ERTKTags.Spreadsheet,
+        ERTKTags.ExecutionGraph,
     ],
     reducerPath: 'baseApi',
     baseQuery: baseQueryWithReauth,
@@ -592,6 +600,26 @@ export const baseApi = createApi({
                     method: 'GET',
                 }
             }
+        }),
+        updateExecutionGraphProperties: builder.mutation<IUpdateExecutionGraphPropertiesResponse, IUpdateExecutionGraphPropertiesRequest>({
+            query: (params: IUpdateExecutionGraphPropertiesRequest) => {
+                return {
+                    url: `/diagram/update/execution-graph`,
+                    method: 'PUT',
+                    body: params,
+                }
+            },
+            invalidatesTags: [ERTKTags.ExecutionGraph]
+        }),
+        getExecutionGraphProperties: builder.query<IGetExecutionGraphPropertiesResponse, IGetExecutionGraphPropertiesRequest>({
+            query: (params: IGetExecutionGraphPropertiesRequest) => {
+                return {
+                    url: `/diagram/execution-graph`,
+                    method: 'GET',
+                    params: params,
+                }
+            },
+            providesTags: [ERTKTags.ExecutionGraph]
         })
     }),
 })
@@ -630,5 +658,7 @@ export const {
     useGetSpreadSheetQuery,
     useGetAllUserGoogleSpreadSheetQuery,
     useGetManySpreadsheetQuery,
+    useUpdateExecutionGraphPropertiesMutation,
+    useGetExecutionGraphPropertiesQuery,
 } = baseApi;
 

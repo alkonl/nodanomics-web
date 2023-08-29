@@ -11,6 +11,7 @@ export class GraphOriginNode extends GraphInteractiveNode<IOriginNodeData> {
         super(data, runManager, nodeManager);
     }
 
+
     protected runAction() {
         this.pushAllOrAnyResources()
     }

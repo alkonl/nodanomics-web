@@ -1,15 +1,19 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Box, Button, Popover} from "@mui/material";
 import {HexColorPicker} from "react-colorful";
 import {EColor} from "../../constant";
 
 export const ColorPicker: React.FC<{
-    onChange?: (newColor: string) => void
+    onChange?: (newColor?: string) => void
+    onClose?: (newColor?: string) => void
     value?: string
 }> = ({
           onChange,
           value,
+          onClose,
       }) => {
+
+    const [innerColorValue, setInnerColorValue] = React.useState<string | undefined>(value);
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
@@ -17,15 +21,24 @@ export const ColorPicker: React.FC<{
         setAnchorEl(event.currentTarget);
     };
 
+    useEffect(() => {
+        if (onChange) {
+            onChange(innerColorValue);
+        }
+    }, [innerColorValue]);
+
     const handleClose = () => {
+        if (onClose) {
+            onClose(innerColorValue);
+        }
         setAnchorEl(null);
     };
 
     const open = Boolean(anchorEl);
     const id = open ? 'ColorPicker' : undefined;
     return (
-        <Box>
-            <Box
+        <>
+            <Button
                 sx={{
                     width: '100%',
                     height: '100%',
@@ -38,10 +51,9 @@ export const ColorPicker: React.FC<{
                     padding: 0,
                 }}
                 style={{
-                    backgroundColor: value,
+                    backgroundColor: innerColorValue,
                 }}
                 onClick={handleClick}
-                component={Button}
             >
                 <Box
                     sx={{
@@ -50,23 +62,26 @@ export const ColorPicker: React.FC<{
                         backgroundColor: value,
                     }}
                 />
-            </Box>
+            </Button>
 
             <Popover
                 id={id}
                 open={open}
                 anchorEl={anchorEl}
                 onClose={handleClose}
+                sx={{
+                    zIndex: 999999,
+                }}
                 anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'left',
                 }}
             >
                 <HexColorPicker
-                    color={value}
-                    onChange={onChange}
+                    color={innerColorValue}
+                    onChange={setInnerColorValue}
                 />
             </Popover>
-        </Box>
+        </>
     );
 };

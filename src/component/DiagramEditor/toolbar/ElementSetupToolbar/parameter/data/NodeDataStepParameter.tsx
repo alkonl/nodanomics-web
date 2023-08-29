@@ -4,7 +4,7 @@ import {ElementParameter} from "../ElementParameter";
 import {Box, Checkbox} from "@mui/material";
 import {EColor} from "../../../../../../constant";
 import {useChangeNodeDataStep, useUpdateNode} from "../../../../../../hooks";
-import {Parameter} from "../../styledComponents";
+import {Parameter} from "../../../../../base";
 
 export const NodeDataStepParameter: React.FC<{
     nodeData: IDataNodeData

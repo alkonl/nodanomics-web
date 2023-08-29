@@ -48,6 +48,8 @@ export const createBaseNode = ({type, position}: {
                 data: {
                     ...baseData,
                     type,
+                    isShowInExecutionGraphNode: false,
+                    history: [],
                 },
             }
         }
@@ -71,6 +73,8 @@ export const createBaseNode = ({type, position}: {
                     ...baseData,
                     type,
                     resources: [],
+                    isShowInExecutionGraphNode: false,
+                    resourcesToProvide: [],
                     actionMode: ENodeAction.pullAny,
                     trigger: {
                         mode: ENodeTrigger.passive,
@@ -86,7 +90,6 @@ export const createBaseNode = ({type, position}: {
                     ...baseData,
                     type,
                     eventName: '',
-                    isEventConditionMet: false,
                 }
             }
         }
@@ -103,7 +106,6 @@ export const createBaseNode = ({type, position}: {
         case EDiagramNode.MicroLoop: {
             return {
                 ...baseParams,
-                zIndex: 0,
                 data: {
                     ...baseData,
                     type,

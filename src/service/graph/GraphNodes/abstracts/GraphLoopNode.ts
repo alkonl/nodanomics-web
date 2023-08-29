@@ -1,11 +1,20 @@
 import {GraphInvokableNode} from "./GraphInvokable";
 import {EConnectionMode, IIsEventTriggered, ILoopNodeData} from "../../../../interface";
 import {GraphLogicManager} from "../helper";
+import {GraphMatchManagerNode} from "../../GraphMatchManager";
+import {RunManager} from "../../RunManager";
+import {GraphNodeManager} from "../../NodeManager";
 
 export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILoopNodeData> extends GraphInvokableNode<IGenericNodeData>
     implements IIsEventTriggered {
 
     private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
+    protected readonly matchManager: GraphMatchManagerNode
+
+    constructor(value: IGenericNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
+        super(value, runManager, nodeManager);
+        this.matchManager = new GraphMatchManagerNode(this.incomingEdges, nodeManager)
+    }
 
     abstract isEventTriggered(mode?: EConnectionMode): boolean;
 
@@ -77,9 +86,12 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
     }
 
     updateChildrenNodesList() {
-        const children: string[] = this.nodeManager.nodes.filter(node => {
+        const children: { id: string, name: string }[] = this.nodeManager.nodes.filter(node => {
             return node.parentId === this.data.id
-        }).map(node => node.data.name)
+        }).map(node => ({
+            id: node.data.id,
+            name: node.data.name,
+        }))
         this._data = {
             ...this.data,
             children
@@ -92,7 +104,8 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
         const children = this.data.children
         const connectedNodes = this.data.connectedNodes
         if (children && connectedNodes) {
-            const filteredNodes = connectedNodes.filter(connectedNode => !children.includes(connectedNode))
+            const childrenNodeNames = children.map(child => child.name)
+            const filteredNodes = connectedNodes.filter(connectedNode => !childrenNodeNames.includes(connectedNode))
             this._data = {
                 ...this.data,
                 connectedNodes: filteredNodes

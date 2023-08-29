@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 import {ElementParameter} from "./ElementParameter";
 import {EDiagramNode, INodeData} from "../../../../../interface";
-import {Parameter} from "../styledComponents";
+import {Parameter} from "../../../../base";
 
 export const NodeConnectedNodesParameter: React.FC<{
     baseNodeData: INodeData

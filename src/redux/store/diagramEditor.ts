@@ -16,6 +16,8 @@ import {addEdge, applyEdgeChanges, applyNodeChanges, Connection, EdgeChange, Nod
 import {Optionalize} from "../../utils";
 import {Graph, resetNodeStates, RunManager} from "../../service";
 import {canNodeHasChildren} from "../../service/reactflow/node/canNodeHasChildren";
+import {geAllChildrenNodes} from "../../hooks/useGeAllChildrenNodes";
+import {ApexOptions} from "apexcharts";
 
 
 export interface IDiagramEditorState {
@@ -37,6 +39,9 @@ export interface IDiagramEditorState {
     isDiagramRunning: boolean
     isDiagramRunningInterval: boolean
     spreadsheets?: IStructuredSpreadsheetsData
+    executionGrid?: {
+        options?: ApexOptions
+    }
 }
 
 const initialState: IDiagramEditorState = {
@@ -45,7 +50,7 @@ const initialState: IDiagramEditorState = {
     autoSaveCalled: 0,
     isDiagramRunning: false,
     isDiagramRunningInterval: false,
-    currentRunningDiagramStep: 0
+    currentRunningDiagramStep: 0,
 }
 
 const graph = new Graph()
@@ -166,10 +171,6 @@ export const diagramEditorSlice = createSlice({
             updateNodesFromGraph(state.diagramNodes)
             state.autoSaveCalled++
         },
-        // TODO FIX Sometimes when moving a node,
-        //  we update the parent of the node by simply moving it.
-        //  This causes a bug, the node teleports after we stop moving it.
-        //  This is now fixed with the following code node.parentNode === undefined
         updateNodeParent: (state, {payload}: PayloadAction<{
             node: IReactFlowNode,
             parentNode: IReactFlowNode
@@ -187,11 +188,12 @@ export const diagramEditorSlice = createSlice({
                     parentId: payload.parentNode.id,
                 }
                 node.parentNode = payload.parentNode.id
+                const parentPosition = payload.parentNode.positionAbsolute || payload.parentNode.position
                 node.position = {
-                    x: payload.node.position.x - payload.parentNode.position.x,
-                    y: payload.node.position.y - payload.parentNode.position.y,
+                    x: payload.node.position.x - parentPosition.x,
+                    y: payload.node.position.y - parentPosition.y,
                 }
-                node.zIndex = 1100
+                node.zIndex = payload.parentNode.zIndex ? payload.parentNode.zIndex + 1 : 10
                 node.extent = 'parent'
                 state.autoSaveCalled++
             }
@@ -216,7 +218,7 @@ export const diagramEditorSlice = createSlice({
                             width: payload.size.width,
                             height: payload.size.height,
                         }
-                    }
+                    },
                 }
                 graph.updateNodeData(payload.nodeId, newNode.data)
                 updateNodesFromGraph(state.diagramNodes)
@@ -228,14 +230,15 @@ export const diagramEditorSlice = createSlice({
         }>) => {
             const node = state.diagramNodes.find(node => node.id === payload.nodeId)
             if (node && canNodeHasChildren(node.data.type)) {
-                const toDeleteNodes: string[] = []
-                state.diagramNodes = state.diagramNodes.filter(node => {
-                    const toDelete = node.id === payload.nodeId || node.parentNode === payload.nodeId
-                    if (toDelete) {
-                        toDeleteNodes.push(node.id)
-                    }
-                    return !toDelete
+                const nodesToDelete = geAllChildrenNodes({
+                    parentId: payload.nodeId,
+                    nodes: state.diagramNodes,
                 })
+                nodesToDelete.push(node)
+                state.diagramNodes = state.diagramNodes.filter(node => {
+                    return !nodesToDelete.some(childNode => childNode.id === node.id)
+                })
+                const toDeleteNodes: string[] = nodesToDelete.map(node => node.id)
                 graph.deleteBulkNodes(toDeleteNodes)
 
             } else {
@@ -334,7 +337,7 @@ export const diagramEditorSlice = createSlice({
         },
         setSpreadsheets: (state, {payload}: PayloadAction<{
             spreadsheets: IStructuredSpreadsheetsData
-        }> ) => {
+        }>) => {
             state.spreadsheets = payload.spreadsheets
             graph.setSpreadsheetsData({
                 spreadsheetData: payload.spreadsheets
@@ -354,6 +357,12 @@ export const diagramEditorSlice = createSlice({
             runManager.updateState()
             updateNodesFromGraph(state.diagramNodes)
         },
+        setExecutionGridProperties: (state, {payload}: PayloadAction<ApexOptions>) => {
+            state.executionGrid = {
+                ...state.executionGrid,
+                options: payload
+            }
+        }
     }
 })
 

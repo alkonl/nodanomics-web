@@ -9,6 +9,7 @@ export class GraphMatchNodeAdapter {
             lengthY: node.lengthY,
             IndexOf: node.indexOf.bind(node),
             Where: node.where.bind(node),
+            ...node.getDynamicVariables()
         }
     }
 }

@@ -2,6 +2,7 @@ import {IDiagramNodeBaseData, INodeData, IUpdateGraphNodeState} from "../../../.
 import {GraphBaseEdge} from "../../GraphEdge";
 import {RunManager} from "../../RunManager";
 import {GraphNodeManager} from "../../NodeManager";
+import {GraphMatchManagerNode} from "../../GraphMatchManager";
 
 export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseData = INodeData>
     implements IUpdateGraphNodeState {
@@ -43,7 +44,7 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
         return this.RunManager;
     }
 
-    get currentStep() {
+    get currentDiagramStep() {
         return this.runManager.currentStep;
     }
 
