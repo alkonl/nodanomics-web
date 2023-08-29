@@ -38,7 +38,7 @@ export interface IDiagramEditorState {
     currentRunningDiagramStep: number
     isDiagramRunning: boolean
     isDiagramRunningInterval: boolean
-    isStepFinished: boolean
+    // isStepFinished: boolean
     spreadsheets?: IStructuredSpreadsheetsData
     executionGrid?: {
         options?: ApexOptions
@@ -52,7 +52,7 @@ const initialState: IDiagramEditorState = {
     autoSaveCalled: 0,
     isDiagramRunning: false,
     isDiagramRunningInterval: false,
-    isStepFinished: false,
+    // isStepFinished: false,
     currentRunningDiagramStep: 0,
     completedSteps: 0,
 }
@@ -327,10 +327,9 @@ export const diagramEditorSlice = createSlice({
             updateEdgesFromGraph(state.diagramEdges)
             state.currentRunningDiagramStep = runManager.currentStep
         },
-        setIsDiagramRunning: (state, {payload: {isDiagramRunningInterval, isRunning, isStepFinished}}: PayloadAction<{
+        setIsDiagramRunning: (state, {payload: {isDiagramRunningInterval, isRunning}}: PayloadAction<{
             isRunning?: boolean
             isDiagramRunningInterval?: boolean
-            isStepFinished?: boolean
         }>) => {
             if (isRunning !== undefined) {
                 state.isDiagramRunning = isRunning
@@ -338,14 +337,16 @@ export const diagramEditorSlice = createSlice({
             if (isDiagramRunningInterval !== undefined) {
                 state.isDiagramRunningInterval = isDiagramRunningInterval
             }
-            if (isStepFinished !== undefined) {
-                state.isStepFinished = isStepFinished
-            }
+            // if (isStepFinished !== undefined) {
+            //     state.isStepFinished = isStepFinished
+            // }
         },
-        updateCompletedSteps: (state, {payload}: PayloadAction<{
-            count: number
-        }>) => {
-            state.completedSteps = payload.count
+        updateCompletedSteps: (state, {payload}: PayloadAction<number | undefined>) => {
+            if (typeof payload === 'number') {
+                state.completedSteps = payload
+            } else {
+                state.completedSteps++
+            }
         },
         setSpreadsheets: (state, {payload}: PayloadAction<{
             spreadsheets: IStructuredSpreadsheetsData

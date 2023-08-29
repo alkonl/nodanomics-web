@@ -14,7 +14,7 @@ import {useDiagramEditorState} from "../../../../redux";
 
 export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
     const {isConnectable, data} = props
-    const {isStepFinished, isDiagramRunning, completedSteps} = useDiagramEditorState()
+    const {isDiagramRunning, completedSteps} = useDiagramEditorState()
 
     const isShowStep = data.isShowStep || false
 
@@ -40,7 +40,7 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
                 max: Math.max(...data.history),
             })
         }
-    }, [isStepFinished]);
+    }, [completedSteps]);
 
     useEffect(() => {
         if (!isDiagramRunning) {
