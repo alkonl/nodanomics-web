@@ -11,6 +11,7 @@ import {LogicHandle} from "../../CustomHandle";
 import {NodeStyle} from "../styledComponent";
 
 const WIDTH = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 5
+const HEIGHT = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 3
 
 export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) => {
     const {data} = props;
@@ -40,7 +41,7 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                 sx={{
                     boxSizing: 'border-box',
                     width: isCollapsed ? WIDTH : data.style.width,
-                    height: isCollapsed ? GAP_BETWEEN_EDITOR_CANVAS_DOTS * 3 : data.style.height,
+                    height: isCollapsed ? HEIGHT : data.style.height,
                     backgroundColor: EColor.lightPurple,
                     display: 'flex',
                     position: 'relative',
@@ -90,7 +91,6 @@ export const MicroLoopNode: React.FC<NodeProps<IMicroLoopNodeData>> = (props) =>
                             <LogicHandle type="source" position={Position.Right} mode={EConnectionMode.NodeOutgoing}/>
                         </Box>
                     </Box>
-
                 </Box>
                 {/*Content*/}
                 {isCollapsed && <Box
