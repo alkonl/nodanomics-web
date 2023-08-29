@@ -1,5 +1,5 @@
-import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
-import {useGetDiagramByIdQuery, useGetExecutionGraphPropertiesQuery} from "../api";
+import {diagramEditorActions, useAppDispatch} from "../redux";
+import {useGetDiagramByIdQuery} from "../api";
 import {useEffect, useRef, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useGetExecutionGraphPropertiesFromServer} from "./useGetExecutionGraphPropertiesFromServer";
@@ -30,7 +30,7 @@ export const useGetEditDiagramFromServer = () => {
     const {data: diagramRes} = useGetDiagramByIdQuery(currentDiagramId, {
         refetchOnMountOrArgChange: true,
     })
-    const {setDiagram, renderState, setExecutionGridProperties} = diagramEditorActions
+    const {setDiagram, renderState} = diagramEditorActions
 
 
 
