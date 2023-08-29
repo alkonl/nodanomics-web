@@ -5,8 +5,18 @@ import {DIAGRAM_RUN_DURATION} from "../constant";
 export const useInvokeStep = () => {
 
     const dispatch = useAppDispatch()
-    const {isDiagramRunning, isDiagramRunningInterval} = useDiagramEditorState()
-    const {invokeStep, setIsDiagramRunning} = diagramEditorActions
+    const {isDiagramRunning, isDiagramRunningInterval, currentRunningDiagramStep} = useDiagramEditorState()
+    const {invokeStep, setIsDiagramRunning, updateCompletedSteps} = diagramEditorActions
+
+    const updateCompletedStep = (count?: number) => {
+        dispatch(updateCompletedSteps(count))
+    }
+
+    useEffect(() => {
+        if (!isDiagramRunning) {
+            updateCompletedStep(currentRunningDiagramStep)
+        }
+    }, [isDiagramRunning]);
 
     const runStep = () => {
         dispatch(invokeStep())
@@ -14,15 +24,15 @@ export const useInvokeStep = () => {
 
     const runOneStep = () => {
         runStep()
-        if(!isDiagramRunningInterval) {
+        if (!isDiagramRunningInterval) {
             dispatch(setIsDiagramRunning({
                 isRunning: true
             }))
             const timeOut = setTimeout(() => {
-
                 dispatch(setIsDiagramRunning({
                     isRunning: false
                 }))
+                updateCompletedStep()
                 clearTimeout(timeOut)
             }, DIAGRAM_RUN_DURATION)
         }
@@ -31,8 +41,14 @@ export const useInvokeStep = () => {
 
     useEffect(() => {
         let interval: NodeJS.Timer | undefined
+        let updateStepFinishedInterval: NodeJS.Timer | undefined
         if (isDiagramRunningInterval) {
-            interval = setInterval(runStep, DIAGRAM_RUN_DURATION)
+            runStep()
+            interval = setInterval(() => {
+                updateCompletedStep()
+                runStep()
+            }, DIAGRAM_RUN_DURATION)
+
         } else {
             if (interval) {
                 clearInterval(interval)
@@ -41,6 +57,7 @@ export const useInvokeStep = () => {
         return () => {
             if (interval) {
                 clearInterval(interval)
+                clearTimeout(updateStepFinishedInterval)
             }
         }
     }, [isDiagramRunningInterval])
@@ -51,5 +68,5 @@ export const useInvokeStep = () => {
             isDiagramRunningInterval: !isDiagramRunningInterval
         }))
     }
-    return {runStep: runOneStep , isRunning: isDiagramRunning, toggleStepInterval}
+    return {runStep: runOneStep, isRunning: isDiagramRunning, toggleStepInterval}
 }

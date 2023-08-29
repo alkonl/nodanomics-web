@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from "reactflow";
 import {Box} from "@mui/material";
@@ -9,18 +9,12 @@ import {BaseNodeContainer} from "../container";
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {useChangeNodeDataStep} from "../../../../hooks";
+import {useDiagramEditorState} from "../../../../redux";
 
 
 export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
     const {isConnectable, data} = props
-    const currentResourcesValue = data.resources?.length.toFixed(1) || 0
-
-    const maxRegisteredValue = data.history.length > 0
-        ? data.history.reduce((acc, cur) => Math.max(acc, cur), 0)
-        : undefined
-    const minRegisteredValue = data.history.length > 0
-        ? data.history.reduce((acc, cur) => Math.min(acc, cur), Infinity)
-        : undefined
+    const {isDiagramRunning, completedSteps} = useDiagramEditorState()
 
     const isShowStep = data.isShowStep || false
 
@@ -28,6 +22,46 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
         nodeData: props.data,
     })
 
+    const [resources, setResources] = React.useState<number>(data.resources.length)
+    const [minMaxResources, setMinMaxResources] = React.useState<{
+        min: number | undefined,
+        max: number | undefined,
+    }>({
+        min: undefined,
+        max: undefined,
+    })
+
+
+    useEffect(() => {
+        setResources(data.resources.length)
+        if (data.history.length > 0) {
+            setMinMaxResources({
+                min: Math.min(...data.history),
+                max: Math.max(...data.history),
+            })
+        }
+    }, [completedSteps]);
+
+    useEffect(() => {
+        if (!isDiagramRunning) {
+            setResources(data.resources.length)
+            if (data.history.length > 0) {
+                setMinMaxResources({
+                    min: Math.min(...data.history),
+                    max: Math.max(...data.history),
+                })
+            } else {
+                setMinMaxResources({
+                    min: undefined,
+                    max: undefined,
+                })
+            }
+        }
+
+    }, [data.resources]);
+
+
+    const currentResourcesValue = resources.toFixed(1) || 0
     return (
 
         <>
@@ -106,7 +140,7 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
                                 Max
                             </NodeStyle.Name>
                             <NodeStyle.Value>
-                                {maxRegisteredValue ? maxRegisteredValue : <br/>}
+                                {minMaxResources ? minMaxResources.max : <br/>}
                             </NodeStyle.Value>
                         </Box>
                         <Box>
@@ -114,7 +148,7 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
                                 Min
                             </NodeStyle.Name>
                             <NodeStyle.Value>
-                                {minRegisteredValue !== undefined ? minRegisteredValue : <br/>}
+                                {minMaxResources !== undefined ? minMaxResources.min : <br/>}
                             </NodeStyle.Value>
                         </Box>
                     </Box>

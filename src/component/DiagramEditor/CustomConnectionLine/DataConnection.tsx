@@ -42,15 +42,14 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
     }
     const animationCircleId = `animation-circle-${id}`
 
-    const [circleCount, setCircleCount] = useState<number>(data?.formula ? parseInt(data.formula) : 0)
+    const [circleCount, setCircleCount] = useState<number>(data?.howManyWasTransferred ?Math.floor(data.howManyWasTransferred)  : 0)
 
     useEffect(() => {
-        setCircleCount(data?.formula ? parseInt(data.formula) : 0)
-    }, [data?.formula]);
+        setCircleCount(data?.howManyWasTransferred ? Math.floor(data.howManyWasTransferred) : 0)
+    }, [data?.howManyWasTransferred]);
 
 
     const isPlay = isDiagramRunning && data?.isTransferredResources
-
     return (
         <>
             {Array.from({length: circleCount <= 30 ? circleCount : 30}).map((_, index) => {
@@ -64,7 +63,7 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
                         path={edgePath}
                         infinite={isDiagramRunningInterval}
                         play={isPlay}
-                        duration={DIAGRAM_RUN_DURATION - delay - 100}
+                        duration={DIAGRAM_RUN_DURATION - delay}
                         begin={delay}
                         key={index} parentId={animationCircleId}
                         id={`${animationCircleId}-${index}`}

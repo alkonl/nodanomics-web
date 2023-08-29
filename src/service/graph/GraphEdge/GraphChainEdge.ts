@@ -19,6 +19,8 @@ export class GraphChainEdge extends GraphBaseEdge<IChainConnectionData> {
     }
 
 
+
+
     get isMeetCondition(): boolean {
         const condition = this.condition;
         if (condition === undefined || condition === 'true' || Number(condition) === 1) {

@@ -38,10 +38,12 @@ export interface IDiagramEditorState {
     currentRunningDiagramStep: number
     isDiagramRunning: boolean
     isDiagramRunningInterval: boolean
+    // isStepFinished: boolean
     spreadsheets?: IStructuredSpreadsheetsData
     executionGrid?: {
         options?: ApexOptions
-    }
+    },
+    completedSteps: number
 }
 
 const initialState: IDiagramEditorState = {
@@ -50,7 +52,9 @@ const initialState: IDiagramEditorState = {
     autoSaveCalled: 0,
     isDiagramRunning: false,
     isDiagramRunningInterval: false,
+    // isStepFinished: false,
     currentRunningDiagramStep: 0,
+    completedSteps: 0,
 }
 
 const graph = new Graph()
@@ -333,7 +337,16 @@ export const diagramEditorSlice = createSlice({
             if (isDiagramRunningInterval !== undefined) {
                 state.isDiagramRunningInterval = isDiagramRunningInterval
             }
-
+            // if (isStepFinished !== undefined) {
+            //     state.isStepFinished = isStepFinished
+            // }
+        },
+        updateCompletedSteps: (state, {payload}: PayloadAction<number | undefined>) => {
+            if (typeof payload === 'number') {
+                state.completedSteps = payload
+            } else {
+                state.completedSteps++
+            }
         },
         setSpreadsheets: (state, {payload}: PayloadAction<{
             spreadsheets: IStructuredSpreadsheetsData
@@ -350,12 +363,14 @@ export const diagramEditorSlice = createSlice({
             runManager.updateState()
             runManager.resetCurrentStep()
             updateNodesFromGraph(state.diagramNodes)
+            updateEdgesFromGraph(state.diagramEdges)
             state.currentRunningDiagramStep = runManager.currentStep
         },
         // using this action to render new values like variableName
         renderState: (state) => {
             runManager.updateState()
             updateNodesFromGraph(state.diagramNodes)
+            updateEdgesFromGraph(state.diagramEdges)
         },
         setExecutionGridProperties: (state, {payload}: PayloadAction<ApexOptions>) => {
             state.executionGrid = {

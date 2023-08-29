@@ -20,8 +20,8 @@ export class GraphOriginNode extends GraphInteractiveNode<IOriginNodeData> {
         this.edgesToVariables.forEach(edge => {
             const resources = this.generateResourceFromSource(edge.countOfResource);
             if (GraphDataNode.baseNodeIsData(edge.target)) {
-                const onSuccess = () => {
-                    edge.changeIsTransferredResources(true)
+                const onSuccess = (resourcesValue: number) => {
+                    edge.changeIsTransferredResources(true, resourcesValue)
                 }
                 edge.target.addResource(resources, this.addingResourcesMode, {
                     onSuccess

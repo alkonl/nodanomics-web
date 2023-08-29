@@ -30,7 +30,7 @@ export const useGetEditDiagramFromServer = () => {
     const {data: diagramRes} = useGetDiagramByIdQuery(currentDiagramId, {
         refetchOnMountOrArgChange: true,
     })
-    const {setDiagram, renderState} = diagramEditorActions
+    const {setDiagram, renderState, resetDiagramRun} = diagramEditorActions
 
 
 
@@ -44,13 +44,14 @@ export const useGetEditDiagramFromServer = () => {
                 nodes: diagramData.elements.diagramNodes,
                 edges: diagramData.elements.diagramEdges,
             }))
-
+            dispatch(resetDiagramRun())
             dispatch(renderState())
         } else if (diagramData) {
             dispatch(setDiagram({
                 name: diagramData.name,
                 diagramId: diagramData.id,
             }))
+            dispatch(resetDiagramRun())
         }
         if (diagramRes?.diagram?.id) {
             setIsRequestLoaded(true)
