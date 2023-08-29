@@ -53,7 +53,7 @@ export const ExecutionToolbar = () => {
 
                 <Box sx={{
                     display: 'flex',
-                    alignItem: 'end',
+                    alignItem: 'flex-end',
                 }}>
 
 
@@ -72,22 +72,21 @@ export const ExecutionToolbar = () => {
             >
                 Step
             </MButton.Submit>
-            <MButton.Submit
-                onClick={toggleStepInterval}
-            >
-                {isRunning ? 'Stop' : 'Start'}
-            </MButton.Submit>
+
             <Box sx={{
                 display: 'flex',
             }}>
-                <MButton.Submit>
-                    Run to
+                <MButton.Submit
+                    onClick={toggleStepInterval}
+                >
+                    {isRunning ? 'Stop' : 'Run'}
                 </MButton.Submit>
                 <Parameter.Input
                     onChange={changeTargetExecutionStepHandler}
                     value={targetSteps}
                     sx={{
                         backgroundColor: EColor.white,
+                        width: 50,
                     }}
                 />
             </Box>

@@ -4,9 +4,10 @@ import {InputProps} from "@mui/material/Input/Input";
 import {Input} from "@mui/material";
 import {EColor, EFontColor} from "../../../constant";
 
-export const ParameterInput: React.FC<InputProps> = ({sx, ...props}) => {
+export const ParameterInput: React.FC<InputProps> = ({sx, value, ...props}) => {
 
     return <Input
+        value={value ? value : ''}
         sx={{
             color: EFontColor.grey4,
             width: '100%',
