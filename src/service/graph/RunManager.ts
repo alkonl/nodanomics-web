@@ -1,5 +1,12 @@
 import {Graph} from "./Graph";
-import {GraphBaseNode, GraphDataNode, GraphEventListenerNode, GraphInvokableNode, GraphStartNode} from "./GraphNodes";
+import {
+    GraphBaseNode,
+    GraphDataNode,
+    GraphEventListenerNode,
+    GraphFormulaNode,
+    GraphInvokableNode,
+    GraphStartNode
+} from "./GraphNodes";
 import {
     EConnectionMode,
     isIIsEventTriggered,
@@ -90,8 +97,8 @@ export class RunManager {
         const chain = this.getExecutionOrder()
         this.setExecutionOrder(chain)
         // remove listener nodes from execution order
-        const startChain = chain.filter(chainItem => chainItem.target instanceof GraphStartNode)
-        this.executeChainOrder(startChain)
+        const startChains = chain.filter(chainItem => !(chainItem.target instanceof GraphEventListenerNode))
+        this.executeChainOrder(startChains)
         this.updateNodePerStep()
     }
 
@@ -155,7 +162,7 @@ export class RunManager {
 
     private getStartedNodes() {
         return this.graph.nodes.filter(node => {
-            if (node instanceof GraphStartNode || node instanceof GraphEventListenerNode) {
+            if (node instanceof GraphStartNode || node instanceof GraphEventListenerNode || node instanceof GraphFormulaNode && node.data.isAutomatic) {
                 return node
             }
         })
