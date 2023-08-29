@@ -1,11 +1,10 @@
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {useEffect} from "react";
-import {DIAGRAM_RUN_DURATION} from "../constant";
 
 export const useInvokeStep = () => {
 
     const dispatch = useAppDispatch()
-    const {isDiagramRunning, isDiagramRunningInterval, currentRunningDiagramStep} = useDiagramEditorState()
+    const {isDiagramRunning, isDiagramRunningInterval, executionDuration, currentRunningDiagramStep} = useDiagramEditorState()
     const {invokeStep, setIsDiagramRunning, updateCompletedSteps} = diagramEditorActions
 
     const updateCompletedStep = (count?: number) => {
@@ -34,7 +33,7 @@ export const useInvokeStep = () => {
                 }))
                 updateCompletedStep()
                 clearTimeout(timeOut)
-            }, DIAGRAM_RUN_DURATION)
+            }, executionDuration)
         }
     }
 
@@ -47,7 +46,7 @@ export const useInvokeStep = () => {
             interval = setInterval(() => {
                 updateCompletedStep()
                 runStep()
-            }, DIAGRAM_RUN_DURATION)
+            }, executionDuration)
 
         } else {
             if (interval) {

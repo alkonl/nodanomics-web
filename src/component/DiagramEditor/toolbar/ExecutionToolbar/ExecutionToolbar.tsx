@@ -1,16 +1,33 @@
 import React from 'react';
-import {Box} from "@mui/material";
+import {Box, Typography} from "@mui/material";
 import {EColor} from "../../../../constant";
-import {MButton} from "../../../base";
+import {MButton, Parameter} from "../../../base";
 import {RunningStep} from "../ElementToolbar/RunningStep";
-import {useInvokeStep, useResetDiagramRun, useToggle} from "../../../../hooks";
+import {
+    useInvokeStep,
+    useManageExecutionDuration,
+    useManageTargetExecutionStep,
+    useResetDiagramRun,
+    useToggle
+} from "../../../../hooks";
 import {ExecutionGraphPopUp} from "../../ExecutionGraph";
 
 export const ExecutionToolbar = () => {
     const executionGraphPopUp = useToggle();
 
     const {toggleStepInterval, isRunning, runStep} = useInvokeStep();
+    const {executionDurationSeconds, changeExecutionDuration} = useManageExecutionDuration();
+    const {targetSteps, changeTargetExecutionStep} = useManageTargetExecutionStep();
     const {resetDiagramRun} = useResetDiagramRun();
+
+    const changeExecutionDurationHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        changeExecutionDuration(event.target.value);
+    }
+
+    const changeTargetExecutionStepHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        changeTargetExecutionStep(event.target.value);
+    }
+
     return (
         <Box sx={{
             pointerEvents: 'auto',
@@ -23,6 +40,32 @@ export const ExecutionToolbar = () => {
             py: 2,
             backgroundColor: EColor.white,
         }}>
+            <Box sx={{
+                width: 80
+            }}>
+                <Parameter.Label sx={{
+                    fontSize: 12,
+                    textAlign: 'left',
+                }}>
+                    Speed
+
+                </Parameter.Label>
+
+                <Box sx={{
+                    display: 'flex',
+                    alignItem: 'end',
+                }}>
+
+
+                    <Parameter.Input
+                        onChange={changeExecutionDurationHandler}
+                        value={executionDurationSeconds}
+                    />
+                    <Typography>
+                        s
+                    </Typography>
+                </Box>
+            </Box>
 
             <MButton.Submit
                 onClick={runStep}
@@ -34,6 +77,20 @@ export const ExecutionToolbar = () => {
             >
                 {isRunning ? 'Stop' : 'Start'}
             </MButton.Submit>
+            <Box sx={{
+                display: 'flex',
+            }}>
+                <MButton.Submit>
+                    Run to
+                </MButton.Submit>
+                <Parameter.Input
+                    onChange={changeTargetExecutionStepHandler}
+                    value={targetSteps}
+                    sx={{
+                        backgroundColor: EColor.white,
+                    }}
+                />
+            </Box>
             <MButton.Submit onClick={resetDiagramRun}>
                 Reset
             </MButton.Submit>
