@@ -42,7 +42,8 @@ export interface IDiagramEditorState {
     spreadsheets?: IStructuredSpreadsheetsData
     executionGrid?: {
         options?: ApexOptions
-    }
+    },
+    completedSteps: number
 }
 
 const initialState: IDiagramEditorState = {
@@ -53,6 +54,7 @@ const initialState: IDiagramEditorState = {
     isDiagramRunningInterval: false,
     isStepFinished: false,
     currentRunningDiagramStep: 0,
+    completedSteps: 0,
 }
 
 const graph = new Graph()
@@ -340,9 +342,14 @@ export const diagramEditorSlice = createSlice({
                 state.isStepFinished = isStepFinished
             }
         },
+        updateCompletedSteps: (state, {payload}: PayloadAction<{
+            count: number
+        }>) => {
+            state.completedSteps = payload.count
+        },
         setSpreadsheets: (state, {payload}: PayloadAction<{
             spreadsheets: IStructuredSpreadsheetsData
-        }> ) => {
+        }>) => {
             state.spreadsheets = payload.spreadsheets
             graph.setSpreadsheetsData({
                 spreadsheetData: payload.spreadsheets
@@ -353,7 +360,7 @@ export const diagramEditorSlice = createSlice({
             graph.resetResourcesToProvide()
             graph.updateNodesState(resetNode.map(node => node.data))
             runManager.updateState()
-            runManager.resetRun()
+            runManager.resetCurrentStep()
             updateNodesFromGraph(state.diagramNodes)
             updateEdgesFromGraph(state.diagramEdges)
             state.currentRunningDiagramStep = runManager.currentStep

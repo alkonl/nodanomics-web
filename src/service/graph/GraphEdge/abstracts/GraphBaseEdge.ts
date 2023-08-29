@@ -16,6 +16,7 @@ export abstract class GraphBaseEdge<IGenericEdgeData extends IDiagramConnectionB
         this._data = data
     }
 
+
     get type() {
         return this.data.type;
     }
