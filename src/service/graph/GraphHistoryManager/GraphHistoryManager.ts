@@ -24,7 +24,6 @@ export class GraphHistoryManager {
         const history = this.history
         const currentStepValue: number | undefined = history[step - 1]
         const newValue = currentStepValue ? currentStepValue + value : value
-        // debugger
         this.updateHistory(newValue)
     }
 

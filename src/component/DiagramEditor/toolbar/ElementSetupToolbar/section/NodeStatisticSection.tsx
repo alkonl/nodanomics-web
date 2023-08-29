@@ -1,8 +1,10 @@
 import React, {useEffect} from 'react';
 import {BaseSection} from "./BaseSection";
 import {useToggle} from "../../../../../hooks";
-import {INodeData, isINodeHistory} from "../../../../../interface";
+import {INodeData, isINodeHistory, isShowInExecutionGraphNode} from "../../../../../interface";
 import {VariableStatisticsParameter} from "../parameter/VariableStatisticsParameter";
+import {NodeIsShowInExecutionGraph} from "../parameter/generic";
+import {Parameter} from "../../../../base";
 
 export const NodeStatisticSection: React.FC<{
     nodeData: INodeData
@@ -29,6 +31,11 @@ export const NodeStatisticSection: React.FC<{
                 <VariableStatisticsParameter
                     resourcesCountHistory={nodeData.history}
                 />
+                <Parameter.Container columns={9} gap={1}>
+                    <>
+                        {isShowInExecutionGraphNode(nodeData) && <NodeIsShowInExecutionGraph nodeData={nodeData}/>}
+                    </>
+                </Parameter.Container>
             </BaseSection>}
         </>
     );

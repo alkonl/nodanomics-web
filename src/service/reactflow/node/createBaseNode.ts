@@ -48,6 +48,7 @@ export const createBaseNode = ({type, position}: {
                 data: {
                     ...baseData,
                     type,
+                    isShowInExecutionGraphNode: false,
                     history: [],
                 },
             }
@@ -72,6 +73,7 @@ export const createBaseNode = ({type, position}: {
                     ...baseData,
                     type,
                     resources: [],
+                    isShowInExecutionGraphNode: false,
                     resourcesToProvide: [],
                     actionMode: ENodeAction.pullAny,
                     trigger: {
@@ -88,7 +90,6 @@ export const createBaseNode = ({type, position}: {
                     ...baseData,
                     type,
                     eventName: '',
-                    // isEventConditionMet: false,
                 }
             }
         }

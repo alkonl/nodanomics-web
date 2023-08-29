@@ -2,10 +2,12 @@ import {EDiagramNode, IDiagramNodeBaseData} from "./structures";
 import {IResource} from "../resource";
 import {INodeWithAction} from "../nodeAction";
 import {INodeWithTrigger} from "../nodeTrigger";
-import {INodeDecimal, INodeHistory} from "./additional";
+import {IIsShowInExecutionGraphNode, INodeDecimal, INodeHistory} from "./additional";
 
 
-export interface IDataNodeData extends IDiagramNodeBaseData, INodeWithTrigger, INodeWithAction, INodeHistory, INodeDecimal {
+export interface IDataNodeData extends IDiagramNodeBaseData, INodeWithTrigger,
+    INodeWithAction, INodeHistory,
+    INodeDecimal, IIsShowInExecutionGraphNode {
     type: EDiagramNode.Data
     resources: IResource[]
     initialResources?: IResource[]

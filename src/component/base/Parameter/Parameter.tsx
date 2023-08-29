@@ -6,6 +6,7 @@ import {ParameterLabel} from "../Label";
 import {ParametersContainer} from "./ParametersContainer";
 import {ElementParameterContainer} from "./ElementParameterContainer";
 import {ParameterInput} from "../Input";
+import {ParameterCheckbox} from "../Input/ParameterCheckbox";
 
 export const ElementSetupToolbarSectionTitle = styled(Box)({
     display: 'block',
@@ -72,6 +73,7 @@ const TextArea: React.FC<TextFieldProps> = ({...props}) => {
 export const Parameter = {
     Container: ParametersContainer,
     ElementContainer: ElementParameterContainer,
+    Checkbox: ParameterCheckbox,
     Label: ParameterLabel,
     Text: ParameterText,
     Input: ParameterInput,

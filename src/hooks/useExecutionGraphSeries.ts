@@ -1,18 +1,23 @@
 import {useMemo} from "react";
 import {BASE_CHART_COLORS} from "../constant";
-import {EDiagramNode, IDataNodeData} from "../interface";
+import {
+    IDiagramNodeBaseData, INodeHistory,
+    isINodeHistory,
+    isShowInExecutionGraphNode
+} from "../interface";
 import {useDiagramEditorState} from "../redux";
+
+
 
 export const useExecutionGraphSeries = () => {
 
     const {diagramNodes, currentRunningDiagramStep} = useDiagramEditorState()
     const filtered = diagramNodes.map(node => node.data).filter((nodeData) => {
-        if (nodeData.type === EDiagramNode.Data || nodeData.type === EDiagramNode.Formula) {
+        if (isINodeHistory(nodeData) && isShowInExecutionGraphNode(nodeData) && nodeData.isShowInExecutionGraphNode) {
             return true
         }
-    }) as IDataNodeData[]
+    }) as (IDiagramNodeBaseData & INodeHistory)[]
     return useMemo(() => {
-        console.log('filtered', filtered)
         const chartData = filtered.map((data, index) => {
             const history = data.history || []
             const colorIndex = index % BASE_CHART_COLORS.length

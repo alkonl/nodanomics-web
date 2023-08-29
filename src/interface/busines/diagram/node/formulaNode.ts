@@ -1,5 +1,11 @@
 import {EDiagramNode, IDiagramNodeBaseData} from "./structures";
-import {INodeDecimal, INodeHistory, INodeLoopIncomingData, INodeNumberVariable} from "./additional";
+import {
+    IIsShowInExecutionGraphNode,
+    INodeDecimal,
+    INodeHistory,
+    INodeLoopIncomingData,
+    INodeNumberVariable
+} from "./additional";
 
 export interface IFormulaResultBoolean {
     type: 'boolean'
@@ -13,7 +19,9 @@ export interface IFormulaResultNumber {
 
 export type IFormulaResult = IFormulaResultBoolean | IFormulaResultNumber
 
-export interface IFormulaNodeData extends IDiagramNodeBaseData, INodeNumberVariable, INodeDecimal, INodeHistory {
+export interface IFormulaNodeData extends
+    IDiagramNodeBaseData, INodeNumberVariable,
+    INodeDecimal, INodeHistory, IIsShowInExecutionGraphNode {
     type: EDiagramNode.Formula;
     formula?: string
     result?: IFormulaResult

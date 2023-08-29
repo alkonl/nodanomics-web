@@ -171,12 +171,6 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     private updateResourcesCountHistory() {
         const numToWrite = this.currentResourcesCount
         this.historyManager.updateHistory(numToWrite)
-        // this._data = {
-        //     ...this.data,
-        //     history: this.data.history
-        //         ? [...this.data.history, numToWrite]
-        //         : [numToWrite]
-        // }
     }
 
     invokeStep() {
