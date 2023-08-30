@@ -49,6 +49,7 @@ export const createBaseNode = ({type, position}: {
                     ...baseData,
                     type,
                     isShowInExecutionGraphNode: false,
+                    isAutomatic: false,
                     history: [],
                 },
             }

@@ -18,6 +18,7 @@ import {Graph, resetNodeStates, RunManager} from "../../service";
 import {canNodeHasChildren} from "../../service/reactflow/node/canNodeHasChildren";
 import {geAllChildrenNodes} from "../../hooks/useGeAllChildrenNodes";
 import {ApexOptions} from "apexcharts";
+import {DIAGRAM_RUN_DURATION} from "../../constant";
 
 
 export interface IDiagramEditorState {
@@ -44,6 +45,9 @@ export interface IDiagramEditorState {
         options?: ApexOptions
     },
     completedSteps: number
+    executionDuration?: number
+    // цілове значення кроків
+    targetSteps?: number
 }
 
 const initialState: IDiagramEditorState = {
@@ -55,6 +59,7 @@ const initialState: IDiagramEditorState = {
     // isStepFinished: false,
     currentRunningDiagramStep: 0,
     completedSteps: 0,
+    executionDuration: DIAGRAM_RUN_DURATION,
 }
 
 const graph = new Graph()
@@ -377,6 +382,12 @@ export const diagramEditorSlice = createSlice({
                 ...state.executionGrid,
                 options: payload
             }
+        },
+        setExecutionDuration(state, {payload}: PayloadAction<number | undefined>) {
+            state.executionDuration = payload
+        },
+        setExecutionTargetStep(state, {payload}: PayloadAction<number | undefined>) {
+            state.targetSteps = payload
         }
     }
 })

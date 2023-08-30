@@ -1,12 +1,23 @@
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
-import {useEffect} from "react";
-import {DIAGRAM_RUN_DURATION} from "../constant";
+import {useEffect, useRef} from "react";
 
 export const useInvokeStep = () => {
 
     const dispatch = useAppDispatch()
-    const {isDiagramRunning, isDiagramRunningInterval, currentRunningDiagramStep} = useDiagramEditorState()
+    const {isDiagramRunning, isDiagramRunningInterval, executionDuration, currentRunningDiagramStep, targetSteps} = useDiagramEditorState()
     const {invokeStep, setIsDiagramRunning, updateCompletedSteps} = diagramEditorActions
+
+    const refStepInfo = useRef<{
+        currentRunningDiagramStep: number,
+        targetSteps: number | undefined,
+    } | undefined>();
+
+    useEffect(() => {
+        refStepInfo.current = {
+            currentRunningDiagramStep,
+            targetSteps,
+        }
+    }, [currentRunningDiagramStep, targetSteps]);
 
     const updateCompletedStep = (count?: number) => {
         dispatch(updateCompletedSteps(count))
@@ -34,7 +45,7 @@ export const useInvokeStep = () => {
                 }))
                 updateCompletedStep()
                 clearTimeout(timeOut)
-            }, DIAGRAM_RUN_DURATION)
+            }, executionDuration)
         }
     }
 
@@ -45,9 +56,17 @@ export const useInvokeStep = () => {
         if (isDiagramRunningInterval) {
             runStep()
             interval = setInterval(() => {
-                updateCompletedStep()
-                runStep()
-            }, DIAGRAM_RUN_DURATION)
+                const stepInfo = refStepInfo.current
+                if (!stepInfo?.targetSteps || stepInfo.currentRunningDiagramStep < stepInfo.targetSteps) {
+                    updateCompletedStep()
+                    runStep()
+                } else {
+                    dispatch(setIsDiagramRunning({
+                        isRunning: false,
+                        isDiagramRunningInterval: false,
+                    }))
+                }
+            }, executionDuration)
 
         } else {
             if (interval) {

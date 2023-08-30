@@ -7,7 +7,7 @@ import {
     EDiagramNode,
     EElementType,
     IDiagramConnectionData,
-    INodeData,
+    INodeData, isNodeAutomatic,
 } from "../../../../../interface";
 import {ConnectionFormulaParameter} from "../parameter/ConnectionFormulaParameter";
 import {NodeTriggerModeParameter} from "../parameter/NodeTriggerModeParameter";
@@ -30,6 +30,7 @@ import {GeneralLoopEditLoopButton} from "../parameter/generalLoop/GeneralLoopEdi
 import {ChainConnectionParametersContainer} from "../parameter/chainConnection/ChainConnectionParametersContainer";
 import {NodeEventTriggerParametersContainer} from "../parameter/eventTrigger";
 import {NodeEventListenerParametersContainer} from "../parameter/eventListener";
+import {IsNodeAutomaticProperty} from "../parameter/generic/IsNodeAutomaticProperty";
 
 
 export const PropertiesSection: React.FC<{
@@ -93,6 +94,7 @@ export const PropertiesSection: React.FC<{
                     && <GeneralLoopChildrenNodesParameter nodeData={selectedElementData}/>}
                 {(selectedElementData.type === EDiagramNode.MicroLoop || selectedElementData.type === EDiagramNode.WhileLoop)
                     && <GeneralLoopEditLoopButton nodeData={selectedElementData}/>}
+                {isNodeAutomatic(selectedElementData) && <IsNodeAutomaticProperty nodeData={selectedElementData}/>}
             </Grid>
         </BaseSection>
     );
