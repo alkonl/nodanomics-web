@@ -33,19 +33,23 @@ export const useInvokeStep = () => {
         dispatch(invokeStep())
     }
 
+    const refRunOneStepTimeOut = useRef<NodeJS.Timeout | undefined>(undefined)
+
     const runOneStep = () => {
         runStep()
         if (!isDiagramRunningInterval) {
             dispatch(setIsDiagramRunning({
                 isRunning: true
             }))
-            const timeOut = setTimeout(() => {
-                dispatch(setIsDiagramRunning({
-                    isRunning: false
-                }))
-                updateCompletedStep()
-                clearTimeout(timeOut)
-            }, executionDuration)
+            if (!isDiagramRunning) {
+                refRunOneStepTimeOut.current = setTimeout(() => {
+                    dispatch(setIsDiagramRunning({
+                        isRunning: false
+                    }))
+                    updateCompletedStep()
+                    clearTimeout(refRunOneStepTimeOut.current)
+                }, executionDuration)
+            }
         }
     }
 
@@ -82,6 +86,7 @@ export const useInvokeStep = () => {
     }, [isDiagramRunningInterval])
 
     const toggleStepInterval = () => {
+        clearTimeout(refRunOneStepTimeOut.current)
         dispatch(setIsDiagramRunning({
             isRunning: !isDiagramRunning,
             isDiagramRunningInterval: !isDiagramRunningInterval
