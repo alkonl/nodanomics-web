@@ -19,6 +19,7 @@ export const useOnSelectionChange = () => {
         nodes: IReactFlowNode[],
         edges: IReactFlowEdge[],
     }) => {
+        console.log('selectedNode:', nodes)
         const selectedNode = nodes[0]
         if (!selectedNode) return
 
@@ -48,8 +49,8 @@ export const useOnSelectionChange = () => {
 
         const updatedNodes: IReactFlowNode[] = [selectedChanged, ...updatedChildNodes]
 
-        dispatch(diagramEditorActions.bulkUpdateNodes(updatedPrevChangedNodes))
-        dispatch(diagramEditorActions.bulkUpdateNodes(updatedNodes))
+        console.log('updatedNodes', updatedNodes)
+        dispatch(diagramEditorActions.bulkUpdateNodes([...updatedPrevChangedNodes, ...updatedNodes]))
 
         refPrevChangedNodes.current = updatedNodes.map(node => node.id)
     }, [dispatch])

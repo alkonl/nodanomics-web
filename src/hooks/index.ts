@@ -1,3 +1,5 @@
+import {useKeyPressDetector} from "./useKeyPressDetector";
+
 export * from './useTagsDashboardView'
 export * from './useWidthAndHeight'
 export * from './useDidMountEffect'
@@ -39,3 +41,5 @@ export * from './useGetExecutionGraphPropertiesFromServer'
 export * from './useExecutionGraphSeries'
 export * from './useManageExecutionDuration'
 export * from './useManageTargetExecutionStep'
+export * from './useKeyPressDetector'
+export * from './useUndoRedoDiagramKeyboard'

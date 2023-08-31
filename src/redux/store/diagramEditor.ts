@@ -20,6 +20,17 @@ import {geAllChildrenNodes} from "../../hooks/useGeAllChildrenNodes";
 import {ApexOptions} from "apexcharts";
 import {DIAGRAM_RUN_DURATION} from "../../constant";
 
+interface IDiagramElements {
+    diagramNodes: IReactFlowNode[]
+    diagramEdges: IReactFlowEdge[],
+}
+
+interface IHistory {
+    past: IDiagramElements[],
+    future: IDiagramElements[]
+    index: number
+    limit: number
+}
 
 export interface IDiagramEditorState {
     currentDiagramId?: string
@@ -48,6 +59,14 @@ export interface IDiagramEditorState {
     executionDuration?: number
     // цілове значення кроків
     targetSteps?: number
+    history: IHistory
+}
+
+const initialHistory: IHistory = {
+    past: [],
+    future: [],
+    index: -1,
+    limit: 120,
 }
 
 const initialState: IDiagramEditorState = {
@@ -60,6 +79,7 @@ const initialState: IDiagramEditorState = {
     currentRunningDiagramStep: 0,
     completedSteps: 0,
     executionDuration: DIAGRAM_RUN_DURATION,
+    history: initialHistory,
 }
 
 const graph = new Graph()
@@ -84,6 +104,33 @@ const updateEdgesFromGraph = (diagramEdges: IReactFlowEdge[]) => {
     })
 }
 
+const updateHistory = (state: IDiagramEditorState) => {
+    const index = state.history.index
+    const pastHistory = state.history.past
+    const futureHistory = state.history.future
+    const historyItem: IDiagramElements | undefined = futureHistory[index] || pastHistory[index]
+    // const pastItem = pastHistory[pastHistory.length - 1]
+    // const isEquals = lodash.isEqual(historyItem?.diagramNodes, state.diagramNodes)
+    const historyJsonNodes = JSON.stringify(historyItem?.diagramNodes)
+    const stateJson = JSON.stringify(state.diagramNodes)
+    const historyJsonEdges = JSON.stringify(historyItem?.diagramEdges)
+    const stateJsonEdges = JSON.stringify(state.diagramEdges)
+    const isDiagramEquals = historyJsonNodes === stateJson
+    const isEdgesEquals = historyJsonEdges === stateJsonEdges
+    const isEquals = isDiagramEquals && isEdgesEquals
+
+    console.log('historyItem', isDiagramEquals, {historyJsonNodes, stateJson}, state.history.index)
+
+    if (!isEquals || state.history.index === -1) {
+        state.history.past.push({
+            diagramNodes: state.diagramNodes,
+            diagramEdges: state.diagramEdges,
+        })
+        state.history.future = []
+        state.history.index = -1
+    }
+}
+
 
 export const diagramEditorSlice = createSlice({
     name: 'diagramEditor',
@@ -98,6 +145,7 @@ export const diagramEditorSlice = createSlice({
         addNode: (state, {payload}: PayloadAction<IReactFlowNode>) => {
             const length = state.diagramNodes.push(payload)
             state.autoSaveCalled++
+            updateHistory(state)
             graph.addOrGetNode(state.diagramNodes[length - 1].data)
         },
 
@@ -105,10 +153,12 @@ export const diagramEditorSlice = createSlice({
         onNodesChange: (state, {payload}: PayloadAction<NodeChange[]>) => {
             state.diagramNodes = applyNodeChanges<INodeData>(payload, state.diagramNodes)
             state.autoSaveCalled++
+            updateHistory(state)
         },
         onEdgeUpdateEnd: (state, {payload}: PayloadAction<IReactFlowEdge>) => {
             state.diagramEdges = state.diagramEdges.filter(edge => edge.id !== payload.id)
             state.autoSaveCalled++
+            updateHistory(state)
             graph.deleteEdge(payload.id)
         },
         onEdgeUpdate: (state, {payload}: PayloadAction<{
@@ -133,15 +183,16 @@ export const diagramEditorSlice = createSlice({
                     newTargetId: target,
                 })
                 state.autoSaveCalled++
+                updateHistory(state)
             }
         },
         addEdge: (state, {payload}: PayloadAction<EdgeChange[]>) => {
             state.diagramEdges = applyEdgeChanges(payload, state.diagramEdges)
             state.autoSaveCalled++
+            updateHistory(state)
         },
         onConnect: (state, {payload}: PayloadAction<IReactFlowEdge | IReactFlowEdgeConnection>) => {
             state.diagramEdges = addEdge(payload, state.diagramEdges)
-            state.autoSaveCalled++
             if (payload.target && payload.source && payload.data) {
                 graph.addEdge({
                     sourceId: payload.source,
@@ -151,6 +202,7 @@ export const diagramEditorSlice = createSlice({
                 runManager.updateState()
                 updateNodesFromGraph(state.diagramNodes)
                 state.autoSaveCalled++
+                updateHistory(state)
             }
         },
         setEditElement: (state, {payload}: PayloadAction<{
@@ -164,6 +216,7 @@ export const diagramEditorSlice = createSlice({
             runManager.updateState()
             updateNodesFromGraph(state.diagramNodes)
             state.autoSaveCalled++
+            updateHistory(state)
         },
         bulkUpdateNodes: (state, {payload}: PayloadAction<IUpdateReactflowNode[]>) => {
             payload.forEach(updatedNode => {
@@ -179,6 +232,7 @@ export const diagramEditorSlice = createSlice({
             })
             updateNodesFromGraph(state.diagramNodes)
             state.autoSaveCalled++
+            updateHistory(state)
         },
         updateNodeParent: (state, {payload}: PayloadAction<{
             node: IReactFlowNode,
@@ -205,6 +259,7 @@ export const diagramEditorSlice = createSlice({
                 node.zIndex = payload.parentNode.zIndex ? payload.parentNode.zIndex + 1 : 10
                 node.extent = 'parent'
                 state.autoSaveCalled++
+                updateHistory(state)
             }
 
         },
@@ -232,6 +287,7 @@ export const diagramEditorSlice = createSlice({
                 graph.updateNodeData(payload.nodeId, newNode.data)
                 updateNodesFromGraph(state.diagramNodes)
                 state.autoSaveCalled++
+                updateHistory(state)
             }
         },
         deleteNode: (state, {payload}: PayloadAction<{
@@ -257,6 +313,7 @@ export const diagramEditorSlice = createSlice({
                 })
             }
             state.autoSaveCalled++
+            updateHistory(state)
         },
         updateEdgeData: (state, {payload}: PayloadAction<Optionalize<IDiagramConnectionData, 'id' | 'type'>>) => {
             const edge = state.diagramEdges.find(edge => edge.id === payload.id)
@@ -268,6 +325,7 @@ export const diagramEditorSlice = createSlice({
                 }
             }
             state.autoSaveCalled++
+            updateHistory(state)
         },
         bulkUpdateEdges: (state, {payload}: PayloadAction<Optionalize<IReactFlowEdge, 'id'>[]>) => {
             payload.forEach(updatedEdge => {
@@ -300,6 +358,7 @@ export const diagramEditorSlice = createSlice({
                 ]
             }
             state.autoSaveCalled++
+            updateHistory(state)
         },
         setDiagram: (state, {payload}: PayloadAction<{
             diagramId: string,
@@ -307,6 +366,7 @@ export const diagramEditorSlice = createSlice({
             nodes?: IReactFlowNode[]
             edges?: IReactFlowEdge[]
         }>) => {
+            state.history = initialHistory
             state.currentDiagramId = payload.diagramId
             state.name = payload.name
             state.diagramNodes = payload.nodes || []
@@ -388,6 +448,39 @@ export const diagramEditorSlice = createSlice({
         },
         setExecutionTargetStep(state, {payload}: PayloadAction<number | undefined>) {
             state.targetSteps = payload
+        },
+        setDiagramElements: (state, {payload}: PayloadAction<IDiagramElements>) => {
+            graph.setDiagramElements({
+                nodes: payload.diagramNodes.map(node => node.data),
+                edges: payload.diagramEdges.map(edge => edge.data)
+                    .filter(Boolean) as IDiagramConnectionData[]
+            })
+        },
+        undo: (state) => {
+            if (state.history.past.length > 0) {
+                state.history.index++
+                const past = state.history.past[state.history.past.length - 1]
+
+                state.history.future.push(past)
+                state.diagramNodes = past.diagramNodes
+                state.diagramEdges = past.diagramEdges
+                state.history.past.pop()
+
+            }
+        },
+        redo: (state) => {
+            const future = state.history.future[state.history.future.length - 1]
+            if (future && future !== null) {
+
+
+                state.diagramNodes = future.diagramNodes
+                state.diagramEdges = future.diagramEdges
+                state.history.past.push(future)
+                state.history.future.pop()
+                state.history.index--
+
+            }
+
         }
     }
 })
