@@ -29,6 +29,7 @@ export const createBaseNode = ({type, position}: {
         style: initialNodeDiagramElement,
         name: `node name ${nodeId}`,
         isCollapsed: true,
+        connectedNodes: [],
     }
 
 
