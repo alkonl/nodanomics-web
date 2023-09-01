@@ -252,11 +252,8 @@ export class RunManager {
     }
 
     private resetIsTransferredResources() {
-        console.log('resetIsTransferredResources')
         this.graph.edges.forEach(edge => {
-            console.log('edge: ', edge)
             if (edge instanceof GraphDataEdge) {
-                console.log(' edge.changeIsTransferredResources(false)')
                 edge.changeIsTransferredResources(false, 0)
             }
         })

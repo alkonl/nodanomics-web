@@ -48,19 +48,16 @@ export const CircleResourcesAnimation: React.FC<{
                     setIsAnimationRunning(false)
                 }, duration)
             } else {
-                setIsAnimationRunning(true)
                 animationRef.current?.beginElement()
 
                 interval = setInterval(() => {
                     if (play) {
-                        setIsAnimationRunning(true)
                         animationRef.current?.beginElement()
                     }
                 }, duration + begin)
             }
         } else {
             setIsAnimationRunning(false)
-
         }
         return () => {
             clearInterval(interval)
@@ -83,7 +80,7 @@ export const CircleResourcesAnimation: React.FC<{
 
     return (
         <>
-            <circle id={id} r={isAnimationRunning ? 8 : 0} fill={EColor.black}
+            {play && <circle id={id} r={isAnimationRunning ? 8 : 4} fill={EColor.black}
             >
                 <animateMotion
                     repeatCount={0}
@@ -95,7 +92,7 @@ export const CircleResourcesAnimation: React.FC<{
                 >
                     <mpath href={formattedPath}/>
                 </animateMotion>
-            </circle>
+            </circle>}
         </>
     )
 }

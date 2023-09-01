@@ -1,5 +1,6 @@
 import {IReactFlowNode, isINodeSize} from "../../interface";
 import {isNodeCanBeParent} from "../../interface/busines/diagram/canBeParent";
+import {getTopParent} from "./node";
 
 export const findParent = (node: IReactFlowNode, nodes: IReactFlowNode[]) => {
 
@@ -26,11 +27,12 @@ export const findParent = (node: IReactFlowNode, nodes: IReactFlowNode[]) => {
         }
     });
     // find the most top parent
-    const topParent = candidates.reduce((prev, current) => {
-        if (prev.id === current.parentNode) {
-            return current
-        }
-        return prev
-    }, candidates[0])
+    const topParent = getTopParent(node, candidates)
+    // const topParent = candidates.reduce((prev, current) => {
+    //     if (prev.id === current.parentNode) {
+    //         return current
+    //     }
+    //     return prev
+    // }, candidates[0])
     return topParent
 }

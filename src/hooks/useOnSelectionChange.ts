@@ -48,8 +48,7 @@ export const useOnSelectionChange = () => {
 
         const updatedNodes: IReactFlowNode[] = [selectedChanged, ...updatedChildNodes]
 
-        dispatch(diagramEditorActions.bulkUpdateNodes(updatedPrevChangedNodes))
-        dispatch(diagramEditorActions.bulkUpdateNodes(updatedNodes))
+        dispatch(diagramEditorActions.bulkUpdateNodes([...updatedPrevChangedNodes, ...updatedNodes]))
 
         refPrevChangedNodes.current = updatedNodes.map(node => node.id)
     }, [dispatch])

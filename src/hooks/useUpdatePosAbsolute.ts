@@ -12,8 +12,8 @@ export const useUpdatePosAbsolute = ({yPos, xPos, nodeId}: {
             id: nodeId,
             type: 'position',
             positionAbsolute: {
-                x: xPos,
-                y: yPos,
+                x: Math.round(xPos),
+                y:  Math.round(yPos),
             }
         }]))
     }, [xPos, yPos])

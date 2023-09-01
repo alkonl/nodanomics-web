@@ -1,4 +1,3 @@
-import {nanoid} from "nanoid";
 import {
     EDiagramNode,
     EElementType,
@@ -8,14 +7,15 @@ import {
     IReactFlowNode
 } from "../../../interface";
 import {initialNodeDiagramElement, loopSize} from "../../../constant";
+import {generateNodeId} from "./generateNodeId";
 
-const getId = () => `nodeId_${nanoid()}`;
+
 
 export const createBaseNode = ({type, position}: {
     type: EDiagramNode,
     position: { x: number, y: number },
 }): IReactFlowNode => {
-    const nodeId = getId();
+    const nodeId = generateNodeId();
     const baseParams = {
         id: nodeId,
         type,
@@ -29,6 +29,7 @@ export const createBaseNode = ({type, position}: {
         style: initialNodeDiagramElement,
         name: `node name ${nodeId}`,
         isCollapsed: true,
+        connectedNodes: [],
     }
 
 
