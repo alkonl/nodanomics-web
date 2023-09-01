@@ -13,11 +13,13 @@ import {MButton} from "../../../base";
 enum EFormFields {
     gridColor = 'gridColor',
     xAxisTitle = 'xAxisTitle',
+    isShowVerticalLine = 'isShowVerticalLine',
 }
 
 const validationSchema = z.object({
     [EFormFields.gridColor]: z.string(),
     [EFormFields.xAxisTitle]: z.string(),
+    [EFormFields.isShowVerticalLine]: z.boolean(),
 })
 
 type IValidationSchema = z.infer<typeof validationSchema>;
@@ -36,6 +38,7 @@ export const ExecutionGraphSetup = () => {
         form.reset({
             [EFormFields.gridColor]: options?.grid?.borderColor,
             [EFormFields.xAxisTitle]: options?.xaxis?.title?.text,
+            [EFormFields.isShowVerticalLine]: options?.grid?.xaxis?.lines?.show,
         })
     }, [options]);
 
@@ -43,6 +46,7 @@ export const ExecutionGraphSetup = () => {
         updateExecutionGridProperties({
             gridColor: data.gridColor,
             xAxisTitle: data.xAxisTitle,
+            isShowVerticalGridLines: data.isShowVerticalLine,
         });
     }
 
@@ -79,9 +83,13 @@ export const ExecutionGraphSetup = () => {
                         form={form}
                     />
                 </ParameterExecutionGraphSetup.Element>
-                <MButton.Submit
-                    type="submit"
-                >
+                <ParameterExecutionGraphSetup.Element label="On vertical lines">
+                    <ParameterExecutionGraphSetup.Checkbox
+                        name={EFormFields.isShowVerticalLine}
+                        form={form}
+                    />
+                </ParameterExecutionGraphSetup.Element>
+                <MButton.Submit type="submit">
                     Save
                 </MButton.Submit>
             </ParameterExecutionGraphSetup.Container>

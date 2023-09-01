@@ -1,5 +1,12 @@
 import React from "react";
-import {ElementParameterContainer, ParameterInput, ParameterInputForm, ParametersContainer} from "../../../base";
+import {
+    ElementParameterContainer,
+    ParameterCheckboxForm,
+    ParameterInput,
+    ParameterInputForm,
+    ParametersContainer
+} from "../../../base";
+import {ParameterCheckbox} from "../../../base/Input/ParameterCheckbox";
 
 const StyledParametersContainer: React.FC<{
     children: React.ReactNode
@@ -34,4 +41,5 @@ export const ParameterExecutionGraphSetup = {
     Container: StyledParametersContainer,
     Element: StyledParameterElement,
     Input: ParameterInputForm,
+    Checkbox: ParameterCheckboxForm,
 }

@@ -27,6 +27,9 @@ export const useGetExecutionGraphPropertiesFromServer = (
             if (executionGraphProperty.xAxisTitle) {
                 modifiedExecutionGraphProperty.xaxis.title.text = executionGraphProperty.xAxisTitle
             }
+            if (executionGraphProperty.isShowVerticalGridLines !== undefined) {
+                modifiedExecutionGraphProperty.grid.xaxis.lines.show = executionGraphProperty.isShowVerticalGridLines
+            }
             dispatch(diagramEditorActions.setExecutionGridProperties(modifiedExecutionGraphProperty))
         } else {
             dispatch(diagramEditorActions.setExecutionGridProperties(BASE_CHART_OPTIONS))
