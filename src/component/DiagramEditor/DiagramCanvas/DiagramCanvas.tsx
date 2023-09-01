@@ -11,7 +11,7 @@ import {
     useOnNodeDrag,
     useOnNodeDragStart,
     useOnNodeDragStop,
-    useOnSelectionChange, useUndoRedoDiagramKeyboard,
+    useOnSelectionChange, useDiagramKeyboardManager,
     useUploadDiagramOnServer
 } from "../../../hooks";
 import styles from './DiagramCanvas.module.scss'
@@ -101,7 +101,7 @@ export const DiagramCanvas = () => {
 
     const onEdgeClick = useOnEdgeClick()
 
-    useUndoRedoDiagramKeyboard()
+    useDiagramKeyboardManager()
 
     return (
         <Box

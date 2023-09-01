@@ -147,7 +147,12 @@ export const diagramEditorSlice = createSlice({
             updateHistory(state)
             graph.addOrGetNode(state.diagramNodes[length - 1].data)
         },
-
+        addManyNodes: (state, {payload}: PayloadAction<IReactFlowNode[]>) => {
+            state.diagramNodes.push(...payload)
+            updateHistory(state)
+            payload.forEach(node => graph.addOrGetNode(node.data))
+            state.autoSaveCalled++
+        },
         // updateNodeData: (state, {payload}: PayloadAction<INodeData>) => {
         onNodesChange: (state, {payload}: PayloadAction<NodeChange[]>) => {
             state.diagramNodes = applyNodeChanges<INodeData>(payload, state.diagramNodes)
