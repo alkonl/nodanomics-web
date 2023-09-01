@@ -1,12 +1,6 @@
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {IReactFlowNode} from "../interface";
-import {
-    geAllChildrenNodes,
-    generateNodeId,
-    getTopParents,
-    recursiveUpdateChildren,
-    recursiveUpdateChildrenV2
-} from "../service";
+import {geAllChildrenNodes, generateNodeId, getTopParents, recursiveUpdateChildrenV2} from "../service";
 import {useMemo} from "react";
 import {useReactFlowInstance} from "./useReactFlowInstance";
 // eslint-disable-next-line import/named
@@ -56,21 +50,43 @@ const recreateNodes = ({nodes, reactFlowInstance, reactFlowWrapper, mousePositio
 
 
     const children = updatedTopParents.map(({newNode, previous: previousTopParent}) => {
-        return recursiveUpdateChildren(nodes, previousTopParent, ({node, parentNode}) => {
-            const updatedNode = recreateNode({node})
-            const parent = previousTopParent.id === parentNode.id ? newNode : parentNode
-            console.log(`parent ${parent.data.name}: `, parent, updatedNode)
-            return {
-                ...updatedNode,
-                parentNode: parent.id,
-                data: {
-                    ...updatedNode.data,
-                    name: `${updatedNode.data.name} copy`,
-                    parentId: parent.id,
+        return recursiveUpdateChildrenV2({
+            nodes,
+            oldParentNode: previousTopParent,
+            newParentNode: newNode,
+            func: ({node, parentNode}) => {
+                const updatedNode = recreateNode({node})
+                const parent = previousTopParent.id === parentNode.id ? newNode : parentNode
+                console.log(`parent ${parent.data.name}: `, parent, updatedNode)
+                return {
+                    ...updatedNode,
+                    parentNode: parent.id,
+                    data: {
+                        ...updatedNode.data,
+                        name: `${updatedNode.data.name} copy`,
+                        parentId: parent.id,
+                    }
                 }
             }
         })
-    }).flat()
+    }).map(nodes => nodes.map(({newParentNode}) => newParentNode)).flat()
+
+    // const children = updatedTopParents.map(({newNode, previous: previousTopParent}) => {
+    //     return recursiveUpdateChildrenV2(nodes, previousTopParent, ({node, parentNode}) => {
+    //         const updatedNode = recreateNode({node})
+    //         const parent = previousTopParent.id === parentNode.id ? newNode : parentNode
+    //         console.log(`parent ${parent.data.name}: `, parent, updatedNode)
+    //         return {
+    //             ...updatedNode,
+    //             parentNode: parent.id,
+    //             data: {
+    //                 ...updatedNode.data,
+    //                 name: `${updatedNode.data.name} copy`,
+    //                 parentId: parent.id,
+    //             }
+    //         }
+    //     })
+    // }).flat()
     const updatedNodesWithoutParent = nodesWithoutParent.map(node => {
         return {
             ...recreateNode({node, position}),
