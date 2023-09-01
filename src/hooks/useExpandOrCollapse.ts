@@ -1,8 +1,7 @@
 import {IDiagramNodeBaseData} from "../interface";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {useGetNodesEdges} from "./useGetNodesEdges";
-import {geAllChildrenNodes} from "./useGeAllChildrenNodes";
-import {IUpdateChildrenFunc, recursiveUpdateChildren} from "../service";
+import {geAllChildrenNodes, IUpdateChildrenFunc, recursiveUpdateChildren} from "../service";
 
 export const useExpandOrCollapse = ({nodeData}: {
     nodeData: IDiagramNodeBaseData

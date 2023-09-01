@@ -14,9 +14,8 @@ import {
 // eslint-disable-next-line import/named
 import {addEdge, applyEdgeChanges, applyNodeChanges, Connection, EdgeChange, NodeChange, updateEdge} from "reactflow";
 import {Optionalize} from "../../utils";
-import {Graph, resetNodeStates, RunManager} from "../../service";
+import {geAllChildrenNodes, Graph, resetNodeStates, RunManager} from "../../service";
 import {canNodeHasChildren} from "../../service/reactflow/node/canNodeHasChildren";
-import {geAllChildrenNodes} from "../../hooks/useGeAllChildrenNodes";
 import {ApexOptions} from "apexcharts";
 import {DIAGRAM_RUN_DURATION} from "../../constant";
 

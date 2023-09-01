@@ -1,4 +1,5 @@
-import {IReactFlowNode} from "../interface";
+import {IReactFlowNode} from "../../../interface";
+import {getTopParents} from "./getTopParent";
 
 export const geAllChildrenNodes = ({nodes, parentId}: {
     parentId: string,
@@ -13,5 +14,7 @@ export const geAllChildrenNodes = ({nodes, parentId}: {
         ...childrenNodes,
         ...childrenChildrenNodes.flat(),
     ]
-
 }
+
+
+
