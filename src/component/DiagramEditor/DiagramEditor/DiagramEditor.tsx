@@ -1,8 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {DiagramCanvas} from "../DiagramCanvas";
 import style from './DiagramEditor.module.scss'
-import {ElementSetupToolbar, LeftToolbar, ElementToolbar, ExecutionToolbar} from "../toolbar";
-import {useSetAllSpreadSheetsToState, useGetEditDiagramFromServer, useWidthAndHeight} from "../../../hooks";
+import {ElementSetupToolbar, ElementToolbar, ExecutionToolbar, LeftToolbar} from "../toolbar";
+import {
+    ReactFlowInstanceProvider,
+    useGetEditDiagramFromServer,
+    useSetAllSpreadSheetsToState,
+    useWidthAndHeight
+} from "../../../hooks";
 import {Box} from "@mui/material";
 import {DiagramEditorHeader} from "../DiagramEditorHeader";
 import {CONFIG} from "../../../utils";
@@ -42,56 +47,58 @@ export const DiagramEditor = () => {
         <Box
             className={style.diagramEditorContainer}
         >
-            <DiagramEditorHeader/>
-            <Box
-                ref={diagramCanvasContainerRef}
-                className={style.canvasContainer}>
-                {isCanvasShow && <DiagramCanvas/>}
-                <Box sx={{
-                    position: 'absolute',
-                    width: diagramCanvasContainerSize.width,
-                    height: diagramCanvasContainerSize.height,
-                    pointerEvents: 'none',
-                }}>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            width: '100%',
-                            height: '100%',
-                        }}
-                    >
-                        <LeftToolbar/>
+            <ReactFlowInstanceProvider>
+                <DiagramEditorHeader/>
+                <Box
+                    ref={diagramCanvasContainerRef}
+                    className={style.canvasContainer}>
+                    {isCanvasShow && <DiagramCanvas/>}
+                    <Box sx={{
+                        position: 'absolute',
+                        width: diagramCanvasContainerSize.width,
+                        height: diagramCanvasContainerSize.height,
+                        pointerEvents: 'none',
+                    }}>
                         <Box
                             sx={{
-                                position: 'relative',
-                                flex: 1,
+                                display: 'flex',
+                                width: '100%',
+                                height: '100%',
                             }}
                         >
+                            <LeftToolbar/>
                             <Box
                                 sx={{
-                                    position: 'absolute',
-                                    top: 10,
-                                    left: '50%',
-                                    transform: 'translateX(-50%)',
+                                    position: 'relative',
+                                    flex: 1,
                                 }}
                             >
-                                <ExecutionToolbar/>
+                                <Box
+                                    sx={{
+                                        position: 'absolute',
+                                        top: 10,
+                                        left: '50%',
+                                        transform: 'translateX(-50%)',
+                                    }}
+                                >
+                                    <ExecutionToolbar/>
+                                </Box>
+                                <Box
+                                    sx={{
+                                        position: 'absolute',
+                                        bottom: 15,
+                                        left: '50%',
+                                        transform: 'translateX(-50%)',
+                                    }}
+                                >
+                                    <ElementToolbar/>
+                                </Box>
                             </Box>
-                            <Box
-                                sx={{
-                                    position: 'absolute',
-                                    bottom: 15,
-                                    left: '50%',
-                                    transform: 'translateX(-50%)',
-                                }}
-                            >
-                                <ElementToolbar/>
-                            </Box>
+                            <ElementSetupToolbar/>
                         </Box>
-                        <ElementSetupToolbar/>
                     </Box>
                 </Box>
-            </Box>
+            </ReactFlowInstanceProvider>
         </Box>
     );
 };

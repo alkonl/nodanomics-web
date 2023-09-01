@@ -1,4 +1,4 @@
-import React, {DragEvent, useCallback, useRef, useState} from 'react';
+import React, {DragEvent, useCallback, useEffect, useRef, useState} from 'react';
 // eslint-disable-next-line import/named
 import ReactFlow, {Background, ConnectionMode, Controls, EdgeChange, NodeChange, ReactFlowInstance} from 'reactflow';
 import 'reactflow/dist/style.css';
@@ -12,7 +12,7 @@ import {
     useOnNodeDragStart,
     useOnNodeDragStop,
     useOnSelectionChange, useDiagramKeyboardManager,
-    useUploadDiagramOnServer
+    useUploadDiagramOnServer, useReactFlowInstance
 } from "../../../hooks";
 import styles from './DiagramCanvas.module.scss'
 import {EConnection, EDiagramNode} from "../../../interface";
@@ -61,6 +61,17 @@ const edgeTypes = {
 
 export const DiagramCanvas = () => {
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
+    const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance>();
+
+    const {setReactFlowInstanceAndWrapper} = useReactFlowInstance().actions
+
+    useEffect(() => {
+        setReactFlowInstanceAndWrapper({
+            reactFlowInstance,
+            reactFlowWrapper
+        })
+    }, [reactFlowInstance]);
+
     const dispatch = useAppDispatch()
 
     const {diagramNodes, diagramEdges} = useDiagramEditorState()
@@ -73,7 +84,7 @@ export const DiagramCanvas = () => {
     const onEgeChangeHandler = useCallback((eges: EdgeChange[]) => dispatch(addEdge(eges)), [dispatch])
     const onConnectHandler = useOnConnect()
 
-    const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance>();
+
 
 
     const onDragOver = useCallback((event: DragEvent<HTMLDivElement>) => {
