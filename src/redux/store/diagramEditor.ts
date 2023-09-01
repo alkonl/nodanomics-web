@@ -202,7 +202,6 @@ export const diagramEditorSlice = createSlice({
             state.diagramEdges = applyEdgeChanges(edges, state.diagramEdges)
             payload.forEach(edge => {
                 if (edge.data) {
-                    console.log('edge.data', edge.data)
                     graph.addEdge({
                         sourceId: edge.source,
                         targetId: edge.target,
@@ -482,27 +481,21 @@ export const diagramEditorSlice = createSlice({
             if (state.history.past.length > 0) {
                 state.history.index++
                 const past = state.history.past[state.history.past.length - 1]
-
                 state.history.future.push(past)
                 state.diagramNodes = past.diagramNodes
                 state.diagramEdges = past.diagramEdges
                 state.history.past.pop()
-
             }
         },
         redo: (state) => {
             const future = state.history.future[state.history.future.length - 1]
             if (future && future !== null) {
-
-
                 state.diagramNodes = future.diagramNodes
                 state.diagramEdges = future.diagramEdges
                 state.history.past.push(future)
                 state.history.future.pop()
                 state.history.index--
-
             }
-
         }
     }
 })

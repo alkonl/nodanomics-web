@@ -13,7 +13,6 @@ export const prepareCopiedNodesToPaste = ({elements, reactFlowInstance, reactFlo
     elements: ICopiedElements
 }): ICopiedElements => {
     const {nodes, edges} = elements
-    console.log('elements', elements)
     const topNodes = getTopNodes(nodes)
 
     const nodesWithoutParent = nodes
@@ -24,8 +23,7 @@ export const prepareCopiedNodesToPaste = ({elements, reactFlowInstance, reactFlo
         y: mousePosition.y - reactFlowBounds.top,
     });
 
-    console.log('nodesWithoutParent', nodesWithoutParent)
-    console.log('topParent', topNodes)
+
     const updatedTopParents: IPastAndNewNode[] = topNodes.map(node => {
         return {
             newNode: {
@@ -100,7 +98,6 @@ export const prepareCopiedNodesToPaste = ({elements, reactFlowInstance, reactFlo
     const updatedNodesWithUpdatedEdges: IReactFlowNode[] = updatedNodes.map(({newNode}) => {
         return newNode
     })
-    console.log('updatedNodesWithUpdatedEdges', updatedNodesWithUpdatedEdges)
     return {
         nodes: updatedNodesWithUpdatedEdges,
         edges: edgesToPaste,

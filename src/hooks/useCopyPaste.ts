@@ -1,10 +1,11 @@
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {ICopiedElements} from "../interface";
-import {geAllChildrenNodes, prepareCopiedNodesToPaste,} from "../service";
+import {geAllChildrenNodes, getTopNodes, prepareCopiedNodesToPaste,} from "../service";
 import {useMemo} from "react";
 import {useReactFlowInstance} from "./useReactFlowInstance";
 // eslint-disable-next-line import/named
 import {useMousePosition} from "./useMousePosition";
+import {useSetParentNode} from "./useSetParentNode";
 
 
 
@@ -14,7 +15,7 @@ export const useCopyPaste = () => {
     const dispatch = useAppDispatch()
     const {addManyNodes, addManyEdges} = diagramEditorActions
     const mousePosition = useMousePosition()
-
+    const setParent = useSetParentNode()
     const nodeToCopy: ICopiedElements = useMemo(() => {
         if (currentEditElement) {
             const parentNodes = diagramNodes.filter(node => node.id === currentEditElement.id)
@@ -47,6 +48,11 @@ export const useCopyPaste = () => {
                 mousePosition,
             })
             dispatch(addManyNodes(preparedToPaste.nodes))
+            const topNodes = getTopNodes(preparedToPaste.nodes)
+            topNodes.forEach(candidateToBeChild => {
+                setParent(candidateToBeChild, diagramNodes)
+            })
+
             dispatch(addManyEdges(preparedToPaste.edges))
         }
 
