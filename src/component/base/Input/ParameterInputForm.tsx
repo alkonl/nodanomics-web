@@ -4,22 +4,23 @@ import {FormBaseInput, IFormBaseInputProps} from "../FormInput";
 import {InputProps} from "@mui/material/Input/Input";
 import {ParameterInput} from "./ParameterInput";
 
-export const ParameterInputForm: React.FC<InputProps & IFormBaseInputProps> = ({
-                                                                                   form,
-                                                                                   name,
-                                                                                   ...props
-                                                                               }) => {
+export const ParameterInputForm: React.FC<InputProps & IFormBaseInputProps> = (
+    {
+        form,
+        name,
+        ...props
+    }) => {
     return (
-            <FormBaseInput
-                form={form}
-                name={name}
-                Input={(formProps) => {
-                    const inputProps = {
-                        ...props,
-                        ...formProps,
-                    }
-                    return <ParameterInput {...inputProps} />
-                }}
-            />
+        <FormBaseInput
+            form={form}
+            name={name}
+            Input={(formProps) => {
+                const inputProps = {
+                    ...props,
+                    ...formProps,
+                }
+                return <ParameterInput {...inputProps} />
+            }}
+        />
     );
 };

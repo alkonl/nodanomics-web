@@ -6,4 +6,5 @@ export interface IGetExecutionGraphPropertiesResponse {
     diagramId: string;
     gridColor?: string;
     xAxisTitle?: string;
+    isShowVerticalGridLines?: boolean;
 }

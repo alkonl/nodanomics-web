@@ -10,11 +10,13 @@ export const BASE_CHART_OPTIONS = {
     tooltip: {
         enabled: true
     },
+
     xaxis: {
         title: {
             offsetX: 0,
             text: 'Step',
-        }
+        },
+
     },
     chart: {
         background: EColor.grey,
@@ -36,13 +38,12 @@ export const BASE_CHART_OPTIONS = {
         dashArray: 0,
     },
     grid: {
-        borderColor: `${EColor.black}`,
+        borderColor: String(EColor.black),
         xaxis: {
-
             lines: {
                 offsetX: 1,
                 offsetY: 1,
-                show: true
+                show: Boolean(true),
             }
         },
     }
