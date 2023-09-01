@@ -17,7 +17,7 @@ export const recursiveUpdateChildren = (nodes: IReactFlowNode[], parentNode: IRe
     return updatedNodes.concat(...childrenNodes.map(node => recursiveUpdateChildren(nodes, node, func)))
 }
 
-export const recursiveUpdateChildrenV2 = (
+export const recursiveUpdateChildrenWithUpdatedParent = (
     {
         newParentNode,
         oldParentNode,
@@ -33,21 +33,19 @@ export const recursiveUpdateChildrenV2 = (
     oldParentNode: IReactFlowNode,
 }[] => {
     const childrenNodes = nodes.filter(node => node.data.parentId === oldParentNode.id)
-    console.log(`parentNode ${newParentNode.data.name}: `, newParentNode, childrenNodes)
     const updatedNodes = childrenNodes.map((node, index) => {
         const updatedNode = func({
             parentNode: newParentNode,
             node: node,
             index,
         })
-        console.log(`updatedNode ${updatedNode.data.name}: `, updatedNode)
         return {
             newParentNode: updatedNode,
             oldParentNode: node,
         }
     })
 
-    const toUpdate = updatedNodes.map(({oldParentNode, newParentNode}) => recursiveUpdateChildrenV2({
+    const toUpdate = updatedNodes.map(({oldParentNode, newParentNode}) => recursiveUpdateChildrenWithUpdatedParent({
         nodes,
         newParentNode: newParentNode,
         oldParentNode: oldParentNode,

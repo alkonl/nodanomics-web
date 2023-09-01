@@ -1,6 +1,6 @@
 import {EDiagramNode, IReactFlowNode} from "../../interface";
 
-const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
+export const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
     switch (node.data.type) {
         case EDiagramNode.Data:
             return {

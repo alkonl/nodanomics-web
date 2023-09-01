@@ -12,7 +12,7 @@ import {
     IUpdateReactflowNode
 } from "../../interface";
 // eslint-disable-next-line import/named
-import {addEdge, applyEdgeChanges, applyNodeChanges, Connection, EdgeChange, NodeChange, updateEdge} from "reactflow";
+import {addEdge, applyEdgeChanges, applyNodeChanges, Connection, EdgeChange, NodeChange, updateEdge, EdgeAddChange} from "reactflow";
 import {Optionalize} from "../../utils";
 import {geAllChildrenNodes, Graph, resetNodeStates, RunManager} from "../../service";
 import {canNodeHasChildren} from "../../service/reactflow/node/canNodeHasChildren";
@@ -191,6 +191,25 @@ export const diagramEditorSlice = createSlice({
         },
         addEdge: (state, {payload}: PayloadAction<EdgeChange[]>) => {
             state.diagramEdges = applyEdgeChanges(payload, state.diagramEdges)
+            state.autoSaveCalled++
+            updateHistory(state)
+        },
+        addManyEdges: (state, {payload}: PayloadAction<IReactFlowEdge[]>) => {
+            const edges: EdgeAddChange[] = payload.map(edge => ({
+                type: 'add',
+                item: edge,
+            }))
+            state.diagramEdges = applyEdgeChanges(edges, state.diagramEdges)
+            payload.forEach(edge => {
+                if (edge.data) {
+                    console.log('edge.data', edge.data)
+                    graph.addEdge({
+                        sourceId: edge.source,
+                        targetId: edge.target,
+                        edgeData: edge.data,
+                    })
+                }
+            })
             state.autoSaveCalled++
             updateHistory(state)
         },

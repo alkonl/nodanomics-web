@@ -3,11 +3,11 @@ import {EConnection, EConnectionMode, IDiagramConnectionData} from "../../../int
 import {Connection, Edge} from "reactflow";
 import {connectionStyle} from "./connectionStyle";
 import {connectionInitialProps} from "./connectionInitialProps";
-import {nanoid} from "nanoid";
 import {EDGE_Z_INDEX} from "../../../constant";
 import {parseConnectionHandleId} from "./connectionMode";
+import {generateEdgeId} from "./generateEdgeId";
 
-const getEdgeId = () => `edgeId_${nanoid()}`;
+
 
 export const defineConnectionTypeBySourceAndTarget = ({targetHandle, sourceHandle}: {
     sourceHandle: string,
@@ -56,7 +56,7 @@ export const connectEdge = ({connection}:
     const sourceMode = parseConnectionHandleId(connection.sourceHandle).mode;
     const targetMode = parseConnectionHandleId(connection.targetHandle).mode;
 
-    const edgeId = getEdgeId();
+    const edgeId = generateEdgeId();
     return  {
         ...connectionStyle[type],
         ...connection,
