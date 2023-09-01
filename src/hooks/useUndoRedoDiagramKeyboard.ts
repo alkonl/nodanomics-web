@@ -14,7 +14,6 @@ export const useUndoRedoDiagramKeyboard = () => {
     const pressedKeys = useKeyPressDetector(Object.values(key))
 
     useEffect(() => {
-        console.log(pressedKeys)
         if (pressedKeys[key.ctrl] && pressedKeys[key.z]) {
             undoDiagram()
         }

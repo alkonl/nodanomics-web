@@ -119,7 +119,6 @@ const updateHistory = (state: IDiagramEditorState) => {
     const isEdgesEquals = historyJsonEdges === stateJsonEdges
     const isEquals = isDiagramEquals && isEdgesEquals
 
-    console.log('historyItem', isDiagramEquals, {historyJsonNodes, stateJson}, state.history.index)
 
     if (!isEquals || state.history.index === -1) {
         state.history.past.push({
