@@ -32,6 +32,7 @@ const chainConnection: Omit<IChainConnectionData, 'id' | 'targetId' | 'sourceId'
     label: 'chain label',
     style: initialNodeDiagramElement,
     condition: 'true',
+    isExecuted: false,
 }
 
 

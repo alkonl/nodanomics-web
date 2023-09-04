@@ -120,6 +120,12 @@ export const useUpdateEdgeData = <IGenericConnection extends IDiagramConnectionB
     const updateEdgeType = (edgeType: EConnection) => {
         if (selectedEdge && selectedEdge.data) {
             offHistoryExecuted('updateEdgeType')
+            const baseData = {
+                ...connectionInitialProps[edgeType],
+                sourceId: selectedEdge.source,
+                targetId: selectedEdge.target,
+                id: selectedEdge.id,
+            } as IDiagramConnectionData
             dispatch(replaceEdge({
                 ...selectedEdge,
                 ...connectionStyle[edgeType],
@@ -127,12 +133,7 @@ export const useUpdateEdgeData = <IGenericConnection extends IDiagramConnectionB
                 source: selectedEdge.source,
                 target: selectedEdge.target,
                 type: edgeType,
-                data: {
-                    ...connectionInitialProps[edgeType],
-                    sourceId: selectedEdge.source,
-                    targetId: selectedEdge.target,
-                    id: selectedEdge.id,
-                }
+                data: baseData,
             }))
         }
     }

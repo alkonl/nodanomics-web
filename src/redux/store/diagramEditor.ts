@@ -11,17 +11,9 @@ import {
     IStructuredSpreadsheetsData,
     IUpdateReactflowNode
 } from "../../interface";
-// eslint-disable-next-line import/named
-import {
-    addEdge,
-    applyEdgeChanges,
-    applyNodeChanges,
-    Connection,
-    EdgeAddChange,
-    EdgeChange,
-    NodeChange,
-    updateEdge
-} from "reactflow";
+
+import type {Connection, EdgeAddChange, EdgeChange, NodeChange,} from 'reactflow'
+import {addEdge, applyEdgeChanges, applyNodeChanges, updateEdge} from "reactflow";
 import {Optionalize} from "../../utils";
 import {geAllChildrenNodes, Graph, resetNodeStates, RunManager} from "../../service";
 import {canNodeHasChildren} from "../../service/reactflow/node/canNodeHasChildren";
@@ -106,8 +98,8 @@ const updateNodesFromGraph = (diagramNodes: IReactFlowNode[]) => {
 const updateEdgesFromGraph = (diagramEdges: IReactFlowEdge[]) => {
     diagramEdges.forEach(edge => {
         const updatedData = graph.findEdge(edge.id)?.data
-        if (updatedData) {
-            edge.data = updatedData
+        if (updatedData && edge.data) {
+            edge.data = updatedData as IDiagramConnectionData
         }
     })
 }
@@ -352,8 +344,8 @@ export const diagramEditorSlice = createSlice({
             if (edge && edge.data && edge.data.type === payload.type) {
                 edge.data = {
                     ...edge.data,
-                    ...payload
-                }
+                    ...payload,
+                } as IDiagramConnectionData
             }
             state.autoSaveCalled++
             updateHistory(state)

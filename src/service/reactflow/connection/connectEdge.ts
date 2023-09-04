@@ -8,7 +8,6 @@ import {parseConnectionHandleId} from "./connectionMode";
 import {generateEdgeId} from "./generateEdgeId";
 
 
-
 export const defineConnectionTypeBySourceAndTarget = ({targetHandle, sourceHandle}: {
     sourceHandle: string,
     targetHandle: string
@@ -57,19 +56,24 @@ export const connectEdge = ({connection}:
     const targetMode = parseConnectionHandleId(connection.targetHandle).mode;
 
     const edgeId = generateEdgeId();
-    return  {
+    const baseData = {
+        sourceId: connection.source,
+        targetId: connection.target,
+        id: edgeId,
+        sourceMode: sourceMode,
+        targetMode: targetMode,
+    }
+    const data: IDiagramConnectionData = {
+        ...connectionInitialProps[type],
+        ...baseData,
+    } as IDiagramConnectionData;
+
+    return {
         ...connectionStyle[type],
         ...connection,
         zIndex: EDGE_Z_INDEX,
         type: type,
         id: edgeId,
-        data: {
-            ...connectionInitialProps[type],
-            sourceId: connection.source,
-            targetId: connection.target,
-            id: edgeId,
-            sourceMode: sourceMode,
-            targetMode: targetMode,
-        }
+        data: data,
     }
 }
