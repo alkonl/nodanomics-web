@@ -14,13 +14,6 @@ export const useUndoRedoDiagram = () => {
         }
     }
 
-    // useEffect(() => {
-    //     if (history.index < 0) {
-    //         dispatch(diagramEditorActions.updateHistory(diagramElements))
-    //     } else {
-    //         dispatch(diagramEditorActions.setHistoryIndex(-1))
-    //     }
-    // }, [diagramElements]);
     const redoDiagram = () => {
         if (history.future.length > 0) {
             dispatch(diagramEditorActions.redo())
