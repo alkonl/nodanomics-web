@@ -1,6 +1,6 @@
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {ICopiedElements} from "../interface";
-import {geAllChildrenNodes, getTopParents, prepareCopiedNodesToPaste,} from "../service";
+import {geAllChildrenNodes, prepareCopiedNodesToPaste,} from "../service";
 import {useMemo} from "react";
 import {useReactFlowInstance} from "./useReactFlowInstance";
 // eslint-disable-next-line import/named
@@ -10,26 +10,23 @@ import {useSetParentNode} from "./useSetParentNode";
 
 export const useCopyPaste = () => {
     const {reactFlowWrapper, reactFlowInstance} = useReactFlowInstance().data
-    const {currentEditElement, diagramNodes, diagramEdges} = useDiagramEditorState()
+    const {diagramNodes, diagramEdges} = useDiagramEditorState()
     const dispatch = useAppDispatch()
     const {addManyNodes, addManyEdges} = diagramEditorActions
     const mousePosition = useMousePosition()
     const setParent = useSetParentNode()
     const nodeToCopy: ICopiedElements = useMemo(() => {
-        if (currentEditElement) {
-            const parentNodes = diagramNodes.filter(node => node.id === currentEditElement.id)
-            const children = geAllChildrenNodes({nodes: diagramNodes, parentId: currentEditElement.id})
-            const edgesToCopy = diagramEdges.filter(edge => children.some(node => node.id === edge.source || node.id === edge.target))
-            return {
-                nodes: [...parentNodes, ...children],
-                edges: edgesToCopy,
-            }
-        }
+        const selectedNodes = diagramNodes.filter(node => node.selected)
+        const children = selectedNodes.map(node => geAllChildrenNodes({nodes: diagramNodes, parentId: node.id})).flat()
+        const selectedWithoutChildren = selectedNodes.filter(node => !children.some(child => child.id === node.id))
+        const allNodes = [...selectedWithoutChildren, ...children]
+        const edgesToCopy = diagramEdges.filter(edge => allNodes.some(node => node.id === edge.source || node.id === edge.target))
         return {
-            nodes: [],
-            edges: [],
+            nodes: allNodes,
+            edges: edgesToCopy,
         }
-    }, [currentEditElement])
+
+    }, [diagramNodes])
 
     const copy = () => {
         navigator.clipboard.writeText(JSON.stringify(nodeToCopy));
