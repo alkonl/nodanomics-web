@@ -6,6 +6,7 @@ import {useReactFlowInstance} from "./useReactFlowInstance";
 // eslint-disable-next-line import/named
 import {useMousePosition} from "./useMousePosition";
 import {useSetParentNode} from "./useSetParentNode";
+import {useOffHistoryExecuted} from "./useOffHistoryExecuted";
 
 
 export const useCopyPaste = () => {
@@ -16,6 +17,7 @@ export const useCopyPaste = () => {
     const mousePosition = useMousePosition()
     const setParent = useSetParentNode()
 
+    const offHistoryExecuted = useOffHistoryExecuted()
 
     const copy = useCallback(() => {
         const selectedNodes = diagramNodes.filter(node => node.selected)
@@ -41,12 +43,15 @@ export const useCopyPaste = () => {
                 reactFlowWrapper: reactFlowWrapper.current,
                 mousePosition,
             })
-            dispatch(addManyNodes(preparedToPaste.nodes))
+
             const topNodes = preparedToPaste.nodes.filter(node => node.parentNode === undefined)
             topNodes.forEach(candidateToBeChild => {
                 setParent(candidateToBeChild, diagramNodes)
             })
 
+            offHistoryExecuted('paste')
+
+            dispatch(addManyNodes(preparedToPaste.nodes))
             dispatch(addManyEdges(preparedToPaste.edges))
         }
     }, [diagramNodes, dispatch, mousePosition, reactFlowInstance, reactFlowWrapper, setParent])

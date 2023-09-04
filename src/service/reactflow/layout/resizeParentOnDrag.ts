@@ -76,6 +76,7 @@ export const resizeParent = (
             : parentNode.data.style.height
 
         if (isRightestChild || isMostBottomChild) {
+
             updateNodeSize({
                 nodeId: parentNode.id,
                 size: {

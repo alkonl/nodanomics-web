@@ -2,6 +2,7 @@ import {MouseEvent as ReactMouseEvent, useCallback} from "react";
 import {IReactFlowNode} from "../interface";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {resizeParentOnDrag} from "../service";
+import {useOffHistoryExecuted} from "./useOffHistoryExecuted";
 
 
 export const useOnNodeDrag = () => {
@@ -14,8 +15,10 @@ export const useOnNodeDrag = () => {
     }) => {
         dispatch(diagramEditorActions.updateNodeSize(params))
     }
-
+    const offHistoryExecuted = useOffHistoryExecuted()
     return useCallback((event: ReactMouseEvent, node: IReactFlowNode) => {
+        offHistoryExecuted('onNodeDrag')
         resizeParentOnDrag({diagramNodes, node, event, updateNodeSize})
+
     }, [dispatch, diagramNodes])
 }

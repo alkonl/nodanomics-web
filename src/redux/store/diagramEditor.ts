@@ -29,6 +29,7 @@ interface IHistory {
     future: IDiagramElements[]
     index: number
     limit: number
+    isExecuted: boolean
 }
 
 export interface IDiagramEditorState {
@@ -49,14 +50,12 @@ export interface IDiagramEditorState {
     currentRunningDiagramStep: number
     isDiagramRunning: boolean
     isDiagramRunningInterval: boolean
-    // isStepFinished: boolean
     spreadsheets?: IStructuredSpreadsheetsData
     executionGrid?: {
         options?: ApexOptions
     },
     completedSteps: number
     executionDuration?: number
-    // цілове значення кроків
     targetSteps?: number
     history: IHistory
 }
@@ -66,6 +65,7 @@ const initialHistory: IHistory = {
     future: [],
     index: -1,
     limit: 120,
+    isExecuted: false,
 }
 
 const initialState: IDiagramEditorState = {
@@ -119,7 +119,7 @@ const updateHistory = (state: IDiagramEditorState) => {
     const isEquals = isDiagramEquals && isEdgesEquals
 
 
-    if (!isEquals || state.history.index === -1) {
+    if ((!isEquals || state.history.index === -1) && !state.history.isExecuted) {
         state.history.past.push({
             diagramNodes: state.diagramNodes,
             diagramEdges: state.diagramEdges,
@@ -255,35 +255,35 @@ export const diagramEditorSlice = createSlice({
             state.autoSaveCalled++
             updateHistory(state)
         },
-        updateNodeParent: (state, {payload}: PayloadAction<{
-            node: IReactFlowNode,
-            parentNode: IReactFlowNode
-        }>) => {
-            graph.updateNodeData(payload.node.data.id, {
-                ...payload.node.data,
-                parentId: payload.parentNode.data.id,
-            })
-            updateNodesFromGraph(state.diagramNodes)
-            const node = state.diagramNodes.find(node => node.id === payload.node.id)
-            if (node && node.parentNode === undefined) {
-
-                node.data = {
-                    ...node.data,
-                    parentId: payload.parentNode.id,
-                }
-                node.parentNode = payload.parentNode.id
-                const parentPosition = payload.parentNode.positionAbsolute || payload.parentNode.position
-                node.position = {
-                    x: payload.node.position.x - parentPosition.x,
-                    y: payload.node.position.y - parentPosition.y,
-                }
-                node.zIndex = payload.parentNode.zIndex ? payload.parentNode.zIndex + 1 : 10
-                node.extent = 'parent'
-                state.autoSaveCalled++
-                updateHistory(state)
-            }
-
-        },
+        // updateNodeParent: (state, {payload}: PayloadAction<{
+        //     node: IReactFlowNode,
+        //     parentNode: IReactFlowNode
+        // }>) => {
+        //     graph.updateNodeData(payload.node.data.id, {
+        //         ...payload.node.data,
+        //         parentId: payload.parentNode.data.id,
+        //     })
+        //     updateNodesFromGraph(state.diagramNodes)
+        //     const node = state.diagramNodes.find(node => node.id === payload.node.id)
+        //     if (node && node.parentNode === undefined) {
+        //
+        //         node.data = {
+        //             ...node.data,
+        //             parentId: payload.parentNode.id,
+        //         }
+        //         node.parentNode = payload.parentNode.id
+        //         const parentPosition = payload.parentNode.positionAbsolute || payload.parentNode.position
+        //         node.position = {
+        //             x: payload.node.position.x - parentPosition.x,
+        //             y: payload.node.position.y - parentPosition.y,
+        //         }
+        //         node.zIndex = payload.parentNode.zIndex ? payload.parentNode.zIndex + 1 : 10
+        //         node.extent = 'parent'
+        //         state.autoSaveCalled++
+        //         updateHistory(state)
+        //     }
+        //
+        // },
         updateNodeSize: (state, {payload}: PayloadAction<{
             nodeId: string,
             size: {
@@ -423,9 +423,6 @@ export const diagramEditorSlice = createSlice({
             if (isDiagramRunningInterval !== undefined) {
                 state.isDiagramRunningInterval = isDiagramRunningInterval
             }
-            // if (isStepFinished !== undefined) {
-            //     state.isStepFinished = isStepFinished
-            // }
         },
         updateCompletedSteps: (state, {payload}: PayloadAction<number | undefined>) => {
             if (typeof payload === 'number') {
@@ -485,6 +482,7 @@ export const diagramEditorSlice = createSlice({
                 state.diagramNodes = past.diagramNodes
                 state.diagramEdges = past.diagramEdges
                 state.history.past.pop()
+                state.history.isExecuted = true
             }
         },
         redo: (state) => {
@@ -495,7 +493,13 @@ export const diagramEditorSlice = createSlice({
                 state.history.past.push(future)
                 state.history.future.pop()
                 state.history.index--
+                state.history.isExecuted = true
             }
+        },
+        offHistoryExecuted: (state, {payload}: PayloadAction<{
+            executedBy: string
+        }>) => {
+            state.history.isExecuted = false
         }
     }
 })

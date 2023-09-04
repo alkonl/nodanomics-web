@@ -3,6 +3,7 @@ import {IReactFlowNode} from "../interface";
 import {diagramEditorActions, useAppDispatch} from "../redux";
 import {findParent, IUpdateChildrenFunc, recursiveUpdateChildren} from "../service";
 import {isNodeCanBeParent} from "../interface/busines/diagram/canBeParent";
+import {useOffHistoryExecuted} from "./useOffHistoryExecuted";
 
 const updateLoopChildren: IUpdateChildrenFunc = ({parentNode, node}) => {
     return {
@@ -18,6 +19,8 @@ const updateLoopChildren: IUpdateChildrenFunc = ({parentNode, node}) => {
 export const useSetParentNode = () => {
     const dispatch = useAppDispatch()
     const {bulkUpdateNodes} = diagramEditorActions
+
+    const offHistoryExecuted = useOffHistoryExecuted()
     return useCallback((node: IReactFlowNode, diagramNodes: IReactFlowNode[]) => {
         if (node.parentNode === undefined) {
             const parentNode = findParent(node, diagramNodes)
@@ -48,7 +51,9 @@ export const useSetParentNode = () => {
                 const updatedInnerChildren = recursiveUpdateChildren(diagramNodes, childNode, updateLoopChildren)
 
                 const nodesToUpdate = [childNode, ...updatedInnerChildren]
+                offHistoryExecuted('setParentNode')
                 dispatch(bulkUpdateNodes(nodesToUpdate))
+
             }
         }
     }, [dispatch])

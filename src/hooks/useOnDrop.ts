@@ -5,6 +5,7 @@ import {ReactFlowInstance} from "reactflow";
 import {diagramEditorActions, useAppDispatch} from "../redux";
 import {EDiagramNode} from "../interface";
 import {useSetParentNode} from "./useSetParentNode";
+import {useOffHistoryExecuted} from "./useOffHistoryExecuted";
 
 export const useOnDrop = ({flowWrapper, flowInstance}: {
     flowWrapper?: HTMLDivElement
@@ -12,8 +13,8 @@ export const useOnDrop = ({flowWrapper, flowInstance}: {
 }) => {
     const dispatch = useAppDispatch()
     const {addNode} = diagramEditorActions
-
     const setParent = useSetParentNode()
+    const offHistoryExecuted = useOffHistoryExecuted()
 
     return useCallback(
         (event: DragEvent<HTMLDivElement>) => {
@@ -34,6 +35,7 @@ export const useOnDrop = ({flowWrapper, flowInstance}: {
                     wrapperNode: flowWrapper
                 })
                 if (newNode) {
+                    offHistoryExecuted('onDrop')
                     dispatch(addNode(newNode))
                     setParent(newNode, flowInstance.getNodes())
                 }
