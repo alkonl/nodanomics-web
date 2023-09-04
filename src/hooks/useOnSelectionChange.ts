@@ -2,6 +2,7 @@ import {IReactFlowEdge, IReactFlowNode} from "../interface";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {useCallback, useEffect, useRef} from "react";
 import {IUpdateChildrenFunc, recursiveUpdateChildren} from "../service";
+import {useOffHistoryExecuted} from "./useOffHistoryExecuted";
 
 
 export const useOnSelectionChange = () => {
@@ -21,7 +22,6 @@ export const useOnSelectionChange = () => {
     }) => {
         const selectedNode = nodes[0]
         if (!selectedNode) return
-
 
         const updatedPrevChangedNodes: IReactFlowNode[] = refDiagramNodes.current.filter(node => {
             return refPrevChangedNodes.current.includes(node.id)
@@ -51,5 +51,6 @@ export const useOnSelectionChange = () => {
         dispatch(diagramEditorActions.bulkUpdateNodes([...updatedPrevChangedNodes, ...updatedNodes]))
 
         refPrevChangedNodes.current = updatedNodes.map(node => node.id)
+
     }, [dispatch])
 }

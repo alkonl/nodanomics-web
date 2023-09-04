@@ -1,10 +1,11 @@
 // eslint-disable-next-line import/named
 import {ReactFlowInstance} from "reactflow";
 import {ICopiedElements, IPastAndNewNode, IReactFlowEdge, IReactFlowNode, MousePosition} from "../../../interface";
-import {getTopNodes} from "./getTopParent";
+import {getTopParents} from "./getTopParent";
 import {recursiveUpdateChildrenWithUpdatedParent} from "../logic";
 import {recreateNode} from "./recreateNode";
 import {generateEdgeId} from "../connection/generateEdgeId";
+import {getNodesWithoutParent} from "./getNodesWithoutParent";
 
 export const prepareCopiedNodesToPaste = ({elements, reactFlowInstance, reactFlowWrapper, mousePosition}: {
     reactFlowInstance: ReactFlowInstance
@@ -12,32 +13,50 @@ export const prepareCopiedNodesToPaste = ({elements, reactFlowInstance, reactFlo
     mousePosition: MousePosition
     elements: ICopiedElements
 }): ICopiedElements => {
-    const {nodes, edges} = elements
-    const topNodes = getTopNodes(nodes)
-
-    const nodesWithoutParent = nodes
-        .filter(node => !nodes.some(n => n.id === node.parentNode) && !topNodes.some(n => n.id === node.id))
     const reactFlowBounds = reactFlowWrapper.getBoundingClientRect();
     const position = reactFlowInstance.project({
         x: mousePosition.x - reactFlowBounds.left,
         y: mousePosition.y - reactFlowBounds.top,
     });
+    const {nodes, edges} = elements
+    // const topNodes = getTopParents(nodes)
 
+    const nodesWithoutParent = getNodesWithoutParent(nodes)
 
-    const updatedTopParents: IPastAndNewNode[] = topNodes.map(node => {
+    const theLeftestNode = nodesWithoutParent.reduce((prev, current) => {
+        if (prev.position.x > current.position.x) {
+            return current
+        }
+        return prev
+    }, nodesWithoutParent[0])
+    const theLeftestNodePosition = {
+        x: theLeftestNode.position.x || Number(theLeftestNode.positionAbsolute?.x),
+        y: theLeftestNode.position.y || Number(theLeftestNode.positionAbsolute?.y),
+    }
+    const updatedNodesWithoutParent: IPastAndNewNode[] = nodesWithoutParent.map(node => {
+        const currentNodePosition = {
+            x: node.position.x || Number(node.positionAbsolute?.x),
+            y: node.position.y || Number(node.positionAbsolute?.y),
+        }
+        const nodeDifferenceX = currentNodePosition.x - theLeftestNodePosition.x
+        const nodeDifferenceY = currentNodePosition.y - theLeftestNodePosition.y
+        const nodePosition = {
+            x: position.x + nodeDifferenceX,
+            y: position.y + nodeDifferenceY,
+        }
+
         return {
             newNode: {
-                ...recreateNode({node, position}),
+                ...recreateNode({node, position: nodePosition}),
                 parentNode: undefined,
                 extent: undefined,
             },
-            previous: node,
-
+            previous: node
         }
     })
 
 
-    const children: IPastAndNewNode[] = updatedTopParents.map(({newNode, previous: previousTopParent}) => {
+    const children: IPastAndNewNode[] = updatedNodesWithoutParent.map(({newNode, previous: previousTopParent}) => {
         return recursiveUpdateChildrenWithUpdatedParent({
             nodes,
             oldParentNode: previousTopParent,
@@ -63,18 +82,12 @@ export const prepareCopiedNodesToPaste = ({elements, reactFlowInstance, reactFlo
         }
     })
 
-    const updatedNodesWithoutParent: IPastAndNewNode[] = nodesWithoutParent.map(node => {
-        return {
-            newNode: {
-                ...recreateNode({node, position}),
-                parentNode: undefined,
-                extent: undefined,
-            },
-            previous: node
-        }
-    })
 
-    const updatedNodes: IPastAndNewNode[] = [...updatedNodesWithoutParent, ...updatedTopParents, ...children]
+
+
+
+
+    const updatedNodes: IPastAndNewNode[] = [...updatedNodesWithoutParent, ...children]
 
 
     const edgesToPaste: IReactFlowEdge[] = edges.map(edge => {

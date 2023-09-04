@@ -1,5 +1,5 @@
 import {useDiagramEditorState} from "../redux";
-import {EElementType, IReactFlowNode} from "../interface";
+import {EElementType} from "../interface";
 
 export const useCurrentEditElement = ()=> {
     const {currentEditElement, diagramNodes, diagramEdges} = useDiagramEditorState()
@@ -10,5 +10,6 @@ export const useCurrentEditElement = ()=> {
         } else if (currentEditElement.elementType === EElementType.Connection) {
             return diagramEdges.find(edge => edge.id === elementId)
         }
+        console.error(`can't find element with id ${elementId}`)
     }
 }

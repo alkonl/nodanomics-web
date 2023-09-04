@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 import {Box} from "@mui/material";
 import {useUpdateNode} from "../../../../hooks";
-import {ENodeTrigger, INodeDataWithInteractivity, INodeTriggers} from "../../../../interface";
+import {ENodeTrigger, INodeDataWithInteractivity} from "../../../../interface";
 import {EColor} from "../../../../constant";
 
 export const InteractiveNodeContainer: React.FC<{

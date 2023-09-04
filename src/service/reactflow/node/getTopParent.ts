@@ -9,9 +9,10 @@ export const getTopParent = (node: IReactFlowNode, candidates: IReactFlowNode[])
     }, candidates[0])
 }
 
-export const getTopNodes = (nodes: IReactFlowNode[]): IReactFlowNode[] => {
-    const topParents = nodes.filter(node => !nodes.some(n => n.id === node.parentNode))
-    return topParents.map(node => {
-        return getTopParent(node, topParents)
+export const getTopParents = (nodes: IReactFlowNode[]): IReactFlowNode[] => {
+    const nodesWithoutParent = nodes.filter(node => !nodes.some(n => n.id === node.parentNode))
+    const nodesWithChildren = nodesWithoutParent.filter(node => nodes.some(n => n.parentNode === node.id))
+    return nodesWithChildren.map(node => {
+        return getTopParent(node, nodesWithChildren)
     })
 }

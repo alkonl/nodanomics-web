@@ -2,34 +2,20 @@ import {useUndoRedoDiagram} from "./useUndoRedoDiagram";
 import {useKeyPressDetector} from "./useKeyPressDetector";
 import {useEffect} from "react";
 import {useCopyPaste} from "./useCopyPaste";
-
-const key = {
-    ctrl: 17,
-    c: 67,
-    v: 86,
-    z: 90,
-    y: 89,
-    shift: 16,
-}
+import {keyCombination, keys} from "../constant";
+import {isKeyCombinationMatch} from "../utils";
 
 export const useDiagramKeyboardManager = () => {
-    const pressedKeys = useKeyPressDetector(Object.values(key))
+    const {pressedKeyCodes} = useKeyPressDetector(Object.values(keys))
 
     const {undoDiagram, redoDiagram} = useUndoRedoDiagram()
 
     const {copy, paste} = useCopyPaste()
+
     useEffect(() => {
-        if (pressedKeys[key.ctrl] && pressedKeys[key.z]) {
-            undoDiagram()
-        }
-        if (pressedKeys[key.ctrl] && pressedKeys[key.y] || pressedKeys[key.ctrl] && pressedKeys[key.shift] && pressedKeys[key.z]) {
-            redoDiagram()
-        }
-        if (pressedKeys[key.ctrl] && pressedKeys[key.c]) {
-            copy()
-        }
-        if (pressedKeys[key.ctrl] && pressedKeys[key.v]) {
-            paste()
-        }
-    }, [pressedKeys]);
+        isKeyCombinationMatch(undoDiagram, keyCombination.undo, pressedKeyCodes)
+        isKeyCombinationMatch(redoDiagram, keyCombination.redo, pressedKeyCodes)
+        isKeyCombinationMatch(copy, keyCombination.copy, pressedKeyCodes)
+        isKeyCombinationMatch(paste, keyCombination.paste, pressedKeyCodes)
+    }, [pressedKeyCodes]);
 }

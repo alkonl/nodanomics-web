@@ -35,7 +35,7 @@ import {LogicConnection} from "../CustomConnectionLine/LogicConnection";
 import {useOnConnect} from "../../../hooks/useOnConnect";
 import {ChainConnection} from "../CustomConnectionLine/ChainConnection";
 import {DatasetNode} from "../CutomNode/DatasetNode";
-import {GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../constant";
+import {GAP_BETWEEN_EDITOR_CANVAS_DOTS, multiSelectKeyCodes} from "../../../constant";
 
 
 const nodeTypes = {
@@ -145,6 +145,7 @@ export const DiagramCanvas = () => {
                     connectionMode={ConnectionMode.Loose}
                     onEdgeClick={onEdgeClick}
                     onSelectionChange={onSelectionChange}
+                    multiSelectionKeyCode={multiSelectKeyCodes}
                 >
                     <Controls/>
                     <Background color="blue" gap={GAP_BETWEEN_EDITOR_CANVAS_DOTS}/>

@@ -2,6 +2,7 @@ import {IDiagramNodeBaseData} from "../interface";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {useGetNodesEdges} from "./useGetNodesEdges";
 import {geAllChildrenNodes, IUpdateChildrenFunc, recursiveUpdateChildren} from "../service";
+import {useOffHistoryExecuted} from "./useOffHistoryExecuted";
 
 export const useExpandOrCollapse = ({nodeData}: {
     nodeData: IDiagramNodeBaseData
@@ -11,6 +12,8 @@ export const useExpandOrCollapse = ({nodeData}: {
 
     const {diagramNodes} = useDiagramEditorState()
     const getNodesEdges = useGetNodesEdges()
+
+    const offHistoryExecuted = useOffHistoryExecuted()
 
     const expandOrCollapse = () => {
         const nodeId = nodeData.id
@@ -54,6 +57,8 @@ export const useExpandOrCollapse = ({nodeData}: {
                 }
             })
         }
+
+        offHistoryExecuted('expandOrCollapse')
         dispatch(bulkUpdateEdges(edgesToHide))
         dispatch(bulkUpdateNodes(nodesToHide))
 

@@ -2,12 +2,14 @@ import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../re
 import {
     EConnection,
     EElementType,
-    ENodeTrigger, IDiagramConnectionBaseData,
+    ENodeTrigger,
+    IDiagramConnectionBaseData,
     IDiagramConnectionData,
     IDiagramNodeBaseData,
     INodeData
 } from "../interface";
 import {connectionInitialProps, connectionStyle} from "../service";
+import {useOffHistoryExecuted} from "./useOffHistoryExecuted";
 
 export const useUpdateNode = <IGenericNode extends IDiagramNodeBaseData = INodeData>({nodeId}: {
     nodeId?: string
@@ -16,8 +18,11 @@ export const useUpdateNode = <IGenericNode extends IDiagramNodeBaseData = INodeD
     const {updateNodeData} = diagramEditorActions
     const {diagramNodes} = useDiagramEditorState()
     const selectedNode = diagramNodes.find(node => node.id === nodeId)
+
+    const offHistoryExecuted = useOffHistoryExecuted()
     const updateNodeDataWrapper = <R extends IGenericNode, P = R>(data: Partial<P>) => {
         if (selectedNode) {
+            offHistoryExecuted('updateNodeData')
             dispatch(updateNodeData({
                 id: selectedNode.id,
                 type: selectedNode?.data.type,
@@ -86,8 +91,11 @@ export const useUpdateEdgeData = <IGenericConnection extends IDiagramConnectionB
     const {diagramEdges} = useDiagramEditorState()
     const selectedEdge = diagramEdges.find(edge => edge.id === edgeId)
 
+    const offHistoryExecuted = useOffHistoryExecuted()
+
     const updateEdgeDataWrapper = <R extends IGenericConnection, P = R>(data: Partial<P>) => {
         if (selectedEdge && selectedEdge.data) {
+            offHistoryExecuted('updateEdgeDataWrapper')
             dispatch(updateEdgeData({
                 type: selectedEdge?.data.type,
                 id: selectedEdge.id,
@@ -111,6 +119,7 @@ export const useUpdateEdgeData = <IGenericConnection extends IDiagramConnectionB
 
     const updateEdgeType = (edgeType: EConnection) => {
         if (selectedEdge && selectedEdge.data) {
+            offHistoryExecuted('updateEdgeType')
             dispatch(replaceEdge({
                 ...selectedEdge,
                 ...connectionStyle[edgeType],

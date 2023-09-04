@@ -19,7 +19,6 @@ export const useResizeParentOnSizeChange = (params: NodeProps<IMicroLoopNodeData
     const node = diagramNodes.find(node => node.id === params.id)
 
     useEffect(() => {
-
         if (node?.parentNode) {
             resizeParent({
                 node,
