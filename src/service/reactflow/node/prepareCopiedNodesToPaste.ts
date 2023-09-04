@@ -44,7 +44,7 @@ export const prepareCopiedNodesToPaste = ({elements, reactFlowInstance, reactFlo
             x: position.x + nodeDifferenceX,
             y: position.y + nodeDifferenceY,
         }
-        console.log('nodePosition', nodePosition)
+
         return {
             newNode: {
                 ...recreateNode({node, position: nodePosition}),
@@ -54,19 +54,6 @@ export const prepareCopiedNodesToPaste = ({elements, reactFlowInstance, reactFlo
             previous: node
         }
     })
-
-
-
-
-    // const formatedParents: IPastAndNewNode[] = nodesWithoutParent.map(node => {
-    //     return {
-    //         newNode: {
-    //
-    //         },
-    //         previous: node,
-    //
-    //     }
-    // })
 
 
     const children: IPastAndNewNode[] = updatedNodesWithoutParent.map(({newNode, previous: previousTopParent}) => {

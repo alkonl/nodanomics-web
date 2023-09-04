@@ -8,3 +8,14 @@ export const keys = {
 }
 
 export const multiSelectKeyCodes = [keys.shift].map((key) => String(key))
+
+
+export const keyCombination = {
+    undo: [keys.ctrl, keys.z],
+    redo: [[keys.ctrl, keys.y], [keys.ctrl, keys.c, keys.z]],
+    paste: [keys.ctrl, keys.v],
+    copy: [keys.ctrl, keys.c],
+}
+
+
+

@@ -1,21 +1,18 @@
-import { useState, useEffect } from 'react';
+import {useEffect, useState} from 'react';
 
-type KeyMap = {
-    [keyCode: number]: boolean;
-};
 
-export const useKeyPressDetector = (keyCodes: number[]): KeyMap => {
-    const [pressedKeys, setPressedKeys] = useState<KeyMap>({});
+export const useKeyPressDetector = (keyCodes: number[]) => {
+    const [pressedKeyCodes, setPressedKeyCodes] = useState<number[]>([]);
 
     const handleKeyDown = (event: KeyboardEvent) => {
         if (keyCodes.includes(event.keyCode)) {
-            setPressedKeys((prevKeys) => ({ ...prevKeys, [event.keyCode]: true }));
+            setPressedKeyCodes((prev)=> [...prev, event.keyCode]);
         }
     };
 
     const handleKeyUp = (event: KeyboardEvent) => {
         if (keyCodes.includes(event.keyCode)) {
-            setPressedKeys((prevKeys) => ({ ...prevKeys, [event.keyCode]: false }));
+            setPressedKeyCodes((prev)=> prev.filter((keyCode) => keyCode !== event.keyCode));
         }
     };
 
@@ -29,6 +26,8 @@ export const useKeyPressDetector = (keyCodes: number[]): KeyMap => {
         };
     }, []);
 
-    return pressedKeys;
+    return {
+        pressedKeyCodes,
+    };
 };
 
