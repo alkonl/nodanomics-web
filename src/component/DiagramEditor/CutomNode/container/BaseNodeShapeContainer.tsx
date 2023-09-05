@@ -1,11 +1,11 @@
-import React, {useMemo} from 'react';
+import React from 'react';
 // eslint-disable-next-line import/named
 import {NodeProps} from "reactflow";
-import {INodeData, isIIsElementExecuted} from "../../../../interface";
+import {INodeData} from "../../../../interface";
 import {Box} from "@mui/material";
 // eslint-disable-next-line import/named
 import {SxProps} from "@mui/system/styleFunctionSx";
-import {useIsStepStarted} from "../../../../hooks";
+import {useIsElementExecuted} from "../../../../hooks";
 import './shapeContainer.scss'
 
 export const BaseNodeShapeContainer: React.FC<{
@@ -24,14 +24,7 @@ export const BaseNodeShapeContainer: React.FC<{
           sxContentContainer
       }) => {
 
-    const isStepStarted = useIsStepStarted()
-
-    const isPlayAnimation = useMemo(() => {
-        if (isIIsElementExecuted(node.data)) {
-            return isStepStarted && node.data.isExecuted
-        }
-        return false
-    }, [isStepStarted])
+    const isPlayAnimation = useIsElementExecuted(node.data)
 
     return (
         <Box sx={{

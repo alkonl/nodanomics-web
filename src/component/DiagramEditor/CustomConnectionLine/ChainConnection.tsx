@@ -5,13 +5,12 @@ import {IChainConnectionData} from "../../../interface";
 import {Box, Typography} from "@mui/material";
 import {EDGE_Z_INDEX} from "../../../constant";
 import './chainConnection.scss'
-import {useIsStepStarted} from "../../../hooks";
+import {useIsElementExecuted} from "../../../hooks";
 
 
 
 export const ChainConnection: React.FC<EdgeProps<IChainConnectionData>> = (
     {
-        id,
         sourceX,
         sourceY,
         targetX,
@@ -31,12 +30,7 @@ export const ChainConnection: React.FC<EdgeProps<IChainConnectionData>> = (
         targetPosition,
     });
 
-
-    const isStepStarted = useIsStepStarted()
-
-    const animationId = `animation-chain-${id}`
-
-    const isPlayAnimation = isStepStarted && data?.isExecuted
+    const isPlayAnimation = useIsElementExecuted(data)
 
 
     return (
@@ -50,7 +44,6 @@ export const ChainConnection: React.FC<EdgeProps<IChainConnectionData>> = (
                     width: 20,
                     animation: isPlayAnimation ? 'blink 0.2s linear 3' : 'none', // 1s duration, 3 times
                 }}
-                id={animationId}
             />
             <EdgeLabelRenderer>
                 <Box
