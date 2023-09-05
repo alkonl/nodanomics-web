@@ -50,8 +50,6 @@ export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
 
     invokeStep() {
         super.invokeStep()
-
-
         if (this.checkIsLoopActive()) {
             this.addStep()
         }

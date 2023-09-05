@@ -45,6 +45,7 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
     }
 
     invokeStep() {
+        super.invokeStep()
         this.updateState()
     }
 

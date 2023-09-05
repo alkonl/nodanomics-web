@@ -8,8 +8,4 @@ export class GraphStartNode extends GraphInvokableNode<IStartNodeData> {
     constructor(value: IStartNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(value, runManager, nodeManager);
     }
-
-    invokeStep() {
-        //
-    }
 }

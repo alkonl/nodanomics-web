@@ -14,25 +14,33 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
     extends GraphInvokableNode<IGenericNodeData> {
 
     invokeStep() {
-
-        if (this.triggerMode === ENodeTrigger.automatic) {
+    const canBeInvoked = this.canBeInvoked()
+        if (canBeInvoked) {
+            super.invokeStep()
             this.runAction();
+            this.clearClick()
+        }
+    }
+
+    private canBeInvoked() {
+        if (this.triggerMode === ENodeTrigger.automatic) {
+            return true
         } else if (this.triggerMode === ENodeTrigger.enabling) {
             if (this.currentDiagramStep <= 1) {
-                this.runAction();
+                return true
             } else if (this.isTriggeredIncomingNodes) {
-                this.runAction();
+                return true
             }
         } else if (this.triggerMode === ENodeTrigger.interactive) {
             if (this.isClicked) {
-                this.runAction();
-                this.clearClick()
+                return true
             }
         } else if (this.triggerMode === ENodeTrigger.passive) {
             if (this.isTriggeredIncomingNodes) {
-                this.runAction();
+                return true
             }
         }
+        return false
     }
 
     protected abstract runAction(): void;
