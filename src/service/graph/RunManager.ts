@@ -104,8 +104,14 @@ export class RunManager {
 
     private executeNode(chainItem: IChainItem) {
         const target = chainItem.target
+        const edge = chainItem.edge
         if (target instanceof GraphInvokableNode) {
             target.invokeStep()
+           if (edge instanceof  GraphChainEdge){
+               chainItem.edge?.onExecute()
+
+           }
+
             if (isITriggeredEvent(target)) {
                 const triggeredEventName = target.getTriggeredEvent()
                 const listenerNodes = this.executionOrder

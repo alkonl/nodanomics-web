@@ -1,12 +1,15 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 // eslint-disable-next-line import/named
 import {BaseEdge, EdgeLabelRenderer, EdgeProps, getBezierPath} from 'reactflow';
 import {IChainConnectionData} from "../../../interface";
 import {Box, Typography} from "@mui/material";
 import {EDGE_Z_INDEX} from "../../../constant";
+import {useDiagramEditorState} from "../../../redux";
+import './chainConnection.scss'
 
 export const ChainConnection: React.FC<EdgeProps<IChainConnectionData>> = (
     {
+        id,
         sourceX,
         sourceY,
         targetX,
@@ -27,13 +30,36 @@ export const ChainConnection: React.FC<EdgeProps<IChainConnectionData>> = (
         targetPosition,
     });
 
+    const {currentRunningDiagramStep, isDiagramRunning, completedSteps, executionDuration} = useDiagramEditorState()
+
+    const animationId = `animation-chain-${id}`
+    const [isPlay, setIsPlay] = useState(false)
+
+    useEffect(() => {
+        let timeout: NodeJS.Timeout
+        if (isDiagramRunning) {
+            setIsPlay(true)
+            timeout = setTimeout(() => {
+                setIsPlay(false)
+            }, (executionDuration || 1000) - 100)
+        } else {
+            setIsPlay(false)
+        }
+        return () => clearTimeout(timeout)
+    }, [currentRunningDiagramStep, completedSteps]);
+
     return (
         <>
+
+
             <BaseEdge
                 path={edgePath}
                 markerEnd={markerEnd}
-                style={style}
-
+                style={{
+                    width: 20,
+                    animation: isPlay ? 'blink 0.2s linear 3' : 'none', // 1s duration, 3 times
+                }}
+                id={animationId}
             />
             <EdgeLabelRenderer>
                 <Box
@@ -47,9 +73,9 @@ export const ChainConnection: React.FC<EdgeProps<IChainConnectionData>> = (
                         pointerEvents: 'all',
                     }}
                 >
-                  <Typography>
-                      {data?.condition}
-                  </Typography>
+                    <Typography>
+                        {data?.condition}
+                    </Typography>
                 </Box>
             </EdgeLabelRenderer>
         </>

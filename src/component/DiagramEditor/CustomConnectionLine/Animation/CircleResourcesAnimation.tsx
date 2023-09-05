@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo} from "react";
 import {Position} from "reactflow";
-import {EColor} from "../../../constant";
+import {EColor} from "../../../../constant";
 
 
 const endPosition: {
@@ -20,7 +20,6 @@ const getLastPoint = (path: string) => {
 }
 
 export const CircleResourcesAnimation: React.FC<{
-    parentId: string
     id: string
     begin: number
     duration: number

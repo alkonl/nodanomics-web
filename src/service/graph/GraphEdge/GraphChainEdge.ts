@@ -19,6 +19,9 @@ export class GraphChainEdge extends GraphBaseEdge<IChainConnectionData> {
     }
 
 
+    onExecute() {
+        this.updateEdge({isExecuted: true})
+    }
 
 
     get isMeetCondition(): boolean {
