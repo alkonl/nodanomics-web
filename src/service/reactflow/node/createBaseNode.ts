@@ -125,7 +125,8 @@ export const createBaseNode = ({type, position}: {
                         ...baseData.style,
                         width: loopSize.minWidth,
                         height: loopSize.minHeight,
-                    }
+                    },
+                    isExecuted: false,
                 },
 
             }
@@ -143,7 +144,8 @@ export const createBaseNode = ({type, position}: {
                         ...baseData.style,
                         width: loopSize.minWidth,
                         height: loopSize.minHeight,
-                    }
+                    },
+                    isExecuted: false,
                 }
             }
         }
@@ -163,6 +165,7 @@ export const createBaseNode = ({type, position}: {
                     ...baseData,
                     name: 'Start node',
                     type,
+                    isExecuted: false,
                 }
             }
         }

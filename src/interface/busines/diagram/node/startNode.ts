@@ -1,5 +1,5 @@
-import {EDiagramNode, IDiagramNodeBaseData} from "./structures";
+import {EDiagramNode, IInvokableNode} from "./structures";
 
-export interface IStartNodeData extends IDiagramNodeBaseData {
+export interface IStartNodeData extends IInvokableNode {
     type: EDiagramNode.Start;
 }

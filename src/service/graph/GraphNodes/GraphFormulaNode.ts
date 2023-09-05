@@ -2,7 +2,7 @@ import {
     IFormulaNodeData,
     IFormulaResult,
     IGetNodeExternalValue,
-    INumberVariable,
+    INumberVariable, IResetBeforeStep,
     IUpdateGraphNodeState,
     IUpdateGraphNodeStatePerStep
 } from "../../../interface";
@@ -14,7 +14,7 @@ import {GraphMatchManagerNode} from "../GraphMatchManager";
 import {GraphHistoryManager} from "../GraphHistoryManager";
 
 export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
-    implements IUpdateGraphNodeState, IGetNodeExternalValue, IUpdateGraphNodeStatePerStep {
+    implements IUpdateGraphNodeState, IGetNodeExternalValue, IUpdateGraphNodeStatePerStep, IResetBeforeStep {
 
     private readonly matchManager: GraphMatchManagerNode
     private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
@@ -24,6 +24,7 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
         super(value, runManager, nodeManager);
         this.matchManager = new GraphMatchManagerNode(this.incomingEdges, nodeManager)
     }
+
 
     get formula() {
         return this.data.formula;

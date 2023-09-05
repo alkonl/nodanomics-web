@@ -1,4 +1,4 @@
-import {EDiagramNode, IDiagramNodeBaseData} from "./structures";
+import {EDiagramNode, IDiagramNodeBaseData, IInvokableNode} from "./structures";
 import {
     IIsNodeAutomatic,
     IIsShowInExecutionGraphNode,
@@ -21,7 +21,7 @@ export interface IFormulaResultNumber {
 
 export type IFormulaResult = IFormulaResultBoolean | IFormulaResultNumber
 
-export interface IFormulaNodeData extends IDiagramNodeBaseData, INodeNumberVariable,
+export interface IFormulaNodeData extends IInvokableNode, INodeNumberVariable,
     INodeDecimal, INodeHistory, IIsShowInExecutionGraphNode,
     IIsNodeAutomatic, IIsElementExecuted {
     type: EDiagramNode.Formula;

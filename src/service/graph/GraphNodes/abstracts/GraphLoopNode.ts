@@ -29,6 +29,7 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
     }
 
     invokeStep() {
+        super.invokeStep()
         this.updateState()
         this.checkWasLoopActiveOnce()
     }

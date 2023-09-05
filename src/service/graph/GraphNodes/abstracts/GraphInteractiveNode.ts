@@ -14,6 +14,7 @@ export abstract class GraphInteractiveNode<IGenericNodeData extends INodeDataWit
     extends GraphInvokableNode<IGenericNodeData> {
 
     invokeStep() {
+
         if (this.triggerMode === ENodeTrigger.automatic) {
             this.runAction();
         } else if (this.triggerMode === ENodeTrigger.enabling) {

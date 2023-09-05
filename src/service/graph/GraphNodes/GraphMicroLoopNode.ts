@@ -1,10 +1,10 @@
 import {GraphLoopNode} from "./abstracts";
-import {EConnectionMode, IMicroLoopNodeData, IUpdateGraphNodeState} from "../../../interface";
+import {EConnectionMode, IMicroLoopNodeData, IResetBeforeStep, IUpdateGraphNodeState} from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
 
 export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
-    implements IUpdateGraphNodeState {
+    implements IUpdateGraphNodeState, IResetBeforeStep {
 
 
     constructor(value: IMicroLoopNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {

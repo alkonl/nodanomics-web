@@ -1,12 +1,12 @@
 import {GraphInteractiveNode} from "./abstracts";
-import {ENodeAction, ISinkNodeData} from "../../../interface";
+import {ENodeAction, IResetBeforeStep, ISinkNodeData} from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
 import {GraphDataEdge} from "../GraphEdge";
 import {GraphDataNode} from "./GraphDataNode";
 import {GraphHistoryManager} from "../GraphHistoryManager";
 
-export class GraphSinkNode extends GraphInteractiveNode<ISinkNodeData>  {
+export class GraphSinkNode extends GraphInteractiveNode<ISinkNodeData> {
 
     private readonly historyManager: GraphHistoryManager = new GraphHistoryManager(this);
 
