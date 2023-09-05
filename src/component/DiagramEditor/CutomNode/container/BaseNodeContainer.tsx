@@ -5,13 +5,17 @@ import {INodeData, isIIsElementExecuted} from "../../../../interface";
 import {NodeProps} from "reactflow";
 import {useIsStepStarted} from "../../../../hooks";
 import './baseContainer.scss'
+// eslint-disable-next-line import/named
+import {SxProps} from "@mui/system/styleFunctionSx";
 
 export const BaseNodeContainer: React.FC<{
     children: React.ReactNode
     node: NodeProps<INodeData>
+    sx?: SxProps
 }> = ({
           children,
-          node
+          node,
+          sx
       }) => {
     const {data} = node;
 
@@ -23,13 +27,14 @@ export const BaseNodeContainer: React.FC<{
         }
         return false
     }, [isStepStarted])
-
+    console.log('isPlayAnimation: ', isPlayAnimation)
     return (
         <Box sx={{
             borderWidth: 3,
             borderColor: data.style.borderColor,
             borderStyle: 'solid',
             animation: isPlayAnimation ? 'containerBlink 0.2s linear 3' : 'none',
+            ...sx
         }}>
             {children}
         </Box>

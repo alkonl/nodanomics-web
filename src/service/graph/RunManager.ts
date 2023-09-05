@@ -14,7 +14,7 @@ import {
     isIUpdateGraphNodeStatePerStep,
     isUpdateGraphNodeState
 } from "../../interface";
-import {GraphChainEdge, GraphDataEdge} from "./GraphEdge";
+import {GraphChainEdge} from "./GraphEdge";
 import {GraphMicroLoopNode} from "./GraphNodes/GraphMicroLoopNode";
 
 export interface IChainItem {
@@ -265,6 +265,11 @@ export class RunManager {
         this.graph.edges.forEach(edge => {
             if (isIResetBeforeStep(edge)) {
                 edge.resetBeforeStep()
+            }
+        })
+        this.graph.nodes.forEach(node => {
+            if (isIResetBeforeStep(node)) {
+                node.resetBeforeStep()
             }
         })
     }

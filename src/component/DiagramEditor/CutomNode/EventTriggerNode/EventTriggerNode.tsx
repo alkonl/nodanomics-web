@@ -6,9 +6,10 @@ import {NodeProps, Position} from "reactflow";
 import {EConnectionMode, IEventTriggerNodeData} from "../../../../interface";
 import {NodeStyle} from "../styledComponent";
 import {ChainHandle} from "../../CustomHandle/ChainHandle";
+import {BaseNodeContainer} from "../container";
 
-export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({isConnectable, data}) => {
-
+export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = (props) => {
+    const {isConnectable, data} = props
 
     return (
         <>
@@ -53,28 +54,31 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = ({is
                     />
                 </Box>
             </Box>
-            <Box
+            <BaseNodeContainer
+                node={props}
                 sx={{
-                    width: GAP_BETWEEN_EDITOR_CANVAS_DOTS * 6,
-                    height: GAP_BETWEEN_EDITOR_CANVAS_DOTS * 3,
-                    padding: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: 1,
                     borderRadius: '14% 14% 14% 14%/28% 28% 28% 28%',
-                    borderWidth: 3,
-                    borderColor: data.style.borderColor,
                     backgroundColor: EColor.black,
-                    borderStyle: 'solid',
-                    boxSizing: 'border-box',
-                }}
-            >
-                <NodeStyle.Name>
-                    {data.name}
-                </NodeStyle.Name>
-            </Box>
+                }}>
+                <Box
+                    sx={{
+                        width: GAP_BETWEEN_EDITOR_CANVAS_DOTS * 6,
+                        height: GAP_BETWEEN_EDITOR_CANVAS_DOTS * 3,
+                        padding: 2,
+                        borderRadius: '14% 14% 14% 14%/28% 28% 28% 28%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: 1,
+                        boxSizing: 'border-box',
+                    }}
+                >
+                    <NodeStyle.Name>
+                        {data.name}
+                    </NodeStyle.Name>
+                </Box>
+            </BaseNodeContainer>
         </>
     )
 }
