@@ -4,28 +4,10 @@ import {BaseEdge, EdgeLabelRenderer, EdgeProps, getBezierPath} from 'reactflow';
 import {IChainConnectionData} from "../../../interface";
 import {Box, Typography} from "@mui/material";
 import {EDGE_Z_INDEX} from "../../../constant";
-import {useDiagramEditorState} from "../../../redux";
 import './chainConnection.scss'
+import {useIsStepStarted} from "../../../hooks";
 
-const useIsStepStarted = () => {
-    const {currentRunningDiagramStep, isDiagramRunning, completedSteps, executionDuration} = useDiagramEditorState()
 
-    const [isPlay, setIsPlay] = useState(false)
-
-    useEffect(() => {
-        let timeout: NodeJS.Timeout
-        if (isDiagramRunning) {
-            setIsPlay(true)
-            timeout = setTimeout(() => {
-                setIsPlay(false)
-            }, (executionDuration || 1000) - 100)
-        } else {
-            setIsPlay(false)
-        }
-        return () => clearTimeout(timeout)
-    }, [currentRunningDiagramStep, completedSteps]);
-    return isPlay
-}
 
 export const ChainConnection: React.FC<EdgeProps<IChainConnectionData>> = (
     {
