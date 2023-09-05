@@ -9,7 +9,7 @@ import {
 } from "./GraphNodes";
 import {
     EConnectionMode,
-    isIIsEventTriggered,
+    isIIsEventTriggered, isIResetBeforeStep,
     isITriggeredEvent,
     isIUpdateGraphNodeStatePerStep,
     isUpdateGraphNodeState
@@ -93,7 +93,7 @@ export class RunManager {
 
     invokeStep() {
         this.incrementStep()
-        this.resetIsTransferredResources()
+        this.resetBeforeStep()
         const chain = this.getExecutionOrder()
         this.setExecutionOrder(chain)
         // remove listener nodes from execution order
@@ -257,10 +257,14 @@ export class RunManager {
         }
     }
 
+    private resetBeforeStep(){
+        this.resetIsTransferredResources()
+    }
+
     private resetIsTransferredResources() {
         this.graph.edges.forEach(edge => {
-            if (edge instanceof GraphDataEdge) {
-                edge.changeIsTransferredResources(false, 0)
+            if (isIResetBeforeStep(edge)) {
+                edge.resetBeforeStep()
             }
         })
     }

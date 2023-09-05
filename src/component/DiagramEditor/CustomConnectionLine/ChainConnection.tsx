@@ -7,32 +7,9 @@ import {EDGE_Z_INDEX} from "../../../constant";
 import {useDiagramEditorState} from "../../../redux";
 import './chainConnection.scss'
 
-export const ChainConnection: React.FC<EdgeProps<IChainConnectionData>> = (
-    {
-        id,
-        sourceX,
-        sourceY,
-        targetX,
-        targetY,
-        sourcePosition,
-        targetPosition,
-        style = {},
-        markerEnd,
-        data
-    }
-) => {
-    const [edgePath, labelX, labelY] = getBezierPath({
-        sourceX,
-        sourceY,
-        sourcePosition,
-        targetX,
-        targetY,
-        targetPosition,
-    });
-
+const useIsStepStarted = () => {
     const {currentRunningDiagramStep, isDiagramRunning, completedSteps, executionDuration} = useDiagramEditorState()
 
-    const animationId = `animation-chain-${id}`
     const [isPlay, setIsPlay] = useState(false)
 
     useEffect(() => {
@@ -47,6 +24,38 @@ export const ChainConnection: React.FC<EdgeProps<IChainConnectionData>> = (
         }
         return () => clearTimeout(timeout)
     }, [currentRunningDiagramStep, completedSteps]);
+    return isPlay
+}
+
+export const ChainConnection: React.FC<EdgeProps<IChainConnectionData>> = (
+    {
+        id,
+        sourceX,
+        sourceY,
+        targetX,
+        targetY,
+        sourcePosition,
+        targetPosition,
+        markerEnd,
+        data
+    }
+) => {
+    const [edgePath, labelX, labelY] = getBezierPath({
+        sourceX,
+        sourceY,
+        sourcePosition,
+        targetX,
+        targetY,
+        targetPosition,
+    });
+
+
+    const isStepStarted = useIsStepStarted()
+
+    const animationId = `animation-chain-${id}`
+
+    const isPlayAnimation = isStepStarted && data?.isExecuted
+
 
     return (
         <>
@@ -57,7 +66,7 @@ export const ChainConnection: React.FC<EdgeProps<IChainConnectionData>> = (
                 markerEnd={markerEnd}
                 style={{
                     width: 20,
-                    animation: isPlay ? 'blink 0.2s linear 3' : 'none', // 1s duration, 3 times
+                    animation: isPlayAnimation ? 'blink 0.2s linear 3' : 'none', // 1s duration, 3 times
                 }}
                 id={animationId}
             />

@@ -1,10 +1,11 @@
 import {GraphBaseEdge} from "./abstracts";
-import {IChainConnectionData} from "../../../interface";
+import {IChainConnectionData, IResetBeforeStep} from "../../../interface";
 import {GraphBaseNode} from "../GraphNodes";
 import {GraphNodeManager} from "../NodeManager";
 import {GraphMatchManagerConnections} from "../GraphMatchManager";
 
-export class GraphChainEdge extends GraphBaseEdge<IChainConnectionData> {
+export class GraphChainEdge extends GraphBaseEdge<IChainConnectionData>
+    implements IResetBeforeStep {
 
     private readonly matchManager: GraphMatchManagerConnections
 
@@ -21,6 +22,10 @@ export class GraphChainEdge extends GraphBaseEdge<IChainConnectionData> {
 
     onExecute() {
         this.updateEdge({isExecuted: true})
+    }
+
+    resetBeforeStep() {
+        this.updateEdge({isExecuted: false})
     }
 
 
