@@ -29,7 +29,11 @@ export const useCopyPaste = () => {
             nodes: allNodes,
             edges: edgesToCopy,
         }
-        navigator.clipboard.writeText(JSON.stringify(elementsToCopy));
+        const selectedText = window.getSelection()?.toString().trim();
+
+        if (elementsToCopy.nodes.length > 0 && !selectedText) {
+            navigator.clipboard.writeText(JSON.stringify(elementsToCopy));
+        }
     }, [diagramNodes])
 
     const paste = useCallback(async () => {
