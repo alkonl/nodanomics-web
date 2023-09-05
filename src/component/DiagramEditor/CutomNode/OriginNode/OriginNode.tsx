@@ -3,7 +3,7 @@ import {Box} from "@mui/material";
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";
 import {IOriginNodeData} from "../../../../interface";
-import {NodeStyle, NodeTextName} from "../styledComponent";
+import {NodeStyle} from "../styledComponent";
 import {EColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
 import {BaseNodeShapeContainer} from "../container";
 import {ChainHandle} from "../../CustomHandle/ChainHandle";
@@ -14,6 +14,9 @@ const clipPath = 'polygon(50% 0%, 100% 50%, 100% 100%, 0 100%, 0 50%)'
 
 export const OriginNode: React.FC<NodeProps<IOriginNodeData>> = (props) => {
     const {isConnectable, data} = props
+
+
+
     return (
         <>
             {/*connections*/}

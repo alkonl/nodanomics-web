@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 // eslint-disable-next-line import/named
 import {BaseEdge, EdgeLabelRenderer, EdgeProps, getBezierPath} from 'reactflow';
 import {IChainConnectionData} from "../../../interface";
