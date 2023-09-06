@@ -1,8 +1,10 @@
 import {nanoid} from "nanoid";
+import {IResource} from "../../interface";
 
 const genResourceId = () => `resource_${nanoid()}}`
 
-export const generateResourceFromSource = (countOfResource: number) => Array(countOfResource).fill(0).map(() => ({
-    color: 'red',
-    id: genResourceId(),
-}));
+export const generateResource = (countOfResource: number): IResource=>{
+    return {
+        value: countOfResource,
+    }
+}
