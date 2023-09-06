@@ -1,6 +1,6 @@
 import React, {useMemo} from "react";
 import styles from './LeftToolbar.module.scss';
-import {Box, Button, Typography} from "@mui/material";
+import {Box, Button} from "@mui/material";
 import {Svg} from "../../../../assets";
 import {LeftToolbarItem} from "./LeftToolbarItem";
 import {SideMenu} from "./SideMenu";
@@ -89,11 +89,13 @@ export function LeftToolbar() {
                             color: EColor.white,
                         }}/>
                     </MButton.Submit>
-                    <MButton.Submit>
-                            <input type="file" accept=".json" onChange={uploadDiagram} hidden/>
-                            <UploadIcon sx={{
-                                color: EColor.white,
-                            }}/>
+                    <MButton.Submit
+                        component="label"
+                    >
+                        <input type="file" accept=".json" onChange={uploadDiagram} hidden/>
+                        <UploadIcon sx={{
+                            color: EColor.white,
+                        }}/>
                     </MButton.Submit>
                 </Box>
             </Box>

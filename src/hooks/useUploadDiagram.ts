@@ -1,5 +1,10 @@
+import {ChangeEvent} from "react";
+
 export const useUploadDiagram = () => {
-    return () => {
-        console.log('useUploadDiagram')
-    }
+    return (event: ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            console.log('file', file);
+        }
+    };
 }
