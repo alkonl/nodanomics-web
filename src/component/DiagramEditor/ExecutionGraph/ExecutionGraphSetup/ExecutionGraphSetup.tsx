@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {z} from "zod";
 import {Box, Typography} from "@mui/material";
-import {useSetupExecutionGraph} from "../../../../hooks";
+import {useClearHistory, useSetupExecutionGraph} from "../../../../hooks";
 import {ColorPickerForm} from "../../../ColorPicker";
 import {useDiagramEditorState} from "../../../../redux";
 import {ParameterExecutionGraphSetup} from "./styledComponent";
@@ -50,6 +50,8 @@ export const ExecutionGraphSetup = () => {
         });
     }
 
+    const clearHistory = useClearHistory()
+
     return (
         <Box sx={{
             display: 'flex',
@@ -89,9 +91,18 @@ export const ExecutionGraphSetup = () => {
                         form={form}
                     />
                 </ParameterExecutionGraphSetup.Element>
-                <MButton.Submit type="submit">
-                    Save
-                </MButton.Submit>
+                <ParameterExecutionGraphSetup.Element label="">
+                    <MButton.Submit type="submit">
+                        Save
+                    </MButton.Submit>
+                </ParameterExecutionGraphSetup.Element>
+
+                <ParameterExecutionGraphSetup.Element label="clear statistic">
+                    <MButton.Submit onClick={clearHistory}>
+                        clear
+                    </MButton.Submit>
+                </ParameterExecutionGraphSetup.Element>
+
             </ParameterExecutionGraphSetup.Container>
         </Box>
     );
