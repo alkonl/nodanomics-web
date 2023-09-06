@@ -1,11 +1,17 @@
 import React, {useMemo} from "react";
 import styles from './LeftToolbar.module.scss';
-import {Box} from "@mui/material";
+import {Box, Button, Typography} from "@mui/material";
 import {Svg} from "../../../../assets";
 import {LeftToolbarItem} from "./LeftToolbarItem";
 import {SideMenu} from "./SideMenu";
 import {ELeftToolbarSideMenu} from "../../../../interface";
 import {BaseSideMenu} from "./SideMenu/BaseSideMenu/BaseSideMenu";
+import DownloadIcon from "@mui/icons-material/Download";
+import UploadIcon from "@mui/icons-material/Upload";
+import {EColor} from "../../../../constant";
+import {MButton} from "../../../base";
+import {useDownloadDiagram} from "../../../../hooks/useDownloadDiagram";
+import {useUploadDiagram} from "../../../../hooks";
 
 
 const menuOptions: {
@@ -56,6 +62,11 @@ export function LeftToolbar() {
             setIsSideMenuOpen(true);
         }
     }
+
+    const downloadDiagram = useDownloadDiagram()
+    const uploadDiagram = useUploadDiagram()
+
+
     return (
         <Box className={styles.container}>
             <Box
@@ -72,6 +83,19 @@ export function LeftToolbar() {
                             key={option.name}
                         />)
                 })}
+                <Box>
+                    <MButton.Submit onClick={downloadDiagram}>
+                        <DownloadIcon sx={{
+                            color: EColor.white,
+                        }}/>
+                    </MButton.Submit>
+                    <MButton.Submit>
+                            <input type="file" accept=".json" onChange={uploadDiagram} hidden/>
+                            <UploadIcon sx={{
+                                color: EColor.white,
+                            }}/>
+                    </MButton.Submit>
+                </Box>
             </Box>
             <BaseSideMenu isOpen={isSideMenuOpen}>
                 {SelectedSideMenu && <SelectedSideMenu/>}
