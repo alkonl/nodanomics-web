@@ -29,7 +29,6 @@ export class GraphSinkNode extends GraphInteractiveNode<ISinkNodeData> {
                 const source = edge.source;
                 if (edge instanceof GraphDataEdge && source instanceof GraphDataNode) {
                     const resources = source.takeCountResources(edge.countOfResource)
-                    console.log('taken resources', resources)
                     if (resources && resources.value > 0) {
                         edge.changeIsTransferredResources(true, resources.value)
                     }

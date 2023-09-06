@@ -18,7 +18,7 @@ export const useChangeNodeDataStep = ({
 
     const changeNodeDataStep = (value: number) => {
         updateNodeData({
-            step: Math.round(value)
+            step: value
         })
     }
 

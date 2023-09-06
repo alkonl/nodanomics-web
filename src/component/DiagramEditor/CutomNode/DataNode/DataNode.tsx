@@ -24,44 +24,42 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
 
     const [resources, setResources] = React.useState<number>(data.resources.value)
     const [minMaxResources, setMinMaxResources] = React.useState<{
-        min: number | undefined,
-        max: number | undefined,
+        min: string | undefined,
+        max: string | undefined,
     }>({
         min: undefined,
         max: undefined,
     })
 
+    const updateMinMax = () =>{
+        if (data.history.length > 0) {
+            setMinMaxResources({
+                min: Math.min(...data.history).toFixed(1),
+                max: Math.max(...data.history).toFixed(1),
+            })
+        } else {
+            setMinMaxResources({
+                min: undefined,
+                max: undefined,
+            })
+        }
+    }
+
 
     useEffect(() => {
         setResources(data.resources.value)
-        if (data.history.length > 0) {
-            setMinMaxResources({
-                min: Math.min(...data.history),
-                max: Math.max(...data.history),
-            })
-        }
+        updateMinMax()
     }, [completedSteps]);
 
     useEffect(() => {
         if (!isDiagramRunning) {
             setResources(data.resources.value)
-            if (data.history.length > 0) {
-                setMinMaxResources({
-                    min: Math.min(...data.history),
-                    max: Math.max(...data.history),
-                })
-            } else {
-                setMinMaxResources({
-                    min: undefined,
-                    max: undefined,
-                })
-            }
+            updateMinMax()
         }
-
     }, [data.resources]);
 
 
-    const currentResourcesValue = resources.toFixed(1) || 0
+    const currentResourcesValue = resources.toFixed(data.decimalDigits || 1) || 0
     return (
 
         <>
