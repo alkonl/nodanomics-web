@@ -22,7 +22,7 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
         nodeData: props.data,
     })
 
-    const [resources, setResources] = React.useState<number>(data.resources.length)
+    const [resources, setResources] = React.useState<number>(data.resources.value)
     const [minMaxResources, setMinMaxResources] = React.useState<{
         min: number | undefined,
         max: number | undefined,
@@ -33,7 +33,7 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
 
 
     useEffect(() => {
-        setResources(data.resources.length)
+        setResources(data.resources.value)
         if (data.history.length > 0) {
             setMinMaxResources({
                 min: Math.min(...data.history),
@@ -44,7 +44,7 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
 
     useEffect(() => {
         if (!isDiagramRunning) {
-            setResources(data.resources.length)
+            setResources(data.resources.value)
             if (data.history.length > 0) {
                 setMinMaxResources({
                     min: Math.min(...data.history),

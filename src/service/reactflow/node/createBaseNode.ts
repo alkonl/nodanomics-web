@@ -8,6 +8,7 @@ import {
 } from "../../../interface";
 import {initialNodeDiagramElement, loopSize} from "../../../constant";
 import {generateNodeId} from "./generateNodeId";
+import {generateResource} from "../../diagram";
 
 
 
@@ -32,6 +33,8 @@ export const createBaseNode = ({type, position}: {
         isCollapsed: true,
         connectedNodes: [],
     }
+
+    const resource = generateResource(0)
 
 
     switch (type) {
@@ -77,9 +80,9 @@ export const createBaseNode = ({type, position}: {
                 data: {
                     ...baseData,
                     type,
-                    resources: [],
+                    resources: resource,
                     isShowInExecutionGraphNode: false,
-                    resourcesToProvide: [],
+                    resourcesToProvide: resource,
                     actionMode: ENodeAction.pullAny,
                     trigger: {
                         mode: ENodeTrigger.passive,

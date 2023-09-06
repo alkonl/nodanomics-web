@@ -10,9 +10,9 @@ export interface IDataNodeData extends IDiagramNodeBaseData, INodeWithTrigger,
     INodeWithAction, INodeHistory,
     INodeDecimal, IIsShowInExecutionGraphNode, IIsElementExecuted {
     type: EDiagramNode.Data
-    resources: IResource[]
-    initialResources?: IResource[]
-    resourcesToProvide: IResource[]
+    resources: IResource
+    initialResources?: IResource
+    resourcesToProvide: IResource
     isShowStep?: boolean
     step?: number
     roundingType?: string
