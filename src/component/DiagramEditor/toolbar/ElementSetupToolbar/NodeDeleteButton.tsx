@@ -1,18 +1,15 @@
 import React from "react";
 import {MButton} from "../../../base";
-import {diagramEditorActions, useAppDispatch} from "../../../../redux";
+import {useDeleteNode} from "../../../../hooks";
 
 export const NodeDeleteButton: React.FC<{
     nodeId: string
 }> = ({nodeId}) => {
-    const dispatch = useAppDispatch()
-    const {deleteNode, renderState} = diagramEditorActions
+    const deleteNode = useDeleteNode()
     const onClick = () => {
-        dispatch(deleteNode({
-            nodeId,
-        }))
-        dispatch(renderState())
+        deleteNode([nodeId])
     }
+
     return (
         <MButton.Submit onClick={onClick}>
             Delete

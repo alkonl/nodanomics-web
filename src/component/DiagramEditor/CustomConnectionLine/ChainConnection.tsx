@@ -4,6 +4,10 @@ import {BaseEdge, EdgeLabelRenderer, EdgeProps, getBezierPath} from 'reactflow';
 import {IChainConnectionData} from "../../../interface";
 import {Box, Typography} from "@mui/material";
 import {EDGE_Z_INDEX} from "../../../constant";
+import './chainConnection.scss'
+import {useIsElementExecuted} from "../../../hooks";
+
+
 
 export const ChainConnection: React.FC<EdgeProps<IChainConnectionData>> = (
     {
@@ -13,7 +17,6 @@ export const ChainConnection: React.FC<EdgeProps<IChainConnectionData>> = (
         targetY,
         sourcePosition,
         targetPosition,
-        style = {},
         markerEnd,
         data
     }
@@ -27,13 +30,20 @@ export const ChainConnection: React.FC<EdgeProps<IChainConnectionData>> = (
         targetPosition,
     });
 
+    const isPlayAnimation = useIsElementExecuted(data)
+
+
     return (
         <>
+
+
             <BaseEdge
                 path={edgePath}
                 markerEnd={markerEnd}
-                style={style}
-
+                style={{
+                    width: 20,
+                    animation: isPlayAnimation ? 'blink 0.2s linear 3' : 'none', // 1s duration, 3 times
+                }}
             />
             <EdgeLabelRenderer>
                 <Box
@@ -47,9 +57,9 @@ export const ChainConnection: React.FC<EdgeProps<IChainConnectionData>> = (
                         pointerEvents: 'all',
                     }}
                 >
-                  <Typography>
-                      {data?.condition}
-                  </Typography>
+                    <Typography>
+                        {data?.condition}
+                    </Typography>
                 </Box>
             </EdgeLabelRenderer>
         </>

@@ -21,6 +21,7 @@ export const createBaseNode = ({type, position}: {
         type,
         position,
     }
+
     const baseData: IDiagramNodeBaseData = {
         elementType: EElementType.Node,
         type,
@@ -52,6 +53,7 @@ export const createBaseNode = ({type, position}: {
                     isShowInExecutionGraphNode: false,
                     isAutomatic: false,
                     history: [],
+                    isExecuted: false,
                 },
             }
         }
@@ -65,6 +67,7 @@ export const createBaseNode = ({type, position}: {
                         mode: ENodeTrigger.automatic,
                     },
                     actionMode: ENodeAction.pushAny,
+                    isExecuted: false,
                 }
             }
         }
@@ -82,6 +85,7 @@ export const createBaseNode = ({type, position}: {
                         mode: ENodeTrigger.passive,
                     },
                     history: [],
+                    isExecuted: false,
                 }
             }
         }
@@ -92,6 +96,7 @@ export const createBaseNode = ({type, position}: {
                     ...baseData,
                     type,
                     eventName: '',
+                    isExecuted: false,
                 }
             }
         }
@@ -102,6 +107,7 @@ export const createBaseNode = ({type, position}: {
                     ...baseData,
                     type,
                     isEventTriggered: false,
+                    isExecuted: false,
                 }
             }
         }
@@ -119,7 +125,8 @@ export const createBaseNode = ({type, position}: {
                         ...baseData.style,
                         width: loopSize.minWidth,
                         height: loopSize.minHeight,
-                    }
+                    },
+                    isExecuted: false,
                 },
 
             }
@@ -137,7 +144,8 @@ export const createBaseNode = ({type, position}: {
                         ...baseData.style,
                         width: loopSize.minWidth,
                         height: loopSize.minHeight,
-                    }
+                    },
+                    isExecuted: false,
                 }
             }
         }
@@ -157,6 +165,7 @@ export const createBaseNode = ({type, position}: {
                     ...baseData,
                     name: 'Start node',
                     type,
+                    isExecuted: false,
                 }
             }
         }
@@ -171,6 +180,7 @@ export const createBaseNode = ({type, position}: {
                     },
                     actionMode: ENodeAction.pullAny,
                     history: [],
+                    isExecuted: false,
                 }
             }
         }

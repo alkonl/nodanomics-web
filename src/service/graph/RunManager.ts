@@ -9,12 +9,12 @@ import {
 } from "./GraphNodes";
 import {
     EConnectionMode,
-    isIIsEventTriggered,
+    isIIsEventTriggered, isIResetBeforeStep,
     isITriggeredEvent,
     isIUpdateGraphNodeStatePerStep,
     isUpdateGraphNodeState
 } from "../../interface";
-import {GraphChainEdge, GraphDataEdge} from "./GraphEdge";
+import {GraphChainEdge} from "./GraphEdge";
 import {GraphMicroLoopNode} from "./GraphNodes/GraphMicroLoopNode";
 
 export interface IChainItem {
@@ -93,7 +93,7 @@ export class RunManager {
 
     invokeStep() {
         this.incrementStep()
-        this.resetIsTransferredResources()
+        this.resetBeforeStep()
         const chain = this.getExecutionOrder()
         this.setExecutionOrder(chain)
         // remove listener nodes from execution order
@@ -104,8 +104,14 @@ export class RunManager {
 
     private executeNode(chainItem: IChainItem) {
         const target = chainItem.target
+        const edge = chainItem.edge
         if (target instanceof GraphInvokableNode) {
             target.invokeStep()
+           if (edge instanceof  GraphChainEdge){
+               chainItem.edge?.onExecute()
+
+           }
+
             if (isITriggeredEvent(target)) {
                 const triggeredEventName = target.getTriggeredEvent()
                 const listenerNodes = this.executionOrder
@@ -251,10 +257,19 @@ export class RunManager {
         }
     }
 
+    private resetBeforeStep(){
+        this.resetIsTransferredResources()
+    }
+
     private resetIsTransferredResources() {
         this.graph.edges.forEach(edge => {
-            if (edge instanceof GraphDataEdge) {
-                edge.changeIsTransferredResources(false, 0)
+            if (isIResetBeforeStep(edge)) {
+                edge.resetBeforeStep()
+            }
+        })
+        this.graph.nodes.forEach(node => {
+            if (isIResetBeforeStep(node)) {
+                node.resetBeforeStep()
             }
         })
     }

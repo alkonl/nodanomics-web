@@ -5,7 +5,7 @@ import {EElementType, IDataConnectionData} from "../../../interface";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../redux";
 import {Box, Button} from "@mui/material";
 import {EColor, EDGE_Z_INDEX} from "../../../constant";
-import {CircleResourcesAnimation} from "./CircleResourcesAnimation";
+import {CircleResourcesAnimation} from "./Animation";
 
 
 export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
@@ -68,7 +68,7 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
                         play={isPlay}
                         duration={duration}
                         begin={delay}
-                        key={index} parentId={animationCircleId}
+                        key={index}
                         id={`${animationCircleId}-${index}`}
                     />
                 )

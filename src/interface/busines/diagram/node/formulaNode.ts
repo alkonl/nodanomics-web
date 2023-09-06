@@ -1,4 +1,4 @@
-import {EDiagramNode, IDiagramNodeBaseData} from "./structures";
+import {EDiagramNode, IDiagramNodeBaseData, IInvokableNode} from "./structures";
 import {
     IIsNodeAutomatic,
     IIsShowInExecutionGraphNode,
@@ -7,6 +7,7 @@ import {
     INodeLoopIncomingData,
     INodeNumberVariable
 } from "./additional";
+import {IIsElementExecuted} from "../generic";
 
 export interface IFormulaResultBoolean {
     type: 'boolean'
@@ -20,9 +21,9 @@ export interface IFormulaResultNumber {
 
 export type IFormulaResult = IFormulaResultBoolean | IFormulaResultNumber
 
-export interface IFormulaNodeData extends IDiagramNodeBaseData, INodeNumberVariable,
+export interface IFormulaNodeData extends IInvokableNode, INodeNumberVariable,
     INodeDecimal, INodeHistory, IIsShowInExecutionGraphNode,
-    IIsNodeAutomatic {
+    IIsNodeAutomatic, IIsElementExecuted {
     type: EDiagramNode.Formula;
     formula?: string
     result?: IFormulaResult

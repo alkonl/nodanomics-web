@@ -1,4 +1,4 @@
-import {EDiagramNode, IDiagramNodeBaseData} from "./structures";
+import {EDiagramNode, IInvokableNode} from "./structures";
 import {INodeNumberVariable} from "./additional";
 
 
@@ -7,7 +7,7 @@ export interface IEventTriggerNodeVariable {
     value: number
 }
 
-export interface IEventTriggerNodeData extends IDiagramNodeBaseData, INodeNumberVariable {
+export interface IEventTriggerNodeData extends IInvokableNode, INodeNumberVariable {
     type: EDiagramNode.EventTrigger;
     eventName: string;
     // eventCondition?: string;

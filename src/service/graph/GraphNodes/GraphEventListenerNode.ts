@@ -1,7 +1,7 @@
 import {GraphBaseNode, GraphInvokableNode} from "./abstracts";
 import {
     IEventListenerNodeData,
-    IIsEventTriggered,
+    IIsEventTriggered, IResetBeforeStep,
     isIIsEventConditionMet,
     IUpdateGraphNodeState
 } from "../../../interface";
@@ -9,7 +9,7 @@ import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
 
 export class GraphEventListenerNode extends GraphInvokableNode<IEventListenerNodeData>
-    implements IIsEventTriggered, IUpdateGraphNodeState {
+    implements IIsEventTriggered, IUpdateGraphNodeState{
 
     private readonly graphNodeManager: GraphNodeManager;
 
@@ -20,6 +20,7 @@ export class GraphEventListenerNode extends GraphInvokableNode<IEventListenerNod
 
 
     invokeStep() {
+        super.invokeStep()
         super.updateState()
         this.updateState()
     }

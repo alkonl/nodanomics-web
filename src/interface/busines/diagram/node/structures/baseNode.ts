@@ -1,4 +1,6 @@
 import {IDiagramBaseInteractiveElementData} from "../../diagramElement";
+import {IResetBeforeStep} from "../../../graph";
+import {IIsElementExecuted} from "../../generic";
 
 export enum EDiagramNode {
     StaticVariable = 'StaticVariable',
@@ -16,7 +18,7 @@ export enum EDiagramNode {
 }
 
 
-export interface IDiagramNodeBaseData extends IDiagramBaseInteractiveElementData {
+export interface IDiagramNodeBaseData extends IDiagramBaseInteractiveElementData  {
     type: EDiagramNode;
     parentId?: string;
     isCollapsed: boolean;

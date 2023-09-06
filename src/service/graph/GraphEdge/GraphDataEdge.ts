@@ -1,11 +1,12 @@
 import {GraphBaseEdge} from "./abstracts";
-import {IDataConnectionData} from "../../../interface";
+import {IDataConnectionData, IResetBeforeStep} from "../../../interface";
 import {GraphBaseNode, GraphDataNode} from "../GraphNodes";
 import {GraphNodeManager} from "../NodeManager";
 import {GraphMatchManagerConnections} from "../GraphMatchManager";
 
 
-export class GraphDataEdge extends GraphBaseEdge<IDataConnectionData> {
+export class GraphDataEdge extends GraphBaseEdge<IDataConnectionData>
+implements IResetBeforeStep{
 
     private readonly matchManager: GraphMatchManagerConnections
 
@@ -17,6 +18,10 @@ export class GraphDataEdge extends GraphBaseEdge<IDataConnectionData> {
     ) {
         super(source, target, data);
         this.matchManager = new GraphMatchManagerConnections(this, nodesManager);
+    }
+
+    resetBeforeStep() {
+        this.changeIsTransferredResources(false, 0)
     }
 
     get countOfResource() {

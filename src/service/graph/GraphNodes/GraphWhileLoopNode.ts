@@ -1,5 +1,11 @@
 import {GraphLoopNode} from "./abstracts";
-import {EConnectionMode, isIIsEventTriggered, IUpdateGraphNodeState, IWhileLoopNodeData} from "../../../interface";
+import {
+    EConnectionMode,
+    IResetBeforeStep,
+    isIIsEventTriggered,
+    IUpdateGraphNodeState,
+    IWhileLoopNodeData
+} from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
 
@@ -9,7 +15,6 @@ export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
     constructor(value: IWhileLoopNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(value, runManager, nodeManager);
     }
-
 
     protected checkIsLoopActive() {
         this.updateNode({isLoopActive: this.isTriggeredIncomingNodes})

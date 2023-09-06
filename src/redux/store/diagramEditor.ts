@@ -11,8 +11,9 @@ import {
     IStructuredSpreadsheetsData,
     IUpdateReactflowNode
 } from "../../interface";
-// eslint-disable-next-line import/named
-import {addEdge, applyEdgeChanges, applyNodeChanges, Connection, EdgeChange, NodeChange, updateEdge, EdgeAddChange} from "reactflow";
+
+import type {Connection, EdgeAddChange, EdgeChange, NodeChange,} from 'reactflow'
+import {addEdge, applyEdgeChanges, applyNodeChanges, updateEdge} from "reactflow";
 import {Optionalize} from "../../utils";
 import {geAllChildrenNodes, Graph, resetNodeStates, RunManager} from "../../service";
 import {canNodeHasChildren} from "../../service/reactflow/node/canNodeHasChildren";
@@ -97,8 +98,8 @@ const updateNodesFromGraph = (diagramNodes: IReactFlowNode[]) => {
 const updateEdgesFromGraph = (diagramEdges: IReactFlowEdge[]) => {
     diagramEdges.forEach(edge => {
         const updatedData = graph.findEdge(edge.id)?.data
-        if (updatedData) {
-            edge.data = updatedData
+        if (updatedData && edge.data) {
+            edge.data = updatedData as IDiagramConnectionData
         }
     })
 }
@@ -312,27 +313,28 @@ export const diagramEditorSlice = createSlice({
             }
         },
         deleteNode: (state, {payload}: PayloadAction<{
-            nodeId: string
+            nodeIds: string[]
         }>) => {
-            const node = state.diagramNodes.find(node => node.id === payload.nodeId)
-            if (node && canNodeHasChildren(node.data.type)) {
-                const nodesToDelete = geAllChildrenNodes({
-                    parentId: payload.nodeId,
-                    nodes: state.diagramNodes,
-                })
-                nodesToDelete.push(node)
-                state.diagramNodes = state.diagramNodes.filter(node => {
-                    return !nodesToDelete.some(childNode => childNode.id === node.id)
-                })
-                const toDeleteNodes: string[] = nodesToDelete.map(node => node.id)
-                graph.deleteBulkNodes(toDeleteNodes)
-
-            } else {
-                state.diagramNodes = state.diagramNodes.filter(node => node.id !== payload.nodeId)
-                graph.deleteNode({
-                    nodeId: payload.nodeId
-                })
-            }
+            payload.nodeIds.forEach(nodeId => {
+                const node = state.diagramNodes.find(node => node.id === nodeId)
+                if (node && canNodeHasChildren(node.data.type)) {
+                    const nodesToDelete = geAllChildrenNodes({
+                        parentId: nodeId,
+                        nodes: state.diagramNodes,
+                    })
+                    nodesToDelete.push(node)
+                    state.diagramNodes = state.diagramNodes.filter(node => {
+                        return !nodesToDelete.some(childNode => childNode.id === node.id)
+                    })
+                    const toDeleteNodes: string[] = nodesToDelete.map(node => node.id)
+                    graph.deleteBulkNodes(toDeleteNodes)
+                } else {
+                    state.diagramNodes = state.diagramNodes.filter(node => node.id !== nodeId)
+                    graph.deleteNode({
+                        nodeId: nodeId
+                    })
+                }
+            })
             state.autoSaveCalled++
             updateHistory(state)
         },
@@ -342,8 +344,8 @@ export const diagramEditorSlice = createSlice({
             if (edge && edge.data && edge.data.type === payload.type) {
                 edge.data = {
                     ...edge.data,
-                    ...payload
-                }
+                    ...payload,
+                } as IDiagramConnectionData
             }
             state.autoSaveCalled++
             updateHistory(state)

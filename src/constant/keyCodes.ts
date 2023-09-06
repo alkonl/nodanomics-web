@@ -5,6 +5,8 @@ export const keys = {
     v: 86,
     z: 90,
     y: 89,
+    delete: 46,
+    backspace: 8,
 }
 
 export const multiSelectKeyCodes = [keys.shift].map((key) => String(key))
@@ -15,6 +17,7 @@ export const keyCombination = {
     redo: [[keys.ctrl, keys.y], [keys.ctrl, keys.c, keys.z]],
     paste: [keys.ctrl, keys.v],
     copy: [keys.ctrl, keys.c],
+    delete: [[keys.delete], [keys.backspace]],
 }
 
 
