@@ -44,10 +44,10 @@ export const DataConnection: React.FC<EdgeProps<IDataConnectionData>> = (
     }
     const animationCircleId = `animation-circle-${id}`
 
-    const [circleCount, setCircleCount] = useState<number>(data?.howManyWasTransferred ? Math.floor(data.howManyWasTransferred) : 0)
+    const [circleCount, setCircleCount] = useState<number>(data?.howManyWasTransferred ? Math.round(data.howManyWasTransferred) : 0)
 
     useEffect(() => {
-        setCircleCount(data?.howManyWasTransferred ? Math.floor(data.howManyWasTransferred) : 0)
+        setCircleCount(data?.howManyWasTransferred ? Math.round(data.howManyWasTransferred) : 0)
     }, [data?.howManyWasTransferred]);
 
 

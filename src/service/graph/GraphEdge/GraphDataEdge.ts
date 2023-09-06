@@ -25,7 +25,7 @@ implements IResetBeforeStep{
     }
 
     get countOfResource() {
-        return Math.round(this.calcFormula() || 0);
+        return this.calcFormula() || 0;
     }
 
     static baseEdgeIsData(edge: GraphBaseEdge): edge is GraphDataEdge {

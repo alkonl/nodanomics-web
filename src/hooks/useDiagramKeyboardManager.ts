@@ -17,7 +17,9 @@ export const useDiagramKeyboardManager = () => {
     const isNodeDeletePressed = useKeyPress(keyCombination.deleteReactFlow)
 
     useEffect(() => {
-        deleteNodes()
+        if (isNodeDeletePressed) {
+            deleteNodes()
+        }
     }, [isNodeDeletePressed]);
 
 
@@ -26,6 +28,5 @@ export const useDiagramKeyboardManager = () => {
         isKeyCombinationMatch(redoDiagram, keyCombination.redo, pressedKeyCodes)
         isKeyCombinationMatch(copy, keyCombination.copy, pressedKeyCodes)
         isKeyCombinationMatch(paste, keyCombination.paste, pressedKeyCodes)
-        // isKeyCombinationMatch(deleteNodes, keyCombination.delete, pressedKeyCodes)
     }, [pressedKeyCodes]);
 }
