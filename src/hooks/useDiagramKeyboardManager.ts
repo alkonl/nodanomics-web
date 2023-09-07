@@ -14,14 +14,6 @@ export const useDiagramKeyboardManager = () => {
 
     const {copy, paste} = useCopyPaste()
     const deleteNodes = useDeleteSelectedNodes()
-    const isNodeDeletePressed = useKeyPress(keyCombination.deleteReactFlow)
-
-    useEffect(() => {
-        if (isNodeDeletePressed) {
-            deleteNodes()
-        }
-    }, [isNodeDeletePressed]);
-
 
     const isNodeDeletePressed = useKeyPress('Delete')
 
