@@ -22,7 +22,7 @@ export const keyCombination = {
     redoReactFlow: [`${keys.ctrl} + ${keys.y}`, `${keys.ctrl} + ${keys.c} + ${keys.z}`],
     pasteReactFlow: [`${keys.ctrl} + ${keys.v}`],
     copyReactFlow: [`${keys.ctrl} + ${keys.c}`],
-    deleteReactFlow: ['delete'],
+    deleteReactFlow: ['Delete'],
 }
 
 
