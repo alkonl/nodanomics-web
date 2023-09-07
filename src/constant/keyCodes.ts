@@ -19,6 +19,11 @@ export const keyCombination = {
     copy: [keys.ctrl, keys.c],
     delete: [[keys.delete], [keys.backspace]],
     deleteReactFlow: [keys.delete, keys.backspace].map((key) => String(key)),
+    undoReactFlow: [`${keys.ctrl} + ${keys.z}`],
+    redoReactFlow: [`${keys.ctrl} + ${keys.y}`, `${keys.ctrl} + ${keys.c} + ${keys.z}`],
+    pasteReactFlow: [`${keys.ctrl} + ${keys.v}`],
+    copyReactFlow: [`${keys.ctrl} + ${keys.c}`],
+    deleteReactFlow: ['delete'],
 }
 
 

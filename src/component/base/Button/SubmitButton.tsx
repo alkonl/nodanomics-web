@@ -5,7 +5,8 @@ import {EColor} from "../../../constant";
 
 
 interface ISubmitButtonProps extends Omit<ButtonProps, 'variant'> {
-    variant?: 'border'
+    variant?: 'border',
+    component?: string,
 }
 
 const baseButtonSx: SxProps = {

@@ -1,3 +1,5 @@
+import {useUploadDiagram} from "./useUploadDiagram";
+
 export * from './useTagsDashboardView'
 export * from './useWidthAndHeight'
 export * from './useDidMountEffect'
@@ -50,3 +52,5 @@ export * from './useDeleteSelectedNodes'
 export * from './useIsStepStarted'
 export * from './useIsElementExecuted'
 export * from './useClearHistory'
+export * from './useDownloadJsonFile'
+export * from './useUploadDiagram'

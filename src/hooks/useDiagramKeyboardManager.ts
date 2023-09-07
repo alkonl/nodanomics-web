@@ -1,11 +1,11 @@
 import {useKeyPress} from 'reactflow'
 import {useUndoRedoDiagram} from "./useUndoRedoDiagram";
-import {useKeyPressDetector} from "./useKeyPressDetector";
 import {useEffect} from "react";
 import {useCopyPaste} from "./useCopyPaste";
-import {keyCombination, keys} from "../constant";
-import {isKeyCombinationMatch} from "../utils";
 import {useDeleteSelectedNodes} from "./useDeleteSelectedNodes";
+import {keyCombination, keys} from "../constant";
+import {useKeyPressDetector} from "./useKeyPressDetector";
+import {isKeyCombinationMatch} from "../utils";
 
 export const useDiagramKeyboardManager = () => {
     const {pressedKeyCodes} = useKeyPressDetector(Object.values(keys))
@@ -22,6 +22,15 @@ export const useDiagramKeyboardManager = () => {
         }
     }, [isNodeDeletePressed]);
 
+
+    const isNodeDeletePressed = useKeyPress('Delete')
+
+
+    useEffect(() => {
+        if (isNodeDeletePressed) {
+            deleteNodes()
+        }
+    }, [isNodeDeletePressed]);
 
     useEffect(() => {
         isKeyCombinationMatch(undoDiagram, keyCombination.undo, pressedKeyCodes)
