@@ -1,5 +1,5 @@
 import {GraphInteractiveNode} from "./abstracts";
-import {ENodeAction, IResetBeforeStep, ISinkNodeData} from "../../../interface";
+import {ENodeAction, ISinkNodeData} from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
 import {GraphDataEdge} from "../GraphEdge";

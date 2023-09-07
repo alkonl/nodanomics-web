@@ -20,6 +20,15 @@ export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield> 
         this.spreadsheetManager = spreadsheetManager;
     }
 
+    updateState() {
+        super.updateState();
+        const dataSetVariables = this.getDynamicVariables()
+        this.updateNode({
+            namedVariables: dataSetVariables
+        })
+        console.log('dataSetVariables', dataSetVariables)
+    }
+
     get spreadsheet() {
         if (this.data.datasetId) {
             return this.spreadsheetManager.getSpreadsheet({
@@ -100,7 +109,7 @@ export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield> 
         const columns = this.getColumns();
         const object: { [key: string]: number | boolean } = {};
 
-        const anchors = row.filter(value => typeof value === 'string') as  string[];
+        const anchors = row.filter(value => typeof value === 'string') as string[];
 
         anchors.forEach(anchor => {
             row.forEach((value, index) => {

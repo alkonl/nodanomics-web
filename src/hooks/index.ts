@@ -1,4 +1,5 @@
 import {useUploadDiagram} from "./useUploadDiagram";
+import {useGetVariables} from "./useGetVariables";
 
 export * from './useTagsDashboardView'
 export * from './useWidthAndHeight'
@@ -54,3 +55,4 @@ export * from './useIsElementExecuted'
 export * from './useClearHistory'
 export * from './useDownloadJsonFile'
 export * from './useUploadDiagram'
+export * from './useGetVariables'
