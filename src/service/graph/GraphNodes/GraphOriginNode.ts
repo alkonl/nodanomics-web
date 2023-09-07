@@ -3,7 +3,7 @@ import {GraphInteractiveNode} from "./abstracts";
 import {GraphDataNode} from "./GraphDataNode";
 import {GraphDataEdge} from "../GraphEdge";
 import {RunManager} from "../RunManager";
-import {generateResourceFromSource} from "../../diagram";
+import {generateResource} from "../../diagram";
 import {GraphNodeManager} from "../NodeManager";
 
 export class GraphOriginNode extends GraphInteractiveNode<IOriginNodeData>
@@ -37,6 +37,6 @@ export class GraphOriginNode extends GraphInteractiveNode<IOriginNodeData>
     }
 
     generateResourceFromSource(countOfResource: number) {
-        return generateResourceFromSource(countOfResource)
+        return generateResource(countOfResource)
     }
 }

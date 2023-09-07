@@ -146,6 +146,8 @@ export const DiagramCanvas = () => {
                     onEdgeClick={onEdgeClick}
                     onSelectionChange={onSelectionChange}
                     multiSelectionKeyCode={multiSelectKeyCodes}
+                    // we have custom way to delete nodes
+                    deleteKeyCode={'undefined'}
                 >
                     <Controls/>
                     <Background color="blue" gap={GAP_BETWEEN_EDITOR_CANVAS_DOTS}/>

@@ -1,14 +1,16 @@
 import {EDiagramNode, IReactFlowNode} from "../../interface";
+import {generateResource} from "../diagram";
 
 export const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
+    const resource = generateResource(0)
     switch (node.data.type) {
         case EDiagramNode.Data:
             return {
                 ...node,
                 data: {
                     ...node.data,
-                    resources: node.data.initialResources || [],
-                    resourcesToProvide: node.data.initialResources || [],
+                    resources: node.data.initialResources || resource,
+                    resourcesToProvide: node.data.initialResources || resource,
                     history: [],
                 }
             }

@@ -33,7 +33,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     }
 
-    private get _resourcesToProvide(): IResource[] {
+    private get _resourcesToProvide(): IResource {
         return this.data.resourcesToProvide
     }
 
@@ -56,7 +56,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     get resourcesToProvideCount() {
-        return this._resourcesToProvide.length;
+        return this._resourcesToProvide.value;
     }
 
     get maxResources() {
@@ -69,7 +69,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     get currentResourcesCount() {
-        return this.data.resources.length;
+        return this.data.resources.value;
     }
 
     get resources() {
@@ -98,24 +98,24 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         this.updatePreviousResourcesCount()
     }
 
-    addResource(resources: IResource[], mode?: EModeAddResourcesToDataNode, params?: {
+    addResource(resources: IResource, mode?: EModeAddResourcesToDataNode, params?: {
         onSuccess?: (resourcesCount: number) => void,
     }) {
         const updatedResources = this.addResourceWithCapacity(resources, mode)
         const isAdded = updatedResources !== undefined;
         if (isAdded && params?.onSuccess) {
-            params.onSuccess(resources.length)
+            params.onSuccess(resources.value)
         }
     }
 
-    isPossibleToAddResource(resources: IResource[], mode: EModeAddResourcesToDataNode) {
+    isPossibleToAddResource(resources: IResource, mode: EModeAddResourcesToDataNode) {
         if (!this.maxCapacity) {
             return true;
         }
         if (mode === EModeAddResourcesToDataNode.onlyAll) {
-            return this.currentResourcesCount + resources.length <= this.maxCapacity
+            return this.currentResourcesCount + resources.value <= this.maxCapacity
         } else if (mode === EModeAddResourcesToDataNode.asPossible) {
-            return this.currentResourcesCount + resources.length <= this.maxCapacity
+            return this.currentResourcesCount + resources.value <= this.maxCapacity
         }
     }
 
@@ -137,15 +137,17 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         return this.previousStepResourcesCount !== this.currentStepResourcesCount
     }
 
-    private addResourceWithCapacity(resources?: IResource[], mode?: EModeAddResourcesToDataNode): IDataNodeData | undefined {
-        if (resources && resources.length > 0) {
+    private addResourceWithCapacity(resources?: IResource, mode?: EModeAddResourcesToDataNode): IDataNodeData | undefined {
+        if (resources && resources.value > 0) {
             if (!this.maxCapacity) {
                 return this.addResourcesToNode(resources)
-            } else if (mode === EModeAddResourcesToDataNode.onlyAll && this.currentResourcesCount + resources?.length <= this.maxCapacity) {
+            } else if (mode === EModeAddResourcesToDataNode.onlyAll && this.currentResourcesCount + resources?.value <= this.maxCapacity) {
                 return this.addResourcesToNode(resources)
             } else if (mode === EModeAddResourcesToDataNode.asPossible) {
                 const countOfResourcesToAdd = this.maxCapacity - this.currentResourcesCount;
-                const resourcesToAdd = resources.slice(0, countOfResourcesToAdd);
+                const resourcesToAdd = {
+                    value: resources.value - countOfResourcesToAdd
+                }
                 return this.addResourcesToNode(resourcesToAdd)
             }
         }
@@ -154,16 +156,19 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     private updateResourcesToProvide() {
         this.updateNode({
-            resourcesToProvide: [...this.data.resources]
+            resourcesToProvide: {
+                ...this.data.resources
+            }
         })
     }
 
-    private addResourcesToNode(resources: IResource[]) {
+    private addResourcesToNode(resource: IResource) {
         this.updateResourcesToProvide()
-        this._data = {
-            ...this.data,
-            resources: [...this.data.resources, ...resources]
-        }
+        this.updateNode({
+            resources: {
+                value: this.currentResourcesCount + resource.value
+            }
+        })
         this.updatePreviousResourcesCount()
         return this.data
     }
@@ -245,22 +250,32 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         }, 0)
     }
 
-    takeCountResources(count: number): IResource[] | undefined {
-        if (!this.minCapacity || this.currentResourcesCount - count >= this.minCapacity) {
-            const deletedResourcesToProvide = this.resourcesToProvide.slice(0, count);
-            const leftResources = this.resources.filter(resource => {
-                return !deletedResourcesToProvide.some(deletedResource => deletedResource.id === resource.id)
-            })
+    takeCountResources(count: number): IResource | undefined {
+        const afterTakeResources = this.resourcesToProvideCount - count
+        if (afterTakeResources >= 0 && (!this.minCapacity || afterTakeResources >= this.minCapacity)) {
+            const deletedResourcesToProvide = {
+                ...this.resourcesToProvide,
+                value: count
+            }
+            const leftResourcesToProvide = {
+                ...this.resourcesToProvide,
+                value: afterTakeResources
+            }
+
+            const leftResources = {
+                ...this.resources,
+                value: this.currentResourcesCount - count
+            }
+
             this.updatePreviousResourcesCount()
             this._data = {
                 ...this.data,
-                resources: leftResources,
-                resourcesToProvide: leftResources
+                resourcesToProvide: leftResourcesToProvide,
+                resources: leftResources
             }
             return deletedResourcesToProvide
         }
     }
-
 
     private pushAnyResources() {
         if (this.actionMode === ENodeAction.pushAny) {
