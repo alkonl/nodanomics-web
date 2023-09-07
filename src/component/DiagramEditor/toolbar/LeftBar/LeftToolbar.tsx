@@ -9,7 +9,6 @@ import {BaseSideMenu} from "./SideMenu/BaseSideMenu/BaseSideMenu";
 import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/Upload";
 import {EColor} from "../../../../constant";
-import {MButton} from "../../../base";
 import {useDownloadDiagram} from "../../../../hooks/useDownloadDiagram";
 import {useUploadDiagram} from "../../../../hooks";
 
@@ -83,21 +82,25 @@ export function LeftToolbar() {
                             key={option.name}
                         />)
                 })}
-                <Box>
-                    <MButton.Submit onClick={downloadDiagram}>
-                        <DownloadIcon sx={{
-                            color: EColor.white,
-                        }}/>
-                    </MButton.Submit>
-                    <MButton.Submit
-                        component="label"
-                    >
-                        <input type="file" accept=".json" onChange={uploadDiagram} hidden/>
-                        <UploadIcon sx={{
-                            color: EColor.white,
-                        }}/>
-                    </MButton.Submit>
-                </Box>
+
+                   <Box>
+                       <Button
+                           onClick={downloadDiagram}
+
+                       >
+                           <DownloadIcon sx={{
+                               color: EColor.grey4,
+                           }}/>
+                       </Button>
+                       <Button
+                           component="label"
+                       >
+                           <input type="file" accept=".json" onChange={uploadDiagram} hidden/>
+                           <UploadIcon sx={{
+                               color: EColor.grey4,
+                           }}/>
+                       </Button>
+                   </Box>
             </Box>
             <BaseSideMenu isOpen={isSideMenuOpen}>
                 {SelectedSideMenu && <SelectedSideMenu/>}
