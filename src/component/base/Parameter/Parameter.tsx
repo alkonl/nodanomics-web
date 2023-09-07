@@ -1,11 +1,11 @@
 import React from "react";
 // eslint-disable-next-line import/named
-import {Box, Grid, styled, TextField, TextFieldProps, Typography} from "@mui/material";
+import {Box, styled, TextField, TextFieldProps, Typography} from "@mui/material";
 import {EColor, EFontColor} from "../../../constant";
 import {ParameterLabel} from "../Label";
 import {ParametersContainer} from "./ParametersContainer";
 import {ElementParameterContainer} from "./ElementParameterContainer";
-import {ParameterInput} from "../Input";
+import {IntellisenseInput, ParameterInput} from "../Input";
 import {ParameterCheckbox} from "../Input/ParameterCheckbox";
 
 export const ElementSetupToolbarSectionTitle = styled(Box)({
@@ -78,5 +78,6 @@ export const Parameter = {
     Text: ParameterText,
     Input: ParameterInput,
     List: ParameterList,
-    TextArea: TextArea
+    TextArea: TextArea,
+    IntellisenseInput: IntellisenseInput,
 }
