@@ -3,8 +3,12 @@ import {useUndoRedoDiagram} from "./useUndoRedoDiagram";
 import {useEffect} from "react";
 import {useCopyPaste} from "./useCopyPaste";
 import {useDeleteSelectedNodes} from "./useDeleteSelectedNodes";
+import {keyCombination, keys} from "../constant";
+import {useKeyPressDetector} from "./useKeyPressDetector";
+import {isKeyCombinationMatch} from "../utils";
 
 export const useDiagramKeyboardManager = () => {
+    const {pressedKeyCodes} = useKeyPressDetector(Object.values(keys))
 
     const {undoDiagram, redoDiagram} = useUndoRedoDiagram()
 
@@ -12,22 +16,18 @@ export const useDiagramKeyboardManager = () => {
     const deleteNodes = useDeleteSelectedNodes()
 
     const isNodeDeletePressed = useKeyPress('Delete')
-    const isUndoPressed = useKeyPress(['ctrl + z', 'command + z'])
-    const isRedoPressed = useKeyPress(['ctrl + y', 'command + y', 'ctrl + c + z', 'command + c + z'])
-    const isCopyPressed = useKeyPress(['ctrl + c', 'command + c'])
-    const isPastePressed = useKeyPress(['ctrl + v', 'command + v'])
+
 
     useEffect(() => {
         if (isNodeDeletePressed) {
             deleteNodes()
-        } else if (isUndoPressed) {
-            undoDiagram()
-        } else if (isRedoPressed) {
-            redoDiagram()
-        } else if (isCopyPressed) {
-            copy()
-        } else if (isPastePressed) {
-            paste()
         }
-    }, [isNodeDeletePressed, isUndoPressed, isRedoPressed, isCopyPressed, isPastePressed]);
+    }, [isNodeDeletePressed]);
+
+    useEffect(() => {
+        isKeyCombinationMatch(undoDiagram, keyCombination.undo, pressedKeyCodes)
+        isKeyCombinationMatch(redoDiagram, keyCombination.redo, pressedKeyCodes)
+        isKeyCombinationMatch(copy, keyCombination.copy, pressedKeyCodes)
+        isKeyCombinationMatch(paste, keyCombination.paste, pressedKeyCodes)
+    }, [pressedKeyCodes]);
 }
