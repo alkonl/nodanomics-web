@@ -1,10 +1,12 @@
 import React from 'react';
 import {Mention, MentionsInput} from "react-mentions";
+import {EColor} from "../../../constant";
 
 const mentionStyle = {
     control: {
         backgroundColor: '#fff',
         fontSize: 16,
+        border: `3px solid ${EColor.grey2}`,
     },
 
     '&multiLine': {
@@ -60,19 +62,21 @@ export const IntellisenseInput: React.FC<{
     onChange: (value: string) => void;
     variables?: { id: string, display: string }[];
     style?: any;
-}> = ({variables = [], value, onChange, style}) => {
+}> = ({variables = [], value = '', onChange, style}) => {
+
+    const mentionVariable = value.length > 0 ? variables : []
+
     return (
         <MentionsInput
-            value={value || ''}
-            onChange={(event, newValue, newPlainTextValue, mentions) => {
+            value={value}
+            onChange={(event, newValue, newPlainTextValue) => {
                 onChange(newPlainTextValue.trimStart())
             }}
-
             style={{...mentionStyle, ...style}}
         >
             <Mention
                 trigger=""
-                data={variables}
+                data={mentionVariable}
             />
         </MentionsInput>
     );

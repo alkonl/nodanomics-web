@@ -26,7 +26,6 @@ export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield> 
         this.updateNode({
             namedVariables: dataSetVariables
         })
-        console.log('dataSetVariables', dataSetVariables)
     }
 
     get spreadsheet() {
