@@ -1,6 +1,7 @@
 import React from 'react';
 import {IBaseDiagramInfo} from "../../interface";
-import {MAccordion, MView} from "../base";
+import {MAccordion} from "../base";
+import {DiagramListItem} from "./DiagramListItem";
 
 export const DiagramList: React.FC<{
     diagrams: IBaseDiagramInfo[]
@@ -9,9 +10,9 @@ export const DiagramList: React.FC<{
     return (
         <MAccordion.Standard title="title">
             {diagrams.map((diagram) => (
-                <MView.Simple
+                <DiagramListItem
                     key={diagram.id}
-                    title={diagram.name}
+                    diagram={diagram}
                 />
             ))}
         </MAccordion.Standard>

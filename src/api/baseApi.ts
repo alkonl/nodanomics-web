@@ -409,8 +409,8 @@ export const baseApi = createApi({
                         return currentItem.id === newItem.id
                     })
                 })
-                currentCache.diagrams.push(...filteredItems)
-                const sortedDiagrams = currentCache.diagrams
+                const diagrams =[...currentCache.diagrams, ...filteredItems]
+                const sortedDiagrams = diagrams
                     .sort((a, b) => {
                         return moment(b.updatedAt).diff(moment(a.updatedAt))
                     })
@@ -418,6 +418,21 @@ export const baseApi = createApi({
                     ...currentCache,
                     diagrams: [...sortedDiagrams]
                 }
+
+                // const filteredItems = newRequest.diagrams.filter((newItem) => {
+                //     return !currentCache.diagrams.some((currentItem) => {
+                //         return currentItem.id === newItem.id
+                //     })
+                // })
+                // currentCache.diagrams.push(...filteredItems)
+                // const sortedDiagrams = currentCache.diagrams
+                //     .sort((a, b) => {
+                //         return moment(b.updatedAt).diff(moment(a.updatedAt))
+                //     })
+                // return {
+                //     ...currentCache,
+                //     diagrams: [...sortedDiagrams]
+                // }
             },
             providesTags: [ERTKTags.Diagrams],
         }),

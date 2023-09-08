@@ -4,6 +4,7 @@ export interface IGetDiagramByProjectIdRequest {
 }
 
 export interface IGetDiagramByProjectIdResponse {
+    id: string
     diagrams: {
         id: string
         name: string
