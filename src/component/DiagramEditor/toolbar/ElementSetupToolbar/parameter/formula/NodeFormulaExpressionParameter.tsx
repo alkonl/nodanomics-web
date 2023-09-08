@@ -1,8 +1,9 @@
-import React, {ChangeEventHandler} from 'react';
+import React from 'react';
 import {IFormulaNodeData} from "../../../../../../interface";
-import {useUpdateNode} from "../../../../../../hooks";
+import {useGetVariables, useUpdateNode} from "../../../../../../hooks";
 import {ElementParameter} from "../ElementParameter";
 import {Parameter} from "../../../../../base";
+
 
 
 
@@ -10,25 +11,27 @@ export const NodeFormulaExpressionParameter: React.FC<{
     nodeData: IFormulaNodeData
 }> = ({nodeData}) => {
 
+    const variables = useGetVariables()
+
     const {updateNodeData} = useUpdateNode<IFormulaNodeData>({
         nodeId: nodeData.id,
     })
 
-    const onChangeExpression: ChangeEventHandler<HTMLTextAreaElement> = (event) => {
+
+    const onChangeExpression = (formula: string) => {
         updateNodeData({
-           formula: event.target.value,
+            formula,
         })
     }
 
 
     return (
         <ElementParameter label="Expression">
-
-            <Parameter.TextArea
-                value={nodeData.formula || ''}
+            <Parameter.IntellisenseInput
+                value={nodeData.formula}
                 onChange={onChangeExpression}
+                variables={variables}
             />
-
         </ElementParameter>
     )
 };

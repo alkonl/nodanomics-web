@@ -1,6 +1,6 @@
 import React from 'react';
 import {IChainConnectionData} from "../../../../../../interface";
-import {useUpdateEdgeData} from "../../../../../../hooks";
+import {useGetVariables, useUpdateEdgeData} from "../../../../../../hooks";
 import {ElementParameter} from "../ElementParameter";
 import {Parameter} from "../../../../../base";
 
@@ -8,22 +8,24 @@ export const ChainConnectionConditionParameter: React.FC<{
     edgeData: IChainConnectionData
 }> = ({edgeData}) => {
 
+    const variables = useGetVariables()
+
     const {updateEdgeData} = useUpdateEdgeData<IChainConnectionData>({
         edgeId: edgeData.id,
     })
 
-    const onChangeCondition = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangeCondition = (condition: string) => {
         updateEdgeData({
-            condition: event.target.value,
+            condition,
         })
     }
 
-
     return (
         <ElementParameter label="Condition">
-            <Parameter.Input
+            <Parameter.IntellisenseInput
                 value={edgeData.condition || ''}
                 onChange={onChangeCondition}
+                variables={variables}
             />
 
         </ElementParameter>

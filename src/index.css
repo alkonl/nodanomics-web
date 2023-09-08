@@ -7,6 +7,10 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+input, textarea {
+    outline: none;
+}
+
 button {
     border: none;
     margin: 0;

@@ -440,6 +440,9 @@ export const diagramEditorSlice = createSlice({
             graph.setSpreadsheetsData({
                 spreadsheetData: payload.spreadsheets
             })
+            runManager.updateState()
+            updateNodesFromGraph(state.diagramNodes)
+            updateEdgesFromGraph(state.diagramEdges)
         },
         resetDiagramRun: (state) => {
             const resetNode = resetNodeStates(state.diagramNodes)
