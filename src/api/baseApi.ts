@@ -21,6 +21,8 @@ import {
     IDeleteProjectRequest,
     IGetAllGoogleSpreadsheetResponse,
     IGetDiagramByIdResponse,
+    IGetDiagramByProjectIdRequest,
+    IGetDiagramByProjectIdResponse,
     IGetDiagramTagsRequest,
     IGetDiagramTagsResponse,
     IGetManySpreadsheetRequests,
@@ -43,7 +45,8 @@ import {
     ISessionUserDataResponse,
     ISignUpRequest,
     ISubmitNewPasswordRequest,
-    IUpdateExecutionGraphPropertiesRequest, IUpdateExecutionGraphPropertiesResponse,
+    IUpdateExecutionGraphPropertiesRequest,
+    IUpdateExecutionGraphPropertiesResponse,
     IUpdateUserDataRequest,
     IUpdateUserDataResponse,
     IUploadSpreadSheetRequest
@@ -59,7 +62,6 @@ import {
     IGetExecutionGraphPropertiesRequest,
     IGetExecutionGraphPropertiesResponse
 } from "../interface/api/executionGraph/getExecutionGraphProperties";
-
 
 
 const baseQuery = fetchBaseQuery(({
@@ -113,6 +115,7 @@ export const baseApi = createApi({
         ERTKTags.ProjectTeamMember,
         ERTKTags.Spreadsheet,
         ERTKTags.ExecutionGraph,
+        ERTKTags.Diagrams,
     ],
     reducerPath: 'baseApi',
     baseQuery: baseQueryWithReauth,
@@ -337,40 +340,8 @@ export const baseApi = createApi({
                     body: body,
                 }
             },
-            invalidatesTags: [ERTKTags.PersonalDashboard]
+            invalidatesTags: [ERTKTags.Diagrams]
         }),
-        // getDiagramById: builder.query<IGetDiagramByIdResponse, string>({
-        //     query: (id: string) => {
-        //         return {
-        //             url: `/diagram?id=${id}`,
-        //             method: 'GET',
-        //         }
-        //     },
-        //     providesTags: (result, error, diagramId) => {
-        //         return [{type: ERTKTags.EditedDiagram, id: diagramId}]
-        //     }
-        // }),
-        // updateDiagram: builder.mutation<IUpdateDiagramResponse, IUpdateDiagramRequest>({
-        //     query: (body: IUpdateDiagramRequest) => {
-        //         return {
-        //             url: '/diagram/update',
-        //             method: 'POST',
-        //             body: body
-        //         }
-        //     },
-        //     invalidatesTags: (result, error, diagram) => {
-        //         return [{type: ERTKTags.EditedDiagram, id: diagram.diagramId}, ERTKTags.PersonalDashboard]
-        //     }
-        // }),
-        // getDiagramsByUserId: builder.query<IGetDiagramsByUserIdResponse, unknown>({
-        //     query: () => {
-        //         return {
-        //             url: '/diagram/own',
-        //             method: 'GET',
-        //         }
-        //     },
-        //     providesTags: [ERTKTags.PersonalDashboard]
-        // }),
         deleteDiagram: builder.mutation({
             query: (id: string) => {
                 return {
@@ -378,7 +349,7 @@ export const baseApi = createApi({
                     method: 'DELETE',
                 }
             },
-            invalidatesTags: [ERTKTags.PersonalDashboard]
+            invalidatesTags: [ERTKTags.Diagrams]
         }),
         createProject: builder.mutation<ICreateProjectResponse, ICreateProjectRequest>({
             query: (body: ICreateProjectRequest) => {
@@ -417,6 +388,37 @@ export const baseApi = createApi({
                     })
             },
             providesTags: [ERTKTags.Projects, ERTKTags.User],
+        }),
+        getProjectDiagrams: builder.query<IGetDiagramByProjectIdResponse, IGetDiagramByProjectIdRequest>({
+            query: (body: IGetDiagramByProjectIdRequest) => {
+                return {
+                    url: `/project/${body.projectId}/diagrams`,
+                    method: 'GET',
+                    params: body,
+                }
+            },
+            forceRefetch: ({currentArg, previousArg}) => {
+                return currentArg?.cursorId !== previousArg?.cursorId
+            },
+            serializeQueryArgs: ({endpointName}) => {
+                return endpointName
+            },
+            merge: (currentCache, newRequest) => {
+                const filteredItems = newRequest.diagrams.filter((newItem) => {
+                    return !currentCache.diagrams.some((currentItem) => {
+                        return currentItem.id === newItem.id
+                    })
+                })
+                currentCache.diagrams.push(...filteredItems)
+                return {
+                    ...currentCache,
+                    diagrams: currentCache.diagrams
+                        .sort((a, b) => {
+                            return moment(b.updatedAt).diff(moment(a.updatedAt))
+                        })
+                }
+            },
+            providesTags: [ERTKTags.Diagrams],
         }),
         getDiagramsByProjectId: builder.query<GetDiagramsByProjectIdResponse, string>({
             query: (projectId: string) => {
@@ -663,5 +665,6 @@ export const {
     useGetManySpreadsheetQuery,
     useUpdateExecutionGraphPropertiesMutation,
     useGetExecutionGraphPropertiesQuery,
+    useGetProjectDiagramsQuery,
 } = baseApi;
 
