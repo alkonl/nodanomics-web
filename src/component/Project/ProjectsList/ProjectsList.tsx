@@ -10,8 +10,8 @@ export const ProjectsList = () => {
 
     return (
         <Box>
-            {groupedProjects.map(({group, projects}) => (
-                <ProjectListAccordion key={group.name} projectDateGroup={group.name} projects={projects}/>
+            {groupedProjects.map(({group, items}) => (
+                <ProjectListAccordion key={group.name} projectDateGroup={group.name} projects={items}/>
             ))}
         </Box>
     );
