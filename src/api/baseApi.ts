@@ -239,8 +239,10 @@ export const baseApi = createApi({
         singInUpGoogle: builder.mutation({
             queryFn: async () => {
                 const authUrl = await getAuthorisationURLWithQueryParamsAndSetState({
-                    providerId: "google",
-                    authorisationURL: `${CONFIG.WEB_URL}/auth/callback/google`,
+                    thirdPartyId: 'google',
+                    frontendRedirectURI: `${CONFIG.WEB_URL}/auth/callback/google`,
+                    // providerId: "google",
+                    // authorisationURL: `${CONFIG.WEB_URL}/auth/callback/google`,
                 });
                 return {
                     data: {
