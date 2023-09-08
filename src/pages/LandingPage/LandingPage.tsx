@@ -14,7 +14,7 @@ export const LandingPage = () => {
     useEffect(() => {
 
         if (path === '/' && !isUserLogged.isLoading && !isUserLogged.hasInvalidClaims) {
-            navigate(ELinks.projects)
+            navigate(ELinks.project)
         }
     }, [navigate, path, isUserLogged])
 

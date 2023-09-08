@@ -8,7 +8,7 @@ import {useCurrentPath} from "../../../../hooks/useCurrentPath";
 const pages = [
     {
         name: 'Projects',
-        link: ELinks.projects,
+        link: ELinks.project,
     }, {
         name: 'Teams',
         link: ELinks.team,
