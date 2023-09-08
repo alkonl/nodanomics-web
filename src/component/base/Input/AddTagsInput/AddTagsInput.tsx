@@ -2,7 +2,6 @@ import React, {useMemo, useState} from 'react';
 import {Combobox} from "@headlessui/react";
 import {Button, Chip} from "@mui/material";
 import {ITag} from "../../../../interface";
-import {TagListSmall} from "../../../list";
 
 
 export const AddTagsInput: React.FC<{
@@ -82,12 +81,6 @@ export const AddTagsInput: React.FC<{
 
                         ))}
                     </Combobox.Options>
-                </div>
-                <div>
-                    <div>
-                        Slected:
-                        <TagListSmall onDelete={onDelete} selectedTags={selectedTags}/>
-                    </div>
                 </div>
                 <div>
                     <Button onClick={onSave}>

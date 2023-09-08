@@ -1,21 +1,21 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { setupListeners } from '@reduxjs/toolkit/query'
-import { baseApi } from '../../api'
-import {diagramDashboardSlice} from "./diagramDashboard";
+import {combineReducers, configureStore} from '@reduxjs/toolkit'
+import {setupListeners} from '@reduxjs/toolkit/query'
+import {baseApi} from '../../api'
 import {diagramEditorSlice} from "./diagramEditor";
 import {projectDashboardSlice} from "./projectDashboard";
 import {teamDashboardSlice} from "./teamDashboard";
+import {diagramDashboardSlice} from "./diagramDashboard";
 
 const store = configureStore({
-  reducer: combineReducers({
-    [baseApi.reducerPath]: baseApi.reducer,
-    [diagramDashboardSlice.name]: diagramDashboardSlice.reducer,
-    [projectDashboardSlice.name]: projectDashboardSlice.reducer,
-    [diagramEditorSlice.name]: diagramEditorSlice.reducer,
-    [teamDashboardSlice.name]: teamDashboardSlice.reducer,
-  }),
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(baseApi.middleware),
+    reducer: combineReducers({
+        [baseApi.reducerPath]: baseApi.reducer,
+        [projectDashboardSlice.name]: projectDashboardSlice.reducer,
+        [diagramEditorSlice.name]: diagramEditorSlice.reducer,
+        [teamDashboardSlice.name]: teamDashboardSlice.reducer,
+        [diagramDashboardSlice.name]: diagramDashboardSlice.reducer,
+    }),
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(baseApi.middleware),
 })
 
 setupListeners(store.dispatch)
@@ -27,5 +27,5 @@ export type AppDispatch = typeof store.dispatch;
 
 export * from './diagramDashboard'
 export * from './diagramEditor'
-export * from './projectDashboard'
 export * from './teamDashboard'
+export * from './projectDashboard'

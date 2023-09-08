@@ -410,12 +410,13 @@ export const baseApi = createApi({
                     })
                 })
                 currentCache.diagrams.push(...filteredItems)
+                const sortedDiagrams = currentCache.diagrams
+                    .sort((a, b) => {
+                        return moment(b.updatedAt).diff(moment(a.updatedAt))
+                    })
                 return {
                     ...currentCache,
-                    diagrams: currentCache.diagrams
-                        .sort((a, b) => {
-                            return moment(b.updatedAt).diff(moment(a.updatedAt))
-                        })
+                    diagrams: [...sortedDiagrams]
                 }
             },
             providesTags: [ERTKTags.Diagrams],

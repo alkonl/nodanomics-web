@@ -1,18 +1,19 @@
 import React from 'react';
-import {IDiagramListItem} from "../../interface";
+import {IBaseDiagramInfo} from "../../interface";
+import {MAccordion, MView} from "../base";
 
 export const DiagramList: React.FC<{
-    diagrams: IDiagramListItem[]
+    diagrams: IBaseDiagramInfo[]
 }> = ({diagrams}) => {
+
     return (
-        <div>
-            {diagrams.map((diagram) => {
-                return (
-                    <div key={diagram.id}>
-                        {diagram.name}
-                    </div>
-                )
-            })}
-        </div>
+        <MAccordion.Standard title="title">
+            {diagrams.map((diagram) => (
+                <MView.Simple
+                    key={diagram.id}
+                    title={diagram.name}
+                />
+            ))}
+        </MAccordion.Standard>
     );
 };

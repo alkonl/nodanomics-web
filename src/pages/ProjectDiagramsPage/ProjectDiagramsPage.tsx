@@ -16,7 +16,7 @@ export const ProjectDiagramsPage = () => {
     })
 
     return (
-        <DashboardPageLayout pageName={`Diagrams ${projectId}`}>
+        <DashboardPageLayout pageName={"Diagrams"}>
             {projectId && <CreateDiagramPopUp
                 projectId={projectId}
                 onClose={createDiagramPopUpManager.close}

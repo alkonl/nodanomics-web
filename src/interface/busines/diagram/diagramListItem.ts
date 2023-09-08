@@ -1,4 +1,4 @@
-export interface IDiagramListItem {
+export interface IBaseDiagramInfo {
     id: string
     name: string
     updatedAt: string
