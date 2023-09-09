@@ -1,7 +1,7 @@
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {ICopiedElements} from "../interface";
 import {geAllChildrenNodes, prepareCopiedNodesToPaste,} from "../service";
-import {useCallback} from "react";
+import {useCallback, useState} from "react";
 import {useReactFlowInstance} from "./useReactFlowInstance";
 // eslint-disable-next-line import/named
 import {useMousePosition} from "./useMousePosition";
@@ -10,6 +10,8 @@ import {useOffHistoryExecuted} from "./useOffHistoryExecuted";
 
 
 export const useCopyPaste = () => {
+    // use if navigator isn't available. like in website without https
+    const [copiedElements, setCopiedElements] = useState<ICopiedElements | undefined>(undefined)
     const {reactFlowWrapper, reactFlowInstance} = useReactFlowInstance().data
     const {diagramNodes, diagramEdges} = useDiagramEditorState()
     const dispatch = useAppDispatch()
@@ -32,14 +34,25 @@ export const useCopyPaste = () => {
         const selectedText = window.getSelection()?.toString().trim();
 
         if (elementsToCopy.nodes.length > 0 && !selectedText) {
-            navigator.clipboard.writeText(JSON.stringify(elementsToCopy));
+            if (navigator?.clipboard) {
+                navigator.clipboard.writeText(JSON.stringify(elementsToCopy));
+            } else {
+                setCopiedElements(elementsToCopy)
+            }
+
         }
     }, [diagramNodes])
 
     const paste = useCallback(async () => {
-        const text = await navigator.clipboard.readText();
-        const elements = JSON.parse(text) as ICopiedElements
-        if (reactFlowInstance && reactFlowWrapper && reactFlowWrapper.current !== null) {
+
+        let elements: ICopiedElements | undefined = undefined
+        if (navigator?.clipboard) {
+            const text = await navigator.clipboard.readText()
+            elements = JSON.parse(text) as ICopiedElements
+        } else if (copiedElements) {
+            elements = copiedElements
+        }
+        if (elements && reactFlowInstance && reactFlowWrapper && reactFlowWrapper.current !== null) {
             const {nodes, edges} = elements
             const preparedToPaste = prepareCopiedNodesToPaste({
                 elements: {nodes, edges},
