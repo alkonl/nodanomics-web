@@ -4,12 +4,13 @@ import {
     GraphDataNode,
     GraphEventListenerNode,
     GraphFormulaNode,
-    GraphInvokableNode,
+    GraphInvokableNode, GraphLoopNode,
     GraphStartNode
 } from "./GraphNodes";
 import {
     EConnectionMode,
-    isIIsEventTriggered, isIResetBeforeStep,
+    isIIsEventTriggered,
+    isIResetBeforeStep,
     isITriggeredEvent,
     isIUpdateGraphNodeStatePerStep,
     isUpdateGraphNodeState
@@ -106,11 +107,14 @@ export class RunManager {
         const target = chainItem.target
         const edge = chainItem.edge
         if (target instanceof GraphInvokableNode) {
+            if(target instanceof GraphLoopNode && !target.isLoopActive){
+                return
+            }
             target.invokeStep()
-           if (edge instanceof  GraphChainEdge){
-               chainItem.edge?.onExecute()
+            if (edge instanceof GraphChainEdge) {
+                chainItem.edge?.onExecute()
 
-           }
+            }
 
             if (isITriggeredEvent(target)) {
                 const triggeredEventName = target.getTriggeredEvent()
@@ -118,6 +122,20 @@ export class RunManager {
                     .filter(node => node.target instanceof GraphEventListenerNode
                         && node.target.eventName === triggeredEventName)
                 this.executeChainOrder(listenerNodes)
+            }
+            if (target instanceof GraphLoopNode) {
+                const innerMicroLoops = chainItem.inner?.filter(item => item.target instanceof GraphMicroLoopNode)
+                if (innerMicroLoops){
+                    innerMicroLoops.forEach(item => {
+                        if(item.target instanceof GraphMicroLoopNode){
+                            item.target.resetLoopStep()
+                            for (let i = 0; i < item.target.loopCount; i++) {
+                                this.executeNode(item)
+                            }
+                        }
+
+                    })
+                }
             }
             if (chainItem.end && chainItem.end.edge && !chainItem.end.edge.isMeetCondition) {
                 const chainItemToExecute = this.findDeepChainItemByNode(chainItem.end.target)
@@ -257,7 +275,7 @@ export class RunManager {
         }
     }
 
-    private resetBeforeStep(){
+    private resetBeforeStep() {
         this.resetIsTransferredResources()
     }
 
