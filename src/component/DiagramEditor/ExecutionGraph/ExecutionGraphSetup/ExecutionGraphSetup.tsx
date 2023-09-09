@@ -14,6 +14,7 @@ enum EFormFields {
     gridColor = 'gridColor',
     xAxisTitle = 'xAxisTitle',
     isShowVerticalLine = 'isShowVerticalLine',
+    dataComponent = 'dataComponent',
 }
 
 const validationSchema = z.object({
@@ -88,6 +89,12 @@ export const ExecutionGraphSetup = () => {
                 <ParameterExecutionGraphSetup.Element label="On vertical lines">
                     <ParameterExecutionGraphSetup.Checkbox
                         name={EFormFields.isShowVerticalLine}
+                        form={form}
+                    />
+                </ParameterExecutionGraphSetup.Element>
+                <ParameterExecutionGraphSetup.Element label="On vertical lines">
+                    <ParameterExecutionGraphSetup.Autocomplete
+                        name={EFormFields.dataComponent}
                         form={form}
                     />
                 </ParameterExecutionGraphSetup.Element>
