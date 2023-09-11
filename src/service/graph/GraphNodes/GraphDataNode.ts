@@ -99,7 +99,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
 
     updateStatePerStep() {
-        if (!this.isAnyAssignedHistoryNode) {
+        if (!this.nodeManager.isAnyAssignedHistoryNode) {
             this.updateResourcesCountHistory()
         }
         this.updatePreviousResourcesCount()
@@ -141,7 +141,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     updateStatePerNodeUpdate() {
-        if (this.isAnyAssignedHistoryNode) {
+        if (this.nodeManager.isAnyAssignedHistoryNode) {
             this.updateResourcesCountHistory()
         }
     }
@@ -153,10 +153,6 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
             this.updateNode({changeCount: changeCount + 1})
         }
         return isAssignedNodeChanged
-    }
-
-    private get isAnyAssignedHistoryNode() {
-        return this.nodeManager.nodes.find(node => node instanceof GraphDataNode && node.isAssigned)
     }
 
     private get isValueChanged() {
