@@ -24,7 +24,7 @@ const validationSchema = z.object({
     [EFormFields.assignedDataComponent]: z.object({
         label: z.string(),
         id: z.string(),
-    }),
+    }).nullable(),
 })
 
 type IValidationSchema = z.infer<typeof validationSchema>;
@@ -61,15 +61,14 @@ export const ExecutionGraphSetup = () => {
             xAxisTitle: data.xAxisTitle,
             isShowVerticalGridLines: data.isShowVerticalLine,
         });
-        changeAssignNode(data.assignedDataComponent.id)
+        if (data.assignedDataComponent !== null) {
+            changeAssignNode(data.assignedDataComponent.id)
+        } else {
+            changeAssignNode()
+        }
     }
 
     const clearHistory = useClearHistory()
-
-
-    // const dataTags = useDiagramEditorState().diagramNodes
-    //     .filter((node) => node.data.type === EDiagramNode.Data && node.data.tag)
-    //     .map((node) => (node.data.tag)) as string[]
 
     return (
         <Box sx={{

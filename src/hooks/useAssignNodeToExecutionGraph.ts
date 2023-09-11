@@ -12,7 +12,7 @@ export const useAssignNodeToExecutionGraph = () => {
         id: string
     }[]
 
-    const changeAssignNode = (nodeId: string) => {
+    const changeAssignNode = (nodeId?: string) => {
         console.log('changeAssignNode:', nodeId)
         const dataNodes = diagramNodes.filter((node) => node.data.type === EDiagramNode.Data) as IReactFlowCurtainNode<IDataNodeData>[]
         const mappedNodes = dataNodes.map((node) => {
@@ -29,7 +29,8 @@ export const useAssignNodeToExecutionGraph = () => {
                 ...node,
                 data: {
                     ...node.data,
-                    isAssigned: undefined
+                    isAssigned: undefined,
+                    changeCount: undefined,
                 }
             }
         })
