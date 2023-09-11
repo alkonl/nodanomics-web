@@ -12,6 +12,7 @@ export const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                     resources: node.data.initialResources || resource,
                     resourcesToProvide: node.data.initialResources || resource,
                     history: [],
+                    changeCount: undefined,
                 }
             }
         case EDiagramNode.Formula:

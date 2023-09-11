@@ -2,6 +2,7 @@ import {GraphBaseNode} from "../GraphNodes";
 import {IDiagramNodeBaseData, INodeHistory} from "../../../interface";
 
 export class GraphHistoryManager {
+
     private node: GraphBaseNode<IDiagramNodeBaseData & INodeHistory>
 
     constructor(node: GraphBaseNode<IDiagramNodeBaseData & INodeHistory>) {

@@ -43,8 +43,6 @@ export const ExecutionGraphSetup = () => {
 
 
     useEffect(() => {
-        console.log('currentAssignedNode', currentAssignedNode)
-
         form.reset({
             [EFormFields.gridColor]: options?.grid?.borderColor,
             [EFormFields.xAxisTitle]: options?.xaxis?.title?.text,

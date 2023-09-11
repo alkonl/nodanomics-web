@@ -4,7 +4,8 @@ import {
     GraphDataNode,
     GraphEventListenerNode,
     GraphFormulaNode,
-    GraphInvokableNode, GraphLoopNode,
+    GraphInvokableNode,
+    GraphLoopNode,
     GraphStartNode
 } from "./GraphNodes";
 import {
@@ -12,7 +13,7 @@ import {
     isIIsEventTriggered,
     isIResetBeforeStep,
     isITriggeredEvent,
-    isIUpdateGraphNodeStatePerStep,
+    isIUpdateGraphNodeStatePerStep, isIUpdateStatePerNodeUpdate,
     isUpdateGraphNodeState
 } from "../../interface";
 import {GraphChainEdge} from "./GraphEdge";
@@ -107,7 +108,7 @@ export class RunManager {
         const target = chainItem.target
         const edge = chainItem.edge
         if (target instanceof GraphInvokableNode) {
-            if(target instanceof GraphLoopNode && !target.isLoopActive){
+            if (target instanceof GraphLoopNode && !target.isLoopActive) {
                 return
             }
             target.invokeStep()
@@ -123,11 +124,19 @@ export class RunManager {
                         && node.target.eventName === triggeredEventName)
                 this.executeChainOrder(listenerNodes)
             }
+            if (target instanceof GraphDataNode && target.isExecutedChangesPerStep) {
+                this.graph.nodes.forEach(node => {
+                    if(isIUpdateStatePerNodeUpdate(node)){
+                        node.updateStatePerNodeUpdate()
+                    }
+                })
+                console.log(`target ${target.data.name}`)
+            }
             if (target instanceof GraphLoopNode) {
                 const innerMicroLoops = chainItem.inner?.filter(item => item.target instanceof GraphMicroLoopNode)
-                if (innerMicroLoops){
+                if (innerMicroLoops) {
                     innerMicroLoops.forEach(item => {
-                        if(item.target instanceof GraphMicroLoopNode){
+                        if (item.target instanceof GraphMicroLoopNode) {
                             item.target.resetLoopStep()
                             for (let i = 0; i < item.target.loopCount; i++) {
                                 this.executeNode(item)

@@ -19,6 +19,7 @@ export interface IDataNodeData extends IDiagramNodeBaseData, INodeWithTrigger,
     minCapacity?: number
     maxCapacity?: number
     isAssigned?: boolean
+    changeCount?: number
 }
 
 export const isIDataNodeData = (data: IDiagramNodeBaseData): data is IDataNodeData => {

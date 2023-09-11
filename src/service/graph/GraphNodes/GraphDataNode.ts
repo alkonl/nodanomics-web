@@ -38,6 +38,10 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         return this.data.resourcesToProvide
     }
 
+    get isAssigned(): boolean {
+        return this.data.isAssigned || false
+    }
+
     get maxCapacity() {
         const maxCapacity = Number(this.data.maxCapacity);
         if (!isNaN(maxCapacity)) {
@@ -95,7 +99,9 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
 
     updateStatePerStep() {
-        this.updateResourcesCountHistory()
+        if (!this.isAnyAssignedHistoryNode) {
+            this.updateResourcesCountHistory()
+        }
         this.updatePreviousResourcesCount()
     }
 
@@ -135,7 +141,22 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     updateStatePerNodeUpdate() {
-        this.updateResourcesCountHistory()
+        if (this.isAnyAssignedHistoryNode) {
+            this.updateResourcesCountHistory()
+        }
+    }
+
+    get isExecutedChangesPerStep() {
+        const isAssignedNodeChanged = this.isAssigned && this.isValueChanged
+        if(isAssignedNodeChanged){
+            const changeCount = this.data.changeCount || 0
+            this.updateNode({changeCount: changeCount + 1})
+        }
+        return isAssignedNodeChanged
+    }
+
+    private get isAnyAssignedHistoryNode() {
+        return this.nodeManager.nodes.find(node => node instanceof GraphDataNode && node.isAssigned)
     }
 
     private get isValueChanged() {
