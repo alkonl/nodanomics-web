@@ -1,10 +1,9 @@
 import {useEffect, useRef, useState} from "react";
 import {useScrollToBottom} from "./usePageBottom";
 
-export const useInfiniteScroll = ({lastProjectId, isLoading}: {
-    lastProjectId?: string
-    isLoading: boolean,
-}) => {
+export const useInfiniteScroll = () => {
+    const [params, setParams] = useState<{ lastProjectId?: string, isLoading?: boolean }>({})
+    const {lastProjectId, isLoading} = params
     const [cursorId, setCursorId] = useState<string>();
     const scrollRef = useRef<HTMLDivElement>(null);
     const prevProjectCursorId = useRef<string>();
@@ -20,5 +19,6 @@ export const useInfiniteScroll = ({lastProjectId, isLoading}: {
     return {
         cursorId,
         scrollRef,
+        setParams: setParams,
     }
 }
