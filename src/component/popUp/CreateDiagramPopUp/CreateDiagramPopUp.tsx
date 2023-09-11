@@ -8,8 +8,16 @@ import {CreateDiagramForm} from "../../form";
 export const CreateDiagramPopUp: React.FC<{
     isShow: boolean;
     projectId: string;
+    onSuccess?: () => void;
     onClose: () => void;
-}> = ({isShow, onClose, projectId}) => {
+}> = ({isShow, onClose, projectId, onSuccess}) => {
+    const onSuccessHandler = () => {
+        onClose()
+        if(onSuccess){
+            onSuccess()
+        }
+    }
+
     return (
         <Dialog open={isShow} onClose={onClose}>
             <BasePopUp>
@@ -20,7 +28,7 @@ export const CreateDiagramPopUp: React.FC<{
                     }}>
                         <CreateDiagramForm
                             projectId={projectId}
-                            onSuccess={onClose}
+                            onSuccess={onSuccessHandler}
                         />
                     </Box>
                 </Dialog.Panel>

@@ -27,9 +27,17 @@ export const ProjectDiagramsPage = () => {
         })
     }, [projectDiagrams, isLoading]);
 
+    const onSuccessDiagramCreating = () => {
+        setParams({
+            lastProjectId: undefined,
+            isLoading: false,
+        })
+    }
+
     return (
         <DashboardPageLayout pageName={"Diagrams"}>
             {projectId && <CreateDiagramPopUp
+                onSuccess={onSuccessDiagramCreating}
                 projectId={projectId}
                 onClose={createDiagramPopUpManager.close}
                 isShow={createDiagramPopUpManager.isOpened}
