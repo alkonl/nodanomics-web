@@ -398,18 +398,23 @@ export const baseApi = createApi({
                 }
             },
             forceRefetch: ({currentArg, previousArg}) => {
-                return currentArg?.cursorId !== previousArg?.cursorId
+                return currentArg?.cursorId !== previousArg?.cursorId || currentArg?.projectId !== previousArg?.projectId
             },
             serializeQueryArgs: ({endpointName}) => {
                 return endpointName
             },
             merge: (currentCache, newRequest) => {
+                console.log('currentCache', currentCache)
+                console.log('newRequest', newRequest)
+                if (currentCache.id === undefined || currentCache.id !== newRequest.id) {
+                    return newRequest
+                }
                 const filteredItems = newRequest.diagrams.filter((newItem) => {
                     return !currentCache.diagrams.some((currentItem) => {
                         return currentItem.id === newItem.id
                     })
                 })
-                const diagrams =[...currentCache.diagrams, ...filteredItems]
+                const diagrams = [...currentCache.diagrams, ...filteredItems]
                 const sortedDiagrams = diagrams
                     .sort((a, b) => {
                         return moment(b.updatedAt).diff(moment(a.updatedAt))
@@ -434,7 +439,9 @@ export const baseApi = createApi({
                 //     diagrams: [...sortedDiagrams]
                 // }
             },
-            providesTags: [ERTKTags.Diagrams],
+            providesTags: (result, error, arg) => {
+                return [{type: ERTKTags.Diagrams, id: arg?.projectId}]
+            }
         }),
         getDiagramsByProjectId: builder.query<GetDiagramsByProjectIdResponse, string>({
             query: (projectId: string) => {
