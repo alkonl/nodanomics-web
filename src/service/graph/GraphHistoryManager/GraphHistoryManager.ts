@@ -9,10 +9,9 @@ export class GraphHistoryManager {
     }
 
     updateHistory(value = 0) {
-        const step = this.node.runManager.currentStep
         const history = this.history
         const newHistory = history.length > 0
-            ? [...history.slice(0, step - 1), value]
+            ? [...history, value]
             : [value]
         this.node.updateNode({
             history: newHistory

@@ -1,14 +1,14 @@
 import React from 'react';
 import {Autocomplete, TextField} from "@mui/material";
 
-export interface IParameterAutocompleteProps {
-    value?: string
-    onChange?: (e: any) => void
-    readonly options?: string[]
+export interface IParameterAutocompleteProps<Value = unknown> {
+    value?: Value
+    onChange?: (e: Value) => void
+    readonly options?: Value[]
     label?: string
 }
 
-export const ParameterAutocomplete: React.FC<IParameterAutocompleteProps> = ({options = [], label, value}) => {
+export const ParameterAutocomplete: React.FC<IParameterAutocompleteProps> = ({options = [], label, value, onChange}) => {
     return (
         <Autocomplete
             sx={{
@@ -17,7 +17,13 @@ export const ParameterAutocomplete: React.FC<IParameterAutocompleteProps> = ({op
             disablePortal
             options={options}
             value={value}
+            isOptionEqualToValue={() => true}
             renderInput={(params) => <TextField {...params} label={label}/>}
+            onChange={(event, value)=>{
+                if(onChange) {
+                    onChange(value)
+                }
+            }}
         />
     );
 };

@@ -9,7 +9,8 @@ import {
     IResource,
     ITriggeredEvent,
     IUpdateGraphNodeState,
-    IUpdateGraphNodeStatePerStep
+    IUpdateGraphNodeStatePerStep,
+    IUpdateStatePerNodeUpdate
 } from "../../../interface";
 import {GraphDataEdge} from "../GraphEdge";
 import {GraphBaseNode, GraphInteractiveNode} from "./abstracts";
@@ -21,7 +22,7 @@ import {GraphHistoryManager} from "../GraphHistoryManager";
 export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue,
         IUpdateGraphNodeStatePerStep, ITriggeredEvent, IIsEventConditionMet,
-        IResetNodeNoStoreProperties {
+        IResetNodeNoStoreProperties, IUpdateStatePerNodeUpdate {
 
     // private _resourcesToProvide: IResource[]
     private previousStepResourcesCount?: number
@@ -131,6 +132,10 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         if (this.isValueChanged) {
             return this.eventName
         }
+    }
+
+    updateStatePerNodeUpdate() {
+        this.updateResourcesCountHistory()
     }
 
     private get isValueChanged() {

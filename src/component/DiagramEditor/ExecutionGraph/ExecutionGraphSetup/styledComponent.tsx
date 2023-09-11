@@ -4,7 +4,7 @@ import {
     ParameterCheckboxForm,
     ParameterInput,
     ParameterInputForm,
-    ParametersContainer, ParameterAutocomplete
+    ParametersContainer, ParameterAutocomplete, ParameterAutocompleteForm
 } from "../../../base";
 import {ParameterCheckbox} from "../../../base/Input/ParameterCheckbox";
 
@@ -42,5 +42,5 @@ export const ParameterExecutionGraphSetup = {
     Element: StyledParameterElement,
     Input: ParameterInputForm,
     Checkbox: ParameterCheckboxForm,
-    Autocomplete: ParameterCheckboxForm,
+    Autocomplete: ParameterAutocompleteForm,
 }
