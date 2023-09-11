@@ -439,9 +439,7 @@ export const baseApi = createApi({
                 //     diagrams: [...sortedDiagrams]
                 // }
             },
-            providesTags: (result, error, arg) => {
-                return [{type: ERTKTags.Diagrams, id: arg?.projectId}]
-            }
+            providesTags: [ERTKTags.Diagrams],
         }),
         getDiagramsByProjectId: builder.query<GetDiagramsByProjectIdResponse, string>({
             query: (projectId: string) => {

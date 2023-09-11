@@ -20,7 +20,6 @@ export const ProjectDiagramsPage = () => {
         skip: !projectId,
     })
 
-
     useEffect(() => {
         setParams({
             lastProjectId: projectDiagrams?.diagrams[projectDiagrams.diagrams.length - 1]?.id,

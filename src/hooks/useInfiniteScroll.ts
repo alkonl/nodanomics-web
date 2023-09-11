@@ -16,6 +16,21 @@ export const useInfiniteScroll = () => {
         }
     }, [reachedBottom])
 
+    // make request until fill the screen
+    useEffect(() => {
+        if (lastProjectId && !isLoading && reachedBottom) {
+            const lastProjectRef = scrollRef.current?.lastElementChild
+            if (lastProjectRef && lastProjectId) {
+                const lastProjectRefRect = lastProjectRef.getBoundingClientRect()
+                if (lastProjectRefRect.y < window.innerHeight) {
+                    prevProjectCursorId.current = lastProjectId
+                    setCursorId(lastProjectId)
+                }
+            }
+
+        }
+    }, [lastProjectId, reachedBottom, isLoading])
+
     return {
         cursorId,
         scrollRef,
