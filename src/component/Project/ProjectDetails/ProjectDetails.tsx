@@ -14,8 +14,6 @@ import {ProjectDetailsManageList} from "./ProjectDetailsManageList";
 export const ProjectDetails = () => {
     const projectDashboardState = useProjectDashboardState()
 
-    // const {data: projectDiagrams} = useGetDiagramsByProjectIdQuery(projectDashboardState?.selectedProjectId || '')
-    // const diagram = projectDiagrams?.diagrams?.[0]
     const projectInfo = useMemo(() => {
         return projectDashboardState.projects.find(project => project.id === projectDashboardState.selectedProjectId)
     }, [projectDashboardState])

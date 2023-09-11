@@ -22,17 +22,17 @@ export const diagramDashboardSlice = createSlice({
             state.diagrams = action.payload.projects
         },
         setSelectedDiagramId: (state, action: PayloadAction<{
-            projectId: string
+            diagramId: string
         }>) => {
-            state.selectedDiagramId = action.payload.projectId
+            state.selectedDiagramId = action.payload.diagramId
         },
         addDeleteDiagramId: (state, action: PayloadAction<{
-            projectId: string
+            diagramId: string
         }>) => {
             if (!state.deleteDiagramIds) {
                 state.deleteDiagramIds = []
             }
-            state.deleteDiagramIds.push(action.payload.projectId)
+            state.deleteDiagramIds.push(action.payload.diagramId)
         }
     }
 })

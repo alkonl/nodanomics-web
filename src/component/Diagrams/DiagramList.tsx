@@ -11,6 +11,7 @@ export const DiagramList: React.FC<{
         <MAccordion.Standard title="title">
             {diagrams.map((diagram) => (
                 <DiagramListItem
+
                     key={diagram.id}
                     diagram={diagram}
                 />

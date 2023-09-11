@@ -1,19 +1,22 @@
 import React from 'react';
 import {MView} from "../base";
 import {IBaseDiagramInfo} from "../../interface";
-import {useNavigate} from "react-router-dom";
-import {ELinks} from "../../service";
+import {diagramDashboardAction, useAppDispatch, useDiagramDashboardState} from "../../redux";
 
 export const DiagramListItem: React.FC<{
     diagram: IBaseDiagramInfo
 }> = ({diagram}) => {
-    const navigate = useNavigate()
+    const {selectedDiagramId} = useDiagramDashboardState()
+    const dispatch = useAppDispatch()
     const onClick = () => {
-        const navLink = `${ELinks.diagram}/${diagram.id}`
-        navigate(navLink)
+        dispatch(diagramDashboardAction.setSelectedDiagramId({
+            diagramId: diagram.id
+        }))
     }
+    const isSelected = diagram.id === selectedDiagramId
     return (
         <MView.Simple
+            isSelected={isSelected}
             onClick={onClick}
             title={diagram.name}
         />

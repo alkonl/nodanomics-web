@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {CreateDiagramPopUp, DashboardPageLayout, DiagramList, LandingScrollLayout} from "../../component";
+import {CreateDiagramPopUp, DashboardPageLayout, DiagramInfo, DiagramList, LandingScrollLayout} from "../../component";
 import {useInfiniteScroll, useToggle} from "../../hooks";
 import {useParams} from "react-router-dom";
 import {MButton} from "../../component/base";
@@ -50,7 +50,7 @@ export const ProjectDiagramsPage = () => {
                 </MButton.Submit>
                 {projectDiagrams && <DiagramList diagrams={projectDiagrams.diagrams}/>}
             </LandingScrollLayout>
-
+            <DiagramInfo/>
 
         </DashboardPageLayout>
     );
