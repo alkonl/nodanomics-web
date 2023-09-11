@@ -60,7 +60,11 @@ export class GraphNodeManager {
         return this._nodes.includes(node);
     }
 
-    get isAnyAssignedHistoryNode(){
-        return this._nodes.some(node => node instanceof GraphDataNode && node.isAssigned)
+    get assignedHistoryNode(){
+        return this._nodes.find(node => node instanceof GraphDataNode && node.isAssigned) as GraphDataNode | undefined
+    }
+
+    get assignedNodeChanged(): boolean {
+        return this.assignedHistoryNode?.isValueChanged || false
     }
 }

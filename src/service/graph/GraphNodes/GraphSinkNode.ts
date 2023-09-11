@@ -8,7 +8,7 @@ import {GraphHistoryManager} from "../GraphHistoryManager";
 
 export class GraphSinkNode extends GraphInteractiveNode<ISinkNodeData> {
 
-    private readonly historyManager: GraphHistoryManager = new GraphHistoryManager(this);
+    private readonly historyManager: GraphHistoryManager = new GraphHistoryManager(this, this.nodeManager);
 
     constructor(data: ISinkNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(data, runManager, nodeManager);
@@ -32,7 +32,7 @@ export class GraphSinkNode extends GraphInteractiveNode<ISinkNodeData> {
                     if (resources && resources.value > 0) {
                         edge.changeIsTransferredResources(true, resources.value)
                     }
-                    this.historyManager.updateCurrentStepHistory(resources?.value)
+                    this.updateHistory(resources?.value)
                 }
             })
         }
@@ -48,12 +48,17 @@ export class GraphSinkNode extends GraphInteractiveNode<ISinkNodeData> {
                         if (resources && resources.value > 0) {
                             edge.changeIsTransferredResources(true, resources.value)
                         }
-                        this.historyManager.updateCurrentStepHistory(resources?.value)
+                        this.updateHistory(resources?.value)
                     }
                 }
             })
         }
     }
 
+    private updateHistory(count: number | undefined) {
+        if (this.nodeManager.assignedHistoryNode && this.nodeManager.assignedNodeChanged) {
+            this.historyManager.updateCurrentStepHistory(count)
+        }
+    }
 
 }

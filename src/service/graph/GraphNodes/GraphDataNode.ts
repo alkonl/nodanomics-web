@@ -27,7 +27,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     // private _resourcesToProvide: IResource[]
     private previousStepResourcesCount?: number
     private currentStepResourcesCount?: number
-    private historyManager: GraphHistoryManager = new GraphHistoryManager(this);
+    private historyManager: GraphHistoryManager = new GraphHistoryManager(this, this.nodeManager);
 
     constructor(data: IDataNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(data, runManager, nodeManager);
@@ -36,6 +36,10 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     private get _resourcesToProvide(): IResource {
         return this.data.resourcesToProvide
+    }
+
+    get changeCount() {
+        return this.data.changeCount || 0
     }
 
     get isAssigned(): boolean {
@@ -99,7 +103,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
 
     updateStatePerStep() {
-        if (!this.nodeManager.isAnyAssignedHistoryNode) {
+        if (!this.nodeManager.assignedHistoryNode) {
             this.updateResourcesCountHistory()
         }
         this.updatePreviousResourcesCount()
@@ -141,21 +145,21 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     updateStatePerNodeUpdate() {
-        if (this.nodeManager.isAnyAssignedHistoryNode) {
+        if (this.nodeManager.assignedHistoryNode) {
             this.updateResourcesCountHistory()
         }
     }
 
     get isExecutedChangesPerStep() {
         const isAssignedNodeChanged = this.isAssigned && this.isValueChanged
-        if(isAssignedNodeChanged){
+        if (isAssignedNodeChanged) {
             const changeCount = this.data.changeCount || 0
             this.updateNode({changeCount: changeCount + 1})
         }
         return isAssignedNodeChanged
     }
 
-    private get isValueChanged() {
+    get isValueChanged() {
         return this.previousStepResourcesCount !== this.currentStepResourcesCount
     }
 

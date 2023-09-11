@@ -21,7 +21,7 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
 
     private readonly matchManager: GraphMatchManagerNode
     private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
-    private readonly historyManager: GraphHistoryManager = new GraphHistoryManager(this);
+    private readonly historyManager: GraphHistoryManager = new GraphHistoryManager(this, this.nodeManager);
 
     constructor(value: IFormulaNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(value, runManager, nodeManager);
@@ -59,13 +59,13 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
     }
 
     updateStatePerStep() {
-        if (!this.nodeManager.isAnyAssignedHistoryNode) {
+        if (!this.nodeManager.assignedHistoryNode) {
             this.updateHistory()
         }
     }
 
     updateStatePerNodeUpdate() {
-        if (this.nodeManager.isAnyAssignedHistoryNode) {
+        if (this.nodeManager.assignedHistoryNode) {
             this.updateHistory()
         }
     }
