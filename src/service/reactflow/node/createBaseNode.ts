@@ -89,6 +89,7 @@ export const createBaseNode = ({type, position}: {
                     },
                     history: [],
                     isExecuted: false,
+                    isAssigned: false,
                 }
             }
         }

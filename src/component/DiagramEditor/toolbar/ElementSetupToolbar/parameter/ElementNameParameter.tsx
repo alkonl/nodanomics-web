@@ -13,8 +13,13 @@ export const ElementNameParameter: React.FC<{
     })
 
     const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const name = event.target.value
+        // Player Wallet -> playerWallet
+        const formattedTag = name.toLowerCase()
+            .replace(/[^a-zA-Z0-9]+(.)/g, (match, character) => character.toUpperCase());
         updateElement({
-            name: event.target.value,
+            name: name,
+            tag: formattedTag,
         })
     }
 

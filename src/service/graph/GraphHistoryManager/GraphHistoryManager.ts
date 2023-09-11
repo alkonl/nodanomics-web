@@ -1,18 +1,21 @@
 import {GraphBaseNode} from "../GraphNodes";
 import {IDiagramNodeBaseData, INodeHistory} from "../../../interface";
+import {GraphNodeManager} from "../NodeManager";
 
 export class GraphHistoryManager {
-    private node: GraphBaseNode<IDiagramNodeBaseData & INodeHistory>
 
-    constructor(node: GraphBaseNode<IDiagramNodeBaseData & INodeHistory>) {
+    private node: GraphBaseNode<IDiagramNodeBaseData & INodeHistory>
+    private nodeManager: GraphNodeManager
+
+    constructor(node: GraphBaseNode<IDiagramNodeBaseData & INodeHistory>, nodeManager: GraphNodeManager) {
         this.node = node
+        this.nodeManager = nodeManager
     }
 
     updateHistory(value = 0) {
-        const step = this.node.runManager.currentStep
-        const history = this.history
+        const history = this.history.slice(0, this.step)
         const newHistory = history.length > 0
-            ? [...history.slice(0, step - 1), value]
+            ? [...history, value]
             : [value]
         this.node.updateNode({
             history: newHistory
@@ -20,9 +23,8 @@ export class GraphHistoryManager {
     }
 
     updateCurrentStepHistory(value = 0) {
-        const step = this.node.runManager.currentStep
         const history = this.history
-        const currentStepValue: number | undefined = history[step - 1]
+        const currentStepValue: number | undefined = history[this.step]
         const newValue = currentStepValue ? currentStepValue + value : value
         this.updateHistory(newValue)
     }
@@ -37,5 +39,12 @@ export class GraphHistoryManager {
 
     get min() {
         return Math.min(...this.history)
+    }
+
+    private get step(): number {
+        const assignedHistoryNode = this.nodeManager.assignedHistoryNode
+        return assignedHistoryNode
+            ? assignedHistoryNode.changeCount
+            : this.node.runManager.currentStep
     }
 }

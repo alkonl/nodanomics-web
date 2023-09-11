@@ -9,7 +9,8 @@ import {
     IResource,
     ITriggeredEvent,
     IUpdateGraphNodeState,
-    IUpdateGraphNodeStatePerStep
+    IUpdateGraphNodeStatePerStep,
+    IUpdateStatePerNodeUpdate
 } from "../../../interface";
 import {GraphDataEdge} from "../GraphEdge";
 import {GraphBaseNode, GraphInteractiveNode} from "./abstracts";
@@ -21,12 +22,12 @@ import {GraphHistoryManager} from "../GraphHistoryManager";
 export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue,
         IUpdateGraphNodeStatePerStep, ITriggeredEvent, IIsEventConditionMet,
-        IResetNodeNoStoreProperties {
+        IResetNodeNoStoreProperties, IUpdateStatePerNodeUpdate {
 
     // private _resourcesToProvide: IResource[]
     private previousStepResourcesCount?: number
     private currentStepResourcesCount?: number
-    private historyManager: GraphHistoryManager = new GraphHistoryManager(this);
+    private historyManager: GraphHistoryManager = new GraphHistoryManager(this, this.nodeManager);
 
     constructor(data: IDataNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(data, runManager, nodeManager);
@@ -35,6 +36,14 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     private get _resourcesToProvide(): IResource {
         return this.data.resourcesToProvide
+    }
+
+    get changeCount() {
+        return this.data.changeCount || 0
+    }
+
+    get isAssigned(): boolean {
+        return this.data.isAssigned || false
     }
 
     get maxCapacity() {
@@ -94,7 +103,9 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
 
     updateStatePerStep() {
-        this.updateResourcesCountHistory()
+        if (!this.nodeManager.assignedHistoryNode) {
+            this.updateResourcesCountHistory()
+        }
         this.updatePreviousResourcesCount()
     }
 
@@ -133,7 +144,22 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         }
     }
 
-    private get isValueChanged() {
+    updateStatePerNodeUpdate() {
+        if (this.nodeManager.assignedHistoryNode) {
+            this.updateResourcesCountHistory()
+        }
+    }
+
+    get isExecutedChangesPerStep() {
+        const isAssignedNodeChanged = this.isAssigned && this.isValueChanged
+        if (isAssignedNodeChanged) {
+            const changeCount = this.data.changeCount || 0
+            this.updateNode({changeCount: changeCount + 1})
+        }
+        return isAssignedNodeChanged
+    }
+
+    get isValueChanged() {
         return this.previousStepResourcesCount !== this.currentStepResourcesCount
     }
 

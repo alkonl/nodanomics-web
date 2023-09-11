@@ -27,4 +27,6 @@ export type INodeData = IStaticVariableNodeData
 
 export type IReactFlowNode = Node<INodeData>
 
+export type IReactFlowCurtainNode<T> = Node<T>
+
 

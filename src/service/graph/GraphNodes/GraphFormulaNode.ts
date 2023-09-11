@@ -2,9 +2,11 @@ import {
     IFormulaNodeData,
     IFormulaResult,
     IGetNodeExternalValue,
-    INumberVariable, IResetBeforeStep,
+    INumberVariable,
+    IResetBeforeStep,
     IUpdateGraphNodeState,
-    IUpdateGraphNodeStatePerStep
+    IUpdateGraphNodeStatePerStep,
+    IUpdateStatePerNodeUpdate
 } from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphInvokableNode} from "./abstracts";
@@ -14,11 +16,12 @@ import {GraphMatchManagerNode} from "../GraphMatchManager";
 import {GraphHistoryManager} from "../GraphHistoryManager";
 
 export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
-    implements IUpdateGraphNodeState, IGetNodeExternalValue, IUpdateGraphNodeStatePerStep, IResetBeforeStep {
+    implements IUpdateGraphNodeState, IGetNodeExternalValue, IUpdateGraphNodeStatePerStep, IResetBeforeStep,
+        IUpdateStatePerNodeUpdate {
 
     private readonly matchManager: GraphMatchManagerNode
     private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
-    private readonly historyManager: GraphHistoryManager = new GraphHistoryManager(this);
+    private readonly historyManager: GraphHistoryManager = new GraphHistoryManager(this, this.nodeManager);
 
     constructor(value: IFormulaNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(value, runManager, nodeManager);
@@ -56,7 +59,15 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
     }
 
     updateStatePerStep() {
-        this.updateHistory()
+        if (!this.nodeManager.assignedHistoryNode) {
+            this.updateHistory()
+        }
+    }
+
+    updateStatePerNodeUpdate() {
+        if (this.nodeManager.assignedHistoryNode) {
+            this.updateHistory()
+        }
     }
 
     private updateResult() {

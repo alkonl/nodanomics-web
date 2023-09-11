@@ -1,4 +1,4 @@
-import {GraphBaseNode, GraphDatasetDatafieldNode} from "../GraphNodes";
+import {GraphBaseNode, GraphDataNode, GraphDatasetDatafieldNode} from "../GraphNodes";
 import {isIResetNodeNoStoreProperties} from "../../../interface";
 
 export class GraphNodeManager {
@@ -58,5 +58,13 @@ export class GraphNodeManager {
 
     has(node: GraphBaseNode) {
         return this._nodes.includes(node);
+    }
+
+    get assignedHistoryNode(){
+        return this._nodes.find(node => node instanceof GraphDataNode && node.isAssigned) as GraphDataNode | undefined
+    }
+
+    get assignedNodeChanged(): boolean {
+        return this.assignedHistoryNode?.isValueChanged || false
     }
 }
