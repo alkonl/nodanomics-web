@@ -16,10 +16,10 @@ export const diagramDashboardSlice = createSlice({
     name: 'diagramDashboard',
     initialState,
     reducers: {
-        setProjects: (state, action: PayloadAction<{
-            projects: IBaseDiagramInfo[]
+        setDiagrams: (state, action: PayloadAction<{
+            diagrams?: IBaseDiagramInfo[]
         }>) => {
-            state.diagrams = action.payload.projects
+            state.diagrams = action.payload.diagrams || []
         },
         setSelectedDiagramId: (state, action: PayloadAction<{
             diagramId: string

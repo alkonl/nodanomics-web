@@ -2,10 +2,11 @@ import React, {useMemo} from 'react';
 import {LandingRightPanelLayout} from "../layout";
 import {Box, Typography} from "@mui/material";
 import {EColor, EFontColor} from "../../constant";
-import {MButton, Parameter} from "../base";
+import {InfoParameter, MButton} from "../base";
 import {Link} from "react-router-dom";
 import {ELinks} from "../../service";
 import {useDiagramDashboardState} from "../../redux";
+import {formatDate} from "../../utils";
 
 export const DiagramInfo = () => {
     const {diagrams, selectedDiagramId} = useDiagramDashboardState()
@@ -14,7 +15,7 @@ export const DiagramInfo = () => {
     const diagramInfo = useMemo(() => {
         return diagrams.find(diagram => diagram.id === selectedDiagramId)
     }, [diagrams])
-
+    
     return (
         <LandingRightPanelLayout>
             <Box sx={{
@@ -57,49 +58,28 @@ export const DiagramInfo = () => {
                             Preview Image
                         </Typography>
                     </Box>
-                    <Parameter.Container columns={9} gap={1}>
-                        <Parameter.ElementContainer label="Created By">
-                            <Parameter.Text  >
-                                TODO
-                            </Parameter.Text>
-                        </Parameter.ElementContainer>
-                        <Parameter.ElementContainer label="Created By">
-                            <Parameter.Text  >
-                                TODO
-                            </Parameter.Text>
-                        </Parameter.ElementContainer>
-                        <Parameter.ElementContainer label="Created By">
-                            <Parameter.Text  >
-                                TODO
-                            </Parameter.Text>
-                        </Parameter.ElementContainer>
-                    </Parameter.Container>
-                    {/*<Box className={style.projectInfo}>*/}
-                    {/*    <Typography className={style.projectInfoKey}>*/}
-                    {/*        Created By*/}
-                    {/*    </Typography>*/}
-                    {/*    <Typography>*/}
-                    {/*        /!*{diagramInfo?.createdBy}*!/*/}
-                    {/*    </Typography>*/}
-                    {/*    <Typography className={style.projectInfoKey}>*/}
-                    {/*        Creation Date*/}
-                    {/*    </Typography>*/}
-                    {/*    <Typography fontSize={14}>*/}
-                    {/*        /!*{diagramInfo && formatDate(projectInfo.createdAt, 'v1')}*!/*/}
-                    {/*    </Typography>*/}
-                    {/*    <Typography className={style.projectInfoKey}>*/}
-                    {/*        Last Edited*/}
-                    {/*    </Typography>*/}
-                    {/*    <Typography>*/}
-                    {/*        /!*{diagramInfo && formatDate(projectInfo.editedAt, 'v1')}*!/*/}
-                    {/*    </Typography>*/}
-                    {/*    <Typography className={style.projectInfoKey}>*/}
-                    {/*        Last Edited By*/}
-                    {/*    </Typography>*/}
-                    {/*    <Typography>*/}
-                    {/*        /!*{diagramInfo?.lastEditedBy}*!/*/}
-                    {/*    </Typography>*/}
-                    {/*</Box>*/}
+                    {diagramInfo && <InfoParameter.Container>
+                        <InfoParameter.Element label="Created By">
+                            <InfoParameter.Text>
+                                {diagramInfo.creator.firstName} {diagramInfo.creator.lastName}
+                            </InfoParameter.Text>
+                        </InfoParameter.Element>
+                        <InfoParameter.Element label="Creation Date">
+                            <InfoParameter.Text>
+                                {formatDate(diagramInfo.createdAt, 'v1')}
+                            </InfoParameter.Text>
+                        </InfoParameter.Element>
+                        <InfoParameter.Element label="Last Edited">
+                            <InfoParameter.Text>
+                                {formatDate(diagramInfo.updatedAt, 'v1')}
+                            </InfoParameter.Text>
+                        </InfoParameter.Element>
+                        <InfoParameter.Element label="Last Edited By">
+                            <InfoParameter.Text>
+                                {diagramInfo.lastEditor.firstName} {diagramInfo.lastEditor.lastName}
+                            </InfoParameter.Text>
+                        </InfoParameter.Element>
+                    </InfoParameter.Container>}
                 </Box>
                 <Box sx={{
                     width: '100%',

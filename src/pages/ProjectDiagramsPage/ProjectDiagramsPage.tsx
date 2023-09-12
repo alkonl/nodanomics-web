@@ -1,43 +1,23 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {CreateDiagramPopUp, DashboardPageLayout, DiagramInfo, DiagramList, LandingScrollLayout} from "../../component";
-import {useInfiniteScroll, useToggle} from "../../hooks";
-import {useParams} from "react-router-dom";
+import {useAutoSelectFirstDiagram, useDiagramDashboard, useToggle} from "../../hooks";
 import {MButton} from "../../component/base";
-import {useGetProjectDiagramsQuery} from "../../api";
+import {useDiagramDashboardState} from "../../redux";
+import {useParams} from "react-router-dom";
 
 export const ProjectDiagramsPage = () => {
     const createDiagramPopUpManager = useToggle()
-
-    const {cursorId, scrollRef, setParams} = useInfiniteScroll()
-
-
     const {projectId} = useParams<{ projectId: string }>()
-    const {data: projectDiagrams, isLoading,} = useGetProjectDiagramsQuery({
-        projectId,
-        cursorId,
-    }, {
-        refetchOnMountOrArgChange: true,
-        skip: !projectId,
-    })
 
-    useEffect(() => {
-        setParams({
-            lastProjectId: projectDiagrams?.diagrams[projectDiagrams.diagrams.length - 1]?.id,
-            isLoading,
-        })
-    }, [projectDiagrams, isLoading]);
+    const {scrollRef, clearCursor} = useDiagramDashboard()
 
-    const onSuccessDiagramCreating = () => {
-        setParams({
-            lastProjectId: undefined,
-            isLoading: false,
-        })
-    }
+    const {diagrams} = useDiagramDashboardState()
+    useAutoSelectFirstDiagram()
 
     return (
         <DashboardPageLayout pageName={"Diagrams"}>
             {projectId && <CreateDiagramPopUp
-                onSuccess={onSuccessDiagramCreating}
+                onSuccess={clearCursor}
                 projectId={projectId}
                 onClose={createDiagramPopUpManager.close}
                 isShow={createDiagramPopUpManager.isOpened}
@@ -48,7 +28,7 @@ export const ProjectDiagramsPage = () => {
                 >
                     Create Diagram
                 </MButton.Submit>
-                {projectDiagrams && <DiagramList diagrams={projectDiagrams.diagrams}/>}
+                {diagrams && <DiagramList diagrams={diagrams}/>}
             </LandingScrollLayout>
             <DiagramInfo/>
 

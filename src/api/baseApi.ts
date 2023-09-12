@@ -404,8 +404,6 @@ export const baseApi = createApi({
                 return endpointName
             },
             merge: (currentCache, newRequest) => {
-                console.log('currentCache', currentCache)
-                console.log('newRequest', newRequest)
                 if (currentCache.id === undefined || currentCache.id !== newRequest.id) {
                     return newRequest
                 }
