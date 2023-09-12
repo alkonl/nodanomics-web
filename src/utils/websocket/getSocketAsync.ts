@@ -11,7 +11,7 @@ export async function getSocketAsync() {
     }
     if (!socket) {
         socket = io(`${CONFIG.API_SOCKET_URL}`, {
-            path: CONFIG.VITE_API_WEBSOCKET_PATH,
+            path: '/api/socket',
             withCredentials: true,
             query: {token}
         });
