@@ -15,7 +15,7 @@ export const DiagramInfo = () => {
     const diagramInfo = useMemo(() => {
         return diagrams.find(diagram => diagram.id === selectedDiagramId)
     }, [diagrams])
-    
+
     return (
         <LandingRightPanelLayout>
             <Box sx={{
@@ -59,11 +59,11 @@ export const DiagramInfo = () => {
                         </Typography>
                     </Box>
                     {diagramInfo && <InfoParameter.Container>
-                        <InfoParameter.Element label="Created By">
+                        {diagramInfo.creator && <InfoParameter.Element label="Created By">
                             <InfoParameter.Text>
                                 {diagramInfo.creator.firstName} {diagramInfo.creator.lastName}
                             </InfoParameter.Text>
-                        </InfoParameter.Element>
+                        </InfoParameter.Element>}
                         <InfoParameter.Element label="Creation Date">
                             <InfoParameter.Text>
                                 {formatDate(diagramInfo.createdAt, 'v1')}
@@ -74,11 +74,11 @@ export const DiagramInfo = () => {
                                 {formatDate(diagramInfo.updatedAt, 'v1')}
                             </InfoParameter.Text>
                         </InfoParameter.Element>
-                        <InfoParameter.Element label="Last Edited By">
+                        {diagramInfo.lastEditor && <InfoParameter.Element label="Last Edited By">
                             <InfoParameter.Text>
                                 {diagramInfo.lastEditor.firstName} {diagramInfo.lastEditor.lastName}
                             </InfoParameter.Text>
-                        </InfoParameter.Element>
+                        </InfoParameter.Element>}
                     </InfoParameter.Container>}
                 </Box>
                 <Box sx={{

@@ -10,15 +10,15 @@ export interface IGetDiagramByProjectIdResponse {
         name: string
         updatedAt: string
         createdAt: string
-        creator: {
+        creator?: {
             firstName: string
             lastName: string
             id: string
-        }
+        } | null
         lastEditor: {
             firstName: string
             lastName: string
             id: string
-        }
+        } | null
     }[]
 }

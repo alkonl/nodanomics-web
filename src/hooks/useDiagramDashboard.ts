@@ -32,7 +32,15 @@ export const useDiagramDashboard = () => {
 
     useEffect(() => {
         dispatch(diagramDashboardAction.setDiagrams({
-            diagrams: projectDiagrams?.diagrams
+            diagrams: projectDiagrams?.diagrams.map(diagram => {
+                const creator = diagram.creator !== null ? diagram.creator : undefined
+                const lastEditor = diagram.lastEditor !== null ? diagram.lastEditor : undefined
+                return {
+                    ...diagram,
+                    creator,
+                    lastEditor
+                }
+            })
         }))
     }, [projectDiagrams]);
 
