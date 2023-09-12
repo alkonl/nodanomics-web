@@ -3,12 +3,12 @@ export interface IBaseDiagramInfo {
     name: string;
     updatedAt: string;
     createdAt: string;
-    creator: {
+    creator?: {
         firstName: string;
         lastName: string;
         id: string;
     };
-    lastEditor: {
+    lastEditor?: {
         firstName: string;
         lastName: string;
         id: string;
