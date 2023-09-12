@@ -32,10 +32,10 @@ export const useInfiniteScroll = () => {
     }, [lastProjectId, reachedBottom, isLoading])
 
     const clearCursor = () => {
-        setCursorId(undefined)
+        setCursorId('')
         setParams({
             lastProjectId: undefined,
-            isLoading: true,
+            isLoading: undefined,
         })
     }
 

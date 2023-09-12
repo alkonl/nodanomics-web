@@ -12,10 +12,10 @@ export const CreateDiagramPopUp: React.FC<{
     onClose: () => void;
 }> = ({isShow, onClose, projectId, onSuccess}) => {
     const onSuccessHandler = () => {
-        onClose()
-        if(onSuccess){
+        if (onSuccess) {
             onSuccess()
         }
+        onClose()
     }
 
     return (

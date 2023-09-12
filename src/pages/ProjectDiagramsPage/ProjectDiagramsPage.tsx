@@ -9,15 +9,15 @@ export const ProjectDiagramsPage = () => {
     const createDiagramPopUpManager = useToggle()
     const {projectId} = useParams<{ projectId: string }>()
 
-    const {scrollRef, clearCursor} = useDiagramDashboard()
+    const {scrollRef, updateDiagrams} = useDiagramDashboard()
 
     const {diagrams} = useDiagramDashboardState()
     useAutoSelectFirstDiagram()
 
     return (
-        <DashboardPageLayout pageName={"Diagrams"}>
+        <DashboardPageLayout pageName="Diagrams">
             {projectId && <CreateDiagramPopUp
-                onSuccess={clearCursor}
+                onSuccess={updateDiagrams}
                 projectId={projectId}
                 onClose={createDiagramPopUpManager.close}
                 isShow={createDiagramPopUpManager.isOpened}

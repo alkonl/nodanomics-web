@@ -8,23 +8,27 @@ export const useDiagramDashboard = () => {
     const dispatch = useAppDispatch()
     const {cursorId, scrollRef, setParams, clearCursor} = useInfiniteScroll()
 
+    console.log('cursorId: ', cursorId)
     const {projectId} = useParams<{ projectId: string }>()
-    const {data: projectDiagrams, isLoading,} = useGetProjectDiagramsQuery({
+    const {data: projectDiagrams, isFetching, refetch} = useGetProjectDiagramsQuery({
         projectId,
         cursorId,
     }, {
-        refetchOnMountOrArgChange: true,
         skip: !projectId,
     })
 
     useEffect(() => {
-        if (!isLoading) {
+        refetch()
+    }, [cursorId]);
+
+    useEffect(() => {
+        if (!isFetching) {
             setParams({
                 lastProjectId: projectDiagrams?.diagrams[projectDiagrams.diagrams.length - 1]?.id,
-                isLoading,
+                isLoading: isFetching,
             })
         }
-    }, [projectDiagrams, isLoading]);
+    }, [isFetching]);
 
     useEffect(() => {
         dispatch(diagramDashboardAction.setDiagrams({
@@ -32,14 +36,13 @@ export const useDiagramDashboard = () => {
         }))
     }, [projectDiagrams]);
 
-    // const clearCursor = () => {
-    //     setParams({
-    //         lastProjectId: undefined,
-    //         isLoading: undefined,
-    //     })
-    // }
+    const updateDiagrams = () => {
+        console.log('updateDiagrams')
+        clearCursor()
+        // refetch()
+    }
     return {
         scrollRef,
-        clearCursor,
+        updateDiagrams,
     }
 }
