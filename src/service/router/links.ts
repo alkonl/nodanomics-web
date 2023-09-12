@@ -10,7 +10,7 @@ export enum ELinks {
     accountBilling = '/account/billing',
     accountNFT = '/account/NFT',
     accountSettings = '/account/settings',
-    projects = '/projects',
+    project = '/project',
     diagram = '/diagram',
     team = '/team',
 }

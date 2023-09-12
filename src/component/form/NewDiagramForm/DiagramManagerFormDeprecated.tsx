@@ -7,7 +7,6 @@ import {FormText, FormTextArea} from "../../base/FormInput";
 import {Box, Button, Typography} from "@mui/material";
 import AddIcon from '@mui/icons-material/AddBoxTwoTone';
 import {TagsPopUp} from "../../popUp/TagsPopUp";
-import {TagListSmall} from "../../list";
 // import {useCreateDiagramMutation, useUpdateDiagramMutation} from "../../../api";
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch, useDiagramEditorState} from "../../../redux";
@@ -169,7 +168,6 @@ export const DiagramManagerFormDeprecated: React.FC<{
                             <AddIcon color='info'/>
                         </Button>
                     </Box>
-                    <TagListSmall selectedTags={form.getValues()[EFormFields.diagramTags]}/>
                 </Box>
                 <Button
                     variant="contained" type='submit'>

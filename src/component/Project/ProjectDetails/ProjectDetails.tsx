@@ -9,15 +9,11 @@ import {useProjectDashboardState} from "../../../redux";
 import {LandingRightPanelLayout} from "../../layout";
 import {Link} from "react-router-dom";
 import {ELinks} from "../../../service";
-import {useGetDiagramsByProjectIdQuery} from "../../../api";
 import {ProjectDetailsManageList} from "./ProjectDetailsManageList";
 
 export const ProjectDetails = () => {
     const projectDashboardState = useProjectDashboardState()
 
-    // now we don't have interface to select certain diagram
-    const {data: projectDiagrams} = useGetDiagramsByProjectIdQuery(projectDashboardState?.selectedProjectId || '')
-    const diagram = projectDiagrams?.diagrams?.[0]
     const projectInfo = useMemo(() => {
         return projectDashboardState.projects.find(project => project.id === projectDashboardState.selectedProjectId)
     }, [projectDashboardState])
@@ -32,10 +28,6 @@ export const ProjectDetails = () => {
             prevProjectId.current = projectDashboardState.selectedProjectId
         }
     }, [projectInfo])
-
-    // const onInviteUser = () => {
-    //
-    // }
 
 
     return (
@@ -119,7 +111,7 @@ export const ProjectDetails = () => {
                         variant="border">
                         Manage
                     </MButton.Submit>}
-                    <Link to={`${ELinks.diagram}/${diagram?.id}`}>
+                    <Link to={`${ELinks.project}/${projectInfo?.id}`}>
                         <MButton.Submit sx={{
                             alignSelf: 'flex-end'
                         }} variant="border">

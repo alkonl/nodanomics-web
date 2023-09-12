@@ -11,7 +11,7 @@ import {
     AccountPlanPage,
     AccountBillingPage,
     AccountNftPage,
-    AccountPage, AccountSettingsPage, TeamPage
+    AccountPage, AccountSettingsPage, TeamPage, ProjectDiagramsPage
 } from "../../pages";
 import {ELinks} from "./links";
 import {ProjectPage} from "../../pages/ProjectPage";
@@ -39,8 +39,11 @@ export const appRouter = createBrowserRouter([
                 element: <AccountSettingsPage/>
             }]
         },  {
-            path: ELinks.projects,
-            element: <ProjectPage/>
+            path: ELinks.project,
+            element: <ProjectPage/>,
+        },{
+            path: `${ELinks.project}/:projectId`,
+            element: <ProjectDiagramsPage/>,
         },{
             path: ELinks.team,
             element: <TeamPage/>

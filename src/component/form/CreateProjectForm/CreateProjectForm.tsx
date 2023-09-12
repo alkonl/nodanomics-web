@@ -9,6 +9,7 @@ import {Text} from "../../base/Text";
 import {FormText} from "../../base/FormInput";
 import {useCreateDiagramMutation, useCreateProjectMutation} from "../../../api";
 import {useNavigate} from "react-router-dom";
+import {ELinks} from "../../../service";
 
 enum EFormFields {
     projectName = 'projectName',
@@ -38,18 +39,20 @@ export const CreateProjectForm: React.FC<{
     }
 
     useEffect(() => {
-        if (resCreateDiagram) {
-            onSuccess()
-            navigate(`/diagram/${resCreateDiagram.id}`)
-        }
+
+        // if (resCreateDiagram) {
+        //     onSuccess()
+        //     navigate(`/diagram/${resCreateDiagram.id}`)
+        // }
     }, [resCreateDiagram])
 
     useEffect(() => {
         if (resCreateProject && resCreateProject.id) {
-            createDiagram({
-                diagramName: resCreateProject.name,
-                projectId: resCreateProject.id,
-            })
+            navigate(`${ELinks.project}/${resCreateProject.id}`)
+            // createDiagram({
+            //     diagramName: resCreateProject.name,
+            //     projectId: resCreateProject.id,
+            // })
         }
     }, [resCreateProject])
 
@@ -62,7 +65,7 @@ export const CreateProjectForm: React.FC<{
             component="form"
         >
             <Text.Label>
-                First Name
+                Project Name
             </Text.Label>
             <FormText name={EFormFields.projectName} form={form}/>
             <MButton.Submit type="submit">

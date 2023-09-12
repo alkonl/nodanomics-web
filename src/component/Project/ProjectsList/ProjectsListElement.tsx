@@ -1,7 +1,6 @@
 import React from 'react';
-import {Box, Typography} from "@mui/material";
-import {EColor} from "../../../constant";
 import {useAppDispatch, useProjectDashboardState, projectDashboardAction} from "../../../redux";
+import {MView} from "../../base";
 
 export const ProjectsListElement: React.FC<{
     projectName: string
@@ -17,30 +16,11 @@ const selectedProjectId = useProjectDashboardState().selectedProjectId
         }))
     }
     return (
-        <Box
-            sx={{
-                borderWidth: 1,
-                borderColor: EColor.black,
-                borderStyle: 'solid',
-                width: 250,
-                height: isBig ? 120 : 60,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                cursor: 'pointer',
-                backgroundColor: isSelected ? EColor.grey2 : EColor.white,
-            }}
+        <MView.Simple
+            isBig={isBig}
+            isSelected={isSelected}
             onClick={onClick}
-            component="button"
-        >
-            <Typography
-                sx={{
-                    fontSize: 20,
-                    fontWeight: 600,
-                }}
-            >
-                {projectName}
-            </Typography>
-        </Box>
+            title={projectName}
+        />
     );
 };

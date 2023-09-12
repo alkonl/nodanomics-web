@@ -6,7 +6,6 @@ import {validation} from "../../../utils";
 import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useAppDispatch} from "../../../redux";
-import {dashboardViewsActions} from "../../../redux/store";
 
 enum EFormFields {
     searchTerm = 'searchTerm',
@@ -28,7 +27,7 @@ export const DiagramSearchBar = () => {
     });
     const data = form.watch()
     useEffect(() => {
-        dispatch(dashboardViewsActions.updateSearchQuery(data.searchTerm))
+        // dispatch(dashboardViewsActions.updateSearchQuery(data.searchTerm))
     }, [data])
 
     return (

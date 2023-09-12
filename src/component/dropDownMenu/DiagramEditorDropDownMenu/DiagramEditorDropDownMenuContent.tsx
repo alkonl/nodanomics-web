@@ -45,7 +45,7 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
     }
 
     const onProjects = () => {
-        navigate(ELinks.projects)
+        navigate(ELinks.project)
     }
 
 
