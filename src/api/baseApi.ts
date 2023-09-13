@@ -391,6 +391,7 @@ export const baseApi = createApi({
         }),
         getProjectDiagrams: builder.query<IGetDiagramByProjectIdResponse, IGetDiagramByProjectIdRequest>({
             query: (body: IGetDiagramByProjectIdRequest) => {
+                console.log('getProjectDiagrams', body.cursorId)
                 return {
                     url: `/project/${body.projectId}/diagrams`,
                     method: 'GET',

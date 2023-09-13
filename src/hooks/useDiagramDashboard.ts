@@ -14,12 +14,11 @@ export const useDiagramDashboard = () => {
         projectId,
         cursorId,
     }, {
+        refetchOnMountOrArgChange: true,
         skip: !projectId,
     })
 
-    useEffect(() => {
-        refetch()
-    }, [cursorId]);
+
 
     useEffect(() => {
         if (!isFetching) {
@@ -45,9 +44,8 @@ export const useDiagramDashboard = () => {
     }, [projectDiagrams]);
 
     const updateDiagrams = () => {
-        console.log('updateDiagrams')
         clearCursor()
-        // refetch()
+        refetch()
     }
     return {
         scrollRef,
