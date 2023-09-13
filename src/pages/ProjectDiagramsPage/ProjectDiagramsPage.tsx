@@ -3,21 +3,27 @@ import {CreateDiagramPopUp, DashboardPageLayout, DiagramInfo, DiagramList, Landi
 import {useAutoSelectFirstDiagram, useDiagramDashboard, useToggle} from "../../hooks";
 import {MButton} from "../../component/base";
 import {useDiagramDashboardState} from "../../redux";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import {ELinks} from "../../service";
 
 export const ProjectDiagramsPage = () => {
+    const navigate = useNavigate()
     const createDiagramPopUpManager = useToggle()
     const {projectId} = useParams<{ projectId: string }>()
 
-    const {scrollRef, updateDiagrams} = useDiagramDashboard()
+    const {scrollRef} = useDiagramDashboard()
 
     const {diagrams} = useDiagramDashboardState()
     useAutoSelectFirstDiagram()
 
+    const onDiagramCreated = (createdDiagram: {id: string}) => {
+        navigate(`${ELinks.diagram}/${createdDiagram.id}`)
+    }
+
     return (
         <DashboardPageLayout pageName="Diagrams">
             {projectId && <CreateDiagramPopUp
-                onSuccess={updateDiagrams}
+                onSuccess={onDiagramCreated}
                 projectId={projectId}
                 onClose={createDiagramPopUpManager.close}
                 isShow={createDiagramPopUpManager.isOpened}

@@ -42,12 +42,7 @@ export const useDiagramDashboard = () => {
         }))
     }, [projectDiagrams]);
 
-    const updateDiagrams = () => {
-        clearCursor()
-        refetch()
-    }
     return {
         scrollRef,
-        updateDiagrams,
     }
 }
