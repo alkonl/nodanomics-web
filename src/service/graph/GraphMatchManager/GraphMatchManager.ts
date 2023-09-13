@@ -54,7 +54,7 @@ export abstract class GraphMatchManager {
                     [key: string]: number
                 }, variable) => {
                     const variableName = variable.variableName || '-'
-                    if (variable.value) {
+                    if (variable.value !== undefined) {
                         acc[variableName] = variable.value
                     }
                     return acc
