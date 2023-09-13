@@ -43,6 +43,7 @@ export const ExecutionGraphSetup = () => {
 
 
     useEffect(() => {
+        console.log('options', options)
         form.reset({
             [EFormFields.gridColor]: options?.grid?.borderColor,
             [EFormFields.xAxisTitle]: options?.xaxis?.title?.text,
@@ -52,7 +53,7 @@ export const ExecutionGraphSetup = () => {
                 id: currentAssignedNode.id,
             } : undefined,
         })
-    }, []);
+    }, [options]);
 
 
     const onSubmit = (data: IValidationSchema) => {
