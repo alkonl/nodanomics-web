@@ -12,8 +12,7 @@ export const ColorPicker: React.FC<{
           value,
           onClose,
       }) => {
-
-    const [innerColorValue, setInnerColorValue] = React.useState<string | undefined>(value);
+    // const [innerColorValue, setInnerColorValue] = React.useState<string | undefined>(value);
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
@@ -21,16 +20,20 @@ export const ColorPicker: React.FC<{
         setAnchorEl(event.currentTarget);
     };
 
-    useEffect(() => {
-        if (onChange) {
-            onChange(innerColorValue);
-        }
-    }, [innerColorValue]);
+    // useEffect(() => {
+    //     setInnerColorValue(value);
+    // }, [value]);
+
+    // useEffect(() => {
+    //     if (onChange) {
+    //         onChange(innerColorValue);
+    //     }
+    // }, [innerColorValue]);
 
     const handleClose = () => {
-        if (onClose) {
-            onClose(innerColorValue);
-        }
+        // if (onClose) {
+        //     onClose(value);
+        // }
         setAnchorEl(null);
     };
 
@@ -51,7 +54,7 @@ export const ColorPicker: React.FC<{
                     padding: 0,
                 }}
                 style={{
-                    backgroundColor: innerColorValue,
+                    backgroundColor: value,
                 }}
                 onClick={handleClick}
             >
@@ -78,8 +81,8 @@ export const ColorPicker: React.FC<{
                 }}
             >
                 <HexColorPicker
-                    color={innerColorValue}
-                    onChange={setInnerColorValue}
+                    color={value}
+                    onChange={onChange}
                 />
             </Popover>
         </>
