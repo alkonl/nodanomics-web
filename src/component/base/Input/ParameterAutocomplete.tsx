@@ -8,7 +8,7 @@ export interface IParameterAutocompleteProps<Value = unknown> {
     label?: string
 }
 
-export const ParameterAutocomplete: React.FC<IParameterAutocompleteProps> = ({options = [], label, value, onChange}) => {
+export const ParameterAutocomplete: React.FC<IParameterAutocompleteProps> = ({options = [], label, value = '', onChange}) => {
     return (
         <Autocomplete
             sx={{

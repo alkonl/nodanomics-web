@@ -18,14 +18,13 @@ export class GraphTagManager {
         const variables: INumberVariable[] = [];
 
         for (const node of this.nodeManager.nodes) {
-            if (isIGetNodeExternalValue(node) && node.tag && node.nodeExternalValue) {
+            if (isIGetNodeExternalValue(node) && node.tag && node.nodeExternalValue !== undefined) {
                 variables.push({
                     variableName: node.tag,
                     value: node.nodeExternalValue,
                 });
             }
         }
-
         return variables;
     }
 

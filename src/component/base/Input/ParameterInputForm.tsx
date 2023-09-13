@@ -3,8 +3,9 @@ import {FormBaseInput, IFormBaseInputProps} from "../FormInput";
 // eslint-disable-next-line import/named
 import {InputProps} from "@mui/material/Input/Input";
 import {ParameterInput} from "./ParameterInput";
+import {isFromInputValueEqual} from "../../../service";
 
-export const ParameterInputForm: React.FC<InputProps & IFormBaseInputProps> = (
+export const ParameterInputFormInner: React.FC<InputProps & IFormBaseInputProps> = (
     {
         form,
         name,
@@ -24,3 +25,5 @@ export const ParameterInputForm: React.FC<InputProps & IFormBaseInputProps> = (
         />
     );
 };
+
+export const ParameterInputForm = React.memo(ParameterInputFormInner, isFromInputValueEqual)

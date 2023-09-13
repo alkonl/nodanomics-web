@@ -8,18 +8,16 @@ export const useDiagramDashboard = () => {
     const dispatch = useAppDispatch()
     const {cursorId, scrollRef, setParams, clearCursor} = useInfiniteScroll()
 
-    console.log('cursorId: ', cursorId)
     const {projectId} = useParams<{ projectId: string }>()
     const {data: projectDiagrams, isFetching, refetch} = useGetProjectDiagramsQuery({
         projectId,
         cursorId,
     }, {
+        refetchOnMountOrArgChange: true,
         skip: !projectId,
     })
 
-    useEffect(() => {
-        refetch()
-    }, [cursorId]);
+
 
     useEffect(() => {
         if (!isFetching) {
@@ -44,13 +42,7 @@ export const useDiagramDashboard = () => {
         }))
     }, [projectDiagrams]);
 
-    const updateDiagrams = () => {
-        console.log('updateDiagrams')
-        clearCursor()
-        // refetch()
-    }
     return {
         scrollRef,
-        updateDiagrams,
     }
 }

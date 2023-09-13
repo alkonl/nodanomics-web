@@ -30,7 +30,7 @@ export const NodeDataValueParameter: React.FC<{
         <ElementParameter label="Value">
             <Parameter.Input
                 type="number"
-                value={nodeData.resources.value || ''}
+                value={nodeData.resources.value}
                 onChange={changeValue}
             />
 

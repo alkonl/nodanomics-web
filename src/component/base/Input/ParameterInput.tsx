@@ -7,7 +7,7 @@ import {EColor, EFontColor} from "../../../constant";
 export const ParameterInput: React.FC<InputProps> = ({sx, value, ...props}) => {
 
     return <Input
-        value={value ? value : ''}
+        value={value !== undefined ? value : ''}
         sx={{
             color: EFontColor.grey4,
             width: '100%',

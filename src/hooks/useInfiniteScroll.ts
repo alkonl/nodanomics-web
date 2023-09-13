@@ -9,6 +9,7 @@ export const useInfiniteScroll = () => {
     const prevProjectCursorId = useRef<string>();
     const reachedBottom = useScrollToBottom(scrollRef)
 
+    // make request when reached bottom
     useEffect(() => {
         if (reachedBottom && lastProjectId && lastProjectId !== prevProjectCursorId.current && !isLoading) {
             prevProjectCursorId.current = lastProjectId
@@ -19,6 +20,7 @@ export const useInfiniteScroll = () => {
     // make request until fill the screen
     useEffect(() => {
         if (lastProjectId && !isLoading && reachedBottom) {
+
             const lastProjectRef = scrollRef.current?.lastElementChild
             if (lastProjectRef && lastProjectId) {
                 const lastProjectRefRect = lastProjectRef.getBoundingClientRect()
@@ -32,11 +34,7 @@ export const useInfiniteScroll = () => {
     }, [lastProjectId, reachedBottom, isLoading])
 
     const clearCursor = () => {
-        setCursorId('')
-        setParams({
-            lastProjectId: undefined,
-            isLoading: undefined,
-        })
+        setCursorId(undefined)
     }
 
     return {

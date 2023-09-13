@@ -1,6 +1,8 @@
 import React from 'react';
-import {useAppDispatch, useProjectDashboardState, projectDashboardAction} from "../../../redux";
+import {projectDashboardAction, useAppDispatch, useProjectDashboardState} from "../../../redux";
 import {MView} from "../../base";
+import {useNavigate} from "react-router-dom";
+import {ELinks} from "../../../service";
 
 export const ProjectsListElement: React.FC<{
     projectName: string
@@ -8,9 +10,14 @@ export const ProjectsListElement: React.FC<{
     isBig: boolean
 }> = ({projectName, projectId, isBig}) => {
     const dispatch = useAppDispatch()
-const selectedProjectId = useProjectDashboardState().selectedProjectId
+    const selectedProjectId = useProjectDashboardState().selectedProjectId
+    const navigate = useNavigate()
+
     const isSelected = selectedProjectId === projectId
-    const onClick = () => {
+    const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        if (event.detail === 2) {
+            navigate(`${ELinks.project}/${projectId}`)
+        }
         dispatch(projectDashboardAction.setSelectedProjectId({
             projectId: projectId
         }))

@@ -1,8 +1,9 @@
 import React from 'react';
 import {FormBaseInput, IFormBaseInputProps} from "../base/FormInput";
 import {ColorPicker} from "./ColorPicker";
+import {isFromInputValueEqual} from "../../service";
 
-export const ColorPickerForm: React.FC<IFormBaseInputProps> = ({
+export const ColorPickerFormInner: React.FC<IFormBaseInputProps> = ({
                                                             form,
                                                             name
                                                         }) => {
@@ -11,7 +12,6 @@ export const ColorPickerForm: React.FC<IFormBaseInputProps> = ({
             form={form}
             name={name}
             Input={({onChange, value}) => {
-
                 return <ColorPicker
                     value={value?.toString()}
                     onChange={onChange}
@@ -21,3 +21,4 @@ export const ColorPickerForm: React.FC<IFormBaseInputProps> = ({
     );
 };
 
+export const ColorPickerForm = React.memo(ColorPickerFormInner, isFromInputValueEqual);

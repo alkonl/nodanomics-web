@@ -6,7 +6,7 @@ export const ViewSimple: React.FC<{
     title: string,
     isBig?: boolean,
     isSelected?: boolean,
-    onClick?: () => void,
+    onClick?: (event:  React.MouseEvent<HTMLButtonElement, MouseEvent> ) => void,
 }> = ({title, isSelected, isBig, onClick}) => {
     return (
         <Box

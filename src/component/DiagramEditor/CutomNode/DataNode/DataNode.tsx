@@ -34,8 +34,8 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
     const updateMinMax = () =>{
         if (data.history.length > 0) {
             setMinMaxResources({
-                min: Math.min(...data.history).toFixed(1),
-                max: Math.max(...data.history).toFixed(1),
+                min: Math.min(...data.history)?.toFixed(1),
+                max: Math.max(...data.history)?.toFixed(1),
             })
         } else {
             setMinMaxResources({
@@ -59,7 +59,7 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
     }, [data.resources]);
 
 
-    const currentResourcesValue = resources.toFixed(data.decimalDigits || 1) || 0
+    const currentResourcesValue = resources?.toFixed(data.decimalDigits || 1) || 0
     return (
 
         <>

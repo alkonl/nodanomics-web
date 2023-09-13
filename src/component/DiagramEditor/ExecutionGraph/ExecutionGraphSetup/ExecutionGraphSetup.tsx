@@ -24,7 +24,7 @@ const validationSchema = z.object({
     [EFormFields.assignedDataComponent]: z.object({
         label: z.string(),
         id: z.string(),
-    }).nullable(),
+    }).nullable().optional(),
 })
 
 type IValidationSchema = z.infer<typeof validationSchema>;
@@ -61,7 +61,7 @@ export const ExecutionGraphSetup = () => {
             xAxisTitle: data.xAxisTitle,
             isShowVerticalGridLines: data.isShowVerticalLine,
         });
-        if (data.assignedDataComponent !== null) {
+        if (data.assignedDataComponent) {
             changeAssignNode(data.assignedDataComponent.id)
         } else {
             changeAssignNode()

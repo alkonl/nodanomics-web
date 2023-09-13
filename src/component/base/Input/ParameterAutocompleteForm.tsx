@@ -2,8 +2,9 @@ import React from 'react';
 import type {InputProps} from "@mui/material/Input/Input";
 import {FormBaseInput, IFormBaseInputProps} from "../FormInput";
 import {IParameterAutocompleteProps, ParameterAutocomplete} from "./ParameterAutocomplete";
+import {isFromInputValueEqual} from "../../../service";
 
-export const ParameterAutocompleteForm: React.FC<InputProps & IFormBaseInputProps & IParameterAutocompleteProps> = (
+const ParameterAutocompleteFormInner: React.FC<InputProps & IFormBaseInputProps & IParameterAutocompleteProps> = (
     {
         form,
         name,
@@ -19,3 +20,5 @@ export const ParameterAutocompleteForm: React.FC<InputProps & IFormBaseInputProp
         />
     );
 };
+
+export const ParameterAutocompleteForm = React.memo(ParameterAutocompleteFormInner, isFromInputValueEqual);

@@ -87,9 +87,9 @@ export const VariableStatisticsParameter: React.FC<{
     const min = resourcesCountHistory && Math.min(...resourcesCountHistory)
     const max = resourcesCountHistory && Math.max(...resourcesCountHistory)
 
-    const avgFormatted = avg && avg.toFixed(2)
-    const maxFormatted = max && max.toFixed(2)
-    const minFormatted = min && min.toFixed(2)
+    const avgFormatted = avg && avg?.toFixed(2)
+    const maxFormatted = max && max?.toFixed(2)
+    const minFormatted = min && min?.toFixed(2)
 
     return (
         <Box>

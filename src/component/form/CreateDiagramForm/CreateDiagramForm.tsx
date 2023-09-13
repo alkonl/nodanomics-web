@@ -20,7 +20,7 @@ const validationSchema = z.object({
 type IValidationSchema = z.infer<typeof validationSchema>;
 
 export const CreateDiagramForm: React.FC<{
-    onSuccess: () => void;
+    onSuccess: (createdDiagram: {id: string}) => void;
     projectId: string;
 }> = ({
           onSuccess, projectId
@@ -40,10 +40,10 @@ export const CreateDiagramForm: React.FC<{
     }
 
     useEffect(() => {
-        if (isSuccess) {
-            onSuccess()
+        if (resCreateDiagram && resCreateDiagram.id) {
+            onSuccess(resCreateDiagram)
         }
-    }, [isSuccess])
+    }, [resCreateDiagram])
 
     return (
         <Box
