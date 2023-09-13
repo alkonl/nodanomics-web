@@ -35,7 +35,6 @@ export const useGetEditDiagramFromServer = () => {
 
 
     useEffect(() => {
-        console.log('diagramRes', diagramRes, {currentDiagramId})
         const diagramData = diagramRes?.diagram
         if (diagramData && diagramData.elements !== null) {
 

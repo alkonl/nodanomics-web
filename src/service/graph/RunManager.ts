@@ -130,7 +130,6 @@ export class RunManager {
                         node.updateStatePerNodeUpdate()
                     }
                 })
-                console.log(`target ${target.data.name}`)
             }
             if (target instanceof GraphLoopNode) {
                 const innerMicroLoops = chainItem.inner?.filter(item => item.target instanceof GraphMicroLoopNode)

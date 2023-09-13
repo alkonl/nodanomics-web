@@ -9,7 +9,6 @@ export interface IParameterAutocompleteProps<Value = unknown> {
 }
 
 export const ParameterAutocomplete: React.FC<IParameterAutocompleteProps> = ({options = [], label, value = '', onChange}) => {
-    console.log('ParameterAutocomplete', value)
     return (
         <Autocomplete
             sx={{

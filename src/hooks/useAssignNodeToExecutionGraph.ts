@@ -13,7 +13,6 @@ export const useAssignNodeToExecutionGraph = () => {
     }[]
 
     const changeAssignNode = (nodeId?: string) => {
-        console.log('changeAssignNode:', nodeId)
         const dataNodes = diagramNodes.filter((node) => node.data.type === EDiagramNode.Data) as IReactFlowCurtainNode<IDataNodeData>[]
         const mappedNodes = dataNodes.map((node) => {
             if (node.data.id === nodeId) {
@@ -38,7 +37,6 @@ export const useAssignNodeToExecutionGraph = () => {
     }
 
     const currentAssignedNode = diagramNodes.find((node) => node.data.type === EDiagramNode.Data && node.data.isAssigned)
-    console.log('currentAssignedNode:', currentAssignedNode)
     const formattedCurrentAssignedNode = currentAssignedNode
         ? {
             label: currentAssignedNode.data.tag,

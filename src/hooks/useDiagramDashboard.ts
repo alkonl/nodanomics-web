@@ -8,7 +8,6 @@ export const useDiagramDashboard = () => {
     const dispatch = useAppDispatch()
     const {cursorId, scrollRef, setParams, clearCursor} = useInfiniteScroll()
 
-    console.log('cursorId: ', cursorId)
     const {projectId} = useParams<{ projectId: string }>()
     const {data: projectDiagrams, isFetching, refetch} = useGetProjectDiagramsQuery({
         projectId,
