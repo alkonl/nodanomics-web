@@ -8,7 +8,7 @@ export const useManageExecutionDuration = () => {
     const {setExecutionDuration} = diagramEditorActions
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
     const [seconds, setSeconds] = useState<string | undefined>(executionDuration
-        ? (executionDuration / 1000).toFixed(2) : '')
+        ? (executionDuration / 1000)?.toFixed(2) : '')
 
     const changeExecutionDuration = (duration: string) => {
         setSeconds(duration)

@@ -21,7 +21,7 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = (props) => {
     const result = useMemo(() => {
         if (data.result && data.result.type === 'number') {
             const value = data.result.value
-            return data.isShowDecimal ? value.toFixed(data.decimalDigits) : value
+            return data.isShowDecimal ? value?.toFixed(data.decimalDigits) : value
         }
     }, [data])
 
