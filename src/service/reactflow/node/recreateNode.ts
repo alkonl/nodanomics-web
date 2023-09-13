@@ -9,7 +9,6 @@ export const recreateNode = ({node, position}: { node: IReactFlowNode, position?
     const newNode = resetNodeState({...node})
     newNode.id = generateNodeId();
     newNode.data.id = newNode.id;
-    newNode.data.name = `node ${newNode.id}`;
     newNode.selected = false;
     if (position) {
         newNode.position.x = position.x;

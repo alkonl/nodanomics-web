@@ -1,10 +1,9 @@
 // eslint-disable-next-line import/named
 import {ReactFlowInstance} from "reactflow";
 import {ICopiedElements, IPastAndNewNode, IReactFlowEdge, IReactFlowNode, MousePosition} from "../../../interface";
-import {getTopParents} from "./getTopParent";
 import {recursiveUpdateChildrenWithUpdatedParent} from "../logic";
 import {recreateNode} from "./recreateNode";
-import {generateEdgeId} from "../connection/generateEdgeId";
+import {generateEdgeId} from "../connection";
 import {getNodesWithoutParent} from "./getNodesWithoutParent";
 
 export const prepareCopiedNodesToPaste = ({elements, reactFlowInstance, reactFlowWrapper, mousePosition}: {

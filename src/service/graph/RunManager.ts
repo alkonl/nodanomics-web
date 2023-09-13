@@ -97,6 +97,7 @@ export class RunManager {
         this.incrementStep()
         this.resetBeforeStep()
         const chain = this.getExecutionOrder()
+        console.log('chain', chain)
         this.setExecutionOrder(chain)
         // remove listener nodes from execution order
         const startChains = chain.filter(chainItem => !(chainItem.target instanceof GraphEventListenerNode))
@@ -202,6 +203,7 @@ export class RunManager {
 
     private getExecutionOrder(): IChainItem[] {
         const startedNodes = this.getStartedNodes()
+        console.log('startedNodes', startedNodes)
         const childrenNodes = startedNodes.map(source => {
             return this.getChainChildrenRecursive({
                 target: source,
