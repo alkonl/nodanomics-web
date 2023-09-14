@@ -590,6 +590,9 @@ export const baseApi = createApi({
                     method: 'GET',
                     params: params,
                 }
+            },
+            providesTags: (result, error, arg) => {
+                return [{type: ERTKTags.Spreadsheet, id: arg?.spreadsheetId}]
             }
         }),
         getManySpreadsheet: builder.query<IGetManySpreadsheetResponse, IGetManySpreadsheetRequests>({
@@ -600,7 +603,18 @@ export const baseApi = createApi({
                     params: params,
                 }
             },
-
+            providesTags: (result, error, arg) => {
+                return [{type: ERTKTags.Spreadsheet, id: arg?.spreadsheetIds?.join('')}]
+            }
+        }),
+        useDeleteSpreadsheet: builder.mutation<unknown, string>({
+            query: (spreadsheetId: string) => {
+                return {
+                    url: `/project/spreadsheet/${spreadsheetId}`,
+                    method: 'DELETE',
+                }
+            },
+            invalidatesTags: [ERTKTags.Spreadsheet]
         }),
         getAllUserGoogleSpreadSheet: builder.query<IGetAllGoogleSpreadsheetResponse, undefined>({
             query: () => {
@@ -667,6 +681,7 @@ export const {
     useGetSpreadSheetQuery,
     useGetAllUserGoogleSpreadSheetQuery,
     useGetManySpreadsheetQuery,
+    useUseDeleteSpreadsheetMutation,
     useUpdateExecutionGraphPropertiesMutation,
     useGetExecutionGraphPropertiesQuery,
     useGetProjectDiagramsQuery,
