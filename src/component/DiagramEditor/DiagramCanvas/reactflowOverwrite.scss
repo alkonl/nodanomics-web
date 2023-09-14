@@ -1,0 +1,11 @@
+.react-flow__edge {
+
+  &:hover {
+
+    .react-flow__edge-path{
+      stroke: orange;
+    }
+
+  }
+}
+
