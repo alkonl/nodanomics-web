@@ -8,7 +8,6 @@ export const useUploadDiagram = () => {
     const dispatch = useAppDispatch()
     const {addManyNodes, addManyEdges} = diagramEditorActions
     return async (event: ChangeEvent<HTMLInputElement>) => {
-        console.log('event.target.files', event.target.files)
         const file = event.target.files?.[0];
         if (file) {
             const data = await readFileAsText(file)
