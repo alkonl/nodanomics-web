@@ -36,7 +36,7 @@ import {useOnConnect} from "../../../hooks/useOnConnect";
 import {ChainConnection} from "../CustomConnectionLine/ChainConnection";
 import {DatasetNode} from "../CutomNode/DatasetNode";
 import {GAP_BETWEEN_EDITOR_CANVAS_DOTS, multiSelectKeyCodes} from "../../../constant";
-
+import './reactflowOverwrite.scss'
 
 const nodeTypes = {
     [EDiagramNode.StaticVariable]: StaticVariableNode,
