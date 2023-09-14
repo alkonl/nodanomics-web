@@ -1,10 +1,12 @@
-import React, {useMemo} from "react";
+import React, {useEffect, useMemo} from "react";
 import {Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography} from "@mui/material";
-import {useGetSpreadSheetQuery} from "../../api";
+import {useGetSpreadSheetQuery, useUseDeleteSpreadsheetMutation} from "../../api";
+import {MButton} from "../base";
 
 export const SpreadsheetViewer: React.FC<{
     spreadsheetId: string;
-}> = ({spreadsheetId}) => {
+    onDelete?: () => void;
+}> = ({spreadsheetId, onDelete}) => {
     const {data} = useGetSpreadSheetQuery({
         spreadsheetId,
     })
@@ -47,6 +49,20 @@ export const SpreadsheetViewer: React.FC<{
             rows: fomattedRows,
         }
     }, [data])
+
+
+    const [reqDeleteSpreadsheet, {isSuccess: isSpreadsheetDeleted}] = useUseDeleteSpreadsheetMutation()
+
+    useEffect(() => {
+        if (isSpreadsheetDeleted && onDelete) {
+            onDelete()
+        }
+    }, [isSpreadsheetDeleted]);
+
+    const handleDeleteSpreadsheet = () => {
+        reqDeleteSpreadsheet(spreadsheetId)
+    }
+
     return (
         <Box sx={{
             padding: 1,
@@ -56,9 +72,21 @@ export const SpreadsheetViewer: React.FC<{
             backgroundColor: 'white',
         }}>
             {formattedTable && <Box>
-                <Typography>
-                    {formattedTable.name}
-                </Typography>
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                }}>
+                    <Typography>
+                        {formattedTable.name}
+                    </Typography>
+                    <MButton.Submit
+                        onClick={handleDeleteSpreadsheet}
+                    >
+                        Delete
+                    </MButton.Submit>
+                </Box>
+
                 <TableContainer component={Paper}>
                     <Table sx={{minWidth: 650}} aria-label="simple table">
                         <TableBody>

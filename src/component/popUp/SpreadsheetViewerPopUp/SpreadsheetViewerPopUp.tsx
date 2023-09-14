@@ -14,6 +14,7 @@ export const SpreadsheetViewerPopUp: React.FC<{
                 <Dialog.Panel>
                     <SpreadsheetViewer
                         spreadsheetId={spreadsheetId}
+                        onDelete={onClose}
                     />
                 </Dialog.Panel>
             </BasePopUp>
