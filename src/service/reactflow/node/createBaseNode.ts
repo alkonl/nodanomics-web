@@ -195,6 +195,7 @@ export const createBaseNode = ({type, position}: {
                     ...baseData,
                     type,
                     isExecuted: false,
+                    incomingVariables: [],
                 }
             }
         }
