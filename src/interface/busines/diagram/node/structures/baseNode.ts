@@ -15,6 +15,7 @@ export enum EDiagramNode {
     DatasetDatafield = 'DatasetDatafield',
     Start = 'Start',
     Sink = 'Sink',
+    Transfer = 'Transfer',
 }
 
 

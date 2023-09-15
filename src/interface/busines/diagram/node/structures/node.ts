@@ -11,6 +11,7 @@ import {IWhileLoopNodeData} from "../whileLoop";
 import {IDatasetDatafield} from "../datasetDatafield";
 import {IStartNodeData} from "../startNode";
 import {ISinkNodeData} from "../sinkNode";
+import {ITransferNodeData} from "../transferNode";
 
 
 export type INodeData = IStaticVariableNodeData
@@ -24,6 +25,7 @@ export type INodeData = IStaticVariableNodeData
     | IDatasetDatafield
     | IStartNodeData
     | ISinkNodeData
+    | ITransferNodeData
 
 export type IReactFlowNode = Node<INodeData>
 

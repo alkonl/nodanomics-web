@@ -483,6 +483,7 @@ export const baseApi = createApi({
             queryFn: async (chatMessageContent: string) => {
                 const socket = await getSocketAsync();
                 return new Promise(() => {
+                    console.log('chatMessageContent: ', chatMessageContent)
                     socket.emit(EEventDiagramServer.UpdateDiagramElements, chatMessageContent);
                 })
             },

@@ -188,6 +188,16 @@ export const createBaseNode = ({type, position}: {
                 }
             }
         }
+        case EDiagramNode.Transfer: {
+            return {
+                ...baseParams,
+                data: {
+                    ...baseData,
+                    type,
+                    isExecuted: false,
+                }
+            }
+        }
         default :
             throw new Error(`Unknown node type: ${type}`);
     }

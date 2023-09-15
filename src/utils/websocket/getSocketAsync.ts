@@ -6,6 +6,7 @@ let socket: Socket;
 
 export async function getSocketAsync() {
     const token = await Session.getAccessToken();
+    console.log('token: ', token)
     if (token === undefined) {
         throw new Error("User is not logged in");
     }
