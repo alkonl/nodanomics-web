@@ -8,7 +8,6 @@ import {EConnectionMode, ISinkNodeData} from "../../../../interface";
 import {ChainHandle} from "../../CustomHandle/ChainHandle";
 import {Position} from "reactflow";
 import {DataHandle} from "../../CustomHandle/DataHandle";
-import {LogicHandle} from "../../CustomHandle";
 
 const clipPath = 'polygon(82% 0, 100% 50%, 82% 100%, 0% 100%, 17% 50%, 0% 0%);'
 const HEIGHT = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 3
@@ -35,18 +34,19 @@ export const TransferNode: React.FC<NodeProps<ISinkNodeData>> = (props) => {
                     justifyContent: 'space-between',
                     top: 'calc(30% - 5px)',
                 }}>
-                    <LogicHandle
-                        type="source"
-                        position={Position.Left}
-                        isConnectable={isConnectable}
-                        mode={EConnectionMode.NodeOutgoing}
-                    />
-                    <LogicHandle
+                    <DataHandle
                         type="target"
-                        position={Position.Right}
+                        position={Position.Left}
                         isConnectable={isConnectable}
                         mode={EConnectionMode.NodeIncoming}
                     />
+                    <DataHandle
+                        type="source"
+                        position={Position.Right}
+                        isConnectable={isConnectable}
+                        mode={EConnectionMode.NodeOutgoing}
+                    />
+
                 </Box>
 
                 <Box sx={{

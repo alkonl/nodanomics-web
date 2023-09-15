@@ -31,7 +31,6 @@ import {ChainConnectionParametersContainer} from "../parameter/chainConnection/C
 import {NodeEventTriggerParametersContainer} from "../parameter/eventTrigger";
 import {NodeEventListenerParametersContainer} from "../parameter/eventListener";
 import {IsNodeAutomaticProperty} from "../parameter/generic/IsNodeAutomaticProperty";
-import {TransferTransferTagParameter} from "../parameter/transferTag";
 
 
 export const PropertiesSection: React.FC<{
@@ -56,9 +55,6 @@ export const PropertiesSection: React.FC<{
                 <ElementNameParameter elementData={selectedElementData}/>
                 {selectedElementData.elementType === EElementType.Node &&
                     <NodeTagParameter nodeData={selectedElementData}/>}
-                {selectedElementData.elementType === EElementType.Node &&
-                    selectedElementData.type === EDiagramNode.Transfer &&
-                    <TransferTransferTagParameter nodeData={selectedElementData}/>}
                 {selectedElementData.elementType === EElementType.Node &&
                     selectedElementData.type === EDiagramNode.Data &&
                     <NodeDataParametersContainer nodeData={selectedElementData}/>}

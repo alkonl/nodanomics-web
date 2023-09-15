@@ -3,7 +3,7 @@ import {
     ENodeAction,
     IDataNodeData,
     IDiagramNodeBaseData,
-    IGetNodeExternalValue,
+    IGetNodeExternalValue, IGraphDataNode,
     IIsEventConditionMet,
     IResetNodeNoStoreProperties,
     IResource,
@@ -22,7 +22,7 @@ import {GraphHistoryManager} from "../GraphHistoryManager";
 export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue,
         IUpdateGraphNodeStatePerStep, ITriggeredEvent, IIsEventConditionMet,
-        IResetNodeNoStoreProperties, IUpdateStatePerNodeUpdate {
+        IResetNodeNoStoreProperties, IUpdateStatePerNodeUpdate, IGraphDataNode {
 
     // private _resourcesToProvide: IResource[]
     private previousStepResourcesCount?: number
@@ -210,7 +210,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
 
     protected runAction() {
-        this.pullAllOrAnyResourcesFromSource()
+        // this.pullAllOrAnyResourcesFromSource()
         this.pushAllResources()
         this.pushAnyResources()
         this.pullAnyResourcesFromData()
@@ -345,20 +345,21 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     }
 
+    // DEPRECATED: data node can't pull resources
     private pullAllOrAnyResourcesFromSource() {
-        if (this.actionMode === ENodeAction.pullAll || this.actionMode === ENodeAction.pullAny) {
-            this.edgesFromSources.forEach(edge => {
-                const countOfResourceToGenerate = edge.countOfResource
-                const source = edge.source;
-                if (source instanceof GraphOriginNode) {
-                    const generatedResources = source.generateResourceFromSource(countOfResourceToGenerate)
-                    const onSuccess = (resourceCount: number) => {
-                        edge.changeIsTransferredResources(true, resourceCount)
-                    }
-                    this.addResource(generatedResources, source.addingResourcesMode, {onSuccess})
-                }
-            })
-        }
+        // if (this.actionMode === ENodeAction.pullAll || this.actionMode === ENodeAction.pullAny) {
+        //     this.edgesFromSources.forEach(edge => {
+        //         const countOfResourceToGenerate = edge.countOfResource
+        //         const source = edge.source;
+        //         if (source instanceof GraphOriginNode) {
+        //             const generatedResources = source.generateResourceFromSource(countOfResourceToGenerate)
+        //             const onSuccess = (resourceCount: number) => {
+        //                 edge.changeIsTransferredResources(true, resourceCount)
+        //             }
+        //             this.addResource(generatedResources, source.addingResourcesMode, {onSuccess})
+        //         }
+        //     })
+        // }
     }
 
     static baseNodeIsData(baseNode: GraphBaseNode<IDiagramNodeBaseData>): baseNode is GraphDataNode {

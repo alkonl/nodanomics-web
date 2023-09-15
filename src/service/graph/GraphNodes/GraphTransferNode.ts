@@ -2,17 +2,21 @@ import {GraphInvokableNode} from "./abstracts";
 import {ITransferNodeData} from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
-import {GraphLogicManager} from "./helper";
+import {GraphLogicManager, GraphResourceManager} from "./helper";
 
 export class GraphTransferNode extends GraphInvokableNode<ITransferNodeData> {
     private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
-
+    private readonly resourceManager = new GraphResourceManager({
+        incomingEdges: this.incomingEdges,
+        outgoingEdges: this.outgoingEdges
+    });
     constructor(value: ITransferNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(value, runManager, nodeManager);
     }
 
     invokeStep() {
         super.invokeStep();
+        this.transferResources()
         this.updateState()
     }
 
@@ -26,5 +30,9 @@ export class GraphTransferNode extends GraphInvokableNode<ITransferNodeData> {
         this.updateNode({
             incomingVariables
         })
+    }
+
+    private transferResources() {
+        const resources = this.resourceManager.pullAny()
     }
 }
