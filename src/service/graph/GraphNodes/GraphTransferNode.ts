@@ -1,5 +1,5 @@
 import {GraphInvokableNode} from "./abstracts";
-import {ITransferNodeData} from "../../../interface";
+import {EModeAddResourcesToDataNode, ITransferNodeData} from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
 import {GraphLogicManager, GraphResourceManager} from "./helper";
@@ -33,6 +33,8 @@ export class GraphTransferNode extends GraphInvokableNode<ITransferNodeData> {
     }
 
     private transferResources() {
-        const resources = this.resourceManager.pullAny()
+        const {resources} = this.resourceManager.pullAny()
+        const joinedResources = this.resourceManager.joinResources(resources)
+        this.resourceManager.pushResourcesToFirst(joinedResources)
     }
 }

@@ -4,8 +4,9 @@ import {EModeAddResourcesToDataNode} from "../modeAddResourcesToDataNode";
 
 export interface IGraphDataNode {
     takeCountResources(count: number): IResource | undefined
-    addResource(resources: IResource, mode?: EModeAddResourcesToDataNode, params?: {
+    addResource(resources: IResource,  params?: {
         onSuccess?: (resourcesCount: number) => void,
+        mode?: EModeAddResourcesToDataNode,
     }): void
     resourcesToProvideCount: number
 }

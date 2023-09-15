@@ -50,21 +50,50 @@ export class GraphResourceManager {
         return {gettingResources, resources}
     }
 
-    pushAny(addingResourcesMode: EModeAddResourcesToDataNode) {
-        this.edgesToVariables.forEach(edge => {
+    generateResource(addingResourcesMode: EModeAddResourcesToDataNode) {
+        this.edgesToData.forEach(edge => {
             if (isIGraphDataNode(edge.target)) {
                 const resource = this.generateResourceFromSource(edge.countOfResource);
                 const onSuccess = (resourcesValue: number) => {
                     edge.changeIsTransferredResources(true, resourcesValue)
                 }
-                edge.target.addResource(resource, addingResourcesMode, {
+                edge.target.addResource(resource, {
+                    mode: addingResourcesMode,
                     onSuccess
                 });
             }
         })
     }
 
-    private get edgesToVariables(): GraphDataEdge[] {
+    pushResourcesToFirst(resources?: IResource) {
+        console.log('resource', resources)
+        if (resources) {
+            const firstEdgeData = this.edgesToData[0]
+            if (firstEdgeData) {
+               this.pushResources(firstEdgeData, resources)
+            }
+        }
+    }
+
+    joinResources(resources: IResource[]): IResource {
+        return resources.reduce((acc, resource) => {
+            acc.value += resource.value
+            return acc
+        }, generateResource(0))
+    }
+
+    private pushResources(edge: GraphDataEdge, resource?: IResource) {
+        if (isIGraphDataNode(edge.target) && resource) {
+            const onSuccess = (resourcesValue: number) => {
+                edge.changeIsTransferredResources(true, resourcesValue)
+            }
+            edge.target.addResource(resource, {
+                onSuccess
+            });
+        }
+    }
+
+    private get edgesToData(): GraphDataEdge[] {
         return this.outgoingEdges
             .filter(edge => isIGraphDataNode(edge.target))
             .filter(edge => GraphDataEdge.baseEdgeIsData(edge)) as GraphDataEdge[];

@@ -20,7 +20,7 @@ export class GraphOriginNode extends GraphInteractiveNode<IOriginNodeData>
     }
 
     pushAllOrAnyResources() {
-        this.resourceManager.pushAny(this.addingResourcesMode)
+        this.resourceManager.generateResource(this.addingResourcesMode)
     }
 
     // get edgesToVariables(): GraphDataEdge[] {
