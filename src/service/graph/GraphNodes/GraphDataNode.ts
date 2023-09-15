@@ -108,6 +108,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
             this.updateResourcesCountHistory()
         }
         this.updatePreviousResourcesCount()
+        this.updateResourcesToProvide()
     }
 
     addResource(resources: IResource,  params?: {
@@ -282,7 +283,12 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     takeCountResources(count: number): IResource | undefined {
         const afterTakeResources = this.resourcesToProvideCount - count
+        console.log(`after: ${afterTakeResources}
+toProvide: ${this.resourcesToProvideCount}
+count: ${count}
+        `)
         if (afterTakeResources >= 0 && (!this.minCapacity || afterTakeResources >= this.minCapacity)) {
+            console.log('takeCountResources', count)
             const deletedResourcesToProvide = {
                 ...this.resourcesToProvide,
                 value: count
