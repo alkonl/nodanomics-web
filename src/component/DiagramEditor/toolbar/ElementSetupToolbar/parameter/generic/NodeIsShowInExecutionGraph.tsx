@@ -1,7 +1,7 @@
 import React from 'react';
 import {Parameter} from "../../../../../base";
 import {useUpdateNode} from "../../../../../../hooks";
-import {IDataNodeData, IDiagramNodeBaseData, IIsShowInExecutionGraphNode} from "../../../../../../interface";
+import {IDiagramNodeBaseData, IIsShowInExecutionGraphNode} from "../../../../../../interface";
 
 export const NodeIsShowInExecutionGraph: React.FC<{
     nodeData: IDiagramNodeBaseData & IIsShowInExecutionGraphNode
