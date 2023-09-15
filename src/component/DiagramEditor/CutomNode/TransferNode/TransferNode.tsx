@@ -4,7 +4,10 @@ import {Box} from "@mui/material";
 import {BaseNodeShapeContainer} from "../container";
 import {NodeStyle} from "../styledComponent";
 import type {NodeProps} from "reactflow";
-import {ISinkNodeData} from "../../../../interface";
+import {EConnectionMode, ISinkNodeData} from "../../../../interface";
+import {ChainHandle} from "../../CustomHandle/ChainHandle";
+import {Position} from "reactflow";
+import {DataHandle} from "../../CustomHandle/DataHandle";
 
 const clipPath = 'polygon(82% 0, 100% 50%, 82% 100%, 0% 100%, 17% 50%, 0% 0%);'
 const HEIGHT = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 3
@@ -12,9 +15,60 @@ const WIDTH = GAP_BETWEEN_EDITOR_CANVAS_DOTS * 6
 
 
 export const TransferNode: React.FC<NodeProps<ISinkNodeData>> = (props) => {
-    const {data} = props;
+    const {data, isConnectable} = props;
     return (
         <>
+            {/*connections*/}
+            <Box sx={{
+                position: 'absolute',
+                width: 'calc(100% + 28px)',
+                height: 'calc(100% + 28px)',
+                left: -14,
+                top: -14,
+            }}>
+
+                <Box sx={{
+                    position: 'absolute',
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    top: 'calc(30% - 5px)',
+                }}>
+                    <DataHandle
+                        type="source"
+                        position={Position.Top}
+                        isConnectable={isConnectable}
+                        mode={EConnectionMode.NodeOutgoing}
+                    />
+                    <DataHandle
+                        type="target"
+                        position={Position.Bottom}
+                        isConnectable={isConnectable}
+                        mode={EConnectionMode.NodeIncoming}
+                    />
+                </Box>
+
+                <Box sx={{
+                    width: '100%',
+                    position: 'absolute',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    bottom: 'calc(30% - 5px)',
+                }}>
+                    <ChainHandle
+                        type="target"
+                        position={Position.Left}
+                        isConnectable={isConnectable}
+
+                    />
+                    <ChainHandle
+                        type="source"
+                        position={Position.Right}
+                        isConnectable={isConnectable}
+                        mode={EConnectionMode.NodeOutgoing}
+                    />
+                </Box>
+            </Box>
             <BaseNodeShapeContainer
                 params={{
                     width: WIDTH,
