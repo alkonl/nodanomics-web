@@ -3,7 +3,7 @@ import {Box, Typography} from "@mui/material";
 import lodash from 'lodash'
 import {EColor} from "../../../constant";
 import ReactApexChart from "react-apexcharts";
-import {useExecutionGraphSeries, useToggle, useWidthAndHeight} from "../../../hooks";
+import {useExecutionGraphSeries, useGetAssignedNode, useToggle, useWidthAndHeight} from "../../../hooks";
 import {useDiagramEditorState} from "../../../redux";
 import {ExecutionGraphSetupPopUp} from "./ExecutionGraphSetup";
 import {MButton} from "../../base";
