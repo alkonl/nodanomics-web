@@ -13,6 +13,9 @@ export const GroupedNodes = () => {
     return (
         <Box sx={{
             padding: 1,
+            position: 'relative',
+            overflowY: 'auto',
+            height: '100%',
         }}>
             <Typography>
                 Groups by tags
