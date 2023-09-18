@@ -3,6 +3,7 @@ import React from "react";
 import {IDiagramConnectionData, INodeData} from "../../../../../interface";
 import {useUpdateElement} from "../../../../../hooks";
 import {ElementParameter} from "./ElementParameter";
+import {convertToCamelCase} from "../../../../../utils";
 
 export const ElementNameParameter: React.FC<{
     elementData: INodeData | IDiagramConnectionData,
@@ -15,8 +16,9 @@ export const ElementNameParameter: React.FC<{
     const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const name = event.target.value
         // Player Wallet -> playerWallet
-        const formattedTag = name.toLowerCase()
-            .replace(/[^a-zA-Z0-9]+(.)/g, (match, character) => character.toUpperCase());
+        // const formattedTag = name.toLowerCase()
+        //     .replace(/[^a-zA-Z0-9]+(.)/g, (match, character) => character.toUpperCase());
+        const formattedTag = convertToCamelCase(name)
         updateElement({
             name: name,
             tag: formattedTag,
@@ -31,3 +33,5 @@ export const ElementNameParameter: React.FC<{
         </ElementParameter>
     )
 }
+
+
