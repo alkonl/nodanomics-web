@@ -22,7 +22,7 @@ const elkOptions = {
     'elk.layered.spacing.nodeNodeBetweenLayers': '100',
     'elk.spacing.nodeNode': '100',
     "elk.direction": "RIGHT",
-    // "elk.hierarchyHandling": "INCLUDE_CHILDREN",
+    "elk.hierarchyHandling": "INCLUDE_CHILDREN",
 };
 const createGraphLayout = async (elements: {
     nodes: IReactFlowNode[];
@@ -74,7 +74,7 @@ const createGraphLayout = async (elements: {
         }
     }
 
-    const formattedNodes: ElkNode[] = nodes.map((node) => getELKNode(edges, nodes, node))
+    const formattedNodes: ElkNode[] = baseNodes.map((node) => getELKNode(edges, nodes, node))
 
     const edgesWithElkMetadata: ElkExtendedEdge[] = edges.map((edge) => ({
         id: edge.id,
@@ -98,18 +98,17 @@ const createGraphLayout = async (elements: {
         const children = node.children?.map((child) => getLayoutedNodesRecurseve(child)).flat()
         const layoutedNode = {
             id: node.id,
-            position: {
-                x: node.x,
-                y: node.y,
-            },
+            x: node.x,
+            y: node.y,
             width: node.width,
             height: node.height,
         }
         return [layoutedNode, ...(children || [])]
     }
     const layoutedNodes = layoutedGraph.children?.map((child) => getLayoutedNodesRecurseve(child)).flat()
+    console.log('layoutedGraph:', layoutedGraph)
     const nodesWithUpdatedPosition = elements.nodes?.map((node) => {
-        const layoutedNode = layoutedGraph.children?.find((n) => n.id === node.id)
+        const layoutedNode = layoutedNodes?.find((n) => n.id === node.id)
         return {
             ...node,
             position: {
