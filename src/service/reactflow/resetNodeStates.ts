@@ -71,6 +71,15 @@ export const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                 }
             }
         }
+        case EDiagramNode.Transfer: {
+            return {
+                ...node,
+                data: {
+                    ...node.data,
+                    history: [],
+                }
+            }
+        }
         default:
             return node
     }

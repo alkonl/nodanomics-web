@@ -25,7 +25,7 @@ import {
     OriginNode,
     SinkNode,
     StartNode,
-    StaticVariableNode,
+    StaticVariableNode, TransferNode,
     WhileLoopNode
 } from "../CutomNode";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../../redux";
@@ -50,6 +50,7 @@ const nodeTypes = {
     [EDiagramNode.DatasetDatafield]: DatasetNode,
     [EDiagramNode.Start]: StartNode,
     [EDiagramNode.Sink]: SinkNode,
+    [EDiagramNode.Transfer]: TransferNode,
 };
 
 const edgeTypes = {

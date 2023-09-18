@@ -1,9 +1,9 @@
 import {
     EModeAddResourcesToDataNode,
-    ENodeAction,
     IDataNodeData,
     IDiagramNodeBaseData,
     IGetNodeExternalValue,
+    IGraphDataNode,
     IIsEventConditionMet,
     IResetNodeNoStoreProperties,
     IResource,
@@ -22,7 +22,7 @@ import {GraphHistoryManager} from "../GraphHistoryManager";
 export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue,
         IUpdateGraphNodeStatePerStep, ITriggeredEvent, IIsEventConditionMet,
-        IResetNodeNoStoreProperties, IUpdateStatePerNodeUpdate {
+        IResetNodeNoStoreProperties, IUpdateStatePerNodeUpdate, IGraphDataNode {
 
     // private _resourcesToProvide: IResource[]
     private previousStepResourcesCount?: number
@@ -107,12 +107,14 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
             this.updateResourcesCountHistory()
         }
         this.updatePreviousResourcesCount()
+        this.updateResourcesToProvide()
     }
 
-    addResource(resources: IResource, mode?: EModeAddResourcesToDataNode, params?: {
+    addResource(resources: IResource,  params?: {
         onSuccess?: (resourcesCount: number) => void,
+        mode?: EModeAddResourcesToDataNode,
     }) {
-        const updatedResources = this.addResourceWithCapacity(resources, mode)
+        const updatedResources = this.addResourceWithCapacity(resources, params?.mode)
         const isAdded = updatedResources !== undefined;
         if (isAdded && params?.onSuccess) {
             params.onSuccess(resources.value)
@@ -169,7 +171,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
                 return this.addResourcesToNode(resources)
             } else if (mode === EModeAddResourcesToDataNode.onlyAll && this.currentResourcesCount + resources?.value <= this.maxCapacity) {
                 return this.addResourcesToNode(resources)
-            } else if (mode === EModeAddResourcesToDataNode.asPossible) {
+            } else {
                 const countOfResourcesToAdd = this.maxCapacity - this.currentResourcesCount;
                 const resourcesToAdd = {
                     value: resources.value - countOfResourcesToAdd
@@ -210,7 +212,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
 
     protected runAction() {
-        this.pullAllOrAnyResourcesFromSource()
+        // this.pullAllOrAnyResourcesFromSource()
         this.pushAllResources()
         this.pushAnyResources()
         this.pullAnyResourcesFromData()
@@ -226,45 +228,47 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
 
+    // DEPRECATED: data node can't pull resources
     private pullAnyResourcesFromData() {
-        if (this.actionMode === ENodeAction.pullAny) {
-            this.incomingEdges.forEach(edge => {
-                const source = edge.source;
-                if (edge instanceof GraphDataEdge && source instanceof GraphDataNode) {
-                    const isPossibleToAddResources = this.isPossibleToAddResource(source.resources, source.addingResourcesMode)
-                    if (isPossibleToAddResources) {
-                        const resources = source.takeCountResources(edge.countOfResource)
-                        if (resources) {
-                            const onSuccess = (resourceCount: number) => {
-                                edge.changeIsTransferredResources(true, resourceCount)
-                            }
-                            this.addResource(resources, source.addingResourcesMode, {onSuccess})
-                        }
-
-                    }
-                }
-            })
-        }
+        // if (this.actionMode === ENodeAction.pullAny) {
+        //     this.incomingEdges.forEach(edge => {
+        //         const source = edge.source;
+        //         if (edge instanceof GraphDataEdge && source instanceof GraphDataNode) {
+        //             const isPossibleToAddResources = this.isPossibleToAddResource(source.resources, source.addingResourcesMode)
+        //             if (isPossibleToAddResources) {
+        //                 const resources = source.takeCountResources(edge.countOfResource)
+        //                 if (resources) {
+        //                     const onSuccess = (resourceCount: number) => {
+        //                         edge.changeIsTransferredResources(true, resourceCount)
+        //                     }
+        //                     this.addResource(resources, source.addingResourcesMode, {onSuccess})
+        //                 }
+        //
+        //             }
+        //         }
+        //     })
+        // }
     }
 
+    // DEPRECATED: data node can't pull resources
     private pullAllResourcesFromData() {
-        if (this.actionMode === ENodeAction.pullAll) {
-            this.incomingEdges.forEach(edge => {
-                const source = edge.source;
-                if (edge instanceof GraphDataEdge && source instanceof GraphDataNode) {
-                    const isPossibleToAddResources = this.isPossibleToAddResource(source.resources, source.addingResourcesMode)
-                    if (source.resourcesToProvideCount >= edge.countOfResource && isPossibleToAddResources) {
-                        const resources = source.takeCountResources(edge.countOfResource)
-                        if (resources) {
-                            const onSuccess = (resourceCount: number) => {
-                                edge.changeIsTransferredResources(true, resourceCount)
-                            }
-                            this.addResource(resources, source.addingResourcesMode, {onSuccess})
-                        }
-                    }
-                }
-            })
-        }
+        // if (this.actionMode === ENodeAction.pullAll) {
+        //     this.incomingEdges.forEach(edge => {
+        //         const source = edge.source;
+        //         if (edge instanceof GraphDataEdge && source instanceof GraphDataNode) {
+        //             const isPossibleToAddResources = this.isPossibleToAddResource(source.resources, source.addingResourcesMode)
+        //             if (source.resourcesToProvideCount >= edge.countOfResource && isPossibleToAddResources) {
+        //                 const resources = source.takeCountResources(edge.countOfResource)
+        //                 if (resources) {
+        //                     const onSuccess = (resourceCount: number) => {
+        //                         edge.changeIsTransferredResources(true, resourceCount)
+        //                     }
+        //                     this.addResource(resources, source.addingResourcesMode, {onSuccess})
+        //                 }
+        //             }
+        //         }
+        //     })
+        // }
     }
 
     private get countOfRequiredOutgoingResources() {
@@ -278,6 +282,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     takeCountResources(count: number): IResource | undefined {
         const afterTakeResources = this.resourcesToProvideCount - count
+
         if (afterTakeResources >= 0 && (!this.minCapacity || afterTakeResources >= this.minCapacity)) {
             const deletedResourcesToProvide = {
                 ...this.resourcesToProvide,
@@ -303,62 +308,64 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         }
     }
 
+    // DEPRECATED: data node can't push resources
     private pushAnyResources() {
-        if (this.actionMode === ENodeAction.pushAny) {
-            this.outgoingEdges.forEach(edge => {
-                const source = edge.source;
-                if (edge instanceof GraphDataEdge && source instanceof GraphDataNode) {
-                    const isPossibleToAddResources = source.isPossibleToAddResource(this.resources, source.addingResourcesMode)
-                    if (isPossibleToAddResources) {
-                        const resources = this.takeCountResources(edge.countOfResource)
-                        if (resources) {
-                            const onSuccess = (resourcesCount: number) =>
-                                edge.changeIsTransferredResources(true, resourcesCount)
-                            source.addResource(resources, source.addingResourcesMode, {onSuccess})
-                        }
-                    }
-                }
-            })
-        }
+        // if (this.actionMode === ENodeAction.pushAny) {
+        //     this.outgoingEdges.forEach(edge => {
+        //         const source = edge.source;
+        //         if (edge instanceof GraphDataEdge && source instanceof GraphDataNode) {
+        //             const isPossibleToAddResources = source.isPossibleToAddResource(this.resources, source.addingResourcesMode)
+        //             if (isPossibleToAddResources) {
+        //                 const resources = this.takeCountResources(edge.countOfResource)
+        //                 if (resources) {
+        //                     const onSuccess = (resourcesCount: number) =>
+        //                         edge.changeIsTransferredResources(true, resourcesCount)
+        //                     source.addResource(resources, source.addingResourcesMode, {onSuccess})
+        //                 }
+        //             }
+        //         }
+        //     })
+        // }
     }
 
+    // DEPRECATED: data node can't push resources
     private pushAllResources() {
-        if (this.actionMode === ENodeAction.pushAll) {
-            if (this.resourcesToProvideCount >= this.countOfRequiredOutgoingResources) {
-                this.outgoingEdges.forEach(edge => {
-                    const source = edge.source;
-                    if (edge instanceof GraphDataEdge && source instanceof GraphDataNode) {
-                        const isPossibleToAddResources = source.isPossibleToAddResource(this.resources, source.addingResourcesMode)
-                        if (isPossibleToAddResources) {
-                            const resources = this.takeCountResources(edge.countOfResource)
-                            if (resources) {
-                                const onSuccess = (resourceCount: number) => {
-                                    edge.changeIsTransferredResources(true, resourceCount)
-                                }
-                                source.addResource(resources, source.addingResourcesMode, {onSuccess})
-                            }
-                        }
-                    }
-                })
-            }
-        }
-
+        // if (this.actionMode === ENodeAction.pushAll) {
+        //     if (this.resourcesToProvideCount >= this.countOfRequiredOutgoingResources) {
+        //         this.outgoingEdges.forEach(edge => {
+        //             const source = edge.source;
+        //             if (edge instanceof GraphDataEdge && source instanceof GraphDataNode) {
+        //                 const isPossibleToAddResources = source.isPossibleToAddResource(this.resources, source.addingResourcesMode)
+        //                 if (isPossibleToAddResources) {
+        //                     const resources = this.takeCountResources(edge.countOfResource)
+        //                     if (resources) {
+        //                         const onSuccess = (resourceCount: number) => {
+        //                             edge.changeIsTransferredResources(true, resourceCount)
+        //                         }
+        //                         source.addResource(resources, source.addingResourcesMode, {onSuccess})
+        //                     }
+        //                 }
+        //             }
+        //         })
+        //     }
+        // }
     }
 
+    // DEPRECATED: data node can't pull resources
     private pullAllOrAnyResourcesFromSource() {
-        if (this.actionMode === ENodeAction.pullAll || this.actionMode === ENodeAction.pullAny) {
-            this.edgesFromSources.forEach(edge => {
-                const countOfResourceToGenerate = edge.countOfResource
-                const source = edge.source;
-                if (source instanceof GraphOriginNode) {
-                    const generatedResources = source.generateResourceFromSource(countOfResourceToGenerate)
-                    const onSuccess = (resourceCount: number) => {
-                        edge.changeIsTransferredResources(true, resourceCount)
-                    }
-                    this.addResource(generatedResources, source.addingResourcesMode, {onSuccess})
-                }
-            })
-        }
+        // if (this.actionMode === ENodeAction.pullAll || this.actionMode === ENodeAction.pullAny) {
+        //     this.edgesFromSources.forEach(edge => {
+        //         const countOfResourceToGenerate = edge.countOfResource
+        //         const source = edge.source;
+        //         if (source instanceof GraphOriginNode) {
+        //             const generatedResources = source.generateResourceFromSource(countOfResourceToGenerate)
+        //             const onSuccess = (resourceCount: number) => {
+        //                 edge.changeIsTransferredResources(true, resourceCount)
+        //             }
+        //             this.addResource(generatedResources, source.addingResourcesMode, {onSuccess})
+        //         }
+        //     })
+        // }
     }
 
     static baseNodeIsData(baseNode: GraphBaseNode<IDiagramNodeBaseData>): baseNode is GraphDataNode {

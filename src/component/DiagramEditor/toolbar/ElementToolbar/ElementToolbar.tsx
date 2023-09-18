@@ -41,7 +41,12 @@ const mockDiagramNodes: DiagramElementPreviewToolbar = {
             type: EDiagramNode.Formula,
             tooltip: 'Formula',
             toolbarName: 'F',
-        },
+        }, {
+            elementType: EElementType.Node,
+            type: EDiagramNode.Transfer,
+            tooltip: 'Transfer',
+            toolbarName: 'T',
+        }
     ],
     [EElementShow.Logic]: [{
         elementType: EElementType.Node,

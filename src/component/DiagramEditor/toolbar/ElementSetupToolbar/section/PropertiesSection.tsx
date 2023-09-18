@@ -55,7 +55,6 @@ export const PropertiesSection: React.FC<{
                 <ElementNameParameter elementData={selectedElementData}/>
                 {selectedElementData.elementType === EElementType.Node &&
                     <NodeTagParameter nodeData={selectedElementData}/>}
-
                 {selectedElementData.elementType === EElementType.Node &&
                     selectedElementData.type === EDiagramNode.Data &&
                     <NodeDataParametersContainer nodeData={selectedElementData}/>}
@@ -68,6 +67,7 @@ export const PropertiesSection: React.FC<{
                     && <NodeEventTriggerParametersContainer nodeData={selectedElementData}/>}
                 {selectedElementData.type === EDiagramNode.EventListener
                     && <NodeEventListenerParametersContainer nodeData={selectedElementData}/>}
+
                 {'trigger' in selectedElementData && <NodeTriggerModeParameter nodeData={selectedElementData}/>}
                 {selectedElementData.type === EDiagramNode.MicroLoop
                     && <ForLoopLoopsParameter nodeData={selectedElementData}/>}

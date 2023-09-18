@@ -57,6 +57,7 @@ export const useChangeNodeDataStep = ({
         updateNodeData({
             resources: newResources,
             initialResources: newResources,
+            resourcesToProvide: newResources,
         })
     }
 
