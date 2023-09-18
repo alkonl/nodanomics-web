@@ -27,13 +27,19 @@ export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
         return 0
     }
 
+    resetBeforeStep() {
+        super.resetBeforeStep();
+        const hasParent = this.data.parentId !== undefined
+        if (hasParent) {
+            this.resetLoopStep()
+        }
+    }
 
     protected checkIsLoopActive() {
         const isLoopActive = this.currentLoopCount < this.loopCount
         this.setIsLoopActive(isLoopActive)
         return isLoopActive
     }
-
 
     isEventTriggered(mode: EConnectionMode): boolean {
 
