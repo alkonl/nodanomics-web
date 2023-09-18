@@ -4,7 +4,6 @@ import {EColor} from "../../../../constant";
 import {MButton, Parameter} from "../../../base";
 import {RunningStep} from "../ElementToolbar/RunningStep";
 import {
-    useDownloadJsonFile,
     useInvokeStep,
     useManageExecutionDuration,
     useManageTargetExecutionStep,
@@ -12,8 +11,7 @@ import {
     useToggle
 } from "../../../../hooks";
 import {ExecutionGraphPopUp} from "../../ExecutionGraph";
-import DownloadIcon from '@mui/icons-material/Download';
-import {useDownloadDiagram} from "../../../../hooks/useDownloadDiagram";
+import {useAutoLayout} from "../../../../hooks/useAutoLayout";
 
 export const ExecutionToolbar = () => {
     const executionGraphPopUp = useToggle();
@@ -31,6 +29,7 @@ export const ExecutionToolbar = () => {
         changeTargetExecutionStep(event.target.value);
     }
 
+    // const autoLayout = useAutoLayout()
 
     return (
         <Box sx={{
@@ -105,6 +104,9 @@ export const ExecutionToolbar = () => {
                 isShow={executionGraphPopUp.isOpened}
                 onClose={executionGraphPopUp.close}
             />
+            {/*<MButton.Submit onClick={autoLayout}>*/}
+            {/*    layout*/}
+            {/*</MButton.Submit>*/}
         </Box>
     );
 };

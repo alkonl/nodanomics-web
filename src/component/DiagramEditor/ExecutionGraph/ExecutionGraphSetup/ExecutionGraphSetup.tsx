@@ -12,14 +12,14 @@ import {MButton} from "../../../base";
 
 enum EFormFields {
     gridColor = 'gridColor',
-    xAxisTitle = 'xAxisTitle',
+    // xAxisTitle = 'xAxisTitle',
     isShowVerticalLine = 'isShowVerticalLine',
     assignedDataComponent = 'assignedDataComponent',
 }
 
 const validationSchema = z.object({
     [EFormFields.gridColor]: z.string(),
-    [EFormFields.xAxisTitle]: z.string(),
+    // [EFormFields.xAxisTitle]: z.string(),
     [EFormFields.isShowVerticalLine]: z.boolean(),
     [EFormFields.assignedDataComponent]: z.object({
         label: z.string(),
@@ -45,7 +45,7 @@ export const ExecutionGraphSetup = () => {
     useEffect(() => {
         form.reset({
             [EFormFields.gridColor]: options?.grid?.borderColor,
-            [EFormFields.xAxisTitle]: options?.xaxis?.title?.text,
+            // [EFormFields.xAxisTitle]: options?.xaxis?.title?.text,
             [EFormFields.isShowVerticalLine]: options?.grid?.xaxis?.lines?.show,
             [EFormFields.assignedDataComponent]: currentAssignedNode ? {
                 label: currentAssignedNode.label,
@@ -58,7 +58,7 @@ export const ExecutionGraphSetup = () => {
     const onSubmit = (data: IValidationSchema) => {
         updateExecutionGridProperties({
             gridColor: data.gridColor,
-            xAxisTitle: data.xAxisTitle,
+            // xAxisTitle: data.xAxisTitle,
             isShowVerticalGridLines: data.isShowVerticalLine,
         });
         if (data.assignedDataComponent) {
@@ -97,12 +97,12 @@ export const ExecutionGraphSetup = () => {
                         form={form}
                     />
                 </ParameterExecutionGraphSetup.Element>
-                <ParameterExecutionGraphSetup.Element label="X axis title">
-                    <ParameterExecutionGraphSetup.Input
-                        name={EFormFields.xAxisTitle}
-                        form={form}
-                    />
-                </ParameterExecutionGraphSetup.Element>
+                {/*<ParameterExecutionGraphSetup.Element label="X axis title">*/}
+                {/*    <ParameterExecutionGraphSetup.Input*/}
+                {/*        name={EFormFields.xAxisTitle}*/}
+                {/*        form={form}*/}
+                {/*    />*/}
+                {/*</ParameterExecutionGraphSetup.Element>*/}
                 <ParameterExecutionGraphSetup.Element label="On vertical lines">
                     <ParameterExecutionGraphSetup.Checkbox
                         name={EFormFields.isShowVerticalLine}

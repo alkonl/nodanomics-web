@@ -2,7 +2,7 @@ import {diagramEditorActions, useAppDispatch} from "../redux";
 import {useGetDiagramByIdQuery} from "../api";
 import {useEffect, useRef, useState} from "react";
 import {useParams} from "react-router-dom";
-import {useGetExecutionGraphPropertiesFromServer} from "./useGetExecutionGraphPropertiesFromServer";
+import {useGetExecutionGraphProperties} from "./useGetExecutionGraphProperties";
 
 
 export const useGetEditDiagramFromServer = () => {
@@ -10,7 +10,7 @@ export const useGetEditDiagramFromServer = () => {
 
     const {diagramId: currentDiagramId} = useParams() as { diagramId: string }
 
-    useGetExecutionGraphPropertiesFromServer({
+    useGetExecutionGraphProperties({
         diagramId: currentDiagramId,
     })
 
