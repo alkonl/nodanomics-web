@@ -5,10 +5,10 @@ import {
     Box,
     Container,
     Toolbar,
-    Typography
 } from "@mui/material";
 import {LandingHeaderNavList} from "./LandingHeaderNavList";
 import {UserToolBox} from "../UserToolBox";
+import {Svg} from "../../../assets";
 
 
 export function LandingHeader() {
@@ -31,22 +31,15 @@ export function LandingHeader() {
                             borderRightColor: 'text.primary',
                         }}
                     >
-                        <Typography
-                            variant="h6"
-                            noWrap
-                            component="a"
-                            href="/"
-                            sx={{
-                                mr: 2,
-                                display: 'flex',
-                                fontFamily: 'monospace',
-                                fontWeight: 700,
-                                letterSpacing: '.3rem',
-                                textDecoration: 'none',
-                            }}
-                        >
-                            LOGO
-                        </Typography>
+                        <Box sx={{
+                            width: 150,
+                            height: '100%',
+                            marginRight: 1.5,
+                        }}>
+                            <Svg.NodanomicsLogoWithName/>
+
+                        </Box>
+
                     </Box>
 
                     <LandingHeaderNavList/>
