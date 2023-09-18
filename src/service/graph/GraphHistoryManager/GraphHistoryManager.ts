@@ -23,6 +23,15 @@ export class GraphHistoryManager {
     }
 
     updateCurrentStepHistory(value = 0) {
+        if (this.nodeManager.assignedHistoryNode && this.nodeManager.assignedNodeChanged) {
+            this.updateCurrentStepHistoryValue(value)
+        } else if (!this.nodeManager.assignedHistoryNode) {
+            this.updateCurrentStepHistoryValue(value)
+        }
+
+    }
+
+    private updateCurrentStepHistoryValue(value = 0) {
         const history = this.history
         const currentStepValue: number | undefined = history[this.step]
         const newValue = currentStepValue ? currentStepValue + value : value

@@ -1,6 +1,6 @@
 import {EDiagramNode, IInvokableNode} from "./structures";
-import {INodeIncomingVariables} from "./additional";
+import {INodeHistory} from "./additional";
 
-export interface ITransferNodeData extends IInvokableNode, INodeIncomingVariables {
+export interface ITransferNodeData extends IInvokableNode, INodeHistory {
     type: EDiagramNode.Transfer;
 }

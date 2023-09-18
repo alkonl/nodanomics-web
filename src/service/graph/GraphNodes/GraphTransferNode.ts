@@ -1,15 +1,19 @@
 import {GraphInvokableNode} from "./abstracts";
-import {EModeAddResourcesToDataNode, ITransferNodeData} from "../../../interface";
+import {ITransferNodeData} from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
-import {GraphLogicManager, GraphResourceManager} from "./helper";
+import {GraphResourceManager} from "./helper";
+import {GraphHistoryManager} from "../GraphHistoryManager";
 
 export class GraphTransferNode extends GraphInvokableNode<ITransferNodeData> {
-    private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
+
+    private readonly historyManager = new GraphHistoryManager(this, this.nodeManager)
+
     private readonly resourceManager = new GraphResourceManager({
         incomingEdges: this.incomingEdges,
         outgoingEdges: this.outgoingEdges
     });
+
     constructor(value: ITransferNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(value, runManager, nodeManager);
     }
@@ -22,19 +26,12 @@ export class GraphTransferNode extends GraphInvokableNode<ITransferNodeData> {
 
     updateState() {
         super.updateState()
-        this.updateVariables()
-    }
-
-    private updateVariables() {
-        const incomingVariables = this.logicManager.getVariables()
-        this.updateNode({
-            incomingVariables
-        })
     }
 
     private transferResources() {
         const {resources} = this.resourceManager.pullAny()
         const joinedResources = this.resourceManager.joinResources(resources)
+        this.historyManager.updateCurrentStepHistory(joinedResources.value)
         this.resourceManager.pushResourcesToFirst(joinedResources)
     }
 }

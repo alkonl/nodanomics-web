@@ -21,7 +21,6 @@ export class GraphResourceManager {
             const source = edge.source;
             if (edge instanceof GraphDataEdge && isIGraphDataNode(source)) {
                 const resource = source.takeCountResources(edge.countOfResource)
-                console.log('resource', resource)
                 if (resource && resource.value > 0) {
                     resources.push(resource)
                     edge.changeIsTransferredResources(true, resource.value)
@@ -67,7 +66,6 @@ export class GraphResourceManager {
     }
 
     pushResourcesToFirst(resources?: IResource) {
-        console.log('resource', resources)
         if (resources) {
             const firstEdgeData = this.edgesToData[0]
             if (firstEdgeData) {
