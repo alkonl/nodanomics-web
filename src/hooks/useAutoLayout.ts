@@ -132,7 +132,14 @@ export const useAutoLayout = () => {
     const dispatch = useAppDispatch()
     return async () => {
         console.log('useAutoLayout:', diagramNodes)
-
+        const s = diagramEdges.some((edge) => {
+            const isSomethingWrong = edge.id === null || edge.id === undefined || edge.id === '' || edge.source === null || edge.source === undefined || edge.source === '' || edge.target === null || edge.target === undefined || edge.target === ''
+            if (isSomethingWrong) {
+                console.log('edge:', edge)
+            }
+            return isSomethingWrong
+        })
+        console.log('s:', s)
         const structured = await createGraphLayout({
             nodes: lodash.cloneDeep(diagramNodes),
             edges: lodash.cloneDeep(diagramEdges),
