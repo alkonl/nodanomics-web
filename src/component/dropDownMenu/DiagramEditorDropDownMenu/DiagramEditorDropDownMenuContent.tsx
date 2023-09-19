@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
-import {Box, Menu, MenuItem} from "@mui/material";
-import {useToggle} from "../../../hooks";
+import {Box, Button, Menu, MenuItem} from "@mui/material";
+import {useToggle, useUploadDiagram} from "../../../hooks";
 import {EDiagramManagerType} from "../../form";
 import {useNavigate} from "react-router-dom";
 import {ELinks} from "../../../service";
@@ -8,6 +8,16 @@ import {useDiagramEditorState} from "../../../redux";
 import {useDeleteDiagramMutation, useGetProjectInfoQuery} from "../../../api";
 import {CreateDiagramPopUp} from "../../popUp";
 import {DiagramManagerPopUp} from "../../popUp/NewDiagramPopUp";
+import {useDownloadDiagram} from "../../../hooks/useDownloadDiagram";
+
+type IMenuButton = {
+    name: string
+    onClick: () => void
+} | {
+    key: string
+    Node: React.ReactNode
+}
+
 
 export const DiagramEditorDropDownMenuContent: React.FC<{
     anchorEl: HTMLElement | null
@@ -58,7 +68,10 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
         }
     }
 
-    const buttons = [{
+    const download = useDownloadDiagram()
+    const uploadDiagram = useUploadDiagram()
+
+    const buttons: IMenuButton[] = [{
         name: 'New',
         onClick: onNewDiagram
     }, {
@@ -69,6 +82,21 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
         onClick: () => {
             //
         }
+    }, {
+        name: 'Export',
+        onClick: download
+    }, {
+        key: 'import',
+        Node: <label
+            style={{
+                width: '100%',
+                height: '100%',
+                cursor: 'pointer'
+            }}
+        >
+            <input type="file" accept=".json" onChange={uploadDiagram} hidden/>
+            Import
+        </label>
     }, {
         name: 'Rename-',
         onClick: onRenameDiagram
@@ -122,10 +150,17 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
                     onClose={onCloseManagerDiagramPopUp}
                 />
 
-                {buttons.map((button) => (<MenuItem
-                    onClick={button.onClick}
-                    key={button.name}
-                >{button.name}</MenuItem>))}
+                {buttons.map((button) => {
+                    if ('name' in button) {
+                        return (<MenuItem
+                            onClick={button.onClick}
+                            key={button.name}
+                        >{button.name}</MenuItem>)
+                    }
+                    return <MenuItem
+                        key={button.key}
+                    >{button.Node}</MenuItem>
+                })}
             </Menu>
         </>
     );
