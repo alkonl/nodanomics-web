@@ -2,6 +2,7 @@ import React from 'react';
 import {Box, Typography} from "@mui/material";
 import {EColor} from "../../../../../../constant";
 import {IReactFlowNode} from "../../../../../../interface";
+import {nodeTypeName} from "../../../../../../service";
 
 export const NodeNestedItem: React.FC<{
     node: IReactFlowNode
@@ -21,7 +22,7 @@ export const NodeNestedItem: React.FC<{
                     },
                     cursor: 'pointer',
                 }}>
-                {node.data.name}
+                {node.data.name} ({nodeTypeName[node.data.type]})
             </Typography>
         </Box>
     );
