@@ -7,6 +7,7 @@ import {useReactFlowInstance} from "./useReactFlowInstance";
 import {useMousePosition} from "./useMousePosition";
 import {useSetParentNode} from "./useSetParentNode";
 import {useOffHistoryExecuted} from "./useOffHistoryExecuted";
+import lodash from "lodash";
 
 
 export const useCopyPaste = () => {
@@ -26,7 +27,19 @@ export const useCopyPaste = () => {
         const children = selectedNodes.map(node => geAllChildrenNodes({nodes: diagramNodes, parentId: node.id})).flat()
         const selectedWithoutChildren = selectedNodes.filter(node => !children.some(child => child.id === node.id))
         const allNodes = [...selectedWithoutChildren, ...children]
-        const edgesToCopy = diagramEdges.filter(edge => allNodes.some(node => node.id === edge.source || node.id === edge.target))
+        const edgesToCopy = diagramEdges.filter(edge => {
+            let hasCopiedSource = false
+            let hasCopiedTarget = false
+            allNodes.forEach(node => {
+                if (node.id === edge.source) {
+                    hasCopiedSource = true
+                }
+                if (node.id === edge.target) {
+                    hasCopiedTarget = true
+                }
+            })
+            return hasCopiedSource && hasCopiedTarget
+        })
         const elementsToCopy = {
             nodes: allNodes,
             edges: edgesToCopy,
@@ -36,22 +49,21 @@ export const useCopyPaste = () => {
         if (elementsToCopy.nodes.length > 0 && !selectedText) {
             if (navigator?.clipboard) {
                 navigator.clipboard.writeText(JSON.stringify(elementsToCopy));
-            } else {
-                setCopiedElements(elementsToCopy)
             }
-
+            setCopiedElements(elementsToCopy)
         }
     }, [diagramNodes])
 
     const paste = useCallback(async () => {
 
-        let elements: ICopiedElements | undefined = undefined
-        if (navigator?.clipboard) {
-            const text = await navigator.clipboard.readText()
-            elements = JSON.parse(text) as ICopiedElements
-        } else if (copiedElements) {
-            elements = copiedElements
-        }
+        // let elements: ICopiedElements | undefined = undefined
+        // if (navigator?.clipboard) {
+        //     const text = await navigator.clipboard.readText()
+        //     elements = JSON.parse(text) as ICopiedElements
+        // } else if (copiedElements) {
+        //     elements = copiedElements
+        // }
+        const elements = lodash.cloneDeep(copiedElements)
         if (elements && reactFlowInstance && reactFlowWrapper && reactFlowWrapper.current !== null) {
             const {nodes, edges} = elements
             const preparedToPaste = prepareCopiedNodesToPaste({
@@ -71,7 +83,7 @@ export const useCopyPaste = () => {
             dispatch(addManyNodes(preparedToPaste.nodes))
             dispatch(addManyEdges(preparedToPaste.edges))
         }
-    }, [diagramNodes, dispatch, mousePosition, reactFlowInstance, reactFlowWrapper, setParent])
+    }, [diagramNodes, dispatch, mousePosition, reactFlowInstance, reactFlowWrapper, setParent, copiedElements])
 
     return {copy, paste};
 }
