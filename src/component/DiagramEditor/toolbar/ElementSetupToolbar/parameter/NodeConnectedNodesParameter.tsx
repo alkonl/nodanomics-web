@@ -9,18 +9,24 @@ export const NodeConnectedNodesParameter: React.FC<{
 
     const values = useMemo(() => {
         if (isINodeNumberVariable(baseNodeData)) {
-            return baseNodeData.variables?.map(variable => `${variable.variableName} = ${variable.value}`)
+            return baseNodeData.variables?.map(variable => ({
+                label: variable.variableName,
+                value: variable.value + variable.variableName
+            }))
         } else if (isINodeIncomingVariables(baseNodeData)) {
-            return baseNodeData.incomingVariables?.map(variable => `${variable.variableName} = ${variable.value}`)
+            return baseNodeData.incomingVariables?.map(variable => ({
+                label: variable.variableName,
+                value: variable.value + variable.variableName
+            }))
         }
         return baseNodeData.connectedNodes
     }, [baseNodeData])
 
     return (
         <>
-            <ElementParameter label="Connected Nodes">
+            {values && <ElementParameter label="Connected Nodes">
                 <Parameter.List items={values}/>
-            </ElementParameter>
+            </ElementParameter>}
         </>
     );
 };

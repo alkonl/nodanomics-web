@@ -110,13 +110,11 @@ export const useAutoLayout = () => {
     const {diagramNodes, diagramEdges} = useDiagramEditorState()
     const dispatch = useAppDispatch()
     return async () => {
-        console.log('useAutoLayout:', diagramNodes)
 
         const structured = await createGraphLayout({
             nodes: lodash.cloneDeep(diagramNodes),
             edges: lodash.cloneDeep(diagramEdges),
         })
-        console.log('structured:', structured)
         // dispatch(diagramEditorActions.bulkUpdateNodes(structured.nodes))
     }
 }

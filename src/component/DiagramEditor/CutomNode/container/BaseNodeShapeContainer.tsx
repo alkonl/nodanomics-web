@@ -26,11 +26,11 @@ export const BaseNodeShapeContainer: React.FC<{
 
     const isPlayAnimation = useIsElementExecuted(node.data)
 
-    useUpdatePosAbsolute({
-        nodeId: node.id,
-        xPos: node.xPos,
-        yPos: node.yPos
-    })
+    // useUpdatePosAbsolute({
+    //     nodeId: node.id,
+    //     xPos: node.xPos,
+    //     yPos: node.yPos
+    // })
 
     return (
         <Box sx={{

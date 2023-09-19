@@ -7,6 +7,7 @@ import {ParametersContainer} from "./ParametersContainer";
 import {ElementParameterContainer} from "./ElementParameterContainer";
 import {IntellisenseInput, ParameterInput} from "../Input";
 import {ParameterCheckbox} from "../Input/ParameterCheckbox";
+import {isObject} from "../../../utils";
 
 export const ElementSetupToolbarSectionTitle = styled(Box)({
     display: 'block',
@@ -27,8 +28,13 @@ export const ParameterText = styled(Typography)({
 })
 
 export const ParameterList: React.FC<{
-    items?: string[]
+    items?: string[] | {
+        label: string
+        value: string
+    }[]
 }> = ({items}) => {
+
+
     return (<Box
             sx={{
                 padding: 0.5,
@@ -42,17 +48,28 @@ export const ParameterList: React.FC<{
                 overflowY: 'auto',
             }}
         >
-            {items?.map((item) => (
-                <Typography
+            {items?.map((item, index) => {
+                if(isObject(item) && 'label' in item) {
+                    return ( <Typography
+                        sx={{
+                            color: EColor.grey4,
+                            fontSize: 14,
+                        }}
+                        key={`${item.value}-${index}`}
+                    >
+                        {item.label}
+                    </Typography>)
+                }
+                return ( <Typography
                     sx={{
                         color: EColor.grey4,
                         fontSize: 14,
                     }}
-                    key={item}
+                    key={`${item}-${index}`}
                 >
                     {item}
-                </Typography>
-            ))}
+                </Typography>)
+            })}
         </Box>
 
     )

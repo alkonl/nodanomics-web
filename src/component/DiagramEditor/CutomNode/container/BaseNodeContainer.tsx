@@ -20,11 +20,11 @@ export const BaseNodeContainer: React.FC<{
     const {data} = node;
     const isPlayAnimation = useIsElementExecuted(data)
 
-    useUpdatePosAbsolute({
-        nodeId: node.id,
-        xPos: node.xPos,
-        yPos: node.yPos
-    })
+    // useUpdatePosAbsolute({
+    //     nodeId: node.id,
+    //     xPos: node.xPos,
+    //     yPos: node.yPos
+    // })
 
     return (
         <Box sx={{

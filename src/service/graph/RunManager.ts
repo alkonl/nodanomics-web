@@ -147,7 +147,6 @@ export class RunManager {
                 // check if loop is has a parent loop
                 const hasParentLoop = target.data.parentId !== undefined
                 if (hasParentLoop && chainItem.inner && target.data.currentLoopCount < target.loopCount) {
-                    console.log('executeNode: ', target.data.name)
                     this.executeNode(chainItem)
                     // for (let i = 0; i < target.loopCount; i++) {
                     //     this.executeNode(chainItem)

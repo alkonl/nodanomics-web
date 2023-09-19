@@ -15,7 +15,6 @@ export const NodeNestedListRecursive: React.FC<{
                 let children: IReactFlowNode[] | undefined = undefined
                 const data = node.data
                 if (isILoopNodeData(data)) {
-                    console.log('data.children', data.children)
                     children = nodes.filter((potentialChild) => {
                         return potentialChild.parentNode === node.id
                     })
