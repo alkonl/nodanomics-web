@@ -44,7 +44,6 @@ export const CreateDiagramForm: React.FC<{
             onSuccess(resCreateDiagram)
         }
     }, [resCreateDiagram])
-    console.log('render')
     return (
         <Box
             onSubmit={(e) => {

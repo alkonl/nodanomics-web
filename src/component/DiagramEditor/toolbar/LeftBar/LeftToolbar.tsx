@@ -8,6 +8,7 @@ import {ELeftToolbarSideMenu} from "../../../../interface";
 import {BaseSideMenu} from "./SideMenu/BaseSideMenu/BaseSideMenu";
 import {useDownloadDiagram} from "../../../../hooks/useDownloadDiagram";
 import {useUploadDiagram} from "../../../../hooks";
+import {PreviewNodeHierarchy} from "./PreviewComponent";
 
 
 const menuOptions: {
@@ -35,6 +36,12 @@ const menuOptions: {
         preview: {
             type: 'Component',
             Component: () => <div>G</div>
+        }
+    }, {
+        name: ELeftToolbarSideMenu.NodeHierarchy,
+        preview: {
+            type: 'Component',
+            Component: PreviewNodeHierarchy
         }
     }
 ]

@@ -12,11 +12,11 @@ export const LoopContainer: React.FC<{
           children,
           node
       }) => {
-    useUpdatePosAbsolute({
-        nodeId: node.id,
-        xPos: node.xPos,
-        yPos: node.yPos
-    })
+    // useUpdatePosAbsolute({
+    //     nodeId: node.id,
+    //     xPos: node.xPos,
+    //     yPos: node.yPos
+    // })
 
     useResizeParentOnSizeChange(node)
     return (
