@@ -83,24 +83,24 @@ export function LeftToolbar() {
                         />)
                 })}
 
-                   <Box>
-                       <Button
-                           onClick={downloadDiagram}
+                   {/*<Box>*/}
+                   {/*    <Button*/}
+                   {/*        onClick={downloadDiagram}*/}
 
-                       >
-                           <DownloadIcon sx={{
-                               color: EColor.grey4,
-                           }}/>
-                       </Button>
-                       <Button
-                           component="label"
-                       >
-                           <input type="file" accept=".json" onChange={uploadDiagram} hidden/>
-                           <UploadIcon sx={{
-                               color: EColor.grey4,
-                           }}/>
-                       </Button>
-                   </Box>
+                   {/*    >*/}
+                   {/*        <DownloadIcon sx={{*/}
+                   {/*            color: EColor.grey4,*/}
+                   {/*        }}/>*/}
+                   {/*    </Button>*/}
+                   {/*    <Button*/}
+                   {/*        component="label"*/}
+                   {/*    >*/}
+                   {/*        <input type="file" accept=".json" onChange={uploadDiagram} hidden/>*/}
+                   {/*        <UploadIcon sx={{*/}
+                   {/*            color: EColor.grey4,*/}
+                   {/*        }}/>*/}
+                   {/*    </Button>*/}
+                   {/*</Box>*/}
             </Box>
             <BaseSideMenu isOpen={isSideMenuOpen}>
                 {SelectedSideMenu && <SelectedSideMenu/>}
