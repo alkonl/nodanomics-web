@@ -3,11 +3,8 @@ import {z} from "zod";
 import {validation} from "../../../utils";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {FormText, FormTextArea} from "../../base/FormInput";
-import {Box, Button, Typography} from "@mui/material";
-import AddIcon from '@mui/icons-material/AddBoxTwoTone';
-import {TagsPopUp} from "../../popUp/TagsPopUp";
-// import {useCreateDiagramMutation, useUpdateDiagramMutation} from "../../../api";
+import {FormText} from "../../base/FormInput";
+import {Box, Button} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch, useDiagramEditorState} from "../../../redux";
 

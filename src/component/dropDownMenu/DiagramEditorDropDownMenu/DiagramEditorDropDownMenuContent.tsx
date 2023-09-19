@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {Box, Button, Menu, MenuItem} from "@mui/material";
+import {Box, Menu, MenuItem} from "@mui/material";
 import {useToggle, useUploadDiagram} from "../../../hooks";
 import {EDiagramManagerType} from "../../form";
 import {useNavigate} from "react-router-dom";
