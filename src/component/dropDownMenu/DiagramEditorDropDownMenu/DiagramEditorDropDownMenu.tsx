@@ -2,6 +2,8 @@ import React, {useCallback, useState} from 'react';
 import {Box, IconButton, Tooltip} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import {DiagramEditorDropDownMenuContent} from "./DiagramEditorDropDownMenuContent";
+import {CreateDiagramPopUp} from "../../popUp";
+import {ELinks} from "../../../service";
 
 export const DiagramEditorDropDownMenu = () => {
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);

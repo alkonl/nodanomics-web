@@ -19,7 +19,7 @@ export const CreateDiagramPopUp: React.FC<{
     }
 
     return (
-        <Dialog open={isShow} onClose={onClose}>
+        <Dialog open={isShow} onClose={onClose} >
             <BasePopUp>
                 <Dialog.Panel>
                     <Box sx={{
