@@ -1,7 +1,6 @@
 import React from 'react';
 import {IReactFlowNode, isILoopNodeData} from "../../../../../../interface";
-import {Box, Typography} from "@mui/material";
-import {EColor} from "../../../../../../constant";
+import {NodeNestedItem} from "./NodeNestedItem";
 
 export const NodeNestedListRecursive: React.FC<{
     nodes: IReactFlowNode[]
@@ -22,22 +21,7 @@ export const NodeNestedListRecursive: React.FC<{
                     })
                 }
                 return (<li key={node.id}>
-                    <Box>
-                        <Typography
-                            onClick={()=>{
-                                if(onNodeClick){
-                                    onNodeClick(node)
-                                }
-                            }}
-                            sx={{
-                            '&:hover': {
-                                background: EColor.grey,
-                            },
-                            cursor: 'pointer',
-                        }}>
-                            {node.data.name}
-                        </Typography>
-                    </Box>
+                    <NodeNestedItem node={node} onNodeClick={onNodeClick}/>
                     {children &&
                         <NodeNestedListRecursive onNodeClick={onNodeClick} nodes={nodes} childrenNodes={children}/>}
                 </li>)

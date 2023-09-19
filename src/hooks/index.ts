@@ -1,5 +1,3 @@
-import {useGetAssignedNode} from "./useGetAssignedNode";
-
 export * from './useWidthAndHeight'
 export * from './useDidMountEffect'
 export * from './useToggle'
@@ -59,3 +57,4 @@ export * from './useInfiniteScroll'
 export * from './useDiagramDashboard'
 export * from './useAutoSelectFirstDiagram'
 export * from './useGetAssignedNode'
+export * from './useFocusNode'
