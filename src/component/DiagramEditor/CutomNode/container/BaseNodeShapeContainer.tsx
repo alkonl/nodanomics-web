@@ -5,7 +5,7 @@ import {INodeData} from "../../../../interface";
 import {Box} from "@mui/material";
 // eslint-disable-next-line import/named
 import {SxProps} from "@mui/system/styleFunctionSx";
-import {useIsElementExecuted} from "../../../../hooks";
+import {useIsElementExecuted, useUpdatePosAbsolute} from "../../../../hooks";
 import './shapeContainer.scss'
 
 export const BaseNodeShapeContainer: React.FC<{
@@ -25,6 +25,12 @@ export const BaseNodeShapeContainer: React.FC<{
       }) => {
 
     const isPlayAnimation = useIsElementExecuted(node.data)
+
+    useUpdatePosAbsolute({
+        nodeId: node.id,
+        xPos: node.xPos,
+        yPos: node.yPos
+    })
 
     return (
         <Box sx={{

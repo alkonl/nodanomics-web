@@ -3,7 +3,7 @@ import {Box} from "@mui/material";
 import {INodeData} from "../../../../interface";
 // eslint-disable-next-line import/named
 import {NodeProps} from "reactflow";
-import {useIsElementExecuted} from "../../../../hooks";
+import {useIsElementExecuted, useUpdatePosAbsolute} from "../../../../hooks";
 import './baseContainer.scss'
 // eslint-disable-next-line import/named
 import {SxProps} from "@mui/system/styleFunctionSx";
@@ -19,6 +19,12 @@ export const BaseNodeContainer: React.FC<{
       }) => {
     const {data} = node;
     const isPlayAnimation = useIsElementExecuted(data)
+
+    useUpdatePosAbsolute({
+        nodeId: node.id,
+        xPos: node.xPos,
+        yPos: node.yPos
+    })
 
     return (
         <Box sx={{
