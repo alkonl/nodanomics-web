@@ -12,4 +12,5 @@ export const SideMenu: {
     [ELeftToolbarSideMenu.LibrariesSideMenu]: LibrariesSideMenu,
     [ELeftToolbarSideMenu.CustomVariablesSideMenu]: CustomVariablesSideMenu,
     [ELeftToolbarSideMenu.GroupedNodes]: GroupedNodes,
+    [ELeftToolbarSideMenu.NodeHierarchy]: GroupedNodes,
 }
