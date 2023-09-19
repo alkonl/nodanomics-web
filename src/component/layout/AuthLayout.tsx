@@ -2,6 +2,7 @@ import React from 'react';
 import {Box} from "@mui/material";
 import {EColor} from "../../constant";
 import {Svg} from "../../assets";
+import {NodanomicsLogoWithName} from "../../assets/svg/NodanomicsLogoWithName";
 
 export const AuthLayout: React.FC<{
     children: React.ReactNode
@@ -38,7 +39,7 @@ export const AuthLayout: React.FC<{
                 <Box sx={{
                     width: '60%',
                 }}>
-                    <Svg.NodanomicsLogo/>
+                    <Svg.NodanomicsLogoWithName/>
                 </Box>
 
             </Box>
