@@ -46,6 +46,7 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
     }
 
     get isLoopActive() {
+        this.checkIsLoopActive()
         return this.data.isLoopActive || false
     }
 
