@@ -27,7 +27,19 @@ export const useCopyPaste = () => {
         const children = selectedNodes.map(node => geAllChildrenNodes({nodes: diagramNodes, parentId: node.id})).flat()
         const selectedWithoutChildren = selectedNodes.filter(node => !children.some(child => child.id === node.id))
         const allNodes = [...selectedWithoutChildren, ...children]
-        const edgesToCopy = diagramEdges.filter(edge => allNodes.some(node => node.id === edge.source || node.id === edge.target))
+        const edgesToCopy = diagramEdges.filter(edge => {
+            let hasCopiedSource = false
+            let hasCopiedTarget = false
+            allNodes.forEach(node => {
+                if (node.id === edge.source) {
+                    hasCopiedSource = true
+                }
+                if (node.id === edge.target) {
+                    hasCopiedTarget = true
+                }
+            })
+            return hasCopiedSource && hasCopiedTarget
+        })
         const elementsToCopy = {
             nodes: allNodes,
             edges: edgesToCopy,
@@ -52,7 +64,6 @@ export const useCopyPaste = () => {
         //     elements = copiedElements
         // }
         const elements = lodash.cloneDeep(copiedElements)
-        console.log('elements: ', elements)
         if (elements && reactFlowInstance && reactFlowWrapper && reactFlowWrapper.current !== null) {
             const {nodes, edges} = elements
             const preparedToPaste = prepareCopiedNodesToPaste({
