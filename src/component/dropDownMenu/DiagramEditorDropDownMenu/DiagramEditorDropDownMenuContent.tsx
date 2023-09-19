@@ -1,12 +1,23 @@
 import React, {useCallback, useState} from 'react';
-import {Menu, MenuItem} from "@mui/material";
-import {useToggle} from "../../../hooks";
-import {DiagramManagerPopUp} from "../../popUp/NewDiagramPopUp";
+import {Box, Menu, MenuItem} from "@mui/material";
+import {useToggle, useUploadDiagram} from "../../../hooks";
 import {EDiagramManagerType} from "../../form";
 import {useNavigate} from "react-router-dom";
 import {ELinks} from "../../../service";
 import {useDiagramEditorState} from "../../../redux";
-import {useDeleteDiagramMutation} from "../../../api";
+import {useDeleteDiagramMutation, useGetProjectInfoQuery} from "../../../api";
+import {CreateDiagramPopUp} from "../../popUp";
+import {DiagramManagerPopUp} from "../../popUp/NewDiagramPopUp";
+import {useDownloadDiagram} from "../../../hooks/useDownloadDiagram";
+
+type IMenuButton = {
+    name: string
+    onClick: () => void
+} | {
+    key: string
+    Node: React.ReactNode
+}
+
 
 export const DiagramEditorDropDownMenuContent: React.FC<{
     anchorEl: HTMLElement | null
@@ -16,7 +27,9 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
           close
       }) => {
     const navigate = useNavigate()
-    const diagramState = useDiagramEditorState()
+    const toggleCreateDiagram = useToggle()
+
+    const {currentDiagramId} = useDiagramEditorState()
     const [deleteDiagram] = useDeleteDiagramMutation()
     const [diagramManagerType, setDiagramManagerType] = useState<EDiagramManagerType>(EDiagramManagerType.new)
     const {
@@ -26,8 +39,8 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
     } = useToggle()
 
     const onNewDiagram = () => {
-        setDiagramManagerType(EDiagramManagerType.new)
-        openManagerDiagramPopUp()
+        toggleCreateDiagram.open()
+        close()
     }
 
     const onRenameDiagram = () => {
@@ -50,13 +63,16 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
 
 
     const onDelete = () => {
-        if (diagramState.currentDiagramId) {
-            deleteDiagram(diagramState.currentDiagramId)
+        if (currentDiagramId) {
+            deleteDiagram(currentDiagramId)
         }
     }
 
-    const buttons = [{
-        name: 'New-',
+    const download = useDownloadDiagram()
+    const uploadDiagram = useUploadDiagram()
+
+    const buttons: IMenuButton[] = [{
+        name: 'New',
         onClick: onNewDiagram
     }, {
         name: 'Projects',
@@ -64,7 +80,23 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
     }, {
         name: 'Save (auto save)',
         onClick: () => {
+            //
         }
+    }, {
+        name: 'Export',
+        onClick: download
+    }, {
+        key: 'import',
+        Node: <label
+            style={{
+                width: '100%',
+                height: '100%',
+                cursor: 'pointer'
+            }}
+        >
+            <input type="file" accept=".json" onChange={uploadDiagram} hidden/>
+            Import
+        </label>
     }, {
         name: 'Rename-',
         onClick: onRenameDiagram
@@ -75,31 +107,62 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
         name: 'Delete-',
         onClick: onDelete
     }]
-    return (
-        <Menu
-            sx={{mt: '25px'}}
-            id="menu-appbar"
-            anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            open={Boolean(anchorEl)}
-            onClose={close}
-        >
-            <DiagramManagerPopUp type={diagramManagerType} isShow={isManagerDiagramPopUpShow}
-                                 onClose={onCloseManagerDiagramPopUp}/>
 
-            {buttons.map((button) => (<MenuItem
-                onClick={button.onClick}
-                key={button.name}
-            >{button.name}</MenuItem>))}
-        </Menu>
+    const {data: projectInfo} = useGetProjectInfoQuery({
+        diagramId: currentDiagramId
+    })
+
+    return (
+        <>
+            <Box>
+                {projectInfo &&
+                    <CreateDiagramPopUp
+                        projectId={projectInfo.id}
+                        isShow={toggleCreateDiagram.isOpened}
+                        onClose={toggleCreateDiagram.close}
+                        onSuccess={({id: newDiagramId}) => {
+                            navigate(`${ELinks.diagram}/${newDiagramId}`)
+                        }}
+                    />}
+            </Box>
+
+            <Menu
+                sx={{mt: '25px'}}
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                open={Boolean(anchorEl)}
+
+                onClose={close}
+            >
+
+                <DiagramManagerPopUp
+                    type={diagramManagerType}
+                    isShow={isManagerDiagramPopUpShow}
+                    onClose={onCloseManagerDiagramPopUp}
+                />
+
+                {buttons.map((button) => {
+                    if ('name' in button) {
+                        return (<MenuItem
+                            onClick={button.onClick}
+                            key={button.name}
+                        >{button.name}</MenuItem>)
+                    }
+                    return <MenuItem
+                        key={button.key}
+                    >{button.Node}</MenuItem>
+                })}
+            </Menu>
+        </>
     );
 };
 

@@ -6,6 +6,6 @@ import {NodanomicsLogoWithName} from "./NodanomicsLogoWithName";
 export const Svg = {
     Library,
     Variable,
-    NodanomicsLogo,
     NodanomicsLogoWithName,
+    NodanomicsLogo
 }

@@ -38,7 +38,7 @@ export const AuthLayout: React.FC<{
                 <Box sx={{
                     width: '60%',
                 }}>
-                    <Svg.NodanomicsLogo/>
+                    <Svg.NodanomicsLogoWithName/>
                 </Box>
 
             </Box>

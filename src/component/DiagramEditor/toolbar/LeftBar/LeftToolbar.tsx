@@ -1,14 +1,11 @@
 import React, {useMemo} from "react";
 import styles from './LeftToolbar.module.scss';
-import {Box, Button} from "@mui/material";
+import {Box} from "@mui/material";
 import {Svg} from "../../../../assets";
 import {LeftToolbarItem} from "./LeftToolbarItem";
 import {SideMenu} from "./SideMenu";
 import {ELeftToolbarSideMenu} from "../../../../interface";
 import {BaseSideMenu} from "./SideMenu/BaseSideMenu/BaseSideMenu";
-import DownloadIcon from "@mui/icons-material/Download";
-import UploadIcon from "@mui/icons-material/Upload";
-import {EColor} from "../../../../constant";
 import {useDownloadDiagram} from "../../../../hooks/useDownloadDiagram";
 import {useUploadDiagram} from "../../../../hooks";
 
@@ -83,24 +80,24 @@ export function LeftToolbar() {
                         />)
                 })}
 
-                   <Box>
-                       <Button
-                           onClick={downloadDiagram}
+                   {/*<Box>*/}
+                   {/*    <Button*/}
+                   {/*        onClick={downloadDiagram}*/}
 
-                       >
-                           <DownloadIcon sx={{
-                               color: EColor.grey4,
-                           }}/>
-                       </Button>
-                       <Button
-                           component="label"
-                       >
-                           <input type="file" accept=".json" onChange={uploadDiagram} hidden/>
-                           <UploadIcon sx={{
-                               color: EColor.grey4,
-                           }}/>
-                       </Button>
-                   </Box>
+                   {/*    >*/}
+                   {/*        <DownloadIcon sx={{*/}
+                   {/*            color: EColor.grey4,*/}
+                   {/*        }}/>*/}
+                   {/*    </Button>*/}
+                   {/*    <Button*/}
+                   {/*        component="label"*/}
+                   {/*    >*/}
+                   {/*        <input type="file" accept=".json" onChange={uploadDiagram} hidden/>*/}
+                   {/*        <UploadIcon sx={{*/}
+                   {/*            color: EColor.grey4,*/}
+                   {/*        }}/>*/}
+                   {/*    </Button>*/}
+                   {/*</Box>*/}
             </Box>
             <BaseSideMenu isOpen={isSideMenuOpen}>
                 {SelectedSideMenu && <SelectedSideMenu/>}

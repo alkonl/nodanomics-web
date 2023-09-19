@@ -3,11 +3,8 @@ import {z} from "zod";
 import {validation} from "../../../utils";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {FormText, FormTextArea} from "../../base/FormInput";
-import {Box, Button, Typography} from "@mui/material";
-import AddIcon from '@mui/icons-material/AddBoxTwoTone';
-import {TagsPopUp} from "../../popUp/TagsPopUp";
-// import {useCreateDiagramMutation, useUpdateDiagramMutation} from "../../../api";
+import {FormText} from "../../base/FormInput";
+import {Box, Button} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch, useDiagramEditorState} from "../../../redux";
 
@@ -59,13 +56,13 @@ export const DiagramManagerFormDeprecated: React.FC<{
             form.reset({
                 [EFormFields.diagramName]: diagramState.name,
                 [EFormFields.diagramDescription]: diagramState.description,
-                [EFormFields.diagramTags]: diagramState.diagramTags,
+                // [EFormFields.diagramTags]: diagramState.diagramTags,
             })
         } else if (type === EDiagramManagerType.makeACopy) {
             form.reset({
                 [EFormFields.diagramName]: `Copy of ${diagramState.name}`,
                 [EFormFields.diagramDescription]: diagramState.description,
-                [EFormFields.diagramTags]: diagramState.diagramTags,
+                // [EFormFields.diagramTags]: diagramState.diagramTags,
             })
         }
     }, [diagramState])
@@ -141,33 +138,33 @@ export const DiagramManagerFormDeprecated: React.FC<{
                 form.handleSubmit(onSubmit)();
             }}>
                 <FormText label={'Name'} name={EFormFields.diagramName} form={form}/>
-                <FormTextArea label={'Description'} name={EFormFields.diagramDescription} form={form}/>
+                {/*<FormTextArea label={'Description'} name={EFormFields.diagramDescription} form={form}/>*/}
                 <Box>
-                    <Box sx={{
-                        display: "flex"
-                    }}>
+                    {/*<Box sx={{*/}
+                    {/*    display: "flex"*/}
+                    {/*}}>*/}
 
-                        <TagsPopUp
-                            isShow={isTagsPopUpShow}
-                            onClose={closeTagsPopUp}
-                            tagsForm={{
-                                form: form,
-                                name: EFormFields.diagramTags,
-                                onSave: closeTagsPopUp,
-                                allTags: [],
-                            }}
-                        />
+                    {/*    <TagsPopUp*/}
+                    {/*        isShow={isTagsPopUpShow}*/}
+                    {/*        onClose={closeTagsPopUp}*/}
+                    {/*        tagsForm={{*/}
+                    {/*            form: form,*/}
+                    {/*            name: EFormFields.diagramTags,*/}
+                    {/*            onSave: closeTagsPopUp,*/}
+                    {/*            allTags: [],*/}
+                    {/*        }}*/}
+                    {/*    />*/}
 
 
-                        <Button onClick={() => {
-                            setTagsPopUpShow(true)
-                        }}>
-                            <Typography>
-                                Tags:
-                            </Typography>
-                            <AddIcon color='info'/>
-                        </Button>
-                    </Box>
+                        {/*<Button onClick={() => {*/}
+                        {/*    setTagsPopUpShow(true)*/}
+                        {/*}}>*/}
+                        {/*    <Typography>*/}
+                        {/*        Tags:*/}
+                        {/*    </Typography>*/}
+                        {/*    <AddIcon color='info'/>*/}
+                        {/*</Button>*/}
+                    {/*</Box>*/}
                 </Box>
                 <Button
                     variant="contained" type='submit'>

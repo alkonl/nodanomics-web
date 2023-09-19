@@ -26,7 +26,7 @@ export const CreateDiagramForm: React.FC<{
           onSuccess, projectId
       }) => {
 
-    const [createDiagram, {data: resCreateDiagram, isSuccess}] = useCreateDiagramMutation()
+    const [createDiagram, {data: resCreateDiagram}] = useCreateDiagramMutation()
     const form = useForm<IValidationSchema>({
         resolver: zodResolver(validationSchema),
     });
@@ -44,7 +44,7 @@ export const CreateDiagramForm: React.FC<{
             onSuccess(resCreateDiagram)
         }
     }, [resCreateDiagram])
-
+    console.log('render')
     return (
         <Box
             onSubmit={(e) => {
