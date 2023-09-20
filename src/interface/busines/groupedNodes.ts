@@ -1,8 +1,8 @@
 export interface IGroupedNodes {
         tag: string;
-        nodes: {
+        values?: {
             nodeId: string;
-            nodeName: string;
+            value: string;
         }[];
 }
 

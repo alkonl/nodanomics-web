@@ -24,10 +24,10 @@ export const GroupTagItem: React.FC<{
                 {group.tag}
             </Typography>
             <Box>
-                {group.nodes.map(({nodeName, nodeId}) => {
+                {group.values?.map(({value, nodeId}) => {
                     return (
                         <GroupNodeItem
-                            nodeName={nodeName}
+                            nodeName={value}
                             nodeId={nodeId}
                             key={nodeId}
                         />

@@ -1,3 +1,5 @@
 export * from './generateResources'
 export * from './nodeTypeName'
 export * from './autolayout'
+export * from './getNodeValue'
+export * from './getNodeUsedTags'
