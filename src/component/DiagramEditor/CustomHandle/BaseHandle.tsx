@@ -4,6 +4,7 @@ import {Handle, HandleProps, Position} from "reactflow";
 import {EConnection, EConnectionMode} from "../../../interface";
 import {Box} from "@mui/material";
 import {EColor} from "../../../constant";
+import {createHandleId} from "../../../service";
 
 const transformStyles: { [key in Position]: string } = {
     left: 'translate(25%, -50%)',
@@ -26,7 +27,8 @@ export const BaseHandle: React.FC<Pick<HandleProps, 'isConnectable' | 'type' | '
           connectionMode,
           color
       }) => {
-    const id = `${connectionMode}.${mode}`;
+    // const id = `${connectionMode}.${mode}.${position}`;
+    const id = createHandleId(connectionMode, position, mode);
 
     return (
         <Box sx={{
