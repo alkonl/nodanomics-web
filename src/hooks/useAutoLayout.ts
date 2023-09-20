@@ -38,7 +38,7 @@ const createPorts = (params: EPortSide[]): ElkPort[] => {
 
 
 const baseNodePorts: { [key in EDiagramNode]?: ElkPort[] } = {
-    [EDiagramNode.Origin]: createPorts([EPortSide.WEST, EPortSide.NORTH, EPortSide.EAST,]),
+    [EDiagramNode.Origin]: createPorts([EPortSide.NORTH, EPortSide.WEST, EPortSide.EAST,]),
     [EDiagramNode.Data]: createPorts([EPortSide.WEST, EPortSide.EAST]),
     [EDiagramNode.Transfer]: createPorts([EPortSide.WEST, EPortSide.EAST]),
     [EDiagramNode.Sink]: createPorts([EPortSide.WEST, EPortSide.EAST, EPortSide.SOUTH]),
@@ -83,9 +83,9 @@ const elkOptions = {
     'elk.spacing.nodeNode': '100',
     "elk.direction": "RIGHT",
     // "elk.alignment": "TOP",
-    "elk.edgeRouting": "ORTHOGONAL",
+    "elk.edgeRouting": "SPLINES",
     "elk.layered.considerModelOrder.strategy": "PREFER_EDGES",
-    "elk.mrtree.edgeRoutingMode": "MIDDLE_TO_MIDDLE",
+    "elk.mrtree.edgeRoutingMode": "AVOID_OVERLAP",
     // "elk.layered.nodePlacement.bk.fixedAlignment": "BALANCED",
     // "elk.spacing.edgeNode": '-500',
     "partitioning.activate": 'true',
@@ -138,6 +138,7 @@ const createGraphLayout = async (elements: {
             height: typeof node.height === 'number' ? node.height : 150,
             children: elkNodeChildren,
             ports,
+            layoutOptions: {}
             // layoutOptions: {
             //     'elk.direction': '100',
             // },
@@ -200,6 +201,7 @@ const createGraphLayout = async (elements: {
                 y: layoutedNode?.y || node.position?.y,
             }
         }
+
     })
     return {
 
