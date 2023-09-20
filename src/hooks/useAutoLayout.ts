@@ -194,12 +194,13 @@ const createGraphLayout = async (elements: {
     console.log('layoutedGraph:', layoutedGraph)
     const nodesWithUpdatedPosition = elements.nodes?.map((node) => {
         const layoutedNode = layoutedNodes?.find((n) => n.id === node.id)
+        const position = {
+            x: layoutedNode?.x !== undefined ? layoutedNode.x: node.position?.x,
+            y: layoutedNode?.y !== undefined ? layoutedNode.y: node.position?.y,
+        }
         return {
             ...node,
-            position: {
-                x: layoutedNode?.x || node.position?.x,
-                y: layoutedNode?.y || node.position?.y,
-            }
+            position,
         }
 
     })
