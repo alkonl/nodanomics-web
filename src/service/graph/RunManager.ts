@@ -107,9 +107,7 @@ export class RunManager {
 
     private executeNode(chainItem: IChainItem) {
         const target = chainItem.target
-        if (target.data.name === 'Matches Loop') {
-            console.log('executeNode: ', target.data.name)
-        }
+
         const edge = chainItem.edge
         if (target instanceof GraphInvokableNode) {
             if (target instanceof GraphLoopNode && !target.isLoopActive) {

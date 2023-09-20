@@ -65,7 +65,6 @@ export abstract class GraphMatchManager {
                 if (typeof res === 'object' && 'entries' in res && Array.isArray(res.entries)) {
                     return res.entries[0]
                 }
-                console.log(`res: ${res}`, formula)
                 return res
             }
         } catch (e) {
