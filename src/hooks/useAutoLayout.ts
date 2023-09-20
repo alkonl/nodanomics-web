@@ -20,90 +20,40 @@ const connectionSideToPortSide: { [key in EConnectionSide]: EPortSide } = {
     [EConnectionSide.Bottom]: EPortSide.SOUTH,
 }
 
-const baseNodePorts: { [key in EDiagramNode]?: ElkPort[] } = {
-    [EDiagramNode.Origin]: [
-        {
-            id: `WEST`, width: 5, height: 5,
-            layoutOptions: {
-                'port.side': 'WEST',
-                "port.index": "1",
-                // "allowNonFlowPortsToSwitchSides": "true"
-            }
-        },
-        {
-            id: `EAST`, width: 5, height: 5, layoutOptions: {
-                'port.side': 'EAST',
-                "port.index": "2",
-                // "allowNonFlowPortsToSwitchSides": "true"
-            }
-        },
-        {
-            id: `NORTH`, width: 5, height: 5, layoutOptions: {
-                'port.side': 'NORTH',
-                "port.index": "3",
-                // "allowNonFlowPortsToSwitchSides": "true"
-            }
+const portFactory = (side: EPortSide, index: number): ElkPort => {
+    return {
+        id: side,
+        width: 5,
+        height: 5,
+        layoutOptions: {
+            'port.side': side,
+            "port.index": `${index}`,
         }
-    ],
-    [EDiagramNode.Data]: [
-        {
-            id: `WEST`, width: 5, height: 5,
-            layoutOptions: {
-                'port.side': 'WEST',
-                "port.index": "1",
-            }
-        },
-        {
-            id: `EAST`, width: 5, height: 5, layoutOptions: {
-                'port.side': 'EAST',
-                "port.index": "2",
-            }
-        },
-    ],
-    [EDiagramNode.Transfer]: [
-        {
-            id: `WEST`, width: 5, height: 5,
-            layoutOptions: {
-                'port.side': 'WEST',
-                "port.index": "1",
-                // "allowNonFlowPortsToSwitchSides": "true"
-            }
-        },
-        {
-            id: `EAST`, width: 5, height: 5, layoutOptions: {
-                'port.side': 'EAST',
-                "port.index": "2",
-                // "allowNonFlowPortsToSwitchSides": "true"
-            }
-        },
-    ],
-    [EDiagramNode.Sink]: [
-        {
-            id: `WEST`, width: 5, height: 5,
-            layoutOptions: {
-                'port.side': 'WEST',
-                "port.index": "1",
-                // "allowNonFlowPortsToSwitchSides": "true"
-            }
-        },
-        {
-            id: `EAST`, width: 5, height: 5, layoutOptions: {
-                'port.side': 'EAST',
-                "port.index": "2",
-                // "allowNonFlowPortsToSwitchSides": "true"
-            }
-        },    {
-            id: EPortSide.SOUTH, width: 5, height: 5, layoutOptions: {
-                'port.side': `${EPortSide.SOUTH}`,
-                "port.index": "3",
-                // "allowNonFlowPortsToSwitchSides": "true"
-            }
-        }
-    ],
+    }
 }
+
+const createPorts = (params: EPortSide[]): ElkPort[] => {
+    return params.map((side, index) => portFactory(side, index))
+}
+
+
+const baseNodePorts: { [key in EDiagramNode]?: ElkPort[] } = {
+    [EDiagramNode.Origin]: createPorts([EPortSide.WEST, EPortSide.NORTH, EPortSide.EAST,]),
+    [EDiagramNode.Data]: createPorts([EPortSide.WEST, EPortSide.EAST]),
+    [EDiagramNode.Transfer]: createPorts([EPortSide.WEST, EPortSide.EAST]),
+    [EDiagramNode.Sink]: createPorts([EPortSide.WEST, EPortSide.EAST, EPortSide.SOUTH]),
+    [EDiagramNode.Formula]: createPorts([EPortSide.WEST, EPortSide.EAST, EPortSide.SOUTH, EPortSide.NORTH]),
+    [EDiagramNode.DatasetDatafield]: createPorts([]),
+    [EDiagramNode.EventTrigger]: createPorts([EPortSide.EAST]),
+    [EDiagramNode.EventListener]: createPorts([EPortSide.WEST, EPortSide.EAST]),
+    [EDiagramNode.MicroLoop]: createPorts([EPortSide.WEST, EPortSide.EAST]),
+    [EDiagramNode.WhileLoop]: createPorts([EPortSide.WEST, EPortSide.EAST]),
+}
+
 
 const getPorts = (node: IReactFlowNode): ElkPort[] => {
     const basePorts = baseNodePorts[node.data.type] || baseNodePorts[EDiagramNode.Origin]
+    console.log(`basePorts ${node.type}:`, basePorts)
     if (basePorts) {
         return basePorts.map((port) => ({
             ...port,
@@ -132,8 +82,10 @@ const elkOptions = {
     "elk.layered.feedbackEdges": "true",
     'elk.spacing.nodeNode': '100',
     "elk.direction": "RIGHT",
-    "elk.alignment": "RIGHT",
+    // "elk.alignment": "TOP",
     "elk.edgeRouting": "ORTHOGONAL",
+    "elk.layered.considerModelOrder.strategy": "PREFER_EDGES",
+    "elk.mrtree.edgeRoutingMode": "MIDDLE_TO_MIDDLE",
     // "elk.layered.nodePlacement.bk.fixedAlignment": "BALANCED",
     // "elk.spacing.edgeNode": '-500',
     "partitioning.activate": 'true',
@@ -179,6 +131,7 @@ const createGraphLayout = async (elements: {
         const children = nodes.filter((n) => n.parentNode === node.id)
         const elkNodeChildren = children.map((child) => getELKNode(edges, nodes, child))
         const ports = getPorts(node)
+        console.log(`ports ${node.type}:`, ports)
         return {
             id: node.id,
             width: typeof node.width === 'number' ? node.width : 300,
@@ -201,7 +154,7 @@ const createGraphLayout = async (elements: {
             // edge.zIndex.
             return {
                 id: edge.id,
-                sources: [`${edge.source}`],
+                sources: [`${edge.source}/${sourcePortSide}`],
                 targets: [`${edge.target}/${targetPortSide}`],
             }
         }
@@ -275,51 +228,4 @@ export const useAutoLayout = () => {
     }
 }
 
-const edges = [
-    {
-        "id": "e1",
-        "sources": [
-            "n1"
-        ],
-        "targets": [
-            "n2"
-        ]
-    },
-    {
-        "id": "e2",
-        "sources": [
-            "n2"
-        ],
-        "targets": [
-            "P4"
-        ]
-    },
-    {
-        "id": "e15",
-        "sources": [
-            "P1"
-        ],
-        "targets": [
-            "n4"
-        ]
-    },
-    {
-        "id": "e16",
-        "sources": [
-            "P2"
-        ],
-        "targets": [
-            "n5"
-        ]
-    },
-    {
-        "id": "e17",
-        "sources": [
-            "P3"
-        ],
-        "targets": [
-            "n6"
-        ]
-    },
-]
 
