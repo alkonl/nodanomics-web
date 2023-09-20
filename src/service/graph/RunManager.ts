@@ -98,7 +98,6 @@ export class RunManager {
         this.incrementStep()
         this.resetBeforeStep()
         const chain = this.getExecutionOrder()
-        console.log('chain: ', chain)
         this.setExecutionOrder(chain)
         // remove listener nodes from execution order
         const startChains = chain.filter(chainItem => !(chainItem.target instanceof GraphEventListenerNode))
@@ -108,9 +107,7 @@ export class RunManager {
 
     private executeNode(chainItem: IChainItem) {
         const target = chainItem.target
-        if (target.data.name === 'Matches Loop') {
-            console.log('executeNode: ', target.data.name)
-        }
+
         const edge = chainItem.edge
         if (target instanceof GraphInvokableNode) {
             if (target instanceof GraphLoopNode && !target.isLoopActive) {

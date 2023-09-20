@@ -54,6 +54,8 @@ export const connectEdge = ({connection}:
 
     const sourceMode = parseConnectionHandleId(connection.sourceHandle).mode;
     const targetMode = parseConnectionHandleId(connection.targetHandle).mode;
+    const sourceSide = parseConnectionHandleId(connection.sourceHandle).side;
+    const targetSide = parseConnectionHandleId(connection.targetHandle).side;
 
     const edgeId = generateEdgeId();
     const baseData = {
@@ -66,6 +68,8 @@ export const connectEdge = ({connection}:
     const data: IDiagramConnectionData = {
         ...connectionInitialProps[type],
         ...baseData,
+        sourceSide,
+        targetSide,
     } as IDiagramConnectionData;
 
     return {

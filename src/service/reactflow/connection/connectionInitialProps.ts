@@ -7,7 +7,7 @@ import {
 } from "../../../interface";
 import {initialNodeDiagramElement} from "../../../constant";
 
-const dataConnection: Omit<IDataConnectionData, 'id' | 'targetId' | 'sourceId'> = {
+const dataConnection: Omit<IDataConnectionData, 'id' | 'targetId' | 'sourceId' | 'sourceSide' | 'targetSide'> = {
     elementType: EElementType.Connection,
     name: 'data connection',
     type: EConnection.DataConnection,
@@ -16,7 +16,7 @@ const dataConnection: Omit<IDataConnectionData, 'id' | 'targetId' | 'sourceId'> 
     style: initialNodeDiagramElement
 }
 
-const logicConnection: Omit<ILogicConnectionData, 'id' | 'targetId' | 'sourceId'> = {
+const logicConnection: Omit<ILogicConnectionData, 'id' | 'targetId' | 'sourceId' | 'sourceSide' | 'targetSide'> = {
     elementType: EElementType.Connection,
     name: 'logic connection',
     type: EConnection.LogicConnection,
@@ -25,7 +25,7 @@ const logicConnection: Omit<ILogicConnectionData, 'id' | 'targetId' | 'sourceId'
     style: initialNodeDiagramElement
 }
 
-const chainConnection: Omit<IChainConnectionData, 'id' | 'targetId' | 'sourceId'> = {
+const chainConnection: Omit<IChainConnectionData, 'id' | 'targetId' | 'sourceId' | 'sourceSide' | 'targetSide'> = {
     elementType: EElementType.Connection,
     name: 'chain connection',
     type: EConnection.ChainConnection,
@@ -37,13 +37,13 @@ const chainConnection: Omit<IChainConnectionData, 'id' | 'targetId' | 'sourceId'
 
 
 export const connectionInitialProps: {
-    [key in EConnection]: Omit<IDiagramConnectionData, 'id' | 'targetId' | 'sourceId'>
+    [key in EConnection]: Omit<IDiagramConnectionData, 'id' | 'targetId' | 'sourceId' | 'sourceSide' | 'targetSide'>
 } = {
     [EConnection.DataConnection]: dataConnection,
     [EConnection.LogicConnection]: logicConnection,
     [EConnection.ChainConnection]: chainConnection
 } satisfies {
-    [EConnection.DataConnection]: Omit<IDataConnectionData, 'id' | 'targetId' | 'sourceId'>,
-    [EConnection.LogicConnection]: Omit<ILogicConnectionData, 'id' | 'targetId' | 'sourceId'>
-    [EConnection.ChainConnection]: Omit<IChainConnectionData, 'id' | 'targetId' | 'sourceId'>
+    [EConnection.DataConnection]: Omit<IDataConnectionData, 'id' | 'targetId' | 'sourceId'| 'sourceSide' | 'targetSide'>,
+    [EConnection.LogicConnection]: Omit<ILogicConnectionData, 'id' | 'targetId' | 'sourceId'| 'sourceSide' | 'targetSide'>
+    [EConnection.ChainConnection]: Omit<IChainConnectionData, 'id' | 'targetId' | 'sourceId'| 'sourceSide' | 'targetSide'>
 }

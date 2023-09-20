@@ -29,7 +29,7 @@ export const ExecutionToolbar = () => {
         changeTargetExecutionStep(event.target.value);
     }
 
-    // const autoLayout = useAutoLayout()
+    const autoLayout = useAutoLayout()
 
     return (
         <Box sx={{
@@ -104,9 +104,9 @@ export const ExecutionToolbar = () => {
                 isShow={executionGraphPopUp.isOpened}
                 onClose={executionGraphPopUp.close}
             />
-            {/*<MButton.Submit onClick={autoLayout}>*/}
-            {/*    layout*/}
-            {/*</MButton.Submit>*/}
+            <MButton.Submit onClick={autoLayout}>
+                layout
+            </MButton.Submit>
         </Box>
     );
 };

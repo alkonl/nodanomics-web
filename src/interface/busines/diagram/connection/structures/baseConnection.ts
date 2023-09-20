@@ -13,6 +13,12 @@ export enum EConnectionMode{
     NodeOutgoing = 'NodeOutgoing',
 }
 
+export enum EConnectionSide {
+    Left = "left",
+    Top = "top",
+    Right = "right",
+    Bottom = "bottom"
+}
 
 export interface IDiagramConnectionBaseData extends IDiagramBaseInteractiveElementData {
     sourceId: string;
@@ -20,5 +26,7 @@ export interface IDiagramConnectionBaseData extends IDiagramBaseInteractiveEleme
     elementType: EElementType.Connection;
     sourceMode?: EConnectionMode
     targetMode?: EConnectionMode
+    targetSide: EConnectionSide
+    sourceSide: EConnectionSide
     type: EConnection;
 }

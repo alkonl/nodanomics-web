@@ -11,6 +11,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {useChangeNodeDataStep} from "../../../../hooks";
 import {useDiagramEditorState} from "../../../../redux";
 import {shortenLargeNumber} from "../../../../utils";
+import {ChainHandle} from "../../CustomHandle/ChainHandle";
+import {DataHandle} from "../../CustomHandle/DataHandle";
 
 
 export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
@@ -66,18 +68,41 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
     return (
 
         <>
-            <Handle type="target" position={Position.Left} id={EConnection.DataConnection}
+
+            <Box sx={{
+                position: 'absolute',
+                width: 'calc(100% + 28px)',
+                height: 'calc(100% + 28px)',
+                left: -14,
+                top: -14,
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+            }}>
+                <DataHandle
+                    type="target"
+                    position={Position.Left}
                     isConnectable={isConnectable}
-                    style={{
-                        background: EColor.green,
-                    }}
-            />
-            <Handle type="source" position={Position.Right} id={EConnection.DataConnection}
+
+                />
+                <DataHandle
+                    type="source"
+                    position={Position.Right}
                     isConnectable={isConnectable}
-                    style={{
-                        background: EColor.green,
-                    }}
-            />
+                />
+                {/*<Handle type="target" position={Position.Left} id={EConnection.DataConnection}*/}
+                {/*        isConnectable={isConnectable}*/}
+                {/*        style={{*/}
+                {/*            background: EColor.green,*/}
+                {/*        }}*/}
+                {/*/>*/}
+                {/*<Handle type="source" position={Position.Right} id={EConnection.DataConnection}*/}
+                {/*        isConnectable={isConnectable}*/}
+                {/*        style={{*/}
+                {/*            background: EColor.green,*/}
+                {/*        }}*/}
+                {/*/>*/}
+            </Box>
             <BaseNodeContainer node={props}>
 
                 <Box sx={{
