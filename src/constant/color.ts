@@ -27,4 +27,6 @@ export enum EColor {
     lightMarine = '#93e0ea',
     lightMarine2 = '#91E0EC',
     darkMarine = '#2B2738',
+    darkMarine2 = '#1C1A28',
+    darkMarineLight = '#2B2738',
 }
