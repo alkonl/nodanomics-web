@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 // eslint-disable-next-line import/named
 import {Handle, NodeProps, Position} from "reactflow";
-import {Box} from "@mui/material";
+import {Box, Typography} from "@mui/material";
 import {EConnection, IDataNodeData} from "../../../../interface";
 import {NodeStyle} from "../styledComponent";
 import {EColor, EFontColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
@@ -92,7 +92,17 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
                 />
             </Box>
             <BaseNodeContainer node={props}>
-
+                <Box sx={{
+                    position: 'absolute',
+                    top: -15,
+                    color: EFontColor.lightMarine4,
+                }}>
+                   <Typography sx={{
+                       fontSize: 9,
+                   }}>
+                       {data.name}
+                   </Typography>
+                </Box>
                 <Box sx={{
                     backgroundColor: EColor.darkMarine,
                     display: 'flex',

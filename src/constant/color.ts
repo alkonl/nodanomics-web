@@ -6,6 +6,7 @@ export enum EFontColor {
     purple = '#c64bff',
     black = '#000000d6',
     red = '#f44336',
+    lightMarine4 = '#8ABBB7',
 }
 
 export enum EColor {
@@ -26,6 +27,7 @@ export enum EColor {
     darkGreen = '#1b5e20',
     lightMarine = '#93e0ea',
     lightMarine2 = '#91E0EC',
+    lightMarine3 = '#8EAEB3',
     darkMarine = '#2B2738',
     darkMarine2 = '#1C1A28',
     darkMarineLight = '#2B2738',

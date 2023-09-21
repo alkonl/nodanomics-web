@@ -3,10 +3,11 @@ import {Box} from "@mui/material";
 import {INodeData} from "../../../../interface";
 // eslint-disable-next-line import/named
 import {NodeProps} from "reactflow";
-import {useIsElementExecuted, useUpdatePosAbsolute} from "../../../../hooks";
+import {useIsElementExecuted} from "../../../../hooks";
 import './baseContainer.scss'
 // eslint-disable-next-line import/named
 import {SxProps} from "@mui/system/styleFunctionSx";
+import {EColor} from "../../../../constant";
 
 export const BaseNodeContainer: React.FC<{
     children: React.ReactNode
@@ -20,20 +21,20 @@ export const BaseNodeContainer: React.FC<{
     const {data} = node;
     const isPlayAnimation = useIsElementExecuted(data)
 
-    // useUpdatePosAbsolute({
-    //     nodeId: node.id,
-    //     xPos: node.xPos,
-    //     yPos: node.yPos
-    // })
-
+    console.log('data.style.borderColor: ', data.style.borderColor)
     return (
-        <Box sx={{
-            borderWidth: 3,
-            borderColor: data.style.borderColor,
-            borderStyle: 'solid',
-            animation: isPlayAnimation ? 'containerBlink 0.2s linear 3' : 'none',
-            ...sx
-        }}>
+        <Box
+            id="base-node-container"
+            sx={{
+                padding: '2px',
+                borderWidth: 1,
+                borderRadius: 2,
+                borderColor: data.style.borderColor,
+                borderStyle: 'solid',
+                backgroundColor: EColor.darkMarine,
+                animation: isPlayAnimation ? 'containerBlink 0.2s linear 3' : 'none',
+                ...sx
+            }}>
             {children}
         </Box>
     );
