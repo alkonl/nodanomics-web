@@ -4,7 +4,7 @@ import {Handle, NodeProps, Position} from "reactflow";
 import {Box} from "@mui/material";
 import {EConnection, IDataNodeData} from "../../../../interface";
 import {NodeStyle} from "../styledComponent";
-import {EColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
+import {EColor, EFontColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS} from "../../../../constant";
 import {BaseNodeContainer} from "../container";
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -90,23 +90,11 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
                     position={Position.Right}
                     isConnectable={isConnectable}
                 />
-                {/*<Handle type="target" position={Position.Left} id={EConnection.DataConnection}*/}
-                {/*        isConnectable={isConnectable}*/}
-                {/*        style={{*/}
-                {/*            background: EColor.green,*/}
-                {/*        }}*/}
-                {/*/>*/}
-                {/*<Handle type="source" position={Position.Right} id={EConnection.DataConnection}*/}
-                {/*        isConnectable={isConnectable}*/}
-                {/*        style={{*/}
-                {/*            background: EColor.green,*/}
-                {/*        }}*/}
-                {/*/>*/}
             </Box>
             <BaseNodeContainer node={props}>
 
                 <Box sx={{
-                    backgroundColor: EColor.black,
+                    backgroundColor: EColor.darkMarine,
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -129,7 +117,7 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
                                 pointerEvents: 'all',
                                 width: 18,
                                 height: 18,
-                                color: EColor.white,
+                                color: EFontColor.white,
                             }}/>}
                         <NodeStyle.Name sx={{
                             maxWidth: '100%',
@@ -149,7 +137,7 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
                                 pointerEvents: 'all',
                                 width: 18,
                                 height: 18,
-                                color: EColor.white,
+                                color: EFontColor.white,
                             }}
                         />}
                     </Box>

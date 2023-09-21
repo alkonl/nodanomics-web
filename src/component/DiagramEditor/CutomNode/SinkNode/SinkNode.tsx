@@ -74,7 +74,7 @@ export const SinkNode: React.FC<NodeProps<ISinkNodeData>> = (props) => {
                     display: 'flex',
                     justifyContent: 'center',
                     clipPath: clipPath,
-                    background: EColor.black,
+                    background: EColor.darkMarine,
                 }}>
                     <NodeStyle.Name sx={{
                         position: 'absolute',

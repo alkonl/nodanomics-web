@@ -21,7 +21,7 @@ export const DatasetNode: React.FC<NodeProps<IDatasetDatafield>> = (props) => {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: EColor.black,
+                backgroundColor: EColor.darkMarine,
             }}>
                 <Box sx={{
                     flex: 1,

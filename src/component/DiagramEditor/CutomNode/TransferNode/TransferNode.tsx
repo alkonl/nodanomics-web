@@ -92,7 +92,7 @@ export const TransferNode: React.FC<NodeProps<ISinkNodeData>> = (props) => {
                     display: 'flex',
                     justifyContent: 'center',
                     clipPath: clipPath,
-                    background: EColor.black,
+                    background: EColor.darkMarine,
                 }}>
                     {/*safe area*/}
                     <Box sx={{
