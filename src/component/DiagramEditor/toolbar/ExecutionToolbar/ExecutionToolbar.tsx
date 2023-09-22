@@ -36,18 +36,18 @@ export const ExecutionToolbar = () => {
             pointerEvents: 'auto',
             display: 'flex',
             gap: 1,
-            borderColor: EColor.grey2,
+            borderRadius: 2,
             borderStyle: 'solid',
             borderWidth: '1px',
             px: 3,
             py: 2,
-            backgroundColor: EColor.white,
+            backgroundColor: EColor.darkMarineLight,
         }}>
             <Box sx={{
                 width: 80
             }}>
                 <Parameter.Label sx={{
-                    fontSize: 12,
+                    fontSize: 14,
                     textAlign: 'left',
                 }}>
                     Speed
@@ -81,6 +81,10 @@ export const ExecutionToolbar = () => {
             }}>
                 <MButton.Submit
                     onClick={toggleStepInterval}
+                    sx={{
+                        borderBottomRightRadius: 0,
+                        borderTopRightRadius: 0,
+                    }}
                 >
                     {isRunning ? 'Stop' : 'Run'}
                 </MButton.Submit>
@@ -88,6 +92,9 @@ export const ExecutionToolbar = () => {
                     onChange={changeTargetExecutionStepHandler}
                     value={targetSteps}
                     sx={{
+                        borderBottomLeftRadius: 0,
+                        borderTopLeftRadius: 0,
+                        borderLeftWidth: 0,
                         // backgroundColor: EColor.white,
                         width: 50,
                     }}

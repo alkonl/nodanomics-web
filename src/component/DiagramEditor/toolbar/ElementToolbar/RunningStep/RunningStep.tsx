@@ -1,6 +1,8 @@
 import React from 'react';
-import {Box, Typography} from "@mui/material";
+import {Box} from "@mui/material";
 import {useDiagramEditorState} from "../../../../../redux";
+import {ParameterLabel} from "../../../../base/Label";
+import {EColor} from "../../../../../constant";
 
 export const RunningStep = () => {
 
@@ -12,15 +14,20 @@ export const RunningStep = () => {
             flexDirection: 'column',
             alignItems: 'center'
         }}>
-            <Typography>
+            <ParameterLabel sx={{
+                margin: 0,
+            }}>
                 step:
-            </Typography>
-            <Typography sx={{
+            </ParameterLabel>
+            <ParameterLabel sx={{
                 fontSize: 20,
                 fontWeight: 'bold',
+                color: EColor.white,
+                textAlign: 'center',
+                margin: 0,
             }}>
                 {currentRunningDiagramStep}
-            </Typography>
+            </ParameterLabel>
         </Box>
     );
 };
