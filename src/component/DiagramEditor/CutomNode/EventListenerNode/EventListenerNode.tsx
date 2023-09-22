@@ -41,7 +41,7 @@ export const EventListenerNode: React.FC<NodeProps<IEventListenerNodeData>> = (p
                 node={props}
                 sx={{
                     borderRadius: '14% 14% 14% 14%/28% 28% 28% 28%',
-                    backgroundColor: EColor.black,
+                    backgroundColor: EColor.darkMarine,
                 }}>
                 <Box
                     sx={{

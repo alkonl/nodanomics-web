@@ -131,7 +131,7 @@ export const FormulaNode: React.FC<NodeProps<IFormulaNodeData>> = (props) => {
                         alignItems: 'center',
                         flexDirection: 'column',
                         clipPath: clipPath,
-                        background: EColor.black,
+                        background: EColor.darkMarine,
                         py: 2,
                         px: 2,
                     }}

@@ -58,7 +58,7 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = (pro
                 node={props}
                 sx={{
                     borderRadius: '14% 14% 14% 14%/28% 28% 28% 28%',
-                    backgroundColor: EColor.black,
+                    backgroundColor: EColor.darkMarine,
                 }}>
                 <Box
                     sx={{

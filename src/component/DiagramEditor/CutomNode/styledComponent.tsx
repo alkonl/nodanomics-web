@@ -68,12 +68,12 @@ const NodeTextValue = styled(Typography)(() => ({
 const NodeInputTextValue: React.FC<InputProps> = ({sx, ...props}) => {
     return <Input
         sx={{
+            color: EFontColor.lightMarine4,
             // height:' 0.7em',
             '& input': {
                 padding: 0,
             },
             padding: 0,
-            color: EFontColor.white,
             ...sx,
         }}
         {...props}

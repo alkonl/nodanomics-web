@@ -9,14 +9,20 @@ export const ParameterInput: React.FC<InputProps> = ({sx, value, ...props}) => {
     return <Input
         value={value !== undefined ? value : ''}
         sx={{
-            color: EFontColor.grey4,
+            color: EFontColor.white,
             width: '100%',
             flex: 1,
-            borderColor: EColor.grey2,
-            borderWidth: 3,
-            borderRadius: 0,
+            borderColor: EColor.lightMarine3,
             borderStyle: 'solid',
+            borderRadius: 2,
+            borderWidth: '1px',
             px: 0.5,
+            '&:after': {
+                display: 'none !important',
+            },
+            '&:before': {
+                display: 'none !important',
+            },
             ...sx,
         }}
         {...props}/>

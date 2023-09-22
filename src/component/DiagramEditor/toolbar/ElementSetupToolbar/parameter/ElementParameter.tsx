@@ -1,6 +1,7 @@
 import React from 'react';
 import {Parameter} from "../../../../base";
 import {Grid} from "@mui/material";
+import {EFontColor} from "../../../../../constant";
 
 export const ElementParameter: React.FC<{
     label: string,
@@ -9,7 +10,9 @@ export const ElementParameter: React.FC<{
     return (
         <>
             <Grid item xs={2.7}>
-                <Parameter.Label>
+                <Parameter.Label sx={{
+                    color: EFontColor.lightMarine4,
+                }}>
                     {label}
                 </Parameter.Label>
             </Grid>

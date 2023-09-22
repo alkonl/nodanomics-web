@@ -11,19 +11,20 @@ import {isObject} from "../../../utils";
 
 export const ElementSetupToolbarSectionTitle = styled(Box)({
     display: 'block',
-    backgroundColor: EColor.grey1,
+    backgroundColor: 'transparent',
     paddingLeft: 1,
     padding: '4px',
-    color: EFontColor.grey4,
+    color: EFontColor.white,
     fontWeight: 'bold',
-    borderColor: EColor.grey2,
+    borderColor: EColor.lightMarine3,
     borderStyle: 'solid',
+    borderRadius: 2,
     borderWidth: '1px',
     marginBottom: 16,
 })
 
 export const ParameterText = styled(Typography)({
-    color: EFontColor.grey4,
+    color: EFontColor.lightMarine4,
     fontWeight: 'bold',
 })
 

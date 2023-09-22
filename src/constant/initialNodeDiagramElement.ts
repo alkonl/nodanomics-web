@@ -1,8 +1,8 @@
 import {EFontAlign} from "../interface";
-import {EFontColor} from "./index";
+import {EColor, EFontColor} from "./index";
 
 export const initialNodeDiagramElement = {
-    borderColor: '#000',
+    borderColor: EColor.lightMarine,
     textStyles: {
         fontAlign: EFontAlign.Center,
         fontFamily: 'Roboto',

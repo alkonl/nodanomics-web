@@ -16,15 +16,17 @@ export const ElementSetupToolbar = () => {
             sx={{
                 display: 'flex',
                 pointerEvents: 'auto',
-                borderColor: EColor.grey2,
+                borderColor: EColor.lightMarine3,
                 borderStyle: 'solid',
+                borderRadius: 4,
                 borderWidth: '1px',
                 maxWidth: 320,
                 height: '100%',
                 boxSizing: 'border-box',
                 overflowY: 'auto',
                 overflowX: 'hidden',
-                backgroundColor: EColor.white,
+                backgroundColor: EColor.darkMarine3,
+
             }}
         >
             <Box sx={{
@@ -46,7 +48,7 @@ export const ElementSetupToolbar = () => {
                             gap: 2,
                         }}>
                             <Typography sx={{
-                                color: EFontColor.grey4,
+                                color: EFontColor.lightMarine4,
                             }}>
                                 {nodeSetupToolbarNames[selectedElementData.type]}
                             </Typography>
@@ -68,7 +70,10 @@ export const ElementSetupToolbar = () => {
                             <NodeDeleteButton nodeId={selectedElementData.id}/>
                         </Box>}
                     </Box>
-                    : <Typography>
+                    : <Typography sx={{
+                        color: EFontColor.lightMarine4,
+
+                    }}>
                         Please select an element to edit
                     </Typography>
                 }

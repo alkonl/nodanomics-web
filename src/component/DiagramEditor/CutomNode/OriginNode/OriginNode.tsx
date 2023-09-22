@@ -72,7 +72,7 @@ export const OriginNode: React.FC<NodeProps<IOriginNodeData>> = (props) => {
                     display: 'flex',
                     justifyContent: 'center',
                     clipPath: clipPath,
-                    background: EColor.black,
+                    background: EColor.darkMarine,
                 }}>
                     <NodeStyle.Name sx={{
                         position: 'absolute',

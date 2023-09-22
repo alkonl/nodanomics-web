@@ -1,6 +1,14 @@
 import React, {DragEvent, useCallback, useEffect, useRef, useState} from 'react';
 // eslint-disable-next-line import/named
-import ReactFlow, {Background, ConnectionMode, Controls, EdgeChange, NodeChange, ReactFlowInstance} from 'reactflow';
+import ReactFlow, {
+    Background,
+    BackgroundVariant,
+    ConnectionMode,
+    Controls,
+    EdgeChange,
+    NodeChange,
+    ReactFlowInstance
+} from 'reactflow';
 import 'reactflow/dist/style.css';
 
 import {
@@ -35,7 +43,7 @@ import {LogicConnection} from "../CustomConnectionLine/LogicConnection";
 import {useOnConnect} from "../../../hooks/useOnConnect";
 import {ChainConnection} from "../CustomConnectionLine/ChainConnection";
 import {DatasetNode} from "../CutomNode/DatasetNode";
-import {GAP_BETWEEN_EDITOR_CANVAS_DOTS, multiSelectKeyCodes} from "../../../constant";
+import {EColor, GAP_BETWEEN_EDITOR_CANVAS_DOTS, multiSelectKeyCodes} from "../../../constant";
 import './reactflowOverwrite.scss'
 
 const nodeTypes = {
@@ -122,6 +130,7 @@ export const DiagramCanvas = () => {
             <Box
                 sx={{
                     flex: 1,
+                    backgroundColor: EColor.darkMarine2
                 }}
                 ref={reactFlowWrapper}
             >
@@ -151,7 +160,9 @@ export const DiagramCanvas = () => {
                     deleteKeyCode={'undefined'}
                 >
                     <Controls/>
-                    <Background color="blue" gap={GAP_BETWEEN_EDITOR_CANVAS_DOTS}/>
+                    <Background id="1" gap={38} color={EColor.darkMarineLight} variant={BackgroundVariant.Lines} />
+                    <Background id="2" gap={220} offset={1} color={EColor.darkMarineLight} variant={BackgroundVariant.Lines} />
+                    {/*<Background color={EColor.darkMarine2} gap={GAP_BETWEEN_EDITOR_CANVAS_DOTS}/>*/}
                 </ReactFlow>
             </Box>
         </Box>

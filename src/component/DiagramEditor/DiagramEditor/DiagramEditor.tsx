@@ -59,6 +59,14 @@ export const DiagramEditor = () => {
                         height: diagramCanvasContainerSize.height,
                         pointerEvents: 'none',
                     }}>
+                        {/*<Box sx={{*/}
+                        {/*    position: 'absolute',*/}
+                        {/*    right: 20,*/}
+                        {/*    width: '100%',*/}
+                        {/*    height: '100%',*/}
+                        {/*}}>*/}
+                        {/*    */}
+                        {/*</Box>*/}
                         <Box
                             sx={{
                                 display: 'flex',
@@ -73,28 +81,38 @@ export const DiagramEditor = () => {
                                     flex: 1,
                                 }}
                             >
-                                <Box
-                                    sx={{
-                                        position: 'absolute',
-                                        top: 10,
-                                        left: '50%',
-                                        transform: 'translateX(-50%)',
-                                    }}
-                                >
-                                    <ExecutionToolbar/>
-                                </Box>
+
                                 <Box
                                     sx={{
                                         position: 'absolute',
                                         bottom: 15,
-                                        left: '50%',
+                                        left: '40%',
                                         transform: 'translateX(-50%)',
                                     }}
                                 >
                                     <ElementToolbar/>
                                 </Box>
+                                <Box sx={{
+                                    position: 'absolute',
+                                    my: 5,
+                                    right: 10,
+                                    height: diagramCanvasContainerSize.height - 40 * 2,
+                                }}>
+                                    <ElementSetupToolbar/>
+                                </Box>
+                                <Box
+                                    sx={{
+                                        position: 'absolute',
+                                        top: 10,
+                                        left: '40%',
+                                        transform: 'translateX(-50%)',
+                                    }}
+                                >
+                                    <ExecutionToolbar/>
+                                </Box>
                             </Box>
-                            <ElementSetupToolbar/>
+
+
                         </Box>
                     </Box>
                 </Box>
