@@ -10,10 +10,10 @@ export const ParameterCheckbox: React.FC<Pick<CheckboxProps, 'onChange' | 'check
             checked={props.checked || false}
             sx={{
                 padding: 0,
-                borderColor: EColor.grey2,
-                color: EColor.grey2,
+                borderColor: EColor.lightMarine3,
+                color: EColor.lightMarine3,
                 '&.Mui-checked': {
-                    color: EColor.grey2,
+                    color: EColor.lightMarine3,
                 },
             }}/>
     );

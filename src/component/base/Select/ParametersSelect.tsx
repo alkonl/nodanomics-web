@@ -19,30 +19,46 @@ export const ParametersSelect: React.FC<{
             sx={{
                 maxWidth: '200px',
                 boxSizing: 'border-box',
+
             }}
             id={`ParametersSelect-controller${currentValue}`}
         >
 
-            <InputLabel
-                sx={{
-                    color: EFontColor.grey4,
-                }}
-            />
+
             <Select
                 value={currentValue || ''}
                 onChange={onChange}
                 sx={{
-                    color: EFontColor.grey4,
                     width: '100%',
                     maxWidth: '100%',
                     flex: 1,
-                    borderColor: EColor.grey2,
-                    borderWidth: 3,
-                    borderRadius: 0,
+                    color: EFontColor.lightMarine4,
+                    borderColor: EColor.lightMarine3,
+                    backgroundColor: EColor.darkMarine3,
+                    borderWidth: 2,
+                    borderRadius: 3,
                     borderStyle: 'solid',
                     px: 0.5,
                     padding: 0,
+                    boxShadow: "none",
+                    ".MuiOutlinedInput-notchedOutline": {border: 0},
+                    "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+                        border: 0,
+                    },
+                    "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        border: 0,
+                    },
                 }}
+                inputProps={{
+                    MenuProps: {
+                        MenuListProps: {
+                            sx: {
+                                backgroundColor: EColor.darkMarine3
+                            }
+                        }
+                    }
+                }}
+
             >
                 {values?.map((item) => {
                     if (typeof item === 'string') {
@@ -51,7 +67,7 @@ export const ParametersSelect: React.FC<{
                                 key={item}
                                 value={item}
                                 sx={{
-                                    color: EFontColor.grey4,
+                                    color: EFontColor.lightMarine4,
                                 }}
                             >
                                 {item}

@@ -38,17 +38,11 @@ export const NodeDecimalParameter: React.FC<{
                     display: 'flex',
                     alignItems: 'center',
                 }}>
-                    <Checkbox
+                    <Parameter.Checkbox
                         onChange={changeIsShowDecimals}
                         checked={nodeData.isShowDecimal || false}
-                        sx={{
-                            padding: 0,
-                            borderColor: EColor.grey2,
-                            color: EColor.grey2,
-                            '&.Mui-checked': {
-                                color: EColor.grey2,
-                            },
-                        }}/>
+                     
+                    />
                 </Box>
                 <Box sx={{
                     display: 'flex',

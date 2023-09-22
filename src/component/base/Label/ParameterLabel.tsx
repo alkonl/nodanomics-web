@@ -5,6 +5,6 @@ export const ParameterLabel = styled(Typography)({
     width: '100%',
     marginTop: 4,
     textAlign: 'right',
-    color: EFontColor.grey4,
+    color: EFontColor.lightMarine4,
     fontWeight: 600,
 })

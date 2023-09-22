@@ -16,7 +16,7 @@ export const ParameterInput: React.FC<InputProps> = ({sx, value, ...props}) => {
             backgroundColor: EColor.darkMarine3,
             borderStyle: 'solid',
             borderRadius: 2,
-            borderWidth: '1px',
+            borderWidth: '2px',
             px: 0.5,
             '&:after': {
                 display: 'none !important',

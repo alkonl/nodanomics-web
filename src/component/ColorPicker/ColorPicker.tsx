@@ -47,9 +47,10 @@ export const ColorPicker: React.FC<{
                     height: '100%',
                     minHeight: 30,
                     flex: 1,
-                    borderColor: EColor.grey2,
-                    borderWidth: 3,
-                    borderRadius: 0,
+                    borderColor: EColor.darkMarine3,
+                    overflow: 'hidden',
+                    borderWidth: 2,
+                    borderRadius: 2,
                     borderStyle: 'solid',
                     padding: 0,
                 }}

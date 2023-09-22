@@ -119,13 +119,31 @@ export const VariableStatisticsParameter: React.FC<{
                 flexDirection: 'column'
             }}>
                 <Parameter.Text>
-                    Max. Val. {maxFormatted}
+                    Max. Val.
+                    <Parameter.Text sx={{
+                        color: EColor.white,
+                        display: 'inline-block',
+                    }}>
+                        {maxFormatted}
+                    </Parameter.Text>
                 </Parameter.Text>
                 <Parameter.Text>
-                    Avg. Val. {avgFormatted}
+                    Avg. Val.
+                    <Parameter.Text sx={{
+                        color: EColor.white,
+                        display: 'inline-block',
+                    }}>
+                        {avgFormatted}
+                    </Parameter.Text>
                 </Parameter.Text>
                 <Parameter.Text>
-                    Min. Val. {minFormatted}
+                    Min. Val.
+                    <Parameter.Text sx={{
+                        color: EColor.white,
+                        display: 'inline-block',
+                    }}>
+                        {minFormatted}
+                    </Parameter.Text>
                 </Parameter.Text>
             </Box>
 

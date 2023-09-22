@@ -1,6 +1,5 @@
 import React from 'react';
 import {Box, Typography} from "@mui/material";
-import {EColor} from "../../../../../../constant";
 import {GroupNodeItem} from "./GroupNodeItem";
 import {IGroupedNodes} from "../../../../../../interface";
 
@@ -18,8 +17,8 @@ export const GroupTagItem: React.FC<{
             <Typography sx={{
                 fontWeight: 'bold',
                 width: '100%',
-                backgroundColor: EColor.grey,
                 padding: 0.5,
+
             }}>
                 {group.tag}
             </Typography>

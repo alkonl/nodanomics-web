@@ -20,12 +20,15 @@ export const SpreadsheetPreviewButton: React.FC<{
                 onClick={spreadsheetViewerPopUpManager.open}
                 sx={{
                     width: '100%',
-                    borderBottomColor: EColor.grey4,
+                    borderBottomColor: EColor.lightMarine2,
                     borderBottomWidth: 2,
                     borderBottomStyle: 'solid',
                     paddingBottom: 0.5,
                 }}>
-                <Typography>
+                <Typography sx={{
+                    fontWeight: 'bold',
+                    color: EColor.grey2,
+                }}>
                     {spreadsheet.name}
                 </Typography>
             </Button>

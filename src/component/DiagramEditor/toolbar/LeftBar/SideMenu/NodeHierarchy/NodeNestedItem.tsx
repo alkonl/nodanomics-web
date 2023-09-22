@@ -7,18 +7,21 @@ import {nodeTypeName} from "../../../../../../service";
 export const NodeNestedItem: React.FC<{
     node: IReactFlowNode
     onNodeClick?: (node: IReactFlowNode) => void
-}> = ({onNodeClick,node}) => {
+}> = ({onNodeClick, node}) => {
     return (
         <Box>
             <Typography
-                onClick={()=>{
-                    if(onNodeClick){
+                onClick={() => {
+                    if (onNodeClick) {
                         onNodeClick(node)
                     }
                 }}
                 sx={{
                     '&:hover': {
-                        background: EColor.grey,
+                        borderWidth: 2,
+                        borderColor: EColor.lightMarine3,
+                        borderStyle: 'solid',
+                        transition: '0.2s ease-in-out',
                     },
                     cursor: 'pointer',
                 }}>

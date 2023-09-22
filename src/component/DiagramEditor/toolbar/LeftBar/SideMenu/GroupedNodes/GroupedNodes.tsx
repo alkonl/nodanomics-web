@@ -3,6 +3,7 @@ import {useDiagramEditorState} from "../../../../../../redux";
 import {Box, Typography} from "@mui/material";
 import {useGroupNodesByTag} from "../../../../../../hooks";
 import {GroupTagItem} from "./GroupTagItem";
+import {EColor, EFontColor} from "../../../../../../constant";
 
 export const GroupedNodes = () => {
 
@@ -16,8 +17,13 @@ export const GroupedNodes = () => {
             position: 'relative',
             overflowY: 'auto',
             height: '100%',
+            backgroundColor: EColor.darkMarineLight,
+
         }}>
-            <Typography>
+            <Typography sx={{
+                fontWeight: 'bold',
+                color: EFontColor.lightMarine4,
+            }}>
                 Groups by tags
             </Typography>
             <Box sx={{
