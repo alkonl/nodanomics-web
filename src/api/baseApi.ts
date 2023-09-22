@@ -12,6 +12,7 @@ import {sendVerificationEmail, verifyEmail} from "supertokens-auth-react/recipe/
 
 import {
     EUploadSpreadSheetRequestType,
+    IAddDiagramLayerRequest,
     IChangePasswordRequest,
     IChangePasswordResponse,
     ICreateNewDiagramRequest,
@@ -116,6 +117,7 @@ export const baseApi = createApi({
         ERTKTags.Spreadsheet,
         ERTKTags.ExecutionGraph,
         ERTKTags.Diagrams,
+        ERTKTags.DiagramSettings,
     ],
     reducerPath: 'baseApi',
     baseQuery: baseQueryWithReauth,
@@ -643,7 +645,17 @@ export const baseApi = createApi({
                 }
             },
             providesTags: [ERTKTags.ExecutionGraph]
-        })
+        }),
+        addDiagramLayer: builder.mutation<unknown,IAddDiagramLayerRequest>({
+            query: (params: IAddDiagramLayerRequest) => {
+              return {
+                url: `/diagram/layers/update`,
+                method: 'PUT',
+                body: params,
+              }
+            },
+            invalidatesTags: [ERTKTags.DiagramSettings],
+        }),
     }),
 })
 export const {
@@ -685,5 +697,6 @@ export const {
     useUpdateExecutionGraphPropertiesMutation,
     useGetExecutionGraphPropertiesQuery,
     useGetProjectDiagramsQuery,
+    useAddDiagramLayerMutation,
 } = baseApi;
 

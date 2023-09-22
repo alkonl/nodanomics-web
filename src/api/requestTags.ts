@@ -8,4 +8,5 @@ export enum ERTKTags {
     ProjectTeamMember ='ProjectTeamMember',
     Spreadsheet ='Spreadsheet',
     ExecutionGraph ='ExecutionGraph',
+    DiagramSettings ='DiagramSettings',
 }
