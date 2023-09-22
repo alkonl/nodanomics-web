@@ -3,6 +3,7 @@ import {Dialog} from "@headlessui/react";
 import {BasePopUp} from "../PopUp";
 import {Box} from "@mui/material";
 import {UploadSpreadsheetForm} from "../../form";
+import {EColor} from "../../../constant";
 
 export const UploadSpreadSheetPopUp: React.FC<{
     isShow: boolean;
@@ -16,8 +17,8 @@ export const UploadSpreadSheetPopUp: React.FC<{
                 <Dialog.Panel>
                     <Box sx={{
                         padding: '40px',
-                        backgroundColor: 'white',
                         borderRadius: 8,
+                        backgroundColor: EColor.darkMarineLight,
                     }}>
                         <UploadSpreadsheetForm
                             projectId={projectId}

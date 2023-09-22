@@ -18,8 +18,8 @@ export const GroupTagItem: React.FC<{
             <Typography sx={{
                 fontWeight: 'bold',
                 width: '100%',
-                backgroundColor: EColor.grey,
                 padding: 0.5,
+
             }}>
                 {group.tag}
             </Typography>

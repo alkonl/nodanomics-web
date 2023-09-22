@@ -2,6 +2,7 @@ import React from 'react';
 import {Button, Typography} from "@mui/material";
 import {useSetEditElement} from "../../../../../../hooks";
 import {EElementType} from "../../../../../../interface";
+import {EFontColor} from "../../../../../../constant";
 
 export const GroupNodeItem: React.FC<{
     nodeName: string;
@@ -27,7 +28,9 @@ export const GroupNodeItem: React.FC<{
                 justifyContent: 'flex-start',
             }}
         >
-            <Typography>
+            <Typography sx={{
+                color: EFontColor.grey2,
+            }}>
                 {nodeName}
             </Typography>
         </Button>

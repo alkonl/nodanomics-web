@@ -5,6 +5,7 @@ import {MButton} from "../../base";
 import {EUploadSpreadSheetRequestType} from "../../../interface";
 import {useCurrentUser} from "../../../hooks";
 import {GoogleConnectButton} from "../../button";
+import {EFontColor} from "../../../constant";
 
 export const UploadSpreadsheetForm: React.FC<{
     projectId: string;
@@ -97,16 +98,17 @@ export const UploadSpreadsheetForm: React.FC<{
                     }}
                 >
 
-                    <Typography>Upload local file</Typography>
-                    <Button
-                        variant="contained"
+                    <Typography sx={{
+                        color: EFontColor.lightMarine4
+                    }}>Upload local file</Typography>
+                    <MButton.Submit
                         component="label"
                     >
                         <input type="file" accept=".xlsx, .numbers" onChange={handleFileChange} hidden/>
                         {uploadedFile
                             ? <Typography>selected: {uploadedFile.name}</Typography>
                             : <Typography>choose</Typography>}
-                    </Button>
+                    </MButton.Submit>
                 </Box>
                 {allUserGoogleSpreadsheets && <Box sx={{
                     display: 'flex',
@@ -142,8 +144,12 @@ export const UploadSpreadsheetForm: React.FC<{
             <Box>
                 <>
                     {(googleSheetId || uploadedFile) && <MButton.Submit type="submit">Submit</MButton.Submit>}
-                    {isSuccess && <Typography>Success</Typography>}
-                    {isError && <Typography>Error</Typography>}
+                    {isSuccess && <Typography sx={{
+                        color: EFontColor.white
+                    }}>Success</Typography>}
+                    {isError && <Typography sx={{
+                        color: EFontColor.red
+                    }}>Error</Typography>}
                 </>
             </Box>
         </Box>

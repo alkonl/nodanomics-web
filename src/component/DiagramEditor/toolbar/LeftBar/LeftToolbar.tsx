@@ -110,6 +110,7 @@ export function LeftToolbar() {
                 open={isSideMenuOpen}
                 anchorEl={anchorEl}
                 onClose={handleClose}
+             
                 anchorOrigin={{
                     vertical: 20,
                     horizontal: 'right',
