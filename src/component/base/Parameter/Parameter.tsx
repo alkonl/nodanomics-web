@@ -41,7 +41,8 @@ export const ParameterList: React.FC<{
                 padding: 0.5,
                 height: 120,
                 flex: 1,
-                borderColor: EColor.grey2,
+                borderColor: EColor.lightMarine3,
+                backgroundColor: EColor.darkMarine3,
                 borderWidth: 3,
                 borderRadius: 0,
                 borderStyle: 'solid',
@@ -53,7 +54,7 @@ export const ParameterList: React.FC<{
                 if(isObject(item) && 'label' in item) {
                     return ( <Typography
                         sx={{
-                            color: EColor.grey4,
+                            color: EColor.white,
                             fontSize: 14,
                         }}
                         key={`${item.value}-${index}`}
