@@ -1,8 +1,9 @@
 import {useAddDiagramLayerMutation} from "../api";
 import {useDiagramEditorState} from "../redux";
 
-export const useDiagramLayers = () => {
+export const useAddDiagramLayers = () => {
     const {currentDiagramId} = useDiagramEditorState()
+
     const [addDiagramLayersReq] = useAddDiagramLayerMutation();
 
     const addDiagramLayer = ({layerName}: {
@@ -13,7 +14,8 @@ export const useDiagramLayers = () => {
         }
     }
 
+
     return {
-        addDiagramLayer
+        addDiagramLayer,
     }
 }

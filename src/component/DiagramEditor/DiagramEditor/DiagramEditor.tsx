@@ -3,7 +3,7 @@ import {DiagramCanvas} from "../DiagramCanvas";
 import style from './DiagramEditor.module.scss'
 import {ElementSetupToolbar, ElementToolbar, ExecutionToolbar, LeftToolbar} from "../toolbar";
 import {
-    ReactFlowInstanceProvider,
+    ReactFlowInstanceProvider, useDiagramSettings,
     useGetEditDiagramFromServer,
     useSetAllSpreadSheetsToState,
     useWidthAndHeight
@@ -42,7 +42,7 @@ export const DiagramEditor = () => {
     const {elementSize: diagramCanvasContainerSize, elementRef: diagramCanvasContainerRef} = useWidthAndHeight()
 
     useSetAllSpreadSheetsToState()
-
+    useDiagramSettings()
     return (
         <Box
             className={style.diagramEditorContainer}
