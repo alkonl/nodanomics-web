@@ -1,13 +1,9 @@
 import React, {useMemo} from "react";
-import styles from './LeftToolbar.module.scss';
-import {Box} from "@mui/material";
+import {Box, Popover} from "@mui/material";
 import {Svg} from "../../../../assets";
 import {LeftToolbarItem} from "./LeftToolbarItem";
 import {SideMenu} from "./SideMenu";
 import {ELeftToolbarSideMenu} from "../../../../interface";
-import {BaseSideMenu} from "./SideMenu/BaseSideMenu/BaseSideMenu";
-import {useDownloadDiagram} from "../../../../hooks/useDownloadDiagram";
-import {useUploadDiagram} from "../../../../hooks";
 import {PreviewNodeHierarchy} from "./PreviewComponent";
 
 
@@ -56,6 +52,7 @@ export function LeftToolbar() {
         }
         return SideMenu[selectedSideMenu];
     }, [selectedSideMenu])
+
     const onSelectSideMenu = (sideMenuName: ELeftToolbarSideMenu) => {
         setSelectedSideMenu(sideMenuName);
         if (sideMenuName === selectedSideMenu) {
@@ -66,14 +63,35 @@ export function LeftToolbar() {
         }
     }
 
-    const downloadDiagram = useDownloadDiagram()
-    const uploadDiagram = useUploadDiagram()
+    const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
+    const id = isSideMenuOpen ? 'simple-popover' : undefined;
 
+    const handleClose = () => {
+        setIsSideMenuOpen(false);
+        setSelectedSideMenu(undefined);
+    }
 
     return (
-        <Box className={styles.container}>
+        <Box sx={{
+            display: 'flex',
+            pointerEvents: 'auto',
+            height: '90%',
+        }}>
             <Box
-                className={styles.buttonList}
+                onMouseEnter={(event) => {
+                    setAnchorEl(event.currentTarget);
+                }}
+                sx={{
+                    width: 60,
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '25px',
+                    paddingTop: '20px',
+                    paddingLeft: '10px',
+                    paddingRight: '10px',
+                }}
             >
                 {menuOptions.map((option) => {
                     const isSelected = option.name === selectedSideMenu;
@@ -86,29 +104,28 @@ export function LeftToolbar() {
                             key={option.name}
                         />)
                 })}
-
-                   {/*<Box>*/}
-                   {/*    <Button*/}
-                   {/*        onClick={downloadDiagram}*/}
-
-                   {/*    >*/}
-                   {/*        <DownloadIcon sx={{*/}
-                   {/*            color: EColor.grey4,*/}
-                   {/*        }}/>*/}
-                   {/*    </Button>*/}
-                   {/*    <Button*/}
-                   {/*        component="label"*/}
-                   {/*    >*/}
-                   {/*        <input type="file" accept=".json" onChange={uploadDiagram} hidden/>*/}
-                   {/*        <UploadIcon sx={{*/}
-                   {/*            color: EColor.grey4,*/}
-                   {/*        }}/>*/}
-                   {/*    </Button>*/}
-                   {/*</Box>*/}
             </Box>
-            <BaseSideMenu isOpen={isSideMenuOpen}>
-                {SelectedSideMenu && <SelectedSideMenu/>}
-            </BaseSideMenu>
+            <Popover
+                id={id}
+                open={isSideMenuOpen}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: 20,
+                    horizontal: 'right',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                }}
+            >
+                <>
+                    {SelectedSideMenu && <SelectedSideMenu/>}
+                </>
+            </Popover>
+
+
+
         </Box>
     );
 }

@@ -1,13 +1,14 @@
 import React from 'react';
-import {Button, Tooltip} from "@mui/material";
+import {Tooltip} from "@mui/material";
 import {ELeftToolbarSideMenu} from "../../../../interface";
+import {MButton} from "../../../base";
 
 export const LeftToolbarItem: React.FC<{
     name: ELeftToolbarSideMenu;
     onClick: (name: ELeftToolbarSideMenu) => void;
     Component: React.FC;
     isSelected: boolean;
-}> = ({name, onClick, Component, isSelected}) => {
+}> = ({name, onClick, Component}) => {
 
     const onClickHandler = () => {
         onClick(name);
@@ -15,17 +16,19 @@ export const LeftToolbarItem: React.FC<{
 
     return (
         <Tooltip title={name}>
-            <Button
+            <MButton.Submit
                 style={{
-                    minWidth: '100%',
-                    padding: 3,
+                    minWidth: 35,
+                    height: 44,
+                    width: 44,
+                    padding: 6,
                     margin: 0,
+                    display: 'inline-block',
                 }}
-                variant={isSelected ? 'outlined' : 'text'}
                 onClick={onClickHandler}
             >
                 <Component/>
-            </Button>
+            </MButton.Submit>
         </Tooltip>
     );
 };
