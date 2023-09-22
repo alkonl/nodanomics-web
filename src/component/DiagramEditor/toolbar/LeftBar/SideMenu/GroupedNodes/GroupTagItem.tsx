@@ -1,6 +1,5 @@
 import React from 'react';
 import {Box, Typography} from "@mui/material";
-import {EColor} from "../../../../../../constant";
 import {GroupNodeItem} from "./GroupNodeItem";
 import {IGroupedNodes} from "../../../../../../interface";
 

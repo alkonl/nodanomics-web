@@ -3,7 +3,7 @@ import React from 'react';
 import {BaseEdge, EdgeLabelRenderer, EdgeProps, getBezierPath} from 'reactflow';
 import {IChainConnectionData} from "../../../interface";
 import {Box, Typography} from "@mui/material";
-import {EDGE_Z_INDEX} from "../../../constant";
+import {EColor, EDGE_Z_INDEX} from "../../../constant";
 import './chainConnection.scss'
 import {useIsElementExecuted} from "../../../hooks";
 
@@ -51,6 +51,8 @@ export const ChainConnection: React.FC<EdgeProps<IChainConnectionData>> = (
                         position: 'absolute',
                         transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
                         fontSize: 12,
+                        color: EColor.grey2,
+                        fontWeight: 600,
                         zIndex: EDGE_Z_INDEX,
                         // everything inside EdgeLabelRenderer has no pointer events by default
                         // if you have an interactive element, set pointer-events: all

@@ -8,6 +8,7 @@ import './baseContainer.scss'
 // eslint-disable-next-line import/named
 import {SxProps} from "@mui/system/styleFunctionSx";
 import {EColor} from "../../../../constant";
+import {NodeName} from "./NodeName";
 
 export const BaseNodeContainer: React.FC<{
     children: React.ReactNode
@@ -35,6 +36,9 @@ export const BaseNodeContainer: React.FC<{
                 animation: isPlayAnimation ? 'containerBlink 0.2s linear 3' : 'none',
                 ...sx
             }}>
+            <NodeName >
+                {data.name}
+            </NodeName>
             {children}
         </Box>
     );
