@@ -64,7 +64,7 @@ export const ParameterList: React.FC<{
                 }
                 return ( <Typography
                     sx={{
-                        color: EColor.grey4,
+                        color: EColor.white,
                         fontSize: 14,
                     }}
                     key={`${item}-${index}`}
