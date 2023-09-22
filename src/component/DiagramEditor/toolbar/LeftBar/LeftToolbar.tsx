@@ -1,5 +1,6 @@
 import React, {useMemo} from "react";
-import {Box, Popover} from "@mui/material";
+import styles from './LeftToolbar.module.scss';
+import {Box, Typography, Popover} from "@mui/material";
 import {Svg} from "../../../../assets";
 import {LeftToolbarItem} from "./LeftToolbarItem";
 import {SideMenu} from "./SideMenu";
@@ -31,13 +32,19 @@ const menuOptions: {
         name: ELeftToolbarSideMenu.GroupedNodes,
         preview: {
             type: 'Component',
-            Component: () => <div>G</div>
+            Component: () => <Typography>G</Typography>
         }
     }, {
         name: ELeftToolbarSideMenu.NodeHierarchy,
         preview: {
             type: 'Component',
             Component: PreviewNodeHierarchy
+        }
+    }, {
+        name: ELeftToolbarSideMenu.LayersManagement,
+        preview: {
+            type: 'Component',
+            Component: () => <Typography>L</Typography>
         }
     }
 ]
@@ -52,7 +59,6 @@ export function LeftToolbar() {
         }
         return SideMenu[selectedSideMenu];
     }, [selectedSideMenu])
-
     const onSelectSideMenu = (sideMenuName: ELeftToolbarSideMenu) => {
         setSelectedSideMenu(sideMenuName);
         if (sideMenuName === selectedSideMenu) {
@@ -110,7 +116,7 @@ export function LeftToolbar() {
                 open={isSideMenuOpen}
                 anchorEl={anchorEl}
                 onClose={handleClose}
-             
+
                 anchorOrigin={{
                     vertical: 20,
                     horizontal: 'right',
