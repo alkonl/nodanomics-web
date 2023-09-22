@@ -88,7 +88,7 @@ export const ExecutionToolbar = () => {
                     onChange={changeTargetExecutionStepHandler}
                     value={targetSteps}
                     sx={{
-                        backgroundColor: EColor.white,
+                        // backgroundColor: EColor.white,
                         width: 50,
                     }}
                 />
