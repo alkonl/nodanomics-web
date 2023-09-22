@@ -1,7 +1,7 @@
 import React, {DragEvent} from 'react';
 import {IDiagramElement, IDiagramElementPreviewToolbarElement} from "../../../../interface";
 import {Tooltip, Typography} from "@mui/material";
-import {EColor} from "../../../../constant";
+import {EColor, EFontColor} from "../../../../constant";
 
 export const ElementToolbarElement: React.FC<{
     element: IDiagramElementPreviewToolbarElement
@@ -22,10 +22,11 @@ export const ElementToolbarElement: React.FC<{
                     padding: '2px',
                     fontSize: '12px',
                     fontWeight: 'bold',
-                    color: EColor.grey4,
-                    borderColor: EColor.grey2,
+                    color: EFontColor.lightMarine4,
+                    borderColor: EColor.lightMarine,
+                    backgroundColor: EColor.darkMarine3,
                     borderStyle: 'solid',
-                    borderWidth: '1px',
+                    borderWidth: 2,
                     borderRadius: '50%',
                     width: '24px',
                     height: '24px',

@@ -26,7 +26,7 @@ export const ElementToolbarSection: React.FC<{
             <Typography sx={{
                 fontSize: '12px',
                 fontWeight: 'bold',
-                color: EColor.grey4,
+                color: EColor.white,
             }}>
                 {section.name}
             </Typography>

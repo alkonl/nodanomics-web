@@ -89,12 +89,12 @@ export const ElementToolbar = () => {
                 pointerEvents: 'auto',
                 display: 'flex',
                 gap: 1,
-                borderColor: EColor.grey2,
+                borderRadius: 2,
+                backgroundColor: EColor.darkMarineLight,
                 borderStyle: 'solid',
-                borderWidth: '1px',
+                borderWidth: 2,
                 px: 3,
                 py: 2,
-                backgroundColor: EColor.white,
             }}>
                 {formatted.map(([sectionName, elements]) => {
                     return <ElementToolbarSection
