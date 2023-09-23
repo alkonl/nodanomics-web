@@ -105,7 +105,9 @@ export class RunManager {
         this.updateNodePerStep()
     }
 
-    private executeNode(chainItem: IChainItem) {
+    private executeNode(chainItem: IChainItem, params?:{
+        notExecuteOutgoingConnected?: boolean
+    }) {
         const target = chainItem.target
 
         const edge = chainItem.edge
@@ -113,12 +115,6 @@ export class RunManager {
             if (target instanceof GraphLoopNode && !target.isLoopActive) {
                 return
             }
-            // else if (target instanceof GraphMicroLoopNode && target.isLoopActive) {
-            //     const hasParentLoop = this.hasParentLoop(chainItem)
-            //     if (hasParentLoop) {
-            //         target.resetLoopStep()
-            //     }
-            // }
 
             target.invokeStep()
             if (edge instanceof GraphChainEdge) {
@@ -144,24 +140,8 @@ export class RunManager {
                 // check if loop is has a parent loop
                 const hasParentLoop = target.data.parentId !== undefined
                 if (hasParentLoop && chainItem.inner && target.data.currentLoopCount < target.loopCount) {
-                    this.executeNode(chainItem)
-                    // for (let i = 0; i < target.loopCount; i++) {
-                    //     this.executeNode(chainItem)
-                    // }
+                    this.executeNode(chainItem, {notExecuteOutgoingConnected: true})
                 }
-
-                // const innerMicroLoops = chainItem.inner?.filter(item => item.target instanceof GraphMicroLoopNode)
-                // if (innerMicroLoops) {
-                //     innerMicroLoops.forEach(item => {
-                //         if (item.target instanceof GraphMicroLoopNode) {
-                //             item.target.resetLoopStep()
-                //             for (let i = 0; i < item.target.loopCount; i++) {
-                //                 this.executeNode(item)
-                //             }
-                //         }
-                //
-                //     })
-                // }
             }
             if (chainItem.end && chainItem.end.edge && !chainItem.end.edge.isMeetCondition) {
                 const chainItemToExecute = this.findDeepChainItemByNode(chainItem.end.target)
@@ -178,7 +158,10 @@ export class RunManager {
             if (chainItem.inner) {
                 this.executeChainOrder(chainItem.inner)
             }
-            if (chainItem.outgoingConnected) {
+            const notExecuteOutgoingConnected = params?.notExecuteOutgoingConnected !== undefined
+            ? params?.notExecuteOutgoingConnected
+            : false
+            if (chainItem.outgoingConnected && !notExecuteOutgoingConnected) {
                 this.executeChainOrder(chainItem.outgoingConnected)
             }
         }
