@@ -8,6 +8,7 @@ import {ParameterExecutionGraphSetup} from "./styledComponent";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {MButton} from "../../../base";
+import {EColor, EFontColor} from "../../../../constant";
 
 
 enum EFormFields {
@@ -75,6 +76,7 @@ export const ExecutionGraphSetup = () => {
             display: 'flex',
             flexDirection: 'column',
             gap: 2,
+            backgroundColor: EColor.darkMarineLight,
         }}
              onSubmit={(e) => {
                  e.preventDefault();
@@ -86,6 +88,7 @@ export const ExecutionGraphSetup = () => {
                 <Typography sx={{
                     fontWeight: 'bold',
                     fontSize: '20px',
+                    color: EFontColor.lightMarine4,
                 }}>
                     Grid setup
                 </Typography>

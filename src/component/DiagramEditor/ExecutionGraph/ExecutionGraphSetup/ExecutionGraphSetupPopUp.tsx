@@ -3,6 +3,7 @@ import {Box} from "@mui/material";
 import {Dialog} from "@headlessui/react";
 import {BasePopUp} from "../../../popUp";
 import {ExecutionGraphSetup} from "./ExecutionGraphSetup";
+import {EColor} from "../../../../constant";
 
 export const ExecutionGraphSetupPopUp: React.FC<{
     isShow: boolean;
@@ -13,6 +14,7 @@ export const ExecutionGraphSetupPopUp: React.FC<{
             <BasePopUp>
                 <Dialog.Panel>
                     <Box sx={{
+                        backgroundColor: EColor.darkMarineLight,
                         height: '50vh',
                         minWidth: {
                             xs: '95vw',
@@ -22,7 +24,6 @@ export const ExecutionGraphSetupPopUp: React.FC<{
                             xs: '10px',
                             sm: '40px',
                         },
-                        backgroundColor: 'white',
                         borderRadius: '8px',
                     }}>
                         <ExecutionGraphSetup/>
