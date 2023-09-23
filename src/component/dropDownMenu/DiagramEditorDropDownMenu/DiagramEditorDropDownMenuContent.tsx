@@ -9,6 +9,7 @@ import {useDeleteDiagramMutation, useGetProjectInfoQuery} from "../../../api";
 import {CreateDiagramPopUp} from "../../popUp";
 import {DiagramManagerPopUp} from "../../popUp/NewDiagramPopUp";
 import {useDownloadDiagram} from "../../../hooks/useDownloadDiagram";
+import {EColor} from "../../../constant";
 
 type IMenuButton = {
     name: string
@@ -127,7 +128,16 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
             </Box>
 
             <Menu
-                sx={{mt: '25px'}}
+                sx={{
+                    mt: '25px',
+                }}
+                slotProps={{
+                    paper: {
+                        sx: {
+                            backgroundColor: EColor.darkMarineLight,
+                        }
+                    }
+                }}
                 id="menu-appbar"
                 anchorEl={anchorEl}
                 anchorOrigin={{

@@ -15,11 +15,14 @@ export const BASE_CHART_OPTIONS = {
         title: {
             offsetX: 0,
             text: 'Step',
+            style:{
+                color: EColor.white,
+            }
         },
 
     },
     chart: {
-        background: EColor.grey,
+        background: EColor.darkMarineLight,
         zoom: {
             enabled: true
         },

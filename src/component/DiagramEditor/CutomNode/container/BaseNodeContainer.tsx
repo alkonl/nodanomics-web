@@ -22,7 +22,6 @@ export const BaseNodeContainer: React.FC<{
     const {data} = node;
     const isPlayAnimation = useIsElementExecuted(data)
 
-    console.log('data.style.borderColor: ', data.style.borderColor)
     return (
         <Box
             id="base-node-container"
