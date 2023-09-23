@@ -7,6 +7,7 @@ import {useGetProjectTeamMembersQuery} from "../../../api";
 import {ITeamMemberInfo} from "../../../interface";
 import {Optionalize} from "../../../utils";
 import {useCurrentUser} from "../../../hooks";
+import {EColor, EFontColor} from "../../../constant";
 
 export const DiagramEditorHeader = () => {
     const {name, currentDiagramId} = useDiagramEditorState()
@@ -33,22 +34,26 @@ export const DiagramEditorHeader = () => {
     return (
         <Box
             sx={{
+                backgroundColor: EColor.darkMarineLight,
                 display: 'flex',
                 justifyContent: 'space-between',
-                mx: '20px',
-                my: 1,
+                px: '20px',
+                py: 1,
             }}
         >
             <Box
                 sx={{
                     display: 'flex',
                     alignContent: 'center',
+                    alignItems: 'center',
                     gap: '20px',
                 }}
             >
                 <DiagramEditorDropDownMenu/>
                 <Typography sx={{
-                    fontSize: 12
+                    fontSize: 16,
+                    fontWeight: 600,
+                    color: EFontColor.white,
                 }}>
                     {name}
                 </Typography>
