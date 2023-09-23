@@ -8,6 +8,8 @@ export interface IGetDiagramSettingsResponse {
     DiagramLayers: {
         id: string;
         name: string;
+        visible: boolean;
+        isSelected: boolean;
         diagramEditorSettingsId: string;
     }[];
 }

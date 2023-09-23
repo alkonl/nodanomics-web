@@ -3,27 +3,25 @@ import {Box, Typography} from "@mui/material";
 import {MButton, Parameter} from "../../../../../base";
 import {useAddDiagramLayers} from "../../../../../../hooks";
 import {useDiagramEditorState} from "../../../../../../redux";
+import {EColor, EFontColor} from "../../../../../../constant";
+import {LayerListItem} from "./LayerListItem";
 
 export const LayersManagement = () => {
-    const [newLayerName, setNewLayerName] = React.useState<string>('');
 
-    const {addDiagramLayer} = useAddDiagramLayers();
+    const {createNewLayer, setNewLayerNameHandler, newLayerName} = useAddDiagramLayers();
 
-    const createNewLayer = () => {
-        addDiagramLayer({layerName: newLayerName});
-    }
-
-    const setNewLayerNameHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNewLayerName(event.target.value);
-    }
 
     const layers = useDiagramEditorState().settings.layers
 
 
     return (
-        <Box>
+        <Box sx={{
+            backgroundColor: EColor.darkMarineLight,
+        }}>
             <Typography sx={{
                 padding: 1,
+                fontWeight: 'bold',
+                color: EFontColor.lightMarine4
             }}>
                 Layers
             </Typography>
@@ -35,12 +33,26 @@ export const LayersManagement = () => {
                     Create
                 </MButton.Submit>
             </Box>
-            <Box>
-                {layers.map((layer, index) => {
-                    return (<Typography key={layer.id}>
-                        {layer.name}
-                    </Typography>)
-                })}
+            <Box component='table'>
+                <Box component='thead'>
+                    <Box component='tr'>
+                        <Typography component='th'>
+                            Name
+                        </Typography>
+                        <Typography component='th'>
+                            Visible
+                        </Typography>
+                        <Typography component='th'>
+                            Selected
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box component="tbody">
+                    {layers.map((layer, index) => {
+                        return (<LayerListItem layer={layer} key={layer.id}/>)
+                    })}
+                </Box>
+
             </Box>
         </Box>
     );
