@@ -1,9 +1,9 @@
 import React, {useMemo} from 'react';
 import {Box, Typography} from "@mui/material";
 import lodash from 'lodash'
-import {EColor} from "../../../constant";
+import {EColor, EFontColor} from "../../../constant";
 import ReactApexChart from "react-apexcharts";
-import {useExecutionGraphSeries, useGetAssignedNode, useToggle, useWidthAndHeight} from "../../../hooks";
+import {useExecutionGraphSeries, useToggle, useWidthAndHeight} from "../../../hooks";
 import {useDiagramEditorState} from "../../../redux";
 import {ExecutionGraphSetupPopUp} from "./ExecutionGraphSetup";
 import {MButton} from "../../base";
@@ -29,7 +29,7 @@ export const ExecutionGraph = () => {
 
     return (
         <Box sx={{
-            backgroundColor: EColor.white,
+            backgroundColor: EColor.darkMarineLight,
             padding: 1,
             display: 'flex',
             flexDirection: 'column',
@@ -46,7 +46,10 @@ export const ExecutionGraph = () => {
                 alignItems: 'center',
                 paddingBottom: 1,
             }}>
-                <Typography>
+                <Typography sx={{
+                    color: EFontColor.lightMarine4,
+                    fontWeight: 600,
+                }}>
                     Graph
                 </Typography>
                 <MButton.Submit

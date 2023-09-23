@@ -26,7 +26,7 @@ const options: ApexOptions = {
         enabled: false
     },
     chart: {
-        background: EColor.grey,
+        background: EColor.darkMarineLight,
         zoom: {
             enabled: false
         },
