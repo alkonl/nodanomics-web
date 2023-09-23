@@ -667,7 +667,7 @@ export const baseApi = createApi({
                     params: params,
                 }
             },
-            providesTags: [ERTKTags.DiagramSettings],
+            providesTags: [ERTKTags.DiagramSettings, ERTKTags.EditedDiagram],
         }),
     }),
 })

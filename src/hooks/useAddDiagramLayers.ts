@@ -3,17 +3,18 @@ import {useDiagramEditorState} from "../redux";
 import React from "react";
 
 export const useAddDiagramLayers = () => {
-    const [newLayerName, setNewLayerName] = React.useState<string>('');
+    const [newLayerName, setNewLayerName] = React.useState<string>();
 
     const {currentDiagramId} = useDiagramEditorState()
 
-    const [addDiagramLayersReq] = useAddDiagramLayerMutation();
+    const [addDiagramLayersReq, createdLayer] = useAddDiagramLayerMutation();
 
-    const addDiagramLayer = ({layerName}: {
+    const addDiagramLayer = ({layerName, diagramId}: {
         layerName: string
+        diagramId: string,
     }) => {
         if (currentDiagramId) {
-            addDiagramLayersReq({layerName, diagramId: currentDiagramId, isSelected: false, visible: true})
+            addDiagramLayersReq({layerName, diagramId, isSelected: false, visible: true})
         }
     }
 
@@ -21,13 +22,26 @@ export const useAddDiagramLayers = () => {
         setNewLayerName(event.target.value);
     }
 
-    const createNewLayer = () => {
-        addDiagramLayer({layerName: newLayerName});
+    const createNewLayer = (params?: {
+        layerName: string
+        diagramId: string
+    }) => {
+        if (params) {
+            addDiagramLayer({layerName: params.layerName, diagramId: params.diagramId});
+        }
+    }
+
+    const submitCreateNewLayer = () => {
+        if(newLayerName && currentDiagramId) {
+            addDiagramLayer({layerName: newLayerName, diagramId: currentDiagramId});
+        }
     }
 
     return {
         createNewLayer,
+        submitCreateNewLayer,
         newLayerName,
         setNewLayerNameHandler,
+        createdLayer,
     }
 }

@@ -8,7 +8,7 @@ import {LayerListItem} from "./LayerListItem";
 
 export const LayersManagement = () => {
 
-    const {createNewLayer, setNewLayerNameHandler, newLayerName} = useAddDiagramLayers();
+    const {submitCreateNewLayer, setNewLayerNameHandler, newLayerName} = useAddDiagramLayers();
 
 
     const layers = useDiagramEditorState().settings.layers
@@ -29,7 +29,7 @@ export const LayersManagement = () => {
                 display: 'flex'
             }}>
                 <Parameter.Input onChange={setNewLayerNameHandler} value={newLayerName}/>
-                <MButton.Submit onClick={createNewLayer}>
+                <MButton.Submit onClick={submitCreateNewLayer}>
                     Create
                 </MButton.Submit>
             </Box>

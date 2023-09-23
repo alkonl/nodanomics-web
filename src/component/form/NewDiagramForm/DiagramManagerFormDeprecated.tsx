@@ -40,10 +40,6 @@ export const DiagramManagerFormDeprecated: React.FC<{
     const navigate = useNavigate()
     const [isTagsPopUpShow, setTagsPopUpShow] = useState(false)
 
-    // const [createDiagram, {data: resCreateDiagram}] = useCreateDiagramMutation()
-    // const [updateDiagram, {data: resUpdateDiagram}] = useUpdateDiagramMutation()
-
-
     const form = useForm<IValidationSchema>({
         resolver: zodResolver(validationSchema),
         defaultValues: {

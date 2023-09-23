@@ -8,6 +8,7 @@ import {validation} from "../../../utils";
 import {useCreateDiagramMutation} from "../../../api";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
+import {useAddDiagramLayers} from "../../../hooks";
 
 enum EFormFields {
     diagramName = 'diagramName',
@@ -20,12 +21,13 @@ const validationSchema = z.object({
 type IValidationSchema = z.infer<typeof validationSchema>;
 
 export const CreateDiagramForm: React.FC<{
-    onSuccess: (createdDiagram: {id: string}) => void;
+    onSuccess: (createdDiagram: { id: string }) => void;
     projectId: string;
 }> = ({
           onSuccess, projectId
       }) => {
 
+    const {createNewLayer, createdLayer} = useAddDiagramLayers()
     const [createDiagram, {data: resCreateDiagram}] = useCreateDiagramMutation()
     const form = useForm<IValidationSchema>({
         resolver: zodResolver(validationSchema),
@@ -40,8 +42,17 @@ export const CreateDiagramForm: React.FC<{
     }
 
     useEffect(() => {
-        if (resCreateDiagram && resCreateDiagram.id) {
+        if (createdLayer.isSuccess) {
             onSuccess(resCreateDiagram)
+        }
+    }, [createdLayer.isSuccess]);
+
+    useEffect(() => {
+        if (resCreateDiagram && resCreateDiagram.id) {
+            createNewLayer({
+                layerName: 'default',
+                diagramId: resCreateDiagram.id,
+            })
         }
     }, [resCreateDiagram])
     return (
