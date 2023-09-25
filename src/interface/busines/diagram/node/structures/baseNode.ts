@@ -15,6 +15,7 @@ export enum EDiagramNode {
     Start = 'Start',
     Sink = 'Sink',
     Transfer = 'Transfer',
+    Label = 'Label',
 }
 
 

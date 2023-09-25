@@ -12,6 +12,7 @@ import {IDatasetDatafield} from "../datasetDatafield";
 import {IStartNodeData} from "../startNode";
 import {ISinkNodeData} from "../sinkNode";
 import {ITransferNodeData} from "../transferNode";
+import {ILabelNodeData} from "../label";
 
 
 export type INodeData = IStaticVariableNodeData
@@ -26,6 +27,7 @@ export type INodeData = IStaticVariableNodeData
     | IStartNodeData
     | ISinkNodeData
     | ITransferNodeData
+    | ILabelNodeData
 
 export type IReactFlowNode = Node<INodeData>
 
