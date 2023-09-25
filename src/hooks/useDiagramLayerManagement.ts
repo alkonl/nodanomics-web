@@ -31,23 +31,22 @@ export const useDiagramLayerManagement = () => {
                 }
                 return layer
             })
-            const visibleLayerIds = new Set<string>
+            const hiddenLayerIds = new Set<string>
             changedLayers.forEach(layer => {
-                if (layer.visible) {
-                    visibleLayerIds.add(layer.id)
+                if (!layer.visible) {
+                    hiddenLayerIds.add(layer.id)
                 }
             })
-            console.log('visibleLayerIds', visibleLayerIds)
+
             const hiddenNodeIds = new Set<string>()
             const updatedNodes: IReactFlowNode[] = diagramNodes.map(node => {
-                const isVisible = visibleLayerIds.has(node.data.layerId)
-                console.log('isVisible', isVisible)
-                if(!isVisible) {
+                const isHidden = hiddenLayerIds.has(node.data.layerId)
+                if(isHidden) {
                     hiddenNodeIds.add(node.id)
                 }
                 return {
                     ...node,
-                    hidden: !isVisible,
+                    hidden: isHidden,
                 }
             })
             const updatedEdges: IReactFlowEdge[] = diagramEdges.map(edge => {

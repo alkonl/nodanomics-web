@@ -13,9 +13,7 @@ export const useAddDiagramLayers = () => {
         layerName: string
         diagramId: string,
     }) => {
-        if (currentDiagramId) {
             addDiagramLayersReq({layerName, diagramId, isSelected: false, visible: true})
-        }
     }
 
     const setNewLayerNameHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
