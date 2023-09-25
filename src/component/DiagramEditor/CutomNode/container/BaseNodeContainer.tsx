@@ -26,9 +26,6 @@ export const BaseNodeContainer: React.FC<{
     return (
         <ContextMenuContainer node={node}>
             <Box
-                onClick={(e) => {
-                    console.log('BaseNodeContainer click')
-                }}
                 id="base-node-container"
                 sx={{
                     padding: '2px',

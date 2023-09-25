@@ -10,7 +10,6 @@ import {
     useEdgeUpdateManager,
     useOnDrop,
     useOnEdgeClick,
-    useOnNodeContextMenu,
     useOnNodeDrag,
     useOnNodeDragStart,
     useOnNodeDragStop,
