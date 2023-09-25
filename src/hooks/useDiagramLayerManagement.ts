@@ -63,8 +63,13 @@ export const useDiagramLayerManagement = () => {
         }
     }
 
+    const deleteLayer = (layerId: string) => {
+
+    }
+
     return {
         changeVisibility,
         selectLayer,
+        deleteLayer,
     }
 }

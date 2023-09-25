@@ -1,7 +1,7 @@
 import React from 'react';
 import {Box, Typography} from "@mui/material";
 import {IDiagramLayer} from "../../../../../../interface";
-import {Parameter} from "../../../../../base";
+import {MButton, Parameter} from "../../../../../base";
 import {useDiagramLayerManagement} from "../../../../../../hooks";
 
 export const LayerListItem: React.FC<{
@@ -10,7 +10,7 @@ export const LayerListItem: React.FC<{
           layer,
       }) => {
 
-    const {selectLayer, changeVisibility} = useDiagramLayerManagement();
+    const {selectLayer, changeVisibility, deleteLayer} = useDiagramLayerManagement();
 
     const selectLayerHandler = () => {
         selectLayer(layer.id);
@@ -18,6 +18,10 @@ export const LayerListItem: React.FC<{
 
     const changeVisibilityHandler = () => {
         changeVisibility(layer.id);
+    }
+
+    const deleteLayerHandler = () => {
+        deleteLayer(layer.id);
     }
 
     return (
@@ -40,6 +44,11 @@ export const LayerListItem: React.FC<{
                     onChange={selectLayerHandler}
                     checked={layer.isSelected}
                 />
+            </Box>
+            <Box component='td'>
+                <MButton.Submit onClick={deleteLayerHandler}>
+                    Delete
+                </MButton.Submit>
             </Box>
         </Box>
     );

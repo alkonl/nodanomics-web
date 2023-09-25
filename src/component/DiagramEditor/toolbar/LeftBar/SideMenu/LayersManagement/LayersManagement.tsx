@@ -45,6 +45,9 @@ export const LayersManagement = () => {
                         <Typography component='th'>
                             Selected
                         </Typography>
+                        <Typography component='th'>
+                            {/*Manage*/}
+                        </Typography>
                     </Box>
                 </Box>
                 <Box component="tbody">
