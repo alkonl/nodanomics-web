@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 // eslint-disable-next-line import/named
 import {NodeProps, Position} from "reactflow";
 import {Box} from "@mui/material";
@@ -16,7 +16,7 @@ import {DataHandle} from "../../CustomHandle/DataHandle";
 
 export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
     const {isConnectable, data} = props
-    const {isDiagramRunning, completedSteps} = useDiagramEditorState()
+    const {isDiagramRunning, completedSteps, settings: {isResourceAnimationLatency}} = useDiagramEditorState()
 
     const isShowStep = data.isShowStep || false
 
@@ -24,8 +24,8 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
         nodeData: props.data,
     })
 
-    const [resources, setResources] = React.useState<number>(data.resources.value)
-    const [minMaxResources, setMinMaxResources] = React.useState<{
+    const [resources, setResources] = useState<number>(data.resources.value)
+    const [minMaxResources, setMinMaxResources] = useState<{
         min: string | undefined,
         max: string | undefined,
     }>({
@@ -49,12 +49,14 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
 
 
     useEffect(() => {
-        setResources(data.resources.value)
-        updateMinMax()
+        if (isResourceAnimationLatency) {
+            setResources(data.resources.value)
+            updateMinMax()
+        }
     }, [completedSteps]);
 
     useEffect(() => {
-        if (!isDiagramRunning) {
+        if (!isDiagramRunning || !isResourceAnimationLatency) {
             setResources(data.resources.value)
             updateMinMax()
         }

@@ -36,6 +36,7 @@ interface IHistory {
 
 export interface IDiagramEditorState {
     settings: {
+        isResourceAnimationLatency: boolean
         layers?: IDiagramLayer[]
     }
     currentDiagramId?: string
@@ -77,6 +78,7 @@ const initialState: IDiagramEditorState = {
     diagramNodes: [],
     diagramEdges: [],
     settings: {
+        isResourceAnimationLatency: true,
     },
     autoSaveCalled: 0,
     isDiagramRunning: false,
@@ -519,6 +521,9 @@ export const diagramEditorSlice = createSlice({
         },
         updateLayers: (state, {payload}: PayloadAction<IDiagramLayer[]>) => {
             state.settings.layers = payload
+        },
+        setResourceAnimationLatency: (state, {payload}: PayloadAction<boolean>) => {
+            state.settings.isResourceAnimationLatency = payload
         }
     }
 })
