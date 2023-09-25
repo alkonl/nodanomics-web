@@ -87,9 +87,9 @@ export const VariableStatisticsParameter: React.FC<{
     const min = resourcesCountHistory && Math.min(...resourcesCountHistory)
     const max = resourcesCountHistory && Math.max(...resourcesCountHistory)
 
-    const avgFormatted = avg && avg?.toFixed(2)
-    const maxFormatted = max && max?.toFixed(2)
-    const minFormatted = min && min?.toFixed(2)
+    const avgFormatted = avg ? avg?.toFixed(2) : ''
+    const maxFormatted = max ? max?.toFixed(2) : ''
+    const minFormatted = min ? min?.toFixed(2) : ''
 
     return (
         <Box>
@@ -118,33 +118,50 @@ export const VariableStatisticsParameter: React.FC<{
                 display: 'flex',
                 flexDirection: 'column'
             }}>
-                <Parameter.Text>
-                    Max. Val.
+                <Box sx={{
+                    display: 'flex',
+                }}>
+                    <Parameter.Text>
+                        Max. Val.
+
+                    </Parameter.Text>
                     <Parameter.Text sx={{
                         color: EColor.white,
                         display: 'inline-block',
                     }}>
                         {maxFormatted}
                     </Parameter.Text>
-                </Parameter.Text>
-                <Parameter.Text>
-                    Avg. Val.
+                </Box>
+                <Box sx={{
+                    display: 'flex',
+                }}>
+                    <Parameter.Text>
+                        Avg. Val.
+
+                    </Parameter.Text>
                     <Parameter.Text sx={{
                         color: EColor.white,
                         display: 'inline-block',
                     }}>
                         {avgFormatted}
                     </Parameter.Text>
-                </Parameter.Text>
-                <Parameter.Text>
-                    Min. Val.
+                </Box>
+                <Box sx={{
+                    display: 'flex',
+                }}>
+                    <Parameter.Text>
+                        Min. Val.
+
+                    </Parameter.Text>
                     <Parameter.Text sx={{
                         color: EColor.white,
                         display: 'inline-block',
                     }}>
                         {minFormatted}
                     </Parameter.Text>
-                </Parameter.Text>
+                </Box>
+
+
             </Box>
 
         </Box>

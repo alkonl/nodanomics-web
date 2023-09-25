@@ -41,6 +41,7 @@ import {ChainConnection} from "../CustomConnectionLine/ChainConnection";
 import {DatasetNode} from "../CutomNode/DatasetNode";
 import {EColor, multiSelectKeyCodes} from "../../../constant";
 import './reactflowOverwrite.scss'
+import {DiagramEditorContextMenu} from "../DiagramEditorContextMenu";
 
 const nodeTypes = {
     [EDiagramNode.StaticVariable]: StaticVariableNode,
@@ -118,6 +119,8 @@ export const DiagramCanvas = () => {
     const onEdgeClick = useOnEdgeClick()
 
     useDiagramKeyboardManager()
+
+
 
     return (
         <Box

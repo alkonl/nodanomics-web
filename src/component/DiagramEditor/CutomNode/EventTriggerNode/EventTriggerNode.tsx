@@ -18,7 +18,8 @@ export const EventTriggerNode: React.FC<NodeProps<IEventTriggerNodeData>> = (pro
                 width: 'calc(100% + 30px)',
                 height: '100%',
                 left: -15,
-                display: 'flex'
+                display: 'flex',
+                pointerEvents: 'none',
             }}>
                 <Box sx={{
                     flex: 1,

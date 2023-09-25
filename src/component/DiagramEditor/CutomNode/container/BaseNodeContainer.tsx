@@ -9,6 +9,7 @@ import './baseContainer.scss'
 import {SxProps} from "@mui/system/styleFunctionSx";
 import {EColor} from "../../../../constant";
 import {NodeName} from "./NodeName";
+import {ContextMenuContainer} from "./ContextMenuContainer";
 
 export const BaseNodeContainer: React.FC<{
     children: React.ReactNode
@@ -23,22 +24,24 @@ export const BaseNodeContainer: React.FC<{
     const isPlayAnimation = useIsElementExecuted(data)
 
     return (
-        <Box
-            id="base-node-container"
-            sx={{
-                padding: '2px',
-                borderWidth: 1,
-                borderRadius: 2,
-                borderColor: data.style.borderColor,
-                borderStyle: 'solid',
-                backgroundColor: EColor.darkMarine,
-                animation: isPlayAnimation ? 'containerBlink 0.2s linear 3' : 'none',
-                ...sx
-            }}>
-            <NodeName >
-                {data.name}
-            </NodeName>
-            {children}
-        </Box>
+        <ContextMenuContainer node={node}>
+            <Box
+                id="base-node-container"
+                sx={{
+                    padding: '2px',
+                    borderWidth: 1,
+                    borderRadius: 2,
+                    borderColor: data.style.borderColor,
+                    borderStyle: 'solid',
+                    backgroundColor: EColor.darkMarine,
+                    animation: isPlayAnimation ? 'containerBlink 0.2s linear 3' : 'none',
+                    ...sx
+                }}>
+                <NodeName>
+                    {data.name}
+                </NodeName>
+                {children}
+            </Box>
+        </ContextMenuContainer>
     );
 };
