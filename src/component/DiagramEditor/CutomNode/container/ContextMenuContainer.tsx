@@ -3,7 +3,6 @@ import {Box, Popover} from "@mui/material";
 import {DiagramEditorContextMenu} from "../../DiagramEditorContextMenu";
 import type {NodeProps} from "reactflow";
 import {INodeData} from "../../../../interface";
-import {EColor} from "../../../../constant";
 
 export const ContextMenuContainer: React.FC<{
     children: React.ReactNode,
@@ -12,10 +11,12 @@ export const ContextMenuContainer: React.FC<{
     const [isContextMenuOpen, setIsContextMenuOpen] = React.useState<boolean>(false);
     const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
 
+
     const id = isContextMenuOpen ? 'context-menu-popover' : undefined;
 
     const openContextMenu = (event: React.MouseEvent<HTMLDivElement>) => {
         if (!isContextMenuOpen) {
+            event.preventDefault()
             setIsContextMenuOpen(true);
             setAnchorEl(event.currentTarget);
         }
@@ -28,7 +29,7 @@ export const ContextMenuContainer: React.FC<{
 
     return (
         <Box
-            onClick={openContextMenu}
+            onContextMenu={openContextMenu}
         >
             <Popover
                 id={id}
