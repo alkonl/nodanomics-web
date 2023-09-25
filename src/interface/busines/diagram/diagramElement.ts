@@ -2,6 +2,7 @@ import {ELogic} from "./logic";
 import {IDiagramNodeStyle} from "./elementStyle";
 import {EDiagramNode} from "./node";
 import {EConnection} from "./connection";
+import {IElementComment} from "./generic";
 
 export enum EElementType {
     Node = 'Node',
@@ -16,7 +17,7 @@ export interface IBaseDiagramElement {
 }
 
 
-export interface IDiagramBaseInteractiveElementData extends IBaseDiagramElement{
+export interface IDiagramBaseInteractiveElementData extends IBaseDiagramElement, IElementComment{
     elementType: EElementType.Connection | EElementType.Node;
     type: EDiagramNode | EConnection
     id: string;
