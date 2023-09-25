@@ -1,3 +1,5 @@
+import {useOnNodeContextMenu} from "./useOnNodeContextMenu";
+
 export * from './useWidthAndHeight'
 export * from './useDidMountEffect'
 export * from './useToggle'
@@ -61,3 +63,4 @@ export * from './useFocusNode'
 export * from './useAddDiagramLayers'
 export * from './useDiagramSettings'
 export * from './useDiagramLayerManagement'
+export * from './useOnNodeContextMenu'

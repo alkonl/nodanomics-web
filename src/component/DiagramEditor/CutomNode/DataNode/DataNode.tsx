@@ -67,7 +67,6 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
     return (
 
         <>
-
             <Box sx={{
                 position: 'absolute',
                 width: 'calc(100% + 28px)',
@@ -77,6 +76,7 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                pointerEvents: 'none',
             }}>
                 <DataHandle
                     type="target"
