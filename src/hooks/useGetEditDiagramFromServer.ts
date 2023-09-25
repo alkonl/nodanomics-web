@@ -60,10 +60,6 @@ export const useGetEditDiagramFromServer = () => {
         }
     }, [diagramRes, currentDiagramId])
 
-
-    // is diagram setting was uploaded one to the current diagram
-
-    console.log('isRequestLoaded: ', isRequestLoaded)
     const isShowDiagram = isRequestLoaded && diagramSettings.isUploaded
 
     return {
