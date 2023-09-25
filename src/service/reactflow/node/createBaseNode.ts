@@ -12,8 +12,9 @@ import {generateResource} from "../../diagram";
 
 
 
-export const createBaseNode = ({type, position}: {
+export const createBaseNode = ({type, position, layerId}: {
     type: EDiagramNode,
+    layerId: string,
     position: { x: number, y: number },
 }): IReactFlowNode => {
     const nodeId = generateNodeId();
@@ -24,6 +25,7 @@ export const createBaseNode = ({type, position}: {
     }
 
     const baseData: IDiagramNodeBaseData = {
+        layerId,
         elementType: EElementType.Node,
         type,
         label: '',

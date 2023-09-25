@@ -7,7 +7,7 @@ import {validation} from "../../../utils";
 import {MButton} from "../../base";
 import {Text} from "../../base/Text";
 import {FormText} from "../../base/FormInput";
-import {useCreateDiagramMutation, useCreateProjectMutation} from "../../../api";
+import {useCreateProjectMutation} from "../../../api";
 import {useNavigate} from "react-router-dom";
 import {ELinks} from "../../../service";
 
@@ -27,7 +27,6 @@ export const CreateProjectForm: React.FC<{
     const navigate = useNavigate()
 
     const [createProject, {data: resCreateProject}] = useCreateProjectMutation()
-    const [createDiagram, {data: resCreateDiagram}] = useCreateDiagramMutation()
     const form = useForm<IValidationSchema>({
         resolver: zodResolver(validationSchema),
     });
@@ -38,13 +37,7 @@ export const CreateProjectForm: React.FC<{
         });
     }
 
-    useEffect(() => {
 
-        // if (resCreateDiagram) {
-        //     onSuccess()
-        //     navigate(`/diagram/${resCreateDiagram.id}`)
-        // }
-    }, [resCreateDiagram])
 
     useEffect(() => {
         if (resCreateProject && resCreateProject.id) {

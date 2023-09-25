@@ -3,6 +3,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
     EElementType,
     IDiagramConnectionData,
+    IDiagramLayer,
     INodeData,
     IReactFlowEdge,
     IReactFlowEdgeConnection,
@@ -34,6 +35,9 @@ interface IHistory {
 }
 
 export interface IDiagramEditorState {
+    settings: {
+        layers?: IDiagramLayer[]
+    }
     currentDiagramId?: string
     name?: string
     description?: string
@@ -72,6 +76,8 @@ const initialHistory: IHistory = {
 const initialState: IDiagramEditorState = {
     diagramNodes: [],
     diagramEdges: [],
+    settings: {
+    },
     autoSaveCalled: 0,
     isDiagramRunning: false,
     isDiagramRunningInterval: false,
@@ -505,6 +511,14 @@ export const diagramEditorSlice = createSlice({
             executedBy: string
         }>) => {
             state.history.isExecuted = false
+        },
+        setDiagramSetting: (state, {payload}: PayloadAction<{
+            layers: IDiagramLayer[]
+        }>) => {
+            state.settings.layers = payload.layers
+        },
+        updateLayers: (state, {payload}: PayloadAction<IDiagramLayer[]>) => {
+            state.settings.layers = payload
         }
     }
 })

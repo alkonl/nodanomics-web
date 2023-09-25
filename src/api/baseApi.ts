@@ -12,6 +12,7 @@ import {sendVerificationEmail, verifyEmail} from "supertokens-auth-react/recipe/
 
 import {
     EUploadSpreadSheetRequestType,
+    IAddDiagramLayerRequest,
     IChangePasswordRequest,
     IChangePasswordResponse,
     ICreateNewDiagramRequest,
@@ -23,6 +24,8 @@ import {
     IGetDiagramByIdResponse,
     IGetDiagramByProjectIdRequest,
     IGetDiagramByProjectIdResponse,
+    IGetDiagramSettingsRequest,
+    IGetDiagramSettingsResponse,
     IGetDiagramTagsRequest,
     IGetDiagramTagsResponse,
     IGetManySpreadsheetRequests,
@@ -62,6 +65,7 @@ import {
     IGetExecutionGraphPropertiesRequest,
     IGetExecutionGraphPropertiesResponse
 } from "../interface/api/executionGraph/getExecutionGraphProperties";
+import {diagramEditorActions} from "../redux";
 
 
 const baseQuery = fetchBaseQuery(({
@@ -116,6 +120,7 @@ export const baseApi = createApi({
         ERTKTags.Spreadsheet,
         ERTKTags.ExecutionGraph,
         ERTKTags.Diagrams,
+        ERTKTags.DiagramSettings,
     ],
     reducerPath: 'baseApi',
     baseQuery: baseQueryWithReauth,
@@ -643,7 +648,27 @@ export const baseApi = createApi({
                 }
             },
             providesTags: [ERTKTags.ExecutionGraph]
-        })
+        }),
+        addDiagramLayer: builder.mutation<unknown, IAddDiagramLayerRequest>({
+            query: (params: IAddDiagramLayerRequest) => {
+                return {
+                    url: `/diagram/layers/update`,
+                    method: 'PUT',
+                    body: params,
+                }
+            },
+            invalidatesTags: [ERTKTags.DiagramSettings],
+        }),
+        getDiagramSettings: builder.query<IGetDiagramSettingsResponse, IGetDiagramSettingsRequest>({
+            query: (params: IGetDiagramSettingsRequest) => {
+                return {
+                    url: `/diagram/settings`,
+                    method: 'GET',
+                    params: params,
+                }
+            },
+            providesTags: [ERTKTags.DiagramSettings, ERTKTags.EditedDiagram],
+        }),
     }),
 })
 export const {
@@ -685,5 +710,7 @@ export const {
     useUpdateExecutionGraphPropertiesMutation,
     useGetExecutionGraphPropertiesQuery,
     useGetProjectDiagramsQuery,
+    useAddDiagramLayerMutation,
+    useGetDiagramSettingsQuery,
 } = baseApi;
 

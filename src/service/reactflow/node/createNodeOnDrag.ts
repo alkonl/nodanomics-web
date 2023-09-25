@@ -5,11 +5,12 @@ import {EDiagramNode, IReactFlowNode,} from "../../../interface";
 import {createBaseNode} from "./createBaseNode";
 
 
-export const createNodeOnDrag = ({type, flowInstance, wrapperNode, event}: {
+export const createNodeOnDrag = ({type, flowInstance, wrapperNode, event, layerId}: {
     type: EDiagramNode,
     flowInstance: ReactFlowInstance
     wrapperNode: HTMLDivElement
     event: DragEvent<HTMLDivElement>
+    layerId: string
 }): IReactFlowNode => {
 
     const reactFlowBounds = wrapperNode?.getBoundingClientRect();
@@ -17,5 +18,5 @@ export const createNodeOnDrag = ({type, flowInstance, wrapperNode, event}: {
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
     });
-    return createBaseNode({type, position})
+    return createBaseNode({type, position, layerId})
 }

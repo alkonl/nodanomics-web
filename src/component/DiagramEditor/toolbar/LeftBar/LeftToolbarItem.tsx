@@ -1,5 +1,5 @@
 import React from 'react';
-import {Tooltip} from "@mui/material";
+import {Tooltip, Box} from "@mui/material";
 import {ELeftToolbarSideMenu} from "../../../../interface";
 import {MButton} from "../../../base";
 
@@ -16,19 +16,21 @@ export const LeftToolbarItem: React.FC<{
 
     return (
         <Tooltip title={name}>
-            <MButton.Submit
-                style={{
-                    minWidth: 35,
-                    height: 44,
-                    width: 44,
-                    padding: 6,
-                    margin: 0,
-                    display: 'inline-block',
-                }}
-                onClick={onClickHandler}
-            >
-                <Component/>
-            </MButton.Submit>
+          <Box>
+              <MButton.Submit
+                  style={{
+                      minWidth: 35,
+                      height: 44,
+                      width: 44,
+                      padding: 6,
+                      margin: 0,
+                      display: 'inline-block',
+                  }}
+                  onClick={onClickHandler}
+              >
+                  <Component/>
+              </MButton.Submit>
+          </Box>
         </Tooltip>
     );
 };

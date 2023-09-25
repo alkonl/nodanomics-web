@@ -3,6 +3,7 @@ import {LibrariesSideMenu} from "./LibrariesSideMenu";
 import {CustomVariablesSideMenu} from "./CustomVariablesSideMenu";
 import {GroupedNodes} from "./GroupedNodes";
 import {NodeHierarchy} from "./NodeHierarchy";
+import {LayersManagement} from "./LayersManagement/LayersManagement";
 
 
 
@@ -14,4 +15,5 @@ export const SideMenu: {
     [ELeftToolbarSideMenu.CustomVariablesSideMenu]: CustomVariablesSideMenu,
     [ELeftToolbarSideMenu.GroupedNodes]: GroupedNodes,
     [ELeftToolbarSideMenu.NodeHierarchy]: NodeHierarchy,
+    [ELeftToolbarSideMenu.LayersManagement]: LayersManagement,
 }
