@@ -19,6 +19,7 @@ export const EventListenerNode: React.FC<NodeProps<IEventListenerNodeData>> = (p
                 left: -15,
                 display: 'flex',
                 flexDirection: 'row-reverse',
+                pointerEvents: 'none',
             }}>
                 <Box sx={{
                     display: 'flex',

@@ -5,8 +5,9 @@ import {INodeData} from "../../../../interface";
 import {Box} from "@mui/material";
 // eslint-disable-next-line import/named
 import {SxProps} from "@mui/system/styleFunctionSx";
-import {useIsElementExecuted, useUpdatePosAbsolute} from "../../../../hooks";
+import {useIsElementExecuted} from "../../../../hooks";
 import './shapeContainer.scss'
+import {ContextMenuContainer} from "./ContextMenuContainer";
 
 export const BaseNodeShapeContainer: React.FC<{
     children: React.ReactNode
@@ -33,26 +34,28 @@ export const BaseNodeShapeContainer: React.FC<{
     // })
 
     return (
-        <Box sx={{
-            width: params.width + 4,
-            height: params.height + 5,
-            position: 'relative',
-            clipPath: params.clipPath,
-            backgroundColor: node.data.style.borderColor,
-            animation: isPlayAnimation ? 'shapeBlink 0.2s linear 3' : 'none',
-        }}>
+        <ContextMenuContainer node={node}>
             <Box sx={{
-                position: 'absolute',
-                top: 3,
-                left: 2,
-                width: params.width,
-                height: params.height,
-                display: 'flex',
-                flexDirection: 'column',
-                ...sxContentContainer
+                width: params.width + 4,
+                height: params.height + 5,
+                position: 'relative',
+                clipPath: params.clipPath,
+                backgroundColor: node.data.style.borderColor,
+                animation: isPlayAnimation ? 'shapeBlink 0.2s linear 3' : 'none',
             }}>
-                {children}
+                <Box sx={{
+                    position: 'absolute',
+                    top: 3,
+                    left: 2,
+                    width: params.width,
+                    height: params.height,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    ...sxContentContainer
+                }}>
+                    {children}
+                </Box>
             </Box>
-        </Box>
+        </ContextMenuContainer>
     );
 };
