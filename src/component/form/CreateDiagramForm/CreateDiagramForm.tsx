@@ -42,10 +42,10 @@ export const CreateDiagramForm: React.FC<{
     }
 
     useEffect(() => {
-        if (createdLayer.isSuccess) {
-            onSuccess(resCreateDiagram)
+        if (createdLayer.isSuccess && resCreateDiagram) {
+            onSuccess({id: resCreateDiagram.id})
         }
-    }, [createdLayer.isSuccess]);
+    }, [createdLayer.isSuccess, resCreateDiagram]);
 
     useEffect(() => {
         if (resCreateDiagram && resCreateDiagram.id) {

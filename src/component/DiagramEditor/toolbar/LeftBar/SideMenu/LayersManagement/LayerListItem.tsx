@@ -30,14 +30,14 @@ export const LayerListItem: React.FC<{
 
             <Box component='td'>
                 <Parameter.Checkbox
-                    onChange={selectLayerHandler}
+                    onChange={changeVisibilityHandler}
                     checked={layer.visible}
 
                 />
             </Box>
             <Box component='td'>
                 <Parameter.Checkbox
-                    onChange={changeVisibilityHandler}
+                    onChange={selectLayerHandler}
                     checked={layer.isSelected}
                 />
             </Box>

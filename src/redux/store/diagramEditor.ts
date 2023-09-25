@@ -514,7 +514,9 @@ export const diagramEditorSlice = createSlice({
             state.history.isExecuted = false
         },
         setDiagramLayers: (state, {payload}: PayloadAction<IDiagramLayer[]>) => {
-            console.log('payload', payload)
+            state.settings.layers = payload
+        },
+        updateLayers: (state, {payload}: PayloadAction<IDiagramLayer[]>) => {
             state.settings.layers = payload
         }
     }
