@@ -31,7 +31,6 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     constructor(data: IDataNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(data, runManager, nodeManager);
-
     }
 
     private get _resourcesToProvide(): IResource {

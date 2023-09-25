@@ -15,4 +15,5 @@ export const nodeTypeName: {
     [EDiagramNode.Sink]: 'Sink',
     [EDiagramNode.StaticVariable]: 'StaticVariable',
     [EDiagramNode.DatasetDatafield]: 'Dataset',
+    [EDiagramNode.Label]: 'Label',
 }
