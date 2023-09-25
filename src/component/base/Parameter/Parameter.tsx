@@ -83,7 +83,7 @@ const TextArea: React.FC<TextFieldProps> = ({...props}) => {
         rows={4}
         sx={{
             color: EFontColor.grey4,
-            borderColor: EColor.grey2,
+            backgroundColor: EColor.darkMarineLight,
             borderStyle: 'solid',
         }}
         {...props}/>

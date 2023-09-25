@@ -23,7 +23,7 @@ import {
     DataNode,
     EventListenerNode,
     EventTriggerNode,
-    FormulaNode,
+    FormulaNode, LabelNode,
     MicroLoopNode,
     OriginNode,
     SinkNode,
@@ -41,7 +41,6 @@ import {ChainConnection} from "../CustomConnectionLine/ChainConnection";
 import {DatasetNode} from "../CutomNode/DatasetNode";
 import {EColor, multiSelectKeyCodes} from "../../../constant";
 import './reactflowOverwrite.scss'
-import {DiagramEditorContextMenu} from "../DiagramEditorContextMenu";
 
 const nodeTypes = {
     [EDiagramNode.StaticVariable]: StaticVariableNode,
@@ -56,6 +55,7 @@ const nodeTypes = {
     [EDiagramNode.Start]: StartNode,
     [EDiagramNode.Sink]: SinkNode,
     [EDiagramNode.Transfer]: TransferNode,
+    [EDiagramNode.Label]: LabelNode,
 };
 
 const edgeTypes = {

@@ -201,6 +201,15 @@ export const createBaseNode = ({type, position, layerId}: {
                 }
             }
         }
+        case EDiagramNode.Label: {
+            return {
+                ...baseParams,
+                data: {
+                    ...baseData,
+                    type,
+                }
+            }
+        }
         default :
             throw new Error(`Unknown node type: ${type}`);
     }

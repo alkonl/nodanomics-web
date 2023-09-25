@@ -29,11 +29,7 @@ export const LayerListItem: React.FC<{
 
     return (
         <>
-            <DiagramLayerDeletePopUp
-                layer={layer}
-                isShow={layerDeletePopUp.isOpened}
-                onClose={layerDeletePopUp.close}
-            />
+
             <Box component='tr'>
                 <Box component='td'>
                     <Typography>
@@ -55,6 +51,11 @@ export const LayerListItem: React.FC<{
                     />
                 </Box>
                 <Box component='td'>
+                    <DiagramLayerDeletePopUp
+                        layer={layer}
+                        isShow={layerDeletePopUp.isOpened}
+                        onClose={layerDeletePopUp.close}
+                    />
                     <MButton.Submit onClick={deleteLayerHandler}>
                         Delete
                     </MButton.Submit>

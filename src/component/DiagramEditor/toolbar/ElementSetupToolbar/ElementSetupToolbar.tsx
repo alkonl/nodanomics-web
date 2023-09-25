@@ -3,7 +3,7 @@ import {Box, Typography} from "@mui/material";
 import {EColor, EFontColor} from "../../../../constant";
 import {EElementType, nodeSetupToolbarNames} from "../../../../interface";
 import {useCurrentEditElement} from "../../../../hooks";
-import {NodeStatisticSection, PropertiesSection} from "./section";
+import {CommentSection, NodeStatisticSection, PropertiesSection} from "./section";
 import {StyleSection} from "./section/StyleSection";
 import {NodeDeleteButton} from "./NodeDeleteButton";
 
@@ -57,9 +57,10 @@ export const ElementSetupToolbar = () => {
                             <StyleSection element={selectedElementData}/>
                             {selectedElementData?.elementType === EElementType.Node &&
                                 <NodeStatisticSection nodeData={selectedElementData}/>}
-
+                            <CommentSection element={selectedElementData}/>
 
                         </Box>
+
                         {selectedElementData.elementType === EElementType.Node && <Box
                             sx={{
                                 mt: 2,
