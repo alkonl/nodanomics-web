@@ -2,7 +2,7 @@ import {DragEvent, useCallback} from "react";
 import {createNodeOnDrag} from "../service";
 // eslint-disable-next-line import/named
 import {ReactFlowInstance} from "reactflow";
-import {diagramEditorActions, useAppDispatch} from "../redux";
+import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {EDiagramNode} from "../interface";
 import {useSetParentNode} from "./useSetParentNode";
 import {useOffHistoryExecuted} from "./useOffHistoryExecuted";
@@ -15,6 +15,8 @@ export const useOnDrop = ({flowWrapper, flowInstance}: {
     const {addNode} = diagramEditorActions
     const setParent = useSetParentNode()
     const offHistoryExecuted = useOffHistoryExecuted()
+    const {layers} = useDiagramEditorState().settings
+
 
     return useCallback(
         (event: DragEvent<HTMLDivElement>) => {
@@ -28,19 +30,24 @@ export const useOnDrop = ({flowWrapper, flowInstance}: {
                     console.error(`Invalid element type: ${type}`)
                     return;
                 }
-                const newNode = createNodeOnDrag({
-                    type,
-                    flowInstance,
-                    event,
-                    wrapperNode: flowWrapper
-                })
-                if (newNode) {
-                    offHistoryExecuted('onDrop')
-                    dispatch(addNode(newNode))
-                    setParent(newNode, flowInstance.getNodes())
+                const selectedLayerId = layers?.find(layer => layer.isSelected)?.id
+                if (selectedLayerId) {
+                    const newNode = createNodeOnDrag({
+                        layerId: selectedLayerId,
+                        type,
+                        flowInstance,
+                        event,
+                        wrapperNode: flowWrapper
+                    })
+                    if (newNode) {
+                        offHistoryExecuted('onDrop')
+                        dispatch(addNode(newNode))
+                        setParent(newNode, flowInstance.getNodes())
+                    }
                 }
+
             }
         },
-        [flowInstance, dispatch]
+        [flowInstance, dispatch, layers]
     );
 }

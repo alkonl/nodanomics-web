@@ -48,7 +48,7 @@ export const LayersManagement = () => {
                     </Box>
                 </Box>
                 <Box component="tbody">
-                    {layers.map((layer, index) => {
+                    {layers?.map((layer) => {
                         return (<LayerListItem layer={layer} key={layer.id}/>)
                     })}
                 </Box>

@@ -36,7 +36,7 @@ interface IHistory {
 
 export interface IDiagramEditorState {
     settings: {
-        layers: IDiagramLayer[]
+        layers?: IDiagramLayer[]
     }
     currentDiagramId?: string
     name?: string
@@ -77,7 +77,6 @@ const initialState: IDiagramEditorState = {
     diagramNodes: [],
     diagramEdges: [],
     settings: {
-        layers: []
     },
     autoSaveCalled: 0,
     isDiagramRunning: false,
@@ -513,8 +512,10 @@ export const diagramEditorSlice = createSlice({
         }>) => {
             state.history.isExecuted = false
         },
-        setDiagramLayers: (state, {payload}: PayloadAction<IDiagramLayer[]>) => {
-            state.settings.layers = payload
+        setDiagramSetting: (state, {payload}: PayloadAction<{
+            layers: IDiagramLayer[]
+        }>) => {
+            state.settings.layers = payload.layers
         },
         updateLayers: (state, {payload}: PayloadAction<IDiagramLayer[]>) => {
             state.settings.layers = payload

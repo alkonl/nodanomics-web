@@ -3,12 +3,14 @@ import {useGetDiagramByIdQuery} from "../api";
 import {useEffect, useRef, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useGetExecutionGraphProperties} from "./useGetExecutionGraphProperties";
+import {useDiagramSettings} from "./useDiagramSettings";
 
 
 export const useGetEditDiagramFromServer = () => {
 
 
     const {diagramId: currentDiagramId} = useParams() as { diagramId: string }
+    const diagramSettings = useDiagramSettings({diagramId: currentDiagramId})
 
     useGetExecutionGraphProperties({
         diagramId: currentDiagramId,
@@ -17,6 +19,7 @@ export const useGetEditDiagramFromServer = () => {
     const dispatch = useAppDispatch()
 
     const [isRequestLoaded, setIsRequestLoaded] = useState(false)
+    // const [isShowDiagram, setIsShowDiagram] = useState(false)
     const prevDiagramId = useRef<string>()
 
     useEffect(() => {
@@ -31,7 +34,6 @@ export const useGetEditDiagramFromServer = () => {
         refetchOnMountOrArgChange: true,
     })
     const {setDiagram, renderState, resetDiagramRun} = diagramEditorActions
-
 
 
     useEffect(() => {
@@ -57,7 +59,10 @@ export const useGetEditDiagramFromServer = () => {
             setIsRequestLoaded(true)
         }
     }, [diagramRes, currentDiagramId])
+
+    const isShowDiagram = isRequestLoaded && diagramSettings.isUploaded
+
     return {
-        isRequestLoaded: isRequestLoaded,
+        isShowDiagram,
     }
 }

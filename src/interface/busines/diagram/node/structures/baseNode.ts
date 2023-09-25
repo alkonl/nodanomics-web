@@ -1,6 +1,5 @@
 import {IDiagramBaseInteractiveElementData} from "../../diagramElement";
-import {IResetBeforeStep} from "../../../graph";
-import {IIsElementExecuted} from "../../generic";
+
 
 export enum EDiagramNode {
     StaticVariable = 'StaticVariable',
@@ -26,4 +25,5 @@ export interface IDiagramNodeBaseData extends IDiagramBaseInteractiveElementData
     tag?: string;
     connectedNodes?: string[];
     defaultZIndex?: number;
+    layerId: string;
 }

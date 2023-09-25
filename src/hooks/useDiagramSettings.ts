@@ -3,18 +3,19 @@ import {useGetDiagramSettingsQuery} from "../api";
 import {useEffect} from "react";
 import {IDiagramLayer} from "../interface";
 
-export const useDiagramSettings = () => {
-    const {currentDiagramId} = useDiagramEditorState()
+export const useDiagramSettings = ({diagramId}: {
+    diagramId: string
+}) => {
     const dispatch = useAppDispatch()
-    const {data: diagramSettings} = useGetDiagramSettingsQuery({diagramId: currentDiagramId}, {
-        skip: !currentDiagramId
+    const {data: diagramSettings, isSuccess} = useGetDiagramSettingsQuery({diagramId}, {
+        skip: !diagramId
     })
 
     useEffect(() => {
         if (diagramSettings?.DiagramLayers) {
             const isLayerSelected = diagramSettings.DiagramLayers.some(layer => layer.isSelected)
             let preparedLayers: IDiagramLayer[] = diagramSettings.DiagramLayers
-            if(!isLayerSelected && diagramSettings.DiagramLayers[0]){
+            if (!isLayerSelected && diagramSettings.DiagramLayers[0]) {
                 const selectedLayer: IDiagramLayer = {
                     ...diagramSettings.DiagramLayers[0],
                     isSelected: true,
@@ -22,8 +23,15 @@ export const useDiagramSettings = () => {
                 preparedLayers = [selectedLayer, ...diagramSettings.DiagramLayers.slice(1)]
             }
 
-            dispatch(diagramEditorActions.setDiagramLayers(preparedLayers))
+            dispatch(diagramEditorActions.setDiagramSetting({
+                layers: preparedLayers,
+            }))
 
         }
-    }, [diagramSettings,dispatch, diagramSettings]);
+    }, [diagramSettings, dispatch, diagramSettings]);
+
+    return {
+        requestedDiagramId: diagramId,
+        isUploaded: isSuccess,
+    }
 }

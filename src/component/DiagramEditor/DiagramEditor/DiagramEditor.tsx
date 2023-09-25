@@ -3,7 +3,7 @@ import {DiagramCanvas} from "../DiagramCanvas";
 import style from './DiagramEditor.module.scss'
 import {ElementSetupToolbar, ElementToolbar, ExecutionToolbar, LeftToolbar} from "../toolbar";
 import {
-    ReactFlowInstanceProvider, useDiagramSettings,
+    ReactFlowInstanceProvider,
     useGetEditDiagramFromServer,
     useSetAllSpreadSheetsToState,
     useWidthAndHeight
@@ -14,8 +14,7 @@ import {CONFIG} from "../../../utils";
 
 
 export const DiagramEditor = () => {
-
-    const {isRequestLoaded} = useGetEditDiagramFromServer()
+    const {isShowDiagram} = useGetEditDiagramFromServer()
     const [isCanvasShow, setIsCanvasShow] = useState(false)
 
     // TODO after downloading the diagram from the server,
@@ -24,7 +23,8 @@ export const DiagramEditor = () => {
     useEffect(() => {
         if (!CONFIG.IS_OFFLINE) {
             let timeout: NodeJS.Timeout
-            if (isRequestLoaded && !isCanvasShow) {
+
+            if (isShowDiagram && !isCanvasShow) {
                 setTimeout(() => {
                     setIsCanvasShow(true)
                 }, 150)
@@ -37,12 +37,12 @@ export const DiagramEditor = () => {
         } else {
             setIsCanvasShow(true)
         }
-    }, [isRequestLoaded])
+    }, [isShowDiagram])
 
     const {elementSize: diagramCanvasContainerSize, elementRef: diagramCanvasContainerRef} = useWidthAndHeight()
 
     useSetAllSpreadSheetsToState()
-    useDiagramSettings()
+
     return (
         <Box
             className={style.diagramEditorContainer}
