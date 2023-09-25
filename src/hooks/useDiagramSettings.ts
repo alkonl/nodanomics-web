@@ -1,4 +1,4 @@
-import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
+import {diagramEditorActions, useAppDispatch} from "../redux";
 import {useGetDiagramSettingsQuery} from "../api";
 import {useEffect} from "react";
 import {IDiagramLayer} from "../interface";
@@ -28,7 +28,7 @@ export const useDiagramSettings = ({diagramId}: {
             }))
 
         }
-    }, [diagramSettings, dispatch, diagramSettings]);
+    }, [diagramSettings, diagramSettings]);
 
     return {
         requestedDiagramId: diagramId,

@@ -1,7 +1,7 @@
 import React, {DragEvent, useCallback, useEffect, useRef, useState} from 'react';
 import type {EdgeChange, NodeChange, ReactFlowInstance} from 'reactflow'
 // eslint-disable-next-line import/named
-import ReactFlow, {Background, BackgroundVariant, ConnectionMode, Controls,} from 'reactflow';
+import ReactFlow, {Background, BackgroundVariant, ConnectionMode, Controls} from 'reactflow';
 import 'reactflow/dist/style.css';
 
 import {
