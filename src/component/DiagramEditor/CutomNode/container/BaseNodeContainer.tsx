@@ -24,7 +24,7 @@ export const BaseNodeContainer: React.FC<{
     const isPlayAnimation = useIsElementExecuted(data)
 
     return (
-        <ContextMenuContainer>
+        <ContextMenuContainer node={node}>
             <Box
                 onClick={(e) => {
                     console.log('BaseNodeContainer click')

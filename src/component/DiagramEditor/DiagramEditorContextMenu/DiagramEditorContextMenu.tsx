@@ -1,17 +1,32 @@
 import React from 'react';
 import {Box} from "@mui/material";
+import {EColor} from "../../../constant";
+import {useChangeLayer} from "../../../hooks";
+import {MSelect} from "../../base";
+import {INodeData} from "../../../interface";
 
 export const DiagramEditorContextMenu: React.FC<{
-    id: string,
+    node: INodeData,
+}> = ({node}) => {
 
-}> = ({id,}) => {
+    const {
+        currentLayer,
+        layers,
+        updateLayer,
+    } = useChangeLayer(node)
+
+
+
     return (
         <Box sx={{
-            width: 200,
-            height: 200,
-            backgroundColor: 'red',
+            backgroundColor: EColor.darkMarineLight,
+            padding: 2,
         }}>
-            node id: {id}
+            <MSelect.Parameters
+                currentValue={currentLayer?.id}
+                onChange={updateLayer}
+                values={layers}
+            />
         </Box>
     );
 };

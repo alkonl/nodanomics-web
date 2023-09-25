@@ -4,13 +4,15 @@ import {EColor, EFontColor} from "../../../constant";
 // eslint-disable-next-line import/named
 import {SelectChangeEvent} from "@mui/material/Select/SelectInput";
 
+export interface IParametersSelectValue {
+    value: string,
+    label: string,
+}
+
 export const ParametersSelect: React.FC<{
     currentValue?: string,
     onChange?: (event: SelectChangeEvent) => void,
-    values?: string[] | {
-        value: string,
-        label: string,
-    }[],
+    values?: string[] | IParametersSelectValue[],
 }> = ({currentValue, onChange, values}) => {
     return (
         <FormControl
