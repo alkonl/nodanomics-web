@@ -669,6 +669,15 @@ export const baseApi = createApi({
             },
             providesTags: [ERTKTags.DiagramSettings, ERTKTags.EditedDiagram],
         }),
+        deleteLayer: builder.mutation<unknown, string>({
+            query: (layerId: string) => {
+                return {
+                    url: `/diagram/layers/delete/${layerId}`,
+                    method: 'DELETE',
+                }
+            },
+            invalidatesTags: [ERTKTags.DiagramSettings],
+        })
     }),
 })
 export const {
@@ -712,5 +721,6 @@ export const {
     useGetProjectDiagramsQuery,
     useAddDiagramLayerMutation,
     useGetDiagramSettingsQuery,
+    useDeleteLayerMutation,
 } = baseApi;
 

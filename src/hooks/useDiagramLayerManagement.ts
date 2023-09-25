@@ -1,9 +1,11 @@
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {IReactFlowEdge, IReactFlowNode} from "../interface";
+import {useDeleteLayerMutation} from "../api";
 
 export const useDiagramLayerManagement = () => {
     const dispatch = useAppDispatch()
     const {settings, diagramNodes, diagramEdges} = useDiagramEditorState()
+    const [deleteLayerRequest] = useDeleteLayerMutation()
     const {layers} = settings
     const selectLayer = (layerId: string) => {
         if (layers) {
@@ -64,7 +66,7 @@ export const useDiagramLayerManagement = () => {
     }
 
     const deleteLayer = (layerId: string) => {
-
+        deleteLayerRequest(layerId)
     }
 
     return {
