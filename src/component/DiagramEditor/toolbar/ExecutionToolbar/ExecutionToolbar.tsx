@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Typography} from "@mui/material";
+import {Box, Tooltip, Typography} from "@mui/material";
 import {EColor} from "../../../../constant";
 import {MButton, Parameter} from "../../../base";
 import {RunningStep} from "../ElementToolbar/RunningStep";
@@ -8,7 +8,8 @@ import {
     useManageExecutionDuration,
     useManageTargetExecutionStep,
     useResetDiagramRun,
-    useToggle
+    useToggle,
+    useToggleResourceAnimationLatency
 } from "../../../../hooks";
 import {ExecutionGraphPopUp} from "../../ExecutionGraph";
 import {useAutoLayout} from "../../../../hooks/useAutoLayout";
@@ -30,6 +31,8 @@ export const ExecutionToolbar = () => {
     }
 
     const autoLayout = useAutoLayout()
+
+    const {toggleResourceAnimationLatency, isResourceAnimationLatency} = useToggleResourceAnimationLatency()
 
     return (
         <Box sx={{
@@ -114,6 +117,18 @@ export const ExecutionToolbar = () => {
             <MButton.Submit onClick={autoLayout}>
                 layout
             </MButton.Submit>
+            <Tooltip title="resource animation latency">
+                <Box>
+                    <Parameter.Text>
+                        latency
+                    </Parameter.Text>
+                    <Parameter.Checkbox
+                        onChange={toggleResourceAnimationLatency}
+                        checked={isResourceAnimationLatency}
+                    />
+                </Box>
+            </Tooltip>
+
         </Box>
     );
 };
