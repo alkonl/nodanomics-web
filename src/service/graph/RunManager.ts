@@ -188,7 +188,7 @@ export class RunManager {
                     }
                 })
             }
-            if (target instanceof GraphMicroLoopNode) {
+            if (target instanceof GraphMicroLoopNode && chainItem.inner) {
                 console.log('target.loopCount: ', target.data.name)
                 // check if loop is has a parent loop
                 const hasParentLoop = target.data.parentId !== undefined
@@ -196,12 +196,15 @@ export class RunManager {
                 if (hasParentLoop && chainItem.inner) {
                     target.resetLoopStep()
                     // if(target.loopCount > 1) {
-                    for (let i = 0; i < target.loopCount - 1; i++) {
+                    for (let i = 0; i < target.loopCount; i++) {
                         console.log('chainItem.inner: ', chainItem.inner)
                         this.executeChainOrder(chainItem.inner)
                     }
+                } else {
+                    this.executeChainOrder(chainItem.inner)
                 }
             }
+
             if (chainItem.end && chainItem.end.edge && !chainItem.end.edge.isMeetCondition) {
                 const chainItemToExecute = this.findDeepChainItemByNode(chainItem.end.target)
                 if (chainItemToExecute && chainItemToExecute.inner) {
@@ -214,9 +217,7 @@ export class RunManager {
                     // this.executeChainOrder(chainItemToExecute.inner)
                 }
             }
-            if (chainItem.inner) {
-                this.executeChainOrder(chainItem.inner)
-            }
+
             // const notExecuteOutgoingConnected = params?.notExecuteOutgoingConnected !== undefined
             //     ? params?.notExecuteOutgoingConnected
             //     : false
