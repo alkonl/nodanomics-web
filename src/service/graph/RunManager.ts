@@ -69,17 +69,17 @@ class NodeToExecute {
         console.log('this.nodesToExecute: ', this)
         if (this.executionCount === 0) {
             this.current = [...this.next]
-            this.executionCount = this.next.length - 1
+            this.executionCount = this.next.length
             this.next = []
+
             for (const argument of this.current) {
-                this.runManager.executeNode(argument, this)
                 this.executionCount--
+                this.runManager.executeNode(argument, this)
                 console.log(`argument: ${argument.target.data.name}`, this.executionCount)
 
             }
-
         }
-
+        console.log('this.executionCount: ',  this.executionCount)
     }
 
     addNodesToExecute(chainItem: IChainItem[]) {
@@ -223,8 +223,9 @@ export class RunManager {
 
                 })
             }
+            // debugger
             nodeToExecute.invokeNodesToExecute()
-
+            console.log('nodeToExecute.executionCount: ', nodeToExecute.executionCount)
         }
     }
 
@@ -250,8 +251,8 @@ export class RunManager {
                 }
             }
         })
+
         nodeToExecute.invokeNodesToExecute()
-        console.log('nodesToExecute: ', nodeToExecute)
     }
 
 
