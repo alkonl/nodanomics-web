@@ -198,6 +198,7 @@ export const createBaseNode = ({type, position, layerId}: {
                     type,
                     isExecuted: false,
                     history: [],
+                    isExecuteOutgoingIfTransferredZero: true,
                 }
             }
         }

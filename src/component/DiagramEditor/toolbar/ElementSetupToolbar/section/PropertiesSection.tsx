@@ -7,7 +7,8 @@ import {
     EDiagramNode,
     EElementType,
     IDiagramConnectionData,
-    INodeData, isNodeAutomatic,
+    INodeData,
+    isNodeAutomatic,
 } from "../../../../../interface";
 import {ConnectionFormulaParameter} from "../parameter/ConnectionFormulaParameter";
 import {NodeTriggerModeParameter} from "../parameter/NodeTriggerModeParameter";
@@ -31,7 +32,8 @@ import {ChainConnectionParametersContainer} from "../parameter/chainConnection/C
 import {NodeEventTriggerParametersContainer} from "../parameter/eventTrigger";
 import {NodeEventListenerParametersContainer} from "../parameter/eventListener";
 import {IsNodeAutomaticProperty} from "../parameter/generic/IsNodeAutomaticProperty";
-import {NodeEventNameParameter, NodeLayerParameter} from "../parameter/generic";
+import {NodeLayerParameter} from "../parameter/generic";
+import {NodeTransferParametersContainer} from "../parameter/transfer/NodeTransferParametersContainer";
 
 
 export const PropertiesSection: React.FC<{
@@ -71,7 +73,8 @@ export const PropertiesSection: React.FC<{
                     && <NodeEventTriggerParametersContainer nodeData={selectedElementData}/>}
                 {selectedElementData.type === EDiagramNode.EventListener
                     && <NodeEventListenerParametersContainer nodeData={selectedElementData}/>}
-
+                {selectedElementData.type === EDiagramNode.Transfer
+                    && <NodeTransferParametersContainer nodeData={selectedElementData}/>}
 
                 {'trigger' in selectedElementData && <NodeTriggerModeParameter nodeData={selectedElementData}/>}
                 {selectedElementData.type === EDiagramNode.MicroLoop
