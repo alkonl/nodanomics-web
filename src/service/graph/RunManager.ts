@@ -10,7 +10,7 @@ import {
 } from "./GraphNodes";
 import {
     EConnectionMode,
-    isIIsEventTriggered,
+    isIIsEventTriggered, isIIsExecuteOutgoingNodes,
     isIResetBeforeStep,
     isITriggeredEvent,
     isIUpdateGraphNodeStatePerStep,
@@ -161,7 +161,7 @@ export class RunManager {
             const notExecuteOutgoingConnected = params?.notExecuteOutgoingConnected !== undefined
             ? params?.notExecuteOutgoingConnected
             : false
-            if (chainItem.outgoingConnected && !notExecuteOutgoingConnected) {
+            if (chainItem.outgoingConnected &&  (isIIsExecuteOutgoingNodes(target) ? target.isExecuteOutgoingNodes : true) && !notExecuteOutgoingConnected) {
                 this.executeChainOrder(chainItem.outgoingConnected)
             }
         }
