@@ -60,7 +60,7 @@ class NodeToExecute {
     current: IChainItem[] = []
     next: IChainItem[] = []
     runManager: RunManager
-
+    reason?: string
     constructor(runManager: RunManager) {
         this.runManager = runManager
     }
@@ -74,7 +74,10 @@ class NodeToExecute {
             for (const argument of this.current) {
                 this.runManager.executeNode(argument, this)
                 this.executionCount--
+                console.log(`argument: ${argument.target.data.name}`, this.executionCount)
+
             }
+
         }
 
     }
@@ -133,22 +136,8 @@ export class RunManager {
         const startChains = chain.filter(chainItem => !(chainItem.target instanceof GraphEventListenerNode))
         this.executeChainOrder(startChains)
         this.updateNodePerStep()
-        // this.nodesToExecute = {
-        //     executionCount: 0,
-        //     current: [],
-        //     next: [],
-        // }
     }
 
-    // private nodesToExecute: {
-    //     executionCount: number
-    //     current: IChainItem[]
-    //     next: IChainItem[]
-    // } = {
-    //     executionCount: 0,
-    //     current: [],
-    //     next: [],
-    // }
 
     executeNode(chainItem: IChainItem, nodeToExecute: NodeToExecute) {
         const target = chainItem.target
@@ -224,7 +213,15 @@ export class RunManager {
 
             if (chainItem.outgoingConnected) {
                 console.log('chainItem.outgoingConnected: ', chainItem.outgoingConnected)
-                nodeToExecute.addNodesToExecute(chainItem.outgoingConnected)
+                chainItem.outgoingConnected.forEach(chainItem => {
+                    const isEdgeMeetCondition = chainItem.edge === undefined
+                        ? true
+                        : chainItem.edge.isMeetCondition
+                    if(isEdgeMeetCondition) {
+                        nodeToExecute.addNodesToExecute([chainItem])
+                    }
+
+                })
             }
             nodeToExecute.invokeNodesToExecute()
 
@@ -237,30 +234,8 @@ export class RunManager {
     }
 
 
-    // private invokeNodesToExecute() {
-    // console.log('this.nodesToExecute: ', this.nodesToExecute)
-    // if (this.nodesToExecute.executionCount === 0) {
-    //     this.nodesToExecute.executionCount = this.nodesToExecute.next.length - 1
-    //     this.nodesToExecute.current = [...this.nodesToExecute.next]
-    //     this.nodesToExecute.next = []
-    //     for (const argument of this.nodesToExecute.current) {
-    //         this.executeNode(argument)
-    //         this.nodesToExecute.executionCount--
-    //     }
-    //     // this.nodesToExecute.current = []
-    //     // this.nodesToExecute.next = []
-    //     // this.nodesToExecute.executionCount = this.nodesToExecute.next.length
-    //
-    // }
-
-    // }
-
-    // private addNodesToExecute(chainItem: IChainItem[]) {
-    //     this.nodesToExecute.next.push(...chainItem)
-    // }
-
-
     private executeChainOrder(chainItems: IChainItem[], nodeToExecute = new NodeToExecute(this)) {
+        nodeToExecute.reason = chainItems[0]?.target.data.name
         chainItems.forEach(chainItem => {
             const target = chainItem.target
             const chainConnection = chainItem.edge
@@ -276,6 +251,7 @@ export class RunManager {
             }
         })
         nodeToExecute.invokeNodesToExecute()
+        console.log('nodesToExecute: ', nodeToExecute)
     }
 
 
