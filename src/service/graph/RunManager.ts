@@ -11,7 +11,6 @@ import {
 import {
     EConnectionMode,
     isIIsEventTriggered,
-    isIIsExecuteOutgoingNodes,
     isIResetBeforeStep,
     isITriggeredEvent,
     isIUpdateGraphNodeStatePerStep,
@@ -106,7 +105,15 @@ export class RunManager {
         this.updateNodePerStep()
     }
 
-    private nodesToExecute: IChainItem[] = []
+    private nodesToExecute: {
+        executionCount: number
+        current: IChainItem[]
+        next: IChainItem[]
+    } = {
+        executionCount: 0,
+        current: [],
+        next: [],
+    }
 
     private executeNode(chainItem: IChainItem, params?: {
         notExecuteOutgoingConnected?: boolean
@@ -131,7 +138,7 @@ export class RunManager {
                 const listenerNodes = this.executionOrder
                     .filter(node => node.target instanceof GraphEventListenerNode
                         && node.target.eventName === triggeredEventName)
-                this.executeChainOrder(listenerNodes)
+                // this.executeChainOrder(listenerNodes)
             }
             if (target instanceof GraphDataNode && target.isExecutedChangesPerStep) {
                 this.graph.nodes.forEach(node => {
@@ -147,13 +154,10 @@ export class RunManager {
                 target.resetLoopStep()
                 if (hasParentLoop && chainItem.inner) {
                     // if(target.loopCount > 1) {
-                        for (let i = 0; i < target.loopCount - 1; i++) {
-                            console.log('chainItem.inner: ', chainItem.inner)
-                            this.executeChainOrder(chainItem.inner)
-                        }
-                    // } else {
-                    //     this.executeChainOrder(chainItem.inner)
-                    // }
+                    for (let i = 0; i < target.loopCount - 1; i++) {
+                        console.log('chainItem.inner: ', chainItem.inner)
+                        // this.executeChainOrder(chainItem.inner)
+                    }
                 }
             }
             if (chainItem.end && chainItem.end.edge && !chainItem.end.edge.isMeetCondition) {
@@ -165,18 +169,21 @@ export class RunManager {
                             item.target.resetLoopStep()
                         }
                     })
-                    this.executeChainOrder(chainItemToExecute.inner)
+                    // this.executeChainOrder(chainItemToExecute.inner)
                 }
             }
             if (chainItem.inner) {
-                this.executeChainOrder(chainItem.inner)
+                // this.executeChainOrder(chainItem.inner)
             }
             const notExecuteOutgoingConnected = params?.notExecuteOutgoingConnected !== undefined
                 ? params?.notExecuteOutgoingConnected
                 : false
-            if (chainItem.outgoingConnected && (isIIsExecuteOutgoingNodes(target) ? target.isExecuteOutgoingNodes : true) && !notExecuteOutgoingConnected) {
-                this.executeChainOrder(chainItem.outgoingConnected)
+            if (chainItem.outgoingConnected) {
+                console.log('chainItem.outgoingConnected: ', chainItem.outgoingConnected)
+                this.addNodesToExecute(chainItem.outgoingConnected)
             }
+            this.invokeNodesToExecute()
+
         }
     }
 
@@ -184,6 +191,27 @@ export class RunManager {
     private findDeepChainItemByNode(node: GraphBaseNode): IChainItem | undefined {
         return findChainItemByTarget(this.executionOrder, node);
     }
+
+
+    private invokeNodesToExecute() {
+        console.log('this.nodesToExecute: ', this.nodesToExecute)
+        if (this.nodesToExecute.executionCount === 0) {
+            this.nodesToExecute.executionCount = this.nodesToExecute.next.length - 1
+            this.nodesToExecute.current = [...this.nodesToExecute.next]
+            this.nodesToExecute.next = []
+            for (const argument of this.nodesToExecute.current) {
+                this.executeNode(argument)
+                this.nodesToExecute.executionCount--
+            }
+
+        }
+
+    }
+
+    private addNodesToExecute(chainItem: IChainItem[]) {
+        this.nodesToExecute.next.push(...chainItem)
+    }
+
 
     private executeChainOrder(chainItems: IChainItem[]) {
         chainItems.forEach(chainItem => {
@@ -193,13 +221,14 @@ export class RunManager {
             if (target instanceof GraphInvokableNode && isChainMeetCondition) {
                 if (isIIsEventTriggered(target)) {
                     if (target.isEventTriggered(chainConnection?.sourceMode)) {
-                        this.executeNode(chainItem)
+                        this.addNodesToExecute([chainItem])
                     }
                 } else {
-                    this.executeNode(chainItem)
+                    this.addNodesToExecute([chainItem])
                 }
             }
         })
+        this.invokeNodesToExecute()
     }
 
 
