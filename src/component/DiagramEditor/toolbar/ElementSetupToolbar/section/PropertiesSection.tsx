@@ -33,7 +33,7 @@ import {NodeEventTriggerParametersContainer} from "../parameter/eventTrigger";
 import {NodeEventListenerParametersContainer} from "../parameter/eventListener";
 import {IsNodeAutomaticProperty} from "../parameter/generic/IsNodeAutomaticProperty";
 import {NodeLayerParameter} from "../parameter/generic";
-import {NodeTransferParametersContainer} from "../parameter/transfer/NodeTransferParametersContainer";
+import {NodeTransferParametersContainer} from "../parameter/transfer";
 
 
 export const PropertiesSection: React.FC<{
