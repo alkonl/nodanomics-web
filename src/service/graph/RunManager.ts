@@ -154,6 +154,13 @@ export class RunManager {
         const target = chainItem.target
 
         const edge = chainItem.edge
+        const isEdgeMeetCondition = edge === undefined
+            ? true
+            : edge.isMeetCondition
+        console.log('isEdgeMeetCondition: ', isEdgeMeetCondition)
+        if(!isEdgeMeetCondition) {
+            return
+        }
         if (target instanceof GraphInvokableNode) {
             console.log('node: ', target.data.name)
             if (target instanceof GraphLoopNode && !target.isLoopActive) {
@@ -171,6 +178,7 @@ export class RunManager {
                 const listenerNodes = this.executionOrder
                     .filter(node => node.target instanceof GraphEventListenerNode
                         && node.target.eventName === triggeredEventName)
+                nodeToExecute.addNodesToExecute(listenerNodes)
                 // this.executeChainOrder(listenerNodes)
             }
             if (target instanceof GraphDataNode && target.isExecutedChangesPerStep) {
@@ -212,6 +220,7 @@ export class RunManager {
             // const notExecuteOutgoingConnected = params?.notExecuteOutgoingConnected !== undefined
             //     ? params?.notExecuteOutgoingConnected
             //     : false
+
             if (chainItem.outgoingConnected) {
                 console.log('chainItem.outgoingConnected: ', chainItem.outgoingConnected)
                 nodeToExecute.addNodesToExecute(chainItem.outgoingConnected)
