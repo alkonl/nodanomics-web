@@ -10,7 +10,8 @@ import {
 } from "./GraphNodes";
 import {
     EConnectionMode,
-    isIIsEventTriggered, isIIsExecuteOutgoingNodes,
+    isIIsEventTriggered,
+    isIIsExecuteOutgoingNodes,
     isIResetBeforeStep,
     isITriggeredEvent,
     isIUpdateGraphNodeStatePerStep,
@@ -105,13 +106,16 @@ export class RunManager {
         this.updateNodePerStep()
     }
 
-    private executeNode(chainItem: IChainItem, params?:{
+    private nodesToExecute: IChainItem[] = []
+
+    private executeNode(chainItem: IChainItem, params?: {
         notExecuteOutgoingConnected?: boolean
     }) {
         const target = chainItem.target
 
         const edge = chainItem.edge
         if (target instanceof GraphInvokableNode) {
+            console.log('node: ', target.data.name)
             if (target instanceof GraphLoopNode && !target.isLoopActive) {
                 return
             }
@@ -137,10 +141,19 @@ export class RunManager {
                 })
             }
             if (target instanceof GraphMicroLoopNode) {
+                console.log('target.loopCount: ', target.data.name)
                 // check if loop is has a parent loop
                 const hasParentLoop = target.data.parentId !== undefined
-                if (hasParentLoop && chainItem.inner && target.data.currentLoopCount < target.loopCount) {
-                    this.executeNode(chainItem, {notExecuteOutgoingConnected: true})
+                target.resetLoopStep()
+                if (hasParentLoop && chainItem.inner) {
+                    // if(target.loopCount > 1) {
+                        for (let i = 0; i < target.loopCount - 1; i++) {
+                            console.log('chainItem.inner: ', chainItem.inner)
+                            this.executeChainOrder(chainItem.inner)
+                        }
+                    // } else {
+                    //     this.executeChainOrder(chainItem.inner)
+                    // }
                 }
             }
             if (chainItem.end && chainItem.end.edge && !chainItem.end.edge.isMeetCondition) {
@@ -159,9 +172,9 @@ export class RunManager {
                 this.executeChainOrder(chainItem.inner)
             }
             const notExecuteOutgoingConnected = params?.notExecuteOutgoingConnected !== undefined
-            ? params?.notExecuteOutgoingConnected
-            : false
-            if (chainItem.outgoingConnected &&  (isIIsExecuteOutgoingNodes(target) ? target.isExecuteOutgoingNodes : true) && !notExecuteOutgoingConnected) {
+                ? params?.notExecuteOutgoingConnected
+                : false
+            if (chainItem.outgoingConnected && (isIIsExecuteOutgoingNodes(target) ? target.isExecuteOutgoingNodes : true) && !notExecuteOutgoingConnected) {
                 this.executeChainOrder(chainItem.outgoingConnected)
             }
         }
