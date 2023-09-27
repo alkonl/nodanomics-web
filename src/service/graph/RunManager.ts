@@ -257,33 +257,39 @@ export class RunManager {
         }).flat()
     }
 
-    private getChainChildrenRecursive(startedChainItem: IChainItem, children: IChainItem[] = [startedChainItem]) {
-        const childChainItem = this.getChainChildren(startedChainItem)
+    private getChainChildrenRecursive(startedChainItem: IChainItem, children: IChainItem[] = [startedChainItem], visited = new Set<string>()) {
+        if(!visited.has(startedChainItem.target.data.id)) {
+            visited.add(startedChainItem.target.data.id)
+            const childChainItem = this.getChainChildren(startedChainItem)
 
-        startedChainItem.outgoingConnected = childChainItem.outgoingConnected
-        startedChainItem.inner = childChainItem.inner
-        startedChainItem.end = childChainItem.endChainItem
-        const nextChildren = [...childChainItem.outgoingConnected, ...childChainItem.inner]
+            startedChainItem.outgoingConnected = childChainItem.outgoingConnected
+            startedChainItem.inner = childChainItem.inner
+            startedChainItem.end = childChainItem.endChainItem
+            const nextChildren = [...childChainItem.outgoingConnected, ...childChainItem.inner]
 
-        nextChildren.forEach(child => {
-            if (!(child.edge?.targetMode === EConnectionMode.LoopChildrenToExternal)) {
+            nextChildren.forEach(child => {
+                if (!(child.edge?.targetMode === EConnectionMode.LoopChildrenToExternal)) {
 
-                const outgoingEdges = child.target.outgoingEdges
-                if (outgoingEdges.length > 0) {
-                    this.getChainChildrenRecursive(child, children)
+                    const outgoingEdges = child.target.outgoingEdges
+                    if (outgoingEdges.length > 0 && !visited.has(child.target.data.id)) {
+                        this.getChainChildrenRecursive(child, children, visited)
+                    }
+
                 }
+            })
+            startedChainItem.inner.sort((a, b) => {
+                if (!a.end && b.end) {
+                    return -1;
+                } else if (a.end && !b.end) {
+                    return 1;
+                }
+                return 0;
+            });
 
-            }
-        })
-        startedChainItem.inner.sort((a, b) => {
-            if (!a.end && b.end) {
-                return -1;
-            } else if (a.end && !b.end) {
-                return 1;
-            }
-            return 0;
-        });
-        return children
+
+            return children
+        }
+        return []
     }
 
     private getChainChildren(chainItem: IChainItem): {
