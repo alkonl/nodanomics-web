@@ -12,7 +12,6 @@ export class NodeExecutionManager {
     }
 
     invokeNodesToExecute() {
-        console.log('this.nodesToExecute: ', this)
         if (this.executionCount === 0) {
             this.current = [...this.next]
             this.executionCount = this.next.length
@@ -21,11 +20,9 @@ export class NodeExecutionManager {
             for (const argument of this.current) {
                 this.executionCount--
                 this.runManager.executeNode(argument, this)
-                console.log(`argument: ${argument.target.data.name}`, this.executionCount)
 
             }
         }
-        console.log('this.executionCount: ', this.executionCount)
     }
 
     addNodesToExecute(chainItem: IChainItem[]) {
