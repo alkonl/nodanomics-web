@@ -58,7 +58,6 @@ function findChainItemByTarget(chain: IChainItem[], target: GraphBaseNode): ICha
 }
 
 
-
 export class RunManager {
     private graph: Graph
     private _currentStep = 0
@@ -103,6 +102,7 @@ export class RunManager {
         this.incrementStep()
         this.resetBeforeStep()
         const chain = this.getExecutionOrder()
+        console.log('chain: ', chain)
         this.setExecutionOrder(chain)
         // remove listener nodes from execution order
         const startChains = chain.filter(chainItem => !(chainItem.target instanceof GraphEventListenerNode))
@@ -118,7 +118,7 @@ export class RunManager {
         const isEdgeMeetCondition = edge === undefined
             ? true
             : edge.isMeetCondition
-        if (!isEdgeMeetCondition) {
+        if (!isEdgeMeetCondition && !(target instanceof GraphDataNode)) {
             return
         }
         if (target instanceof GraphInvokableNode) {
@@ -182,16 +182,17 @@ export class RunManager {
             const isExecuteOutgoingNodes = (isIIsExecuteOutgoingNodes(target) ? target.isExecuteOutgoingNodes : true)
 
             if (chainItem.outgoingConnected && isExecuteOutgoingNodes) {
-
-                chainItem.outgoingConnected.forEach(chainItem => {
-                    const isEdgeMeetCondition = chainItem.edge === undefined
-                        ? true
-                        : chainItem.edge.isMeetCondition
-                    if (isEdgeMeetCondition) {
-                        nodeToExecute.addNodesToExecute([chainItem])
-                    }
-
-                })
+                console.log('chainItem.outgoingConnected: ', chainItem.outgoingConnected)
+                nodeToExecute.addNodesToExecute(chainItem.outgoingConnected )
+                // chainItem.outgoingConnected.forEach(chainItem => {
+                //     const isEdgeMeetCondition = chainItem.edge === undefined
+                //         ? true
+                //         : chainItem.edge.isMeetCondition
+                //     if (isEdgeMeetCondition || target instanceof GraphDataNode) {
+                //
+                //     }
+                //
+                // })
             }
             nodeToExecute.invokeNodesToExecute()
         }
