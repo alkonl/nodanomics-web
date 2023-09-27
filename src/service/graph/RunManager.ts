@@ -104,7 +104,7 @@ export class RunManager {
         this.setExecutionOrder(chain)
         // remove listener nodes from execution order
         const startChains = chain.filter(chainItem => !(chainItem.target instanceof GraphEventListenerNode))
-        this.executeChainOrder(startChains)
+        this.executeChainOrder(chain)
         this.updateNodePerStep()
         this.incrementStep()
     }
@@ -123,7 +123,7 @@ export class RunManager {
             if (target instanceof GraphLoopNode && !target.isLoopActive) {
                 return
             }
-            if (!options?.notInvoke) {
+            if (!options?.notInvoke || target instanceof GraphEventListenerNode && target.isEventTriggered()) {
                 target.invokeStep()
                 if (edge instanceof GraphChainEdge) {
                     chainItem.edge?.onExecute()
@@ -136,7 +136,7 @@ export class RunManager {
                 const listenerNodes = this.executionOrder
                     .filter(node => node.target instanceof GraphEventListenerNode
                         && node.target.eventName === triggeredEventName)
-                nodeToExecute.addNodesToExecute(listenerNodes)
+                // nodeToExecute.addNodesToExecute(listenerNodes)
                 // this.executeChainOrder(listenerNodes)
             }
             if (target instanceof GraphDataNode && target.isExecutedChangesPerStep) {
