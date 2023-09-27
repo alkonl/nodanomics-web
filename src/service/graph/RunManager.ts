@@ -11,6 +11,7 @@ import {
 import {
     EConnectionMode,
     isIIsEventTriggered,
+    isIIsExecuteOutgoingNodes,
     isIResetBeforeStep,
     isITriggeredEvent,
     isIUpdateGraphNodeStatePerStep,
@@ -19,6 +20,7 @@ import {
 } from "../../interface";
 import {GraphChainEdge} from "./GraphEdge";
 import {GraphMicroLoopNode} from "./GraphNodes/GraphMicroLoopNode";
+import {NodeExecutionManager} from "./NodeExecutionManager";
 
 export interface IChainItem {
     target: GraphBaseNode
@@ -55,37 +57,7 @@ function findChainItemByTarget(chain: IChainItem[], target: GraphBaseNode): ICha
     return undefined; // Item not found
 }
 
-class NodeToExecute {
-    executionCount = 0
-    current: IChainItem[] = []
-    next: IChainItem[] = []
-    runManager: RunManager
-    reason?: string
-    constructor(runManager: RunManager) {
-        this.runManager = runManager
-    }
 
-    invokeNodesToExecute() {
-        console.log('this.nodesToExecute: ', this)
-        if (this.executionCount === 0) {
-            this.current = [...this.next]
-            this.executionCount = this.next.length
-            this.next = []
-
-            for (const argument of this.current) {
-                this.executionCount--
-                this.runManager.executeNode(argument, this)
-                console.log(`argument: ${argument.target.data.name}`, this.executionCount)
-
-            }
-        }
-        console.log('this.executionCount: ',  this.executionCount)
-    }
-
-    addNodesToExecute(chainItem: IChainItem[]) {
-        this.next.push(...chainItem)
-    }
-}
 
 export class RunManager {
     private graph: Graph
@@ -139,19 +111,17 @@ export class RunManager {
     }
 
 
-    executeNode(chainItem: IChainItem, nodeToExecute: NodeToExecute) {
+    executeNode(chainItem: IChainItem, nodeToExecute: NodeExecutionManager) {
         const target = chainItem.target
-
+        console.log('target: ', target.data.name)
         const edge = chainItem.edge
         const isEdgeMeetCondition = edge === undefined
             ? true
             : edge.isMeetCondition
-        console.log('isEdgeMeetCondition: ', isEdgeMeetCondition)
-        if(!isEdgeMeetCondition) {
+        if (!isEdgeMeetCondition) {
             return
         }
         if (target instanceof GraphInvokableNode) {
-            console.log('node: ', target.data.name)
             if (target instanceof GraphLoopNode && !target.isLoopActive) {
                 return
             }
@@ -164,6 +134,7 @@ export class RunManager {
 
             if (isITriggeredEvent(target)) {
                 const triggeredEventName = target.getTriggeredEvent()
+                console.log('triggeredEventName: ', triggeredEventName)
                 const listenerNodes = this.executionOrder
                     .filter(node => node.target instanceof GraphEventListenerNode
                         && node.target.eventName === triggeredEventName)
@@ -207,25 +178,22 @@ export class RunManager {
                 }
             }
 
-            // const notExecuteOutgoingConnected = params?.notExecuteOutgoingConnected !== undefined
-            //     ? params?.notExecuteOutgoingConnected
-            //     : false
 
-            if (chainItem.outgoingConnected) {
-                console.log('chainItem.outgoingConnected: ', chainItem.outgoingConnected)
+            const isExecuteOutgoingNodes = (isIIsExecuteOutgoingNodes(target) ? target.isExecuteOutgoingNodes : true)
+
+            if (chainItem.outgoingConnected && isExecuteOutgoingNodes) {
+
                 chainItem.outgoingConnected.forEach(chainItem => {
                     const isEdgeMeetCondition = chainItem.edge === undefined
                         ? true
                         : chainItem.edge.isMeetCondition
-                    if(isEdgeMeetCondition) {
+                    if (isEdgeMeetCondition) {
                         nodeToExecute.addNodesToExecute([chainItem])
                     }
 
                 })
             }
-            // debugger
             nodeToExecute.invokeNodesToExecute()
-            console.log('nodeToExecute.executionCount: ', nodeToExecute.executionCount)
         }
     }
 
@@ -235,7 +203,7 @@ export class RunManager {
     }
 
 
-    private executeChainOrder(chainItems: IChainItem[], nodeToExecute = new NodeToExecute(this)) {
+    private executeChainOrder(chainItems: IChainItem[], nodeToExecute = new NodeExecutionManager(this)) {
         nodeToExecute.reason = chainItems[0]?.target.data.name
         chainItems.forEach(chainItem => {
             const target = chainItem.target
