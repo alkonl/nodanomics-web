@@ -120,6 +120,7 @@ export class RunManager {
         this.resetCountOfExecuted()
         this.resetBeforeStep()
         const chain = this.getExecutionOrder()
+        console.log('chain: ', chain)
         this.setExecutionOrder(chain)
         // remove listener nodes from execution order
         const startChains = chain.filter(chainItem => !(chainItem.target instanceof GraphEventListenerNode))
@@ -136,6 +137,7 @@ export class RunManager {
 
     executeNode(chainItem: IChainItem, nodeToExecute: NodeExecutionManager, options?: { notInvoke?: boolean }) {
         const target = chainItem.target
+        console.log('target: ', target.data.name)
         const edge = chainItem.edge
         const isEdgeMeetCondition = edge === undefined
             ? true
@@ -145,16 +147,18 @@ export class RunManager {
         }
         if (target instanceof GraphInvokableNode) {
             if (target instanceof GraphLoopNode && !target.isLoopActive) {
+                console.log(`target: ${target.data.name}`, target.isLoopActive)
+
                 return
             }
             if (!options?.notInvoke || target instanceof GraphEventListenerNode && target.isEventTriggered()) {
                 target.invokeStep()
-                if (target instanceof GraphMicroLoopNode && chainItem.inner) {
+                if (target instanceof GraphLoopNode && chainItem.inner) {
                     // check if loop is has a parent loop
                     const hasParentLoop = target.data.parentId !== undefined
 
 
-                    if (hasParentLoop) {
+                    if (hasParentLoop && target instanceof  GraphMicroLoopNode) {
                         target.resetLoopStep()
                         // if(target.loopCount > 1) {
                         for (let i = 0; i < target.loopCount; i++) {
