@@ -61,7 +61,7 @@ function findChainItemByTarget(chain: IChainItem[], target: GraphBaseNode): ICha
 export class RunManager {
     private graph: Graph
     private _countOfExecuted = 0
-    private  _diameter?: number
+    private _diameter?: number
 
 
     private _currentStep = 0
@@ -75,12 +75,15 @@ export class RunManager {
     get currentStep() {
         return this._currentStep
     }
+
     get diameter() {
         return this._diameter || 0
     }
-    get countOfExecuted () {
+
+    get countOfExecuted() {
         return this._countOfExecuted
     }
+
     private resetCountOfExecuted() {
         this._countOfExecuted = 0
     }
@@ -88,6 +91,7 @@ export class RunManager {
     addCountOfExecuted() {
         this._countOfExecuted++
     }
+
     resetCurrentStep() {
         this._currentStep = 0
     }
@@ -158,7 +162,7 @@ export class RunManager {
                     const hasParentLoop = target.data.parentId !== undefined
 
 
-                    if (hasParentLoop && target instanceof  GraphMicroLoopNode) {
+                    if (hasParentLoop && target instanceof GraphMicroLoopNode) {
                         target.resetLoopStep()
                         // if(target.loopCount > 1) {
                         for (let i = 0; i < target.loopCount; i++) {
@@ -173,20 +177,34 @@ export class RunManager {
                     }
                 }
 
+                if (isITriggeredEvent(target)) {
+                    // const triggeredEventName = target.getTriggeredEvent()
+                    // const listenerNodes = this.executionOrder
+                    //     .filter(node => node.target instanceof GraphEventListenerNode
+                    //         && node.target.eventName === triggeredEventName)
+                    // const longestListenerDiameter = this.findLongestBranch(listenerNodes.map(node => node.target))
+                    // const roots = Array.from(this.findAllRootsOfBranch(target))
+                    // const distanceFromTargetToRoot = this.shortestDistance(roots[0], target)
+                    // if (distanceFromTargetToRoot) {
+                    //     const possibleNewDiameter = longestListenerDiameter + distanceFromTargetToRoot
+                    //     this._diameter = possibleNewDiameter > this.diameter ? possibleNewDiameter : this.diameter
+                    //     this._wasDiameterUpdated = true
+                    // }
+                    // listenerNodes.forEach(node => {
+                    //     node.stepExecutionCompensation = distanceFromTargetToRoot || 0
+                    // })
+                    // console.log('roots and diameter: ', roots, this.diameter)
+                    //
+                    // nodeToExecute.addNodesToExecute(listenerNodes)
+                }
+
                 if (edge instanceof GraphChainEdge) {
                     chainItem.edge?.onExecute()
                 }
 
             }
 
-            if (isITriggeredEvent(target)) {
-                const triggeredEventName = target.getTriggeredEvent()
-                const listenerNodes = this.executionOrder
-                    .filter(node => node.target instanceof GraphEventListenerNode
-                        && node.target.eventName === triggeredEventName)
-                // nodeToExecute.addNodesToExecute(listenerNodes)
-                // this.executeChainOrder(listenerNodes)
-            }
+
             if (target instanceof GraphDataNode && target.isExecutedChangesPerStep) {
                 this.graph.nodes.forEach(node => {
                     if (isIUpdateStatePerNodeUpdate(node)) {
@@ -265,10 +283,10 @@ export class RunManager {
                 }
                 if (isCanAdd) {
                     let nodeToExecute
-                    if(chainItem.target instanceof GraphStartNode && chainItem.outgoingConnected){
-                        nodeToExecute  = new NodeExecutionManager(this, chainItem.outgoingConnected)
-                    } else if(chainItem.target instanceof GraphLoopNode && chainItem.inner){
-                        nodeToExecute  = new NodeExecutionManager(this, chainItem.inner)
+                    if (chainItem.target instanceof GraphStartNode && chainItem.outgoingConnected) {
+                        nodeToExecute = new NodeExecutionManager(this, chainItem.outgoingConnected)
+                    } else if (chainItem.target instanceof GraphLoopNode && chainItem.inner) {
+                        nodeToExecute = new NodeExecutionManager(this, chainItem.inner)
                     } else {
                         nodeToExecute = new NodeExecutionManager(this, [chainItem])
                     }
@@ -398,6 +416,56 @@ export class RunManager {
                 node.resetBeforeStep()
             }
         })
+    }
+
+
+    findAllRootsOfBranch(node: GraphBaseNode, visited: Set<GraphBaseNode> = new Set()): Set<GraphBaseNode> {
+        // If the node has been visited before, return an empty set to prevent infinite loops.
+        if (visited.has(node)) return new Set();
+
+        visited.add(node);
+
+        // If the node has no incoming edges, it's a root.
+        if (node.incomingEdges.length === 0) {
+            return new Set([node]);
+        }
+
+        const roots = new Set<GraphBaseNode>();
+        for (const edge of node.incomingEdges) {
+            const sourceRoots = this.findAllRootsOfBranch(edge.source, visited);
+            for (const root of sourceRoots) {
+                roots.add(root);
+            }
+        }
+
+        return roots;
+    }
+
+    shortestDistance(start: GraphBaseNode, end: GraphBaseNode): number | undefined {
+        const visited = new Set<GraphBaseNode>();
+        const queue: { node: GraphBaseNode, distance: number }[] = [{node: start, distance: 0}];
+
+        while (queue.length > 0) {
+            const current = queue.shift();
+
+            if (current) {
+                if (current.node === end) {
+                    return current.distance;
+                }
+
+
+                visited.add(current.node);
+
+                for (const edge of current.node.outgoingEdges) {
+                    if (!visited.has(edge.target)) {
+                        queue.push({node: edge.target, distance: current.distance + 1});
+                    }
+                }
+            }
+
+        }
+
+        return undefined
     }
 
     longestBranchFromNode(node: GraphBaseNode, visited: Set<GraphBaseNode> = new Set()): number {

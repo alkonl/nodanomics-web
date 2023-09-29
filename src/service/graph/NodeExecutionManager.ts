@@ -12,6 +12,7 @@ export class NodeExecutionManager {
         this.runManager = runManager
         this.current = []
         this.next = [...starters]
+        const nodes = starters.map(({target}) => target)
     }
 
     invokeNodesToExecute() {
