@@ -1,8 +1,6 @@
 import {GraphLoopNode} from "./abstracts";
 import {
     EConnectionMode,
-    IResetBeforeStep,
-    isIIsEventTriggered,
     IUpdateGraphNodeState,
     IWhileLoopNodeData
 } from "../../../interface";
@@ -17,23 +15,23 @@ export class GraphWhileLoopNode extends GraphLoopNode<IWhileLoopNodeData>
     }
 
     protected checkIsLoopActive() {
-        this.updateNode({isLoopActive: this.isTriggeredIncomingNodes})
+        this.updateNode({isLoopActive: true})
     }
 
-    get isTriggeredIncomingNodes(): boolean {
-        return this.incomingEdges.some(edge => {
-            const source = edge.source;
-            if (isIIsEventTriggered(source)) {
-                return source.isEventTriggered(edge.data.sourceMode)
-            }
-            return false
-        })
-    }
+    // get isTriggeredIncomingNodes(): boolean {
+    //     return this.incomingEdges.some(edge => {
+    //         const source = edge.source;
+    //         if (isIIsEventTriggered(source)) {
+    //             return source.isEventTriggered(edge.data.sourceMode)
+    //         }
+    //         return false
+    //     })
+    // }
 
     isEventTriggered(mode?: EConnectionMode) {
-        if (mode === EConnectionMode.LoopInnerToChildren) {
-            return this.isTriggeredIncomingNodes
-        }
+        // if (mode === EConnectionMode.LoopInnerToChildren) {
+        //     return this.isTriggeredIncomingNodes
+        // }
         return true
     }
 }
