@@ -60,6 +60,10 @@ function findChainItemByTarget(chain: IChainItem[], target: GraphBaseNode): ICha
 
 export class RunManager {
     private graph: Graph
+    private _countOfExecuted = 0
+    private  _diameter?: number
+
+
     private _currentStep = 0
     // private invokedNodes: GraphNodeManager = new GraphNodeManager()
     private executionOrder: IChainItem[] = []
@@ -71,7 +75,19 @@ export class RunManager {
     get currentStep() {
         return this._currentStep
     }
+    get diameter() {
+        return this._diameter || 0
+    }
+    get countOfExecuted () {
+        return this._countOfExecuted
+    }
+    private resetCountOfExecuted() {
+        this._countOfExecuted = 0
+    }
 
+    addCountOfExecuted() {
+        this._countOfExecuted++
+    }
     resetCurrentStep() {
         this._currentStep = 0
     }
@@ -98,15 +114,23 @@ export class RunManager {
         this.executionOrder = nodes
     }
 
+
+
     invokeStep() {
+        this.resetCountOfExecuted()
         this.resetBeforeStep()
         const chain = this.getExecutionOrder()
         this.setExecutionOrder(chain)
         // remove listener nodes from execution order
         const startChains = chain.filter(chainItem => !(chainItem.target instanceof GraphEventListenerNode))
+        const startNodes = startChains
+            .find(chainItem => chainItem.target instanceof GraphStartNode)
+            ?.outgoingConnected?.map(chainItem => chainItem.target) || []
+        this._diameter = this.findLongestBranch(startNodes)
         this.executeChainOrder(chain)
         this.updateNodePerStep()
         this.incrementStep()
+
     }
 
 
@@ -125,11 +149,31 @@ export class RunManager {
             }
             if (!options?.notInvoke || target instanceof GraphEventListenerNode && target.isEventTriggered()) {
                 target.invokeStep()
+                if (target instanceof GraphMicroLoopNode && chainItem.inner) {
+                    // check if loop is has a parent loop
+                    const hasParentLoop = target.data.parentId !== undefined
+
+
+                    if (hasParentLoop) {
+                        target.resetLoopStep()
+                        // if(target.loopCount > 1) {
+                        for (let i = 0; i < target.loopCount; i++) {
+                            const loopNodeExecutionManager = new NodeExecutionManager(this, chainItem.inner)
+                            loopNodeExecutionManager.invokeAll()
+                        }
+                    } else {
+                        const loopNodeExecutionManager = new NodeExecutionManager(this, chainItem.inner)
+                        loopNodeExecutionManager.invokeAll()
+                        // nodeToExecute.addNodesToExecute(chainItem.inner)
+                        // this.executeChainOrder([chainItem])
+                    }
+                }
+
                 if (edge instanceof GraphChainEdge) {
                     chainItem.edge?.onExecute()
                 }
-            }
 
+            }
 
             if (isITriggeredEvent(target)) {
                 const triggeredEventName = target.getTriggeredEvent()
@@ -146,20 +190,20 @@ export class RunManager {
                     }
                 })
             }
-            if (target instanceof GraphMicroLoopNode && chainItem.inner) {
-                // check if loop is has a parent loop
-                const hasParentLoop = target.data.parentId !== undefined
-
-                if (hasParentLoop && chainItem.inner) {
-                    target.resetLoopStep()
-                    // if(target.loopCount > 1) {
-                    for (let i = 0; i < target.loopCount; i++) {
-                        this.executeChainOrder(chainItem.inner)
-                    }
-                } else {
-                    this.executeChainOrder(chainItem.inner)
-                }
-            }
+            // if (target instanceof GraphMicroLoopNode && chainItem.inner) {
+            //     // check if loop is has a parent loop
+            //     const hasParentLoop = target.data.parentId !== undefined
+            //
+            //     if (hasParentLoop && chainItem.inner) {
+            //         target.resetLoopStep()
+            //         // if(target.loopCount > 1) {
+            //         for (let i = 0; i < target.loopCount; i++) {
+            //             this.executeChainOrder(chainItem.inner)
+            //         }
+            //     } else {
+            //         this.executeChainOrder(chainItem.inner)
+            //     }
+            // }
 
             if (chainItem.end && chainItem.end.edge && !chainItem.end.edge.isMeetCondition) {
                 const chainItemToExecute = this.findDeepChainItemByNode(chainItem.end.target)
@@ -219,6 +263,8 @@ export class RunManager {
                     let nodeToExecute
                     if(chainItem.target instanceof GraphStartNode && chainItem.outgoingConnected){
                         nodeToExecute  = new NodeExecutionManager(this, chainItem.outgoingConnected)
+                    } else if(chainItem.target instanceof GraphLoopNode && chainItem.inner){
+                        nodeToExecute  = new NodeExecutionManager(this, chainItem.inner)
                     } else {
                         nodeToExecute = new NodeExecutionManager(this, [chainItem])
                     }
@@ -355,7 +401,7 @@ export class RunManager {
 
         let maxDepth = 0;
         for (const edge of node.outgoingEdges) {
-            if (!visited.has(edge.target) && edge instanceof GraphChainEdge) {
+            if (!visited.has(edge.target) && edge instanceof GraphChainEdge && edge.sourceMode !== EConnectionMode.LoopInnerToChildren) {
                 maxDepth = Math.max(maxDepth, this.longestBranchFromNode(edge.target, visited));
             }
         }
