@@ -17,8 +17,6 @@ export class NodeExecutionManager {
 
     invokeNodesToExecute() {
         if (this.executionCount === 0) {
-            console.log('diameter: ', this.runManager.diameter)
-            console.log('this.executionCount: ', this.executionCount)
             this.current = [...this.next]
             this.executionCount = this.next.length
             this.next = []
@@ -26,9 +24,8 @@ export class NodeExecutionManager {
                 // const isStart = this.current[0]?.target instanceof GraphStartNode
 
                 const notInvoke = this.runManager.countOfExecuted !== (this.runManager.currentStep) % this.runManager.diameter
-                console.log(`notInvoke ${this.runManager.countOfExecuted}, ${(this.runManager.currentStep) % this.runManager.diameter}`, notInvoke)
 
-                this.runManager.countOfExecuted++
+                this.runManager.addCountOfExecuted()
                 // console.log('this.current: ', this.countOfExecuted)
 
                 for (const argument of this.current) {

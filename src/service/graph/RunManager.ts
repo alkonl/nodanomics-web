@@ -60,7 +60,9 @@ function findChainItemByTarget(chain: IChainItem[], target: GraphBaseNode): ICha
 
 export class RunManager {
     private graph: Graph
-    countOfExecuted = 0
+    private _countOfExecuted = 0
+    private  _diameter?: number
+
 
     private _currentStep = 0
     // private invokedNodes: GraphNodeManager = new GraphNodeManager()
@@ -73,7 +75,19 @@ export class RunManager {
     get currentStep() {
         return this._currentStep
     }
+    get diameter() {
+        return this._diameter || 0
+    }
+    get countOfExecuted () {
+        return this._countOfExecuted
+    }
+    private resetCountOfExecuted() {
+        this._countOfExecuted = 0
+    }
 
+    addCountOfExecuted() {
+        this._countOfExecuted++
+    }
     resetCurrentStep() {
         this._currentStep = 0
     }
@@ -100,14 +114,10 @@ export class RunManager {
         this.executionOrder = nodes
     }
 
-  private  _diameter?: number
 
-    get diameter() {
-        return this._diameter || 0
-    }
 
     invokeStep() {
-        this.countOfExecuted = 0
+        this.resetCountOfExecuted()
         this.resetBeforeStep()
         const chain = this.getExecutionOrder()
         this.setExecutionOrder(chain)
@@ -117,7 +127,6 @@ export class RunManager {
             .find(chainItem => chainItem.target instanceof GraphStartNode)
             ?.outgoingConnected?.map(chainItem => chainItem.target) || []
         this._diameter = this.findLongestBranch(startNodes)
-        console.log('this.diameter: ', this.diameter)
         this.executeChainOrder(chain)
         this.updateNodePerStep()
         this.incrementStep()
@@ -141,7 +150,6 @@ export class RunManager {
             if (!options?.notInvoke || target instanceof GraphEventListenerNode && target.isEventTriggered()) {
                 target.invokeStep()
                 if (target instanceof GraphMicroLoopNode && chainItem.inner) {
-                    console.log('here')
                     // check if loop is has a parent loop
                     const hasParentLoop = target.data.parentId !== undefined
 
@@ -394,7 +402,6 @@ export class RunManager {
         let maxDepth = 0;
         for (const edge of node.outgoingEdges) {
             if (!visited.has(edge.target) && edge instanceof GraphChainEdge && edge.sourceMode !== EConnectionMode.LoopInnerToChildren) {
-                console.log(`edge: ${edge.data.targetMode}`, edge.data)
                 maxDepth = Math.max(maxDepth, this.longestBranchFromNode(edge.target, visited));
             }
         }
