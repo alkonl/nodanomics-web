@@ -111,6 +111,7 @@ export class RunManager {
     }
 
     resetCurrentStep() {
+        this._diagramRunCount = 0
         this._currentStep = 0
     }
 
