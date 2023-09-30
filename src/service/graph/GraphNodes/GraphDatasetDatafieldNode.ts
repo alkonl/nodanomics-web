@@ -1,12 +1,13 @@
 import {GraphBaseNode} from "./abstracts";
-import {IDatasetDatafield} from "../../../interface";
+import {IDatasetDatafield, IGetNodeExternalValue} from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
 import {GraphSpreadsheetManager} from "../GraphSpreadsheetManager";
 import {findIndex2D} from "../../../utils";
 
 
-export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield> {
+export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield>
+    implements IGetNodeExternalValue {
 
     private spreadsheetManager: GraphSpreadsheetManager
 
@@ -38,6 +39,20 @@ export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield> 
 
     get lengthY() {
         return this.spreadsheet?.rows.length
+    }
+
+    get nodeExternalValue() {
+        const datafield = this.data.datafield
+        if (datafield) {
+            const rowValue = this.getValue({
+                x: datafield.x,
+                y: datafield.y,
+            })
+            if (typeof rowValue === 'number') {
+                return rowValue
+            }
+        }
+        return 0
     }
 
     get lengthX() {
@@ -79,8 +94,8 @@ export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield> 
         y: number,
     }) {
         try {
-            const x = coordinates.x + this.xOffset
-            const y = coordinates.y + this.yOffset
+            const x = coordinates.x
+            const y = coordinates.y
             return this.spreadsheet?.rows[y][x]
         } catch (e) {
             console.error(e)
