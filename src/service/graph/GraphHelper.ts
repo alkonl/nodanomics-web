@@ -89,10 +89,10 @@ export class GraphHelper {
         }
 
         const isMicroLoop = node instanceof GraphMicroLoopNode
-        const multipleDepthByLoopCount = (theLongestBranchIsInner && isMicroLoop)
-            ? maxDepth * node.loopCount
-            : 0
-        console.log(`total depth ${node.data.name}`, maxDepth, multipleDepthByLoopCount)
+        if(theLongestBranchIsInner && isMicroLoop){
+           return maxDepth * node.loopCount
+        }
+
         return maxDepth  + 1; // +1 to count the current node
     }
 
