@@ -9,4 +9,8 @@ export interface IDatasetDatafield extends IDiagramNodeBaseData {
     datasetId?: string;
     isReadOnly?: boolean;
     namedVariables?: namedVariable;
+    datafield?: {
+        x: number;
+        y: number;
+    }
 }
