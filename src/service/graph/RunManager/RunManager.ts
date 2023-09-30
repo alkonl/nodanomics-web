@@ -25,16 +25,24 @@ import {IChainItem} from "./ChainItem";
 import {NodeExecutionManager} from "./NodeExecutionManager";
 
 export class RunManager {
-    private graph: Graph
+    private _graph: Graph
     private _countOfExecuted = 0
     private _diameter?: number
     private _diagramRunCount = 0
     private _currentStep = 0
     // private invokedNodes: GraphNodeManager = new GraphNodeManager()
-    private executionOrder: IChainItem[] = []
+    private _executionOrder: IChainItem[] = []
 
     constructor(graph: Graph) {
-        this.graph = graph
+        this._graph = graph
+    }
+
+    get executionOrder() {
+        return this._executionOrder
+    }
+
+    get graph() {
+        return this._graph
     }
 
     get diagramRunCount() {
@@ -67,7 +75,7 @@ export class RunManager {
     }
 
     updateState() {
-        const nodes = this.graph.nodes
+        const nodes = this._graph.nodes
         nodes.forEach(node => {
             if (isUpdateGraphNodeState(node)) {
                 node.updateState()
@@ -76,7 +84,7 @@ export class RunManager {
     }
 
     updateNodePerStep() {
-        const nodes = this.graph.nodes
+        const nodes = this._graph.nodes
         nodes.forEach(node => {
             if (isIUpdateGraphNodeStatePerStep(node)) {
                 node.updateStatePerStep()
@@ -85,7 +93,7 @@ export class RunManager {
     }
 
     private setExecutionOrder(nodes: IChainItem[]) {
-        this.executionOrder = nodes
+        this._executionOrder = nodes
     }
 
 
@@ -128,100 +136,10 @@ export class RunManager {
     }
 
 
-    executeNode(chainItem: IChainItem, nodeToExecute: NodeExecutionManager, options: { invoke: boolean }) {
-        const target = chainItem.target
-        const edge = chainItem.edge
-        const isEdgeMeetCondition = edge === undefined
-            ? true
-            : edge.isMeetCondition
-        if (!isEdgeMeetCondition && !(target instanceof GraphDataNode)) {
-            return
-        }
-        if (target instanceof GraphInvokableNode) {
-            if (target instanceof GraphLoopNode && !target.isLoopActive) {
-                return
-            }
-            if (options?.invoke) {
-
-                target.invokeStep()
-                if (target instanceof GraphLoopNode && chainItem.inner) {
-                    // check if loop is has a parent loop
-                    const hasParentLoop = target.data.parentId !== undefined
 
 
-                    if (hasParentLoop && target instanceof GraphMicroLoopNode) {
-                        target.resetLoopStep()
-                        for (let i = 0; i < target.loopCount; i++) {
-                            const loopNodeExecutionManager = new NodeExecutionManager(this, chainItem.inner)
-                            loopNodeExecutionManager.invokeAll()
-                        }
-                    } else {
-                        const loopNodeExecutionManager = new NodeExecutionManager(this, chainItem.inner)
-                        loopNodeExecutionManager.invokeAll()
-
-                    }
-                }
-
-                if (isITriggeredEvent(target)) {
-                    const triggeredEventName = target.getTriggeredEvent()
-                    const listenerNodes = this.executionOrder
-                        .filter(node => node.target instanceof GraphEventListenerNode
-                            && node.target.eventName === triggeredEventName)
-                    const roots = Array.from(GraphHelper.findAllRootsOfBranch(target))
-                    const distanceFromTargetToRoot = GraphHelper.shortestDistance(roots[0], target)
-                    if (distanceFromTargetToRoot) {
-                        const compensation = chainItem.stepExecutionCompensation > 0
-                            ? distanceFromTargetToRoot + chainItem.stepExecutionCompensation + 1
-                            : distanceFromTargetToRoot
-                        listenerNodes.map(listenerChainItem => {
-                            listenerChainItem.target.setStepExecutionCompensation(compensation)
-
-                        })
-                    }
-                }
-
-                if (edge instanceof GraphChainEdge) {
-                    chainItem.edge?.onExecute()
-                }
-
-            }
-
-
-            if (target instanceof GraphDataNode && target.isExecutedChangesPerStep) {
-                this.graph.nodes.forEach(node => {
-                    if (isIUpdateStatePerNodeUpdate(node)) {
-                        node.updateStatePerNodeUpdate()
-                    }
-                })
-            }
-            if (chainItem.end && chainItem.end.edge && !chainItem.end.edge.isMeetCondition) {
-                const chainItemToExecute = this.findDeepChainItemByNode(chainItem.end.target)
-                if (chainItemToExecute && chainItemToExecute.inner) {
-
-                    chainItemToExecute.inner.forEach(item => {
-                        if (item.target instanceof GraphMicroLoopNode) {
-                            item.target.resetLoopStep()
-                        }
-                    })
-                }
-            }
-
-
-            const isExecuteOutgoingNodes = (isIIsExecuteOutgoingNodes(target) ? target.isExecuteOutgoingNodes : true)
-
-            if (chainItem.outgoingConnected && isExecuteOutgoingNodes) {
-                chainItem.outgoingConnected.forEach(nextChainItem => {
-                    nextChainItem.target.setStepExecutionCompensation(chainItem.stepExecutionCompensation)
-                })
-                nodeToExecute.addNodesToExecute(chainItem.outgoingConnected)
-            }
-
-        }
-    }
-
-
-    private findDeepChainItemByNode(node: GenericGraphNode): IChainItem | undefined {
-        return findChainItemByTarget(this.executionOrder, node);
+     findDeepChainItemByNode(node: GenericGraphNode): IChainItem | undefined {
+        return findChainItemByTarget(this._executionOrder, node);
     }
 
 
@@ -269,7 +187,7 @@ export class RunManager {
     }
 
     private getStartedNodes() {
-        return this.graph.nodes.filter(node => {
+        return this._graph.nodes.filter(node => {
             if (node instanceof GraphStartNode || node instanceof GraphEventListenerNode || node instanceof GraphFormulaNode && node.data.isAutomatic) {
                 return node
             }
@@ -366,12 +284,12 @@ export class RunManager {
     }
 
     private resetIsTransferredResources() {
-        this.graph.edges.forEach(edge => {
+        this._graph.edges.forEach(edge => {
             if (isIResetBeforeStep(edge)) {
                 edge.resetBeforeStep()
             }
         })
-        this.graph.nodes.forEach(node => {
+        this._graph.nodes.forEach(node => {
             if (isIResetBeforeStep(node)) {
                 node.resetBeforeStep()
             }
@@ -386,7 +304,7 @@ export class RunManager {
     resetAfterDiagramRun() {
         if (this.isDiagramFinished) {
             this._diagramRunCount = 0
-            this.graph.nodesManager.resetAfterDiagramRun();
+            this._graph.nodesManager.resetAfterDiagramRun();
         }
     }
 
