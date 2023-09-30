@@ -135,6 +135,103 @@ export class RunManager {
         return GraphHelper.findLongestBranch(startNodes)
     }
 
+    executeNode(chainItem: IChainItem, nodeToExecute: NodeExecutionManager, options: { invoke: boolean }) {
+        const target = chainItem.target
+        const edge = chainItem.edge
+        const isEdgeMeetCondition = edge === undefined
+            ? true
+            : edge.isMeetCondition
+        if (!isEdgeMeetCondition && !(target instanceof GraphDataNode)) {
+            return
+        }
+        if (target instanceof GraphInvokableNode) {
+            if (target instanceof GraphLoopNode && !target.isLoopActive) {
+                return
+            }
+            if (options?.invoke) {
+
+                target.invokeStep()
+                if (target instanceof GraphLoopNode && chainItem.inner) {
+
+                    if (target instanceof GraphMicroLoopNode && target.data.isAccumulative) {
+                        // accumulative logic
+
+                        // check if loop is has a parent loop
+                        const hasParentLoop = target.data.parentId !== undefined
+
+                        if (hasParentLoop && target instanceof GraphMicroLoopNode) {
+                            target.resetLoopStep()
+                            for (let i = 0; i < target.loopCount; i++) {
+                                const loopNodeExecutionManager = new NodeExecutionManager(this, chainItem.inner)
+                                loopNodeExecutionManager.invokeAll()
+                            }
+                        } else {
+                            const loopNodeExecutionManager = new NodeExecutionManager(this, chainItem.inner)
+                            loopNodeExecutionManager.invokeAll()
+                        }
+                    } else {
+                        // non accumulative logic
+                        nodeToExecute.addNodesToExecute(chainItem.inner)
+
+                    }
+                }
+
+                if (isITriggeredEvent(target)) {
+                    const triggeredEventName = target.getTriggeredEvent()
+                    const listenerNodes = this.executionOrder
+                        .filter(node => node.target instanceof GraphEventListenerNode
+                            && node.target.eventName === triggeredEventName)
+                    const roots = Array.from(GraphHelper.findAllRootsOfBranch(target))
+                    const distanceFromTargetToRoot = GraphHelper.shortestDistance(roots[0], target)
+                    if (distanceFromTargetToRoot) {
+                        const compensation = chainItem.stepExecutionCompensation > 0
+                            ? distanceFromTargetToRoot + chainItem.stepExecutionCompensation + 1
+                            : distanceFromTargetToRoot
+                        listenerNodes.map(listenerChainItem => {
+                            listenerChainItem.target.setStepExecutionCompensation(compensation)
+
+                        })
+                    }
+                }
+
+                if (edge instanceof GraphChainEdge) {
+                    chainItem.edge?.onExecute()
+                }
+
+            }
+
+
+            if (target instanceof GraphDataNode && target.isExecutedChangesPerStep) {
+                this.graph.nodes.forEach(node => {
+                    if (isIUpdateStatePerNodeUpdate(node)) {
+                        node.updateStatePerNodeUpdate()
+                    }
+                })
+            }
+            // if (chainItem.end && chainItem.end.edge && !chainItem.end.edge.isMeetCondition) {
+            //     const chainItemToExecute = this.runManager.findDeepChainItemByNode(chainItem.end.target)
+            //     if (chainItemToExecute && chainItemToExecute.inner) {
+            //
+            //         chainItemToExecute.inner.forEach(item => {
+            //             if (item.target instanceof GraphMicroLoopNode) {
+            //                 item.target.resetLoopStep()
+            //             }
+            //         })
+            //     }
+            // }
+
+
+            const isExecuteOutgoingNodes = (isIIsExecuteOutgoingNodes(target) ? target.isExecuteOutgoingNodes : true)
+
+            if (chainItem.outgoingConnected && isExecuteOutgoingNodes) {
+                chainItem.outgoingConnected.forEach(nextChainItem => {
+                    nextChainItem.target.setStepExecutionCompensation(chainItem.stepExecutionCompensation)
+                })
+                nodeToExecute.addNodesToExecute(chainItem.outgoingConnected)
+            }
+
+        }
+    }
 
 
 
