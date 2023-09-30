@@ -139,7 +139,6 @@ export class RunManager {
         const chain = this.getExecutionOrder()
         console.log('chain: ', chain)
         this.setExecutionOrder(chain)
-        console.log('chain: ', chain)
         // remove listener nodes from execution order
         const startChains = chain.filter(chainItem => {
             if (chainItem.target instanceof GraphEventListenerNode) {
@@ -148,9 +147,14 @@ export class RunManager {
             }
             return true
         })
-        const startNodes = startChains
+        const startNodesFromStart = startChains
             .find(chainItem => chainItem.target instanceof GraphStartNode)
             ?.outgoingConnected?.map(chainItem => chainItem.target) || []
+        const eventListenerNodes = startChains
+            .filter(chainItem => !(chainItem.target instanceof GraphStartNode))
+            .map(chainItem => chainItem.target)
+
+        const startNodes = [...startNodesFromStart, ...eventListenerNodes]
         this._diameter = GraphHelper.findLongestBranch(startNodes)
         this.executeChainOrder(chain)
         this.updateNodePerStep()
@@ -208,7 +212,7 @@ export class RunManager {
                     const distanceFromTargetToRoot = GraphHelper.shortestDistance(roots[0], target)
                     console.log('distanceFromTargetToRoot: ', distanceFromTargetToRoot)
                     if (distanceFromTargetToRoot) {
-                        listenerNodes.map(listenerChainItem=> {
+                        listenerNodes.map(listenerChainItem => {
                             listenerChainItem.target.setStepExecutionCompensation(distanceFromTargetToRoot)
 
                         })

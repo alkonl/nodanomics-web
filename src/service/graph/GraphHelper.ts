@@ -1,4 +1,4 @@
-import {GraphBaseNode} from "./GraphNodes";
+import {GraphBaseNode, GraphInvokableNode} from "./GraphNodes";
 import {GraphChainEdge} from "./GraphEdge";
 import {EConnectionMode} from "../../interface";
 import {GenericGraphNode} from "./GenericGraphNode";
@@ -71,7 +71,11 @@ export class GraphHelper {
     static findLongestBranch(nodes: GenericGraphNode[]): number {
         let maxLength = 0;
         for (const node of nodes) {
-            maxLength = Math.max(maxLength, this.longestBranchFromNode(node));
+            let compensation = 0
+            if (node instanceof GraphInvokableNode) {
+                compensation = node.stepExecutionCompensation
+            }
+            maxLength = Math.max(maxLength, this.longestBranchFromNode(node) + compensation);
         }
 
         return maxLength;
