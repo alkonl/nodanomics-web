@@ -11,5 +11,6 @@ export interface IMicroLoopNodeData extends ILoopNodeData, IIsElementExecuted {
     loopFormula?: string;
     currentLoopCount: number;
     style: IMicroLoopNodeDataStyle;
+    isAccumulative?: boolean;
 }
 
