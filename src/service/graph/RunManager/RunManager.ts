@@ -106,8 +106,7 @@ export class RunManager {
         const chain = this.getExecutionOrder()
         this.setExecutionOrder(chain)
         this._diameter = this.getDiameter()
-
-        console.log('diameter: ', this.nodeToExecute)
+        console.log('diameter: ', this._diameter)
         this.executeChainOrder(chain, this.nodeToExecute)
         this.updateNodePerStep()
         this.incrementStep()

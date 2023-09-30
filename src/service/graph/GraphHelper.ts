@@ -59,17 +59,21 @@ export class GraphHelper {
         visited.add(node);
 
         let maxDepth = 0;
-        const theLongestBranchIsInner = false
+        let theLongestBranchIsInner = false
         console.log(`node.outgoingEdges ${node.data.name}`, node.outgoingEdges.map(e => e.target.data.name))
         for (const edge of node.outgoingEdges) {
+            let isInnerNode = false
             let skipEdge = false
-            if (edge.target instanceof GraphLoopNode) {
-                if (edge.target instanceof GraphMicroLoopNode && edge.target.data.isAccumulative) {
+            if (edge.source instanceof GraphLoopNode) {
+                if (edge.source instanceof GraphMicroLoopNode && !edge.source.data.isAccumulative) {
+                    isInnerNode = true
                     skipEdge = false
-                } else if(edge.sourceMode === EConnectionMode.LoopInnerToChildren) {
+                } else if (edge.sourceMode === EConnectionMode.LoopInnerToChildren) {
                     skipEdge = true
                 }
             }
+            console.log(`skipEdge ${edge.target.data.name}`, skipEdge)
+
             if (skipEdge) {
                 continue
             }
@@ -78,15 +82,18 @@ export class GraphHelper {
                 const depth = this.longestBranchFromNode(edge.target, visited);
                 if (depth > maxDepth) {
                     maxDepth = depth
+                    theLongestBranchIsInner = isInnerNode
                 }
-                console.log(`depth ${edge.target.data.name}`, depth)
+                console.log(`out.depth ${edge.target.data.name}`, depth, isInnerNode)
             }
         }
 
-        const isNotAccumulativeMicroLoop = node instanceof GraphMicroLoopNode && !node.data.isAccumulative
-        const multipleDepthByLoopCount = 0
-        console.log(`total depth ${node.data.name}`, maxDepth)
-        return maxDepth + 1; // +1 to count the current node
+        const isMicroLoop = node instanceof GraphMicroLoopNode
+        const multipleDepthByLoopCount = (theLongestBranchIsInner && isMicroLoop)
+            ? maxDepth * node.loopCount
+            : 0
+        console.log(`total depth ${node.data.name}`, maxDepth, multipleDepthByLoopCount)
+        return maxDepth  + 1; // +1 to count the current node
     }
 
     static findLongestBranch(nodes: GenericGraphNode[]): number {
