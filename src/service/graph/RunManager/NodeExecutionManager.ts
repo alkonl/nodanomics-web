@@ -1,4 +1,5 @@
-import {IChainItem, RunManager} from "./RunManager";
+import {IChainItem} from "./ChainItem";
+import {RunManager} from "./RunManager";
 
 export class NodeExecutionManager {
     executionCount = 0
