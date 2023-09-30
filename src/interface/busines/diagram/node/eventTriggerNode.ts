@@ -10,6 +10,7 @@ export interface IEventTriggerNodeVariable {
 export interface IEventTriggerNodeData extends IInvokableNode, INodeNumberVariable {
     type: EDiagramNode.EventTrigger;
     eventName: string;
+    isEventTriggered?: boolean;
     // eventCondition?: string;
     // isEventConditionMet?: boolean;
 }

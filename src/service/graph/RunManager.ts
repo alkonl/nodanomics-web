@@ -21,13 +21,28 @@ import {
 import {GraphChainEdge} from "./GraphEdge";
 import {GraphMicroLoopNode} from "./GraphNodes/GraphMicroLoopNode";
 import {NodeExecutionManager} from "./NodeExecutionManager";
+import {GraphHelper} from "./GraphHelper";
+import {GenericGraphNode} from "./GenericGraphNode";
 
-export interface IChainItem {
-    target: GraphBaseNode
+export class IChainItem {
+    target: GraphInvokableNode
     edge?: GraphChainEdge
     outgoingConnected?: IChainItem[]
     inner?: IChainItem[]
     end?: IChainItem
+
+    constructor(target: GraphInvokableNode, edge?: GraphChainEdge) {
+        this.target = target
+        this.edge = edge
+    }
+
+    get stepExecutionCompensation() {
+        return this.target.stepExecutionCompensation
+    }
+
+    get toRoot() {
+        return this.target.toRoot
+    }
 }
 
 
@@ -62,14 +77,17 @@ export class RunManager {
     private graph: Graph
     private _countOfExecuted = 0
     private _diameter?: number
-
-
+    private _diagramRunCount = 0
     private _currentStep = 0
     // private invokedNodes: GraphNodeManager = new GraphNodeManager()
     private executionOrder: IChainItem[] = []
 
     constructor(graph: Graph) {
         this.graph = graph
+    }
+
+    get diagramRunCount() {
+        return this._diagramRunCount
     }
 
     get currentStep() {
@@ -93,6 +111,7 @@ export class RunManager {
     }
 
     resetCurrentStep() {
+        this._diagramRunCount = 0
         this._currentStep = 0
     }
 
@@ -119,29 +138,47 @@ export class RunManager {
     }
 
 
-
     invokeStep() {
+
         this.resetCountOfExecuted()
         this.resetBeforeStep()
         const chain = this.getExecutionOrder()
-        console.log('chain: ', chain)
         this.setExecutionOrder(chain)
-        // remove listener nodes from execution order
-        const startChains = chain.filter(chainItem => !(chainItem.target instanceof GraphEventListenerNode))
-        const startNodes = startChains
-            .find(chainItem => chainItem.target instanceof GraphStartNode)
-            ?.outgoingConnected?.map(chainItem => chainItem.target) || []
-        this._diameter = this.findLongestBranch(startNodes)
+        this._diameter = this.getDiameter()
+
         this.executeChainOrder(chain)
         this.updateNodePerStep()
         this.incrementStep()
+        const updatedDiameter = this.getDiameter()
+        if (updatedDiameter === this._diameter) {
+            this.resetAfterDiagramRun()
 
+        }
     }
 
 
-    executeNode(chainItem: IChainItem, nodeToExecute: NodeExecutionManager, options?: { notInvoke?: boolean }) {
+    private getDiameter() {
+        const chain = this.getExecutionOrder()
+        const startChains = chain.filter(chainItem => {
+            if (chainItem.target instanceof GraphEventListenerNode) {
+                return chainItem.target.checkIsEventTriggered()
+            }
+            return true
+        })
+        const startNodesFromStart = startChains
+            .find(chainItem => chainItem.target instanceof GraphStartNode)
+            ?.outgoingConnected?.map(chainItem => chainItem.target) || []
+        const eventListenerNodes = startChains
+            .filter(chainItem => !(chainItem.target instanceof GraphStartNode))
+            .map(chainItem => chainItem.target)
+
+        const startNodes = [...startNodesFromStart, ...eventListenerNodes]
+        return GraphHelper.findLongestBranch(startNodes)
+    }
+
+
+    executeNode(chainItem: IChainItem, nodeToExecute: NodeExecutionManager, options: { invoke: boolean }) {
         const target = chainItem.target
-        console.log('target: ', target.data.name)
         const edge = chainItem.edge
         const isEdgeMeetCondition = edge === undefined
             ? true
@@ -151,11 +188,10 @@ export class RunManager {
         }
         if (target instanceof GraphInvokableNode) {
             if (target instanceof GraphLoopNode && !target.isLoopActive) {
-                console.log(`target: ${target.data.name}`, target.isLoopActive)
-
                 return
             }
-            if (!options?.notInvoke || target instanceof GraphEventListenerNode && target.isEventTriggered()) {
+            if (options?.invoke) {
+
                 target.invokeStep()
                 if (target instanceof GraphLoopNode && chainItem.inner) {
                     // check if loop is has a parent loop
@@ -178,24 +214,21 @@ export class RunManager {
                 }
 
                 if (isITriggeredEvent(target)) {
-                    // const triggeredEventName = target.getTriggeredEvent()
-                    // const listenerNodes = this.executionOrder
-                    //     .filter(node => node.target instanceof GraphEventListenerNode
-                    //         && node.target.eventName === triggeredEventName)
-                    // const longestListenerDiameter = this.findLongestBranch(listenerNodes.map(node => node.target))
-                    // const roots = Array.from(this.findAllRootsOfBranch(target))
-                    // const distanceFromTargetToRoot = this.shortestDistance(roots[0], target)
-                    // if (distanceFromTargetToRoot) {
-                    //     const possibleNewDiameter = longestListenerDiameter + distanceFromTargetToRoot
-                    //     this._diameter = possibleNewDiameter > this.diameter ? possibleNewDiameter : this.diameter
-                    //     this._wasDiameterUpdated = true
-                    // }
-                    // listenerNodes.forEach(node => {
-                    //     node.stepExecutionCompensation = distanceFromTargetToRoot || 0
-                    // })
-                    // console.log('roots and diameter: ', roots, this.diameter)
-                    //
-                    // nodeToExecute.addNodesToExecute(listenerNodes)
+                    const triggeredEventName = target.getTriggeredEvent()
+                    const listenerNodes = this.executionOrder
+                        .filter(node => node.target instanceof GraphEventListenerNode
+                            && node.target.eventName === triggeredEventName)
+                    const roots = Array.from(GraphHelper.findAllRootsOfBranch(target))
+                    const distanceFromTargetToRoot = GraphHelper.shortestDistance(roots[0], target)
+                    if (distanceFromTargetToRoot) {
+                        const compensation = chainItem.stepExecutionCompensation > 0
+                            ? distanceFromTargetToRoot + chainItem.stepExecutionCompensation + 1
+                            : distanceFromTargetToRoot
+                        listenerNodes.map(listenerChainItem => {
+                            listenerChainItem.target.setStepExecutionCompensation(compensation)
+
+                        })
+                    }
                 }
 
                 if (edge instanceof GraphChainEdge) {
@@ -244,6 +277,9 @@ export class RunManager {
             const isExecuteOutgoingNodes = (isIIsExecuteOutgoingNodes(target) ? target.isExecuteOutgoingNodes : true)
 
             if (chainItem.outgoingConnected && isExecuteOutgoingNodes) {
+                chainItem.outgoingConnected.forEach(nextChainItem => {
+                    nextChainItem.target.setStepExecutionCompensation(chainItem.stepExecutionCompensation)
+                })
                 nodeToExecute.addNodesToExecute(chainItem.outgoingConnected)
                 // chainItem.outgoingConnected.forEach(chainItem => {
                 //     const isEdgeMeetCondition = chainItem.edge === undefined
@@ -260,12 +296,13 @@ export class RunManager {
     }
 
 
-    private findDeepChainItemByNode(node: GraphBaseNode): IChainItem | undefined {
+    private findDeepChainItemByNode(node: GenericGraphNode): IChainItem | undefined {
         return findChainItemByTarget(this.executionOrder, node);
     }
 
 
     private executeChainOrder(chainItems: IChainItem[]) {
+        const nodeToExecute = new NodeExecutionManager(this, [])
         // nodeToExecute.reason = chainItems[0]?.target.data.name
         chainItems.forEach(chainItem => {
             const target = chainItem.target
@@ -282,25 +319,29 @@ export class RunManager {
                     isCanAdd = true
                 }
                 if (isCanAdd) {
-                    let nodeToExecute
                     if (chainItem.target instanceof GraphStartNode && chainItem.outgoingConnected) {
-                        nodeToExecute = new NodeExecutionManager(this, chainItem.outgoingConnected)
+                        // nodeToExecute = new NodeExecutionManager(this, chainItem.outgoingConnected)
+                        nodeToExecute.addNodesToExecute(chainItem.outgoingConnected)
                     } else if (chainItem.target instanceof GraphLoopNode && chainItem.inner) {
-                        nodeToExecute = new NodeExecutionManager(this, chainItem.inner)
+                        // nodeToExecute = new NodeExecutionManager(this, chainItem.inner)
+                        nodeToExecute.addNodesToExecute(chainItem.inner)
                     } else {
-                        nodeToExecute = new NodeExecutionManager(this, [chainItem])
+                        // nodeToExecute = new NodeExecutionManager(this, [chainItem])
+                        nodeToExecute.addNodesToExecute([chainItem])
                     }
-                    nodeToExecute.invokeNodesToExecute()
                 }
 
             }
+
         })
+        nodeToExecute.invokeNodesToExecute()
 
 
     }
 
 
     private incrementStep() {
+        this._diagramRunCount++
         this._currentStep++
     }
 
@@ -315,10 +356,10 @@ export class RunManager {
     private getExecutionOrder(): IChainItem[] {
         const startedNodes = this.getStartedNodes()
         const childrenNodes = startedNodes.map(source => {
-            return this.getChainChildrenRecursive({
-                target: source,
-            })
-        })
+            if (source instanceof GraphInvokableNode) {
+                return this.getChainChildrenRecursive(new IChainItem(source))
+            }
+        }).filter(Boolean) as IChainItem[][]
 
         return childrenNodes.sort((a, b) => {
             const aFirstNode = a[0].target
@@ -378,11 +419,12 @@ export class RunManager {
 
         chainItem.target.outgoingEdges.forEach(edge => {
             const target = edge.target
-            if (edge instanceof GraphChainEdge || target instanceof GraphDataNode) {
-                const newChainItem: IChainItem = {
-                    target: target,
-                    edge: edge as GraphChainEdge,
-                }
+            if ((edge instanceof GraphChainEdge || target instanceof GraphDataNode) && target instanceof GraphInvokableNode) {
+                // const newChainItem: IChainItem = {
+                //     target: target,
+                //     edge: edge as GraphChainEdge,
+                // }
+                const newChainItem = new IChainItem(target, edge as GraphChainEdge)
                 if (edge.sourceMode === EConnectionMode.LoopInnerToChildren) {
                     inner.push(newChainItem)
                 } else if (edge.targetMode === EConnectionMode.LoopChildrenToExternal) {
@@ -419,76 +461,15 @@ export class RunManager {
     }
 
 
-    findAllRootsOfBranch(node: GraphBaseNode, visited: Set<GraphBaseNode> = new Set()): Set<GraphBaseNode> {
-        // If the node has been visited before, return an empty set to prevent infinite loops.
-        if (visited.has(node)) return new Set();
-
-        visited.add(node);
-
-        // If the node has no incoming edges, it's a root.
-        if (node.incomingEdges.length === 0) {
-            return new Set([node]);
-        }
-
-        const roots = new Set<GraphBaseNode>();
-        for (const edge of node.incomingEdges) {
-            const sourceRoots = this.findAllRootsOfBranch(edge.source, visited);
-            for (const root of sourceRoots) {
-                roots.add(root);
-            }
-        }
-
-        return roots;
+    get isDiagramFinished() {
+        return this._diagramRunCount === this._diameter
     }
 
-    shortestDistance(start: GraphBaseNode, end: GraphBaseNode): number | undefined {
-        const visited = new Set<GraphBaseNode>();
-        const queue: { node: GraphBaseNode, distance: number }[] = [{node: start, distance: 0}];
-
-        while (queue.length > 0) {
-            const current = queue.shift();
-
-            if (current) {
-                if (current.node === end) {
-                    return current.distance;
-                }
-
-
-                visited.add(current.node);
-
-                for (const edge of current.node.outgoingEdges) {
-                    if (!visited.has(edge.target)) {
-                        queue.push({node: edge.target, distance: current.distance + 1});
-                    }
-                }
-            }
-
+    resetAfterDiagramRun() {
+        if (this.isDiagramFinished) {
+            this._diagramRunCount = 0
+            this.graph.nodesManager.resetAfterDiagramRun();
         }
-
-        return undefined
-    }
-
-    longestBranchFromNode(node: GraphBaseNode, visited: Set<GraphBaseNode> = new Set()): number {
-        visited.add(node);
-
-        let maxDepth = 0;
-        for (const edge of node.outgoingEdges) {
-            if (!visited.has(edge.target) && edge instanceof GraphChainEdge && edge.sourceMode !== EConnectionMode.LoopInnerToChildren) {
-                maxDepth = Math.max(maxDepth, this.longestBranchFromNode(edge.target, visited));
-            }
-        }
-
-
-        return maxDepth + 1; // +1 to count the current node
-    }
-
-    findLongestBranch(nodes: GraphBaseNode[]): number {
-        let maxLength = 0;
-        for (const node of nodes) {
-            maxLength = Math.max(maxLength, this.longestBranchFromNode(node));
-        }
-
-        return maxLength;
     }
 
     // private findParentLoop(chainItem: IChainItem): IChainItem | undefined {

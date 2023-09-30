@@ -37,6 +37,7 @@ export const resetNodeState = (node: IReactFlowNode): IReactFlowNode => {
                 ...node,
                 data: {
                     ...node.data,
+                    isEventTriggered: false,
                 }
             }
         case EDiagramNode.MicroLoop:{
