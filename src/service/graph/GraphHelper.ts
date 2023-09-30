@@ -1,7 +1,8 @@
-import {GraphBaseNode, GraphInvokableNode} from "./GraphNodes";
+import {GraphInvokableNode, GraphLoopNode} from "./GraphNodes";
 import {GraphChainEdge} from "./GraphEdge";
-import {EConnectionMode} from "../../interface";
 import {GenericGraphNode} from "./GenericGraphNode";
+import {GraphMicroLoopNode} from "./GraphNodes/GraphMicroLoopNode";
+import {EConnectionMode} from "../../interface";
 
 
 export class GraphHelper {
@@ -58,13 +59,33 @@ export class GraphHelper {
         visited.add(node);
 
         let maxDepth = 0;
+        const theLongestBranchIsInner = false
+        console.log(`node.outgoingEdges ${node.data.name}`, node.outgoingEdges.map(e => e.target.data.name))
         for (const edge of node.outgoingEdges) {
-            if (!visited.has(edge.target) && edge instanceof GraphChainEdge && edge.sourceMode !== EConnectionMode.LoopInnerToChildren) {
-                maxDepth = Math.max(maxDepth, this.longestBranchFromNode(edge.target, visited));
+            let skipEdge = false
+            if (edge.target instanceof GraphLoopNode) {
+                if (edge.target instanceof GraphMicroLoopNode && edge.target.data.isAccumulative) {
+                    skipEdge = false
+                } else if(edge.sourceMode === EConnectionMode.LoopInnerToChildren) {
+                    skipEdge = true
+                }
+            }
+            if (skipEdge) {
+                continue
+            }
+            if (!visited.has(edge.target) && edge instanceof GraphChainEdge) {
+
+                const depth = this.longestBranchFromNode(edge.target, visited);
+                if (depth > maxDepth) {
+                    maxDepth = depth
+                }
+                console.log(`depth ${edge.target.data.name}`, depth)
             }
         }
 
-
+        const isNotAccumulativeMicroLoop = node instanceof GraphMicroLoopNode && !node.data.isAccumulative
+        const multipleDepthByLoopCount = 0
+        console.log(`total depth ${node.data.name}`, maxDepth)
         return maxDepth + 1; // +1 to count the current node
     }
 

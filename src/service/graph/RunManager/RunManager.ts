@@ -2,7 +2,8 @@ import {Graph} from "../Graph";
 import {
     EConnectionMode,
     isIIsEventTriggered,
-    isIIsExecuteOutgoingNodes, isIResetBeforeStep,
+    isIIsExecuteOutgoingNodes,
+    isIResetBeforeStep,
     isITriggeredEvent,
     isIUpdateGraphNodeStatePerStep,
     isIUpdateStatePerNodeUpdate,
@@ -96,6 +97,7 @@ export class RunManager {
         this._executionOrder = nodes
     }
 
+    private nodeToExecute = new NodeExecutionManager(this, [])
 
     invokeStep() {
 
@@ -105,7 +107,8 @@ export class RunManager {
         this.setExecutionOrder(chain)
         this._diameter = this.getDiameter()
 
-        this.executeChainOrder(chain)
+        console.log('diameter: ', this.nodeToExecute)
+        this.executeChainOrder(chain, this.nodeToExecute)
         this.updateNodePerStep()
         this.incrementStep()
         const updatedDiameter = this.getDiameter()
@@ -144,15 +147,20 @@ export class RunManager {
         if (!isEdgeMeetCondition && !(target instanceof GraphDataNode)) {
             return
         }
+        let notInvokeLoop = false
         if (target instanceof GraphInvokableNode) {
-            if (target instanceof GraphLoopNode && !target.isLoopActive) {
-                return
-            }
-            if (options?.invoke) {
 
+            if (target instanceof GraphLoopNode) {
+                if (target instanceof GraphMicroLoopNode && target.data.isAccumulative) {
+                    notInvokeLoop = false
+                } else if (target instanceof GraphLoopNode && !target.isLoopActive) {
+                    notInvokeLoop = true
+                }
+            }
+            if (options.invoke && !notInvokeLoop) {
                 target.invokeStep()
                 if (target instanceof GraphLoopNode && chainItem.inner) {
-
+                    console.log(target.data?.isAccumulative)
                     if (target instanceof GraphMicroLoopNode && target.data.isAccumulative) {
                         // accumulative logic
 
@@ -169,10 +177,6 @@ export class RunManager {
                             const loopNodeExecutionManager = new NodeExecutionManager(this, chainItem.inner)
                             loopNodeExecutionManager.invokeAll()
                         }
-                    } else {
-                        // non accumulative logic
-                        nodeToExecute.addNodesToExecute(chainItem.inner)
-
                     }
                 }
 
@@ -220,6 +224,11 @@ export class RunManager {
             //     }
             // }
 
+            if (target instanceof GraphMicroLoopNode && !target.data.isAccumulative && chainItem.inner) {
+                console.log('non accumulative logic: ', chainItem.inner)
+                // non accumulative logic
+                nodeToExecute.addNodesToExecute(chainItem.inner)
+            }
 
             const isExecuteOutgoingNodes = (isIIsExecuteOutgoingNodes(target) ? target.isExecuteOutgoingNodes : true)
 
@@ -230,18 +239,17 @@ export class RunManager {
                 nodeToExecute.addNodesToExecute(chainItem.outgoingConnected)
             }
 
+
         }
     }
 
 
-
-     findDeepChainItemByNode(node: GenericGraphNode): IChainItem | undefined {
+    findDeepChainItemByNode(node: GenericGraphNode): IChainItem | undefined {
         return findChainItemByTarget(this._executionOrder, node);
     }
 
 
-    private executeChainOrder(chainItems: IChainItem[]) {
-        const nodeToExecute = new NodeExecutionManager(this, [])
+    private executeChainOrder(chainItems: IChainItem[], nodeToExecute: NodeExecutionManager) {
         chainItems.forEach(chainItem => {
             const target = chainItem.target
             const chainConnection = chainItem.edge
@@ -258,13 +266,10 @@ export class RunManager {
                 }
                 if (isCanAdd) {
                     if (chainItem.target instanceof GraphStartNode && chainItem.outgoingConnected) {
-                        // nodeToExecute = new NodeExecutionManager(this, chainItem.outgoingConnected)
                         nodeToExecute.addNodesToExecute(chainItem.outgoingConnected)
                     } else if (chainItem.target instanceof GraphLoopNode && chainItem.inner) {
-                        // nodeToExecute = new NodeExecutionManager(this, chainItem.inner)
                         nodeToExecute.addNodesToExecute(chainItem.inner)
                     } else {
-                        // nodeToExecute = new NodeExecutionManager(this, [chainItem])
                         nodeToExecute.addNodesToExecute([chainItem])
                     }
                 }

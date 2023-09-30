@@ -1,10 +1,5 @@
 import {IChainItem} from "./ChainItem";
 import {RunManager} from "./RunManager";
-import {GraphDataNode, GraphEventListenerNode, GraphInvokableNode, GraphLoopNode} from "../GraphNodes";
-import {GraphMicroLoopNode} from "../GraphNodes/GraphMicroLoopNode";
-import {isIIsExecuteOutgoingNodes, isITriggeredEvent, isIUpdateStatePerNodeUpdate} from "../../../interface";
-import {GraphHelper} from "../GraphHelper";
-import {GraphChainEdge} from "../GraphEdge";
 
 export class NodeExecutionManager {
     executionCount = 0
@@ -31,6 +26,7 @@ export class NodeExecutionManager {
 
 
                 for (const argument of this.current) {
+                    console.log('argument', argument.target)
                     const compensation = argument.stepExecutionCompensation
                         ? argument.stepExecutionCompensation
                         : 0
