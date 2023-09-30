@@ -1,4 +1,4 @@
-import React, {DragEvent, useCallback, useEffect, useRef, useState} from 'react';
+import React, {DragEvent, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import type {EdgeChange, NodeChange, ReactFlowInstance} from 'reactflow'
 // eslint-disable-next-line import/named
 import ReactFlow, {Background, BackgroundVariant, ConnectionMode, Controls} from 'reactflow';
@@ -23,7 +23,8 @@ import {
     DataNode,
     EventListenerNode,
     EventTriggerNode,
-    FormulaNode, LabelNode,
+    FormulaNode,
+    LabelNode,
     MicroLoopNode,
     OriginNode,
     SinkNode,
@@ -119,8 +120,21 @@ export const DiagramCanvas = () => {
     const onEdgeClick = useOnEdgeClick()
 
     useDiagramKeyboardManager()
+    const [isInteractive, setIsInteractive] = useState<boolean>(true)
+    const onInteractiveChange = (isInteractive: boolean) => {
+        setIsInteractive(isInteractive)
+    }
 
-
+    // the library has a bug. When interactivity is blocked,
+    // edges can still be manipulated.
+    // To remove the ability to change edges,
+    // it is necessary not to pass the onEdgeUpdate function
+    const onEdgeUpdateHandlerWithInteractive: typeof onEdgeUpdateHandler | undefined = useMemo(() => {
+        if (isInteractive) {
+            return onEdgeUpdateHandler
+        }
+        return undefined
+    }, [isInteractive])
 
     return (
         <Box
@@ -139,7 +153,7 @@ export const DiagramCanvas = () => {
                     onNodesChange={onNodesChangeHandler}
                     onEdgesChange={onEgeChangeHandler}
                     onEdgeUpdateStart={onEdgeUpdateStartHandler}
-                    onEdgeUpdate={onEdgeUpdateHandler}
+                    onEdgeUpdate={onEdgeUpdateHandlerWithInteractive}
                     onEdgeUpdateEnd={onEdgeUpdateEndHandler}
                     onConnect={onConnectHandler}
                     nodeTypes={nodeTypes}
@@ -158,11 +172,10 @@ export const DiagramCanvas = () => {
                     // we have custom way to delete nodes
                     deleteKeyCode={'undefined'}
                 >
-                    <Controls/>
+                    <Controls onInteractiveChange={onInteractiveChange}/>
                     <Background id="1" gap={38} color={EColor.darkMarineLight} variant={BackgroundVariant.Lines}/>
                     <Background id="2" gap={220} offset={1} color={EColor.darkMarineLight}
                                 variant={BackgroundVariant.Lines}/>
-                    {/*<Background color={EColor.darkMarine2} gap={GAP_BETWEEN_EDITOR_CANVAS_DOTS}/>*/}
                 </ReactFlow>
             </Box>
         </Box>
