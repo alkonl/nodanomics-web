@@ -77,13 +77,17 @@ export class RunManager {
     private graph: Graph
     private _countOfExecuted = 0
     private _diameter?: number
-
+    private _diagramRunCount = 0
     private _currentStep = 0
     // private invokedNodes: GraphNodeManager = new GraphNodeManager()
     private executionOrder: IChainItem[] = []
 
     constructor(graph: Graph) {
         this.graph = graph
+    }
+
+    get diagramRunCount() {
+        return this._diagramRunCount
     }
 
     get currentStep() {
@@ -134,6 +138,7 @@ export class RunManager {
 
 
     invokeStep() {
+
         this.resetCountOfExecuted()
         this.resetBeforeStep()
         const chain = this.getExecutionOrder()
@@ -156,11 +161,11 @@ export class RunManager {
 
         const startNodes = [...startNodesFromStart, ...eventListenerNodes]
         this._diameter = GraphHelper.findLongestBranch(startNodes)
+        console.log('this._diameter: ', this._diameter)
         this.executeChainOrder(chain)
         this.updateNodePerStep()
         this.incrementStep()
         this.resetAfterDiagramRun()
-
     }
 
 
@@ -212,8 +217,10 @@ export class RunManager {
                     const distanceFromTargetToRoot = GraphHelper.shortestDistance(roots[0], target)
                     console.log('distanceFromTargetToRoot: ', distanceFromTargetToRoot)
                     if (distanceFromTargetToRoot) {
+                        const compensation = distanceFromTargetToRoot + chainItem.stepExecutionCompensation
+                        console.log('compensation: ', compensation)
                         listenerNodes.map(listenerChainItem => {
-                            listenerChainItem.target.setStepExecutionCompensation(distanceFromTargetToRoot)
+                            listenerChainItem.target.setStepExecutionCompensation(compensation)
 
                         })
                     }
@@ -330,6 +337,7 @@ export class RunManager {
 
 
     private incrementStep() {
+        this._diagramRunCount++
         this._currentStep++
     }
 
@@ -450,11 +458,12 @@ export class RunManager {
 
 
     get isDiagramFinished() {
-        return this.currentStep % this.diameter === 0
+        return this._diagramRunCount === this._diameter
     }
 
     resetAfterDiagramRun() {
         if (this.isDiagramFinished) {
+            this._diagramRunCount = 0
             console.log('resetAfterDiagramRun')
             this.graph.nodesManager.resetAfterDiagramRun();
         }

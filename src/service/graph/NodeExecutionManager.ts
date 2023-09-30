@@ -33,7 +33,7 @@ export class NodeExecutionManager {
                     const compensation = argument.stepExecutionCompensation
                         ? argument.stepExecutionCompensation
                         : 0
-                    const currentLayerTick = (this.runManager.currentStep) % this.runManager.diameter
+                    const currentLayerTick = this.runManager.diagramRunCount
                     const invoke = this.runManager.countOfExecuted === currentLayerTick - compensation
 
                     console.log(`NodeExecutionManager.argument: ${argument.target.data.name} ${argument.stepExecutionCompensation}`, invoke, currentLayerTick, this.runManager.countOfExecuted)
