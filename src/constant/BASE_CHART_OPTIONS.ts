@@ -1,4 +1,4 @@
-import {EColor} from "./color";
+import {EColor, EFontColor} from "./color";
 import {ApexOptions} from "apexcharts";
 
 export const BASE_CHART_OPTIONS = {
@@ -22,6 +22,7 @@ export const BASE_CHART_OPTIONS = {
 
     },
     chart: {
+        foreColor: EFontColor.lightMarine4,
         background: EColor.darkMarineLight,
         zoom: {
             enabled: true

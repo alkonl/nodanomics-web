@@ -1,6 +1,6 @@
 import React from 'react';
 import {Box, Tooltip, Typography} from "@mui/material";
-import {EColor} from "../../../../constant";
+import {EColor, EFontColor} from "../../../../constant";
 import {MButton, Parameter} from "../../../base";
 import {RunningStep} from "../ElementToolbar/RunningStep";
 import {
@@ -67,7 +67,12 @@ export const ExecutionToolbar = () => {
                         onChange={changeExecutionDurationHandler}
                         value={executionDurationSeconds}
                     />
-                    <Typography>
+                    <Typography sx={{
+                        marginLeft: '2px',
+                        fontSize: 14,
+                        textAlign: 'left',
+                        color: EFontColor.lightMarine4,
+                    }}>
                         s
                     </Typography>
                 </Box>
