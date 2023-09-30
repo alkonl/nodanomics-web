@@ -145,7 +145,23 @@ export class RunManager {
         const chain = this.getExecutionOrder()
         console.log('chain: ', chain)
         this.setExecutionOrder(chain)
-        // remove listener nodes from execution order
+        this._diameter = this.getDiameter()
+
+        console.log('this._diameter: ', this._diameter)
+        this.executeChainOrder(chain)
+        this.updateNodePerStep()
+        this.incrementStep()
+        const updatedDiameter = this.getDiameter()
+        if (updatedDiameter === this._diameter) {
+            this.resetAfterDiagramRun()
+
+        }
+        console.log('updatedDiameter: ', updatedDiameter, this._diameter)
+    }
+
+
+    private getDiameter() {
+        const chain = this.getExecutionOrder()
         const startChains = chain.filter(chainItem => {
             if (chainItem.target instanceof GraphEventListenerNode) {
                 console.log('chainItem.target: ', chainItem.target.data)
@@ -161,12 +177,7 @@ export class RunManager {
             .map(chainItem => chainItem.target)
 
         const startNodes = [...startNodesFromStart, ...eventListenerNodes]
-        this._diameter = GraphHelper.findLongestBranch(startNodes)
-        console.log('this._diameter: ', this._diameter)
-        this.executeChainOrder(chain)
-        this.updateNodePerStep()
-        this.incrementStep()
-        this.resetAfterDiagramRun()
+        return GraphHelper.findLongestBranch(startNodes)
     }
 
 
@@ -218,7 +229,9 @@ export class RunManager {
                     const distanceFromTargetToRoot = GraphHelper.shortestDistance(roots[0], target)
                     console.log('distanceFromTargetToRoot: ', distanceFromTargetToRoot)
                     if (distanceFromTargetToRoot) {
-                        const compensation = distanceFromTargetToRoot + chainItem.stepExecutionCompensation
+                        const compensation = chainItem.stepExecutionCompensation > 0
+                            ? distanceFromTargetToRoot + chainItem.stepExecutionCompensation + 1
+                            : distanceFromTargetToRoot
                         console.log('compensation: ', compensation)
                         listenerNodes.map(listenerChainItem => {
                             listenerChainItem.target.setStepExecutionCompensation(compensation)
