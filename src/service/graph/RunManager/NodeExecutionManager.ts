@@ -26,7 +26,7 @@ export class NodeExecutionManager {
 
 
                 for (const argument of this.current) {
-                    console.log('argument', argument.target)
+                    console.log('argument', argument.target.data.name)
                     const compensation = argument.stepExecutionCompensation
                         ? argument.stepExecutionCompensation
                         : 0
@@ -38,6 +38,7 @@ export class NodeExecutionManager {
 
                 }
                 this.runManager.addCountOfExecuted()
+                console.log('this.executionCount', this.executionCount)
                 this.invokeNodesToExecute()
             }
         }
@@ -71,7 +72,13 @@ export class NodeExecutionManager {
         return this.next
     }
 
-    addNodesToExecute(chainItem: IChainItem[]) {
-        this.next.push(...chainItem)
+    addNodesToExecute(chainItems: IChainItem[]) {
+        this.next.push(...chainItems)
+    }
+
+    addNodesToCurrent(chainItem: IChainItem[]) {
+        this.current.push(...chainItem)
+        this.executionCount += chainItem.length
+
     }
 }

@@ -225,13 +225,14 @@ export class RunManager {
 
             if (target instanceof GraphMicroLoopNode && !target.data.isAccumulative && chainItem.inner) {
                 console.log('non accumulative logic: ', chainItem.inner)
-                // non accumulative logic
-                nodeToExecute.addNodesToExecute(chainItem.inner)
+
+                nodeToExecute.addNodesToCurrent(chainItem.inner)
             }
 
             const isExecuteOutgoingNodes = (isIIsExecuteOutgoingNodes(target) ? target.isExecuteOutgoingNodes : true)
 
             if (chainItem.outgoingConnected && isExecuteOutgoingNodes) {
+                console.log('executeNode', chainItem.target.data.name, chainItem.outgoingConnected.map(item => item.target.data.name))
                 chainItem.outgoingConnected.forEach(nextChainItem => {
                     nextChainItem.target.setStepExecutionCompensation(chainItem.stepExecutionCompensation)
                 })
