@@ -130,7 +130,7 @@ export class RunManager {
         const startChains = chain.filter(chainItem => {
             if (chainItem.target instanceof GraphEventListenerNode) {
                 console.log('chainItem.target: ', chainItem.target.data)
-                return true
+                return chainItem.target.checkIsEventTriggered()
             }
             return true
         })
@@ -141,13 +141,13 @@ export class RunManager {
         this.executeChainOrder(chain)
         this.updateNodePerStep()
         this.incrementStep()
+        this.resetAfterDiagramRun()
 
     }
 
 
     executeNode(chainItem: IChainItem, nodeToExecute: NodeExecutionManager, options?: { notInvoke?: boolean }) {
         const target = chainItem.target
-        console.log('target: ', target.data.name)
         const edge = chainItem.edge
         const isEdgeMeetCondition = edge === undefined
             ? true
@@ -157,11 +157,11 @@ export class RunManager {
         }
         if (target instanceof GraphInvokableNode) {
             if (target instanceof GraphLoopNode && !target.isLoopActive) {
-                console.log(`target: ${target.data.name}`, target.isLoopActive)
-
                 return
             }
-            if (!options?.notInvoke || target instanceof GraphEventListenerNode && target.isEventTriggered()) {
+            if (!options?.notInvoke) {
+                console.log('target: ', target.data.name)
+
                 target.invokeStep()
                 if (target instanceof GraphLoopNode && chainItem.inner) {
                     // check if loop is has a parent loop
@@ -500,6 +500,17 @@ export class RunManager {
         }
 
         return maxLength;
+    }
+
+    get isDiagramFinished() {
+        return this.currentStep % this.diameter === 0
+    }
+
+    resetAfterDiagramRun() {
+        if (this.isDiagramFinished) {
+            console.log('resetAfterDiagramRun')
+            this.graph.nodesManager.resetAfterDiagramRun();
+        }
     }
 
     // private findParentLoop(chainItem: IChainItem): IChainItem | undefined {

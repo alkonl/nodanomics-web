@@ -177,6 +177,8 @@ export class Graph {
         })
     }
 
+
+
     resetResourcesToProvide() {
         this.nodesManager.resetResourcesToProvide();
     }

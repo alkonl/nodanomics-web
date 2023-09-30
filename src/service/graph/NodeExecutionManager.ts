@@ -29,11 +29,13 @@ export class NodeExecutionManager {
                 // console.log('this.current: ', this.countOfExecuted)
 
                 for (const argument of this.current) {
+                    console.log(`argument: ${argument.target.data.name}`, notInvoke,argument.target)
                     this.executionCount--
                     this.runManager.executeNode(argument, this, {notInvoke})
                     this.invokeNodesToExecute()
                 }
             }
+            // console.log('this.current: ', this.current.map(({target}) => target.data.name))
         }
 
     }

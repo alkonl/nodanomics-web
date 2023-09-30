@@ -1,5 +1,5 @@
 import {GraphBaseNode, GraphDataNode, GraphDatasetDatafieldNode} from "../GraphNodes";
-import {isIResetNodeNoStoreProperties} from "../../../interface";
+import {isIResetAfterDiagramRun, isIResetNodeNoStoreProperties} from "../../../interface";
 
 export class GraphNodeManager {
     private _nodes: GraphBaseNode[] = [];
@@ -39,6 +39,7 @@ export class GraphNodeManager {
     resetResourcesToProvide() {
         this._nodes.forEach(node => {
             if (isIResetNodeNoStoreProperties(node)) {
+
                 node.resetNodeNoStoreProperties();
             }
         });
@@ -66,5 +67,13 @@ export class GraphNodeManager {
 
     get assignedNodeChanged(): boolean {
         return this.assignedHistoryNode?.isValueChanged || false
+    }
+
+    resetAfterDiagramRun() {
+        this._nodes.forEach(node => {
+            if (isIResetAfterDiagramRun(node)) {
+                node.resetAfterDiagramRun();
+            }
+        });
     }
 }
