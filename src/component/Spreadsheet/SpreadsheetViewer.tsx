@@ -2,6 +2,7 @@ import React, {useEffect, useMemo} from "react";
 import {Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography} from "@mui/material";
 import {useGetSpreadSheetQuery, useUseDeleteSpreadsheetMutation} from "../../api";
 import {MButton} from "../base";
+import {EColor, EFontColor} from "../../constant";
 
 export const SpreadsheetViewer: React.FC<{
     spreadsheetId: string;
@@ -69,7 +70,7 @@ export const SpreadsheetViewer: React.FC<{
             maxHeight: '80vh',
             maxWidth: '100vw',
             overflow: 'auto',
-            backgroundColor: 'white',
+            backgroundColor: EColor.darkMarineLight,
         }}>
             {formattedTable && <Box>
                 <Box sx={{
@@ -77,7 +78,10 @@ export const SpreadsheetViewer: React.FC<{
                     justifyContent: 'space-between',
                     alignItems: 'center'
                 }}>
-                    <Typography>
+                    <Typography sx={{
+                        fontWeight: 'bold',
+                        color: EFontColor.lightMarine4,
+                    }}>
                         {formattedTable.name}
                     </Typography>
                     <MButton.Submit
@@ -88,7 +92,11 @@ export const SpreadsheetViewer: React.FC<{
                 </Box>
 
                 <TableContainer component={Paper}>
-                    <Table sx={{minWidth: 650}} aria-label="simple table">
+                    <Table sx={{
+                        minWidth: 650,
+                        backgroundColor: EColor.darkMarineLight,
+                        color: EFontColor.white,
+                    }} aria-label="simple table">
                         <TableBody>
                             {formattedTable.rows.map((row) => (
                                 <TableRow
