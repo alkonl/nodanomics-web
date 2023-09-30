@@ -119,15 +119,21 @@ export class RunManager {
     }
 
 
-
     invokeStep() {
         this.resetCountOfExecuted()
         this.resetBeforeStep()
         const chain = this.getExecutionOrder()
         console.log('chain: ', chain)
         this.setExecutionOrder(chain)
+        console.log('chain: ', chain)
         // remove listener nodes from execution order
-        const startChains = chain.filter(chainItem => !(chainItem.target instanceof GraphEventListenerNode))
+        const startChains = chain.filter(chainItem => {
+            if (chainItem.target instanceof GraphEventListenerNode) {
+                console.log('chainItem.target: ', chainItem.target.data)
+                return true
+            }
+            return true
+        })
         const startNodes = startChains
             .find(chainItem => chainItem.target instanceof GraphStartNode)
             ?.outgoingConnected?.map(chainItem => chainItem.target) || []
@@ -266,6 +272,8 @@ export class RunManager {
 
 
     private executeChainOrder(chainItems: IChainItem[]) {
+        console.log('chainItems: ', chainItems)
+        const nodeToExecute = new NodeExecutionManager(this, [])
         // nodeToExecute.reason = chainItems[0]?.target.data.name
         chainItems.forEach(chainItem => {
             const target = chainItem.target
@@ -282,19 +290,22 @@ export class RunManager {
                     isCanAdd = true
                 }
                 if (isCanAdd) {
-                    let nodeToExecute
                     if (chainItem.target instanceof GraphStartNode && chainItem.outgoingConnected) {
-                        nodeToExecute = new NodeExecutionManager(this, chainItem.outgoingConnected)
+                        // nodeToExecute = new NodeExecutionManager(this, chainItem.outgoingConnected)
+                        nodeToExecute.addNodesToExecute(chainItem.outgoingConnected)
                     } else if (chainItem.target instanceof GraphLoopNode && chainItem.inner) {
-                        nodeToExecute = new NodeExecutionManager(this, chainItem.inner)
+                        // nodeToExecute = new NodeExecutionManager(this, chainItem.inner)
+                        nodeToExecute.addNodesToExecute(chainItem.inner)
                     } else {
-                        nodeToExecute = new NodeExecutionManager(this, [chainItem])
+                        // nodeToExecute = new NodeExecutionManager(this, [chainItem])
+                        nodeToExecute.addNodesToExecute([chainItem])
                     }
-                    nodeToExecute.invokeNodesToExecute()
                 }
 
             }
+
         })
+        nodeToExecute.invokeNodesToExecute()
 
 
     }

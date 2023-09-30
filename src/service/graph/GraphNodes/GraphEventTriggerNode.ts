@@ -22,17 +22,24 @@ export class GraphEventTriggerNode extends GraphInvokableNode<IEventTriggerNodeD
     }
 
     get isEventConditionMet() {
-        return true;
+        return this.data.isEventTriggered || false;
     }
 
 
     invokeStep() {
         super.invokeStep()
         this.updateState()
+        this.triggerEvent()
+    }
+
+    private triggerEvent() {
+        this.updateNode({
+            isEventTriggered: true,
+        })
     }
 
 
-
+    // TODO remove this method
     isEventTriggered() {
         return true
     }
