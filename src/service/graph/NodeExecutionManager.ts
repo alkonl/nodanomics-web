@@ -24,10 +24,8 @@ export class NodeExecutionManager {
                 // const isStart = this.current[0]?.target instanceof GraphStartNode
 
 
-                // console.log('this.current: ', this.countOfExecuted)
 
 
-                console.log('NodeExecutionManager.current: ', this.current.map(({target}) => target.data.name))
 
                 for (const argument of this.current) {
                     const compensation = argument.stepExecutionCompensation
@@ -36,7 +34,6 @@ export class NodeExecutionManager {
                     const currentLayerTick = this.runManager.diagramRunCount
                     const invoke = this.runManager.countOfExecuted === currentLayerTick - compensation
 
-                    console.log(`NodeExecutionManager.argument: ${argument.target.data.name} ${argument.stepExecutionCompensation}`, invoke, currentLayerTick, this.runManager.countOfExecuted)
                     this.executionCount--
                     this.runManager.executeNode(argument, this, {invoke})
 
@@ -44,7 +41,6 @@ export class NodeExecutionManager {
                 this.runManager.addCountOfExecuted()
                 this.invokeNodesToExecute()
             }
-            // console.log('this.current: ', this.current.map(({target}) => target.data.name))
         }
 
     }
@@ -79,7 +75,6 @@ export class NodeExecutionManager {
     }
 
     addNodesToExecute(chainItem: IChainItem[]) {
-        console.log('NodeExecutionManager.addNodesToExecute: ', chainItem.map(({target}) => target.data.name))
         this.next.push(...chainItem)
     }
 }

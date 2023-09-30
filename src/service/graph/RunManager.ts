@@ -143,11 +143,9 @@ export class RunManager {
         this.resetCountOfExecuted()
         this.resetBeforeStep()
         const chain = this.getExecutionOrder()
-        console.log('chain: ', chain)
         this.setExecutionOrder(chain)
         this._diameter = this.getDiameter()
 
-        console.log('this._diameter: ', this._diameter)
         this.executeChainOrder(chain)
         this.updateNodePerStep()
         this.incrementStep()
@@ -156,7 +154,6 @@ export class RunManager {
             this.resetAfterDiagramRun()
 
         }
-        console.log('updatedDiameter: ', updatedDiameter, this._diameter)
     }
 
 
@@ -164,7 +161,6 @@ export class RunManager {
         const chain = this.getExecutionOrder()
         const startChains = chain.filter(chainItem => {
             if (chainItem.target instanceof GraphEventListenerNode) {
-                console.log('chainItem.target: ', chainItem.target.data)
                 return chainItem.target.checkIsEventTriggered()
             }
             return true
@@ -195,7 +191,6 @@ export class RunManager {
                 return
             }
             if (options?.invoke) {
-                console.log('RunManager.target: ', target.data.name)
 
                 target.invokeStep()
                 if (target instanceof GraphLoopNode && chainItem.inner) {
@@ -211,7 +206,6 @@ export class RunManager {
                             loopNodeExecutionManager.invokeAll()
                         }
                     } else {
-                        console.log('RunManager.executeLoop: ', target.data.name, chainItem)
                         const loopNodeExecutionManager = new NodeExecutionManager(this, chainItem.inner)
                         loopNodeExecutionManager.invokeAll()
                         // nodeToExecute.addNodesToExecute(chainItem.inner)
@@ -220,19 +214,16 @@ export class RunManager {
                 }
 
                 if (isITriggeredEvent(target)) {
-                    console.log('target.getTriggeredEvent(): ', target.getTriggeredEvent())
                     const triggeredEventName = target.getTriggeredEvent()
                     const listenerNodes = this.executionOrder
                         .filter(node => node.target instanceof GraphEventListenerNode
                             && node.target.eventName === triggeredEventName)
                     const roots = Array.from(GraphHelper.findAllRootsOfBranch(target))
                     const distanceFromTargetToRoot = GraphHelper.shortestDistance(roots[0], target)
-                    console.log('distanceFromTargetToRoot: ', distanceFromTargetToRoot)
                     if (distanceFromTargetToRoot) {
                         const compensation = chainItem.stepExecutionCompensation > 0
                             ? distanceFromTargetToRoot + chainItem.stepExecutionCompensation + 1
                             : distanceFromTargetToRoot
-                        console.log('compensation: ', compensation)
                         listenerNodes.map(listenerChainItem => {
                             listenerChainItem.target.setStepExecutionCompensation(compensation)
 
@@ -311,7 +302,6 @@ export class RunManager {
 
 
     private executeChainOrder(chainItems: IChainItem[]) {
-        console.log('chainItems: ', chainItems)
         const nodeToExecute = new NodeExecutionManager(this, [])
         // nodeToExecute.reason = chainItems[0]?.target.data.name
         chainItems.forEach(chainItem => {
@@ -478,7 +468,6 @@ export class RunManager {
     resetAfterDiagramRun() {
         if (this.isDiagramFinished) {
             this._diagramRunCount = 0
-            console.log('resetAfterDiagramRun')
             this.graph.nodesManager.resetAfterDiagramRun();
         }
     }

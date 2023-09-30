@@ -42,7 +42,6 @@ export class GraphEventListenerNode extends GraphInvokableNode<IEventListenerNod
     get triggeredNodes() {
         return this.graphNodes.filter(node => {
             if (isIIsEventConditionMet(node)) {
-                console.log(`node ${node.data.name}`, node.isEventConditionMet)
                 return node.eventName === this.eventName && node.isEventConditionMet
             }
             return false
