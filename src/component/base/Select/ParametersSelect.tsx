@@ -52,6 +52,7 @@ export const ParametersSelect: React.FC<{
                     },
                 }}
                 inputProps={{
+                    color: EFontColor.lightMarine4,
                     MenuProps: {
                         MenuListProps: {
                             sx: {
@@ -80,7 +81,7 @@ export const ParametersSelect: React.FC<{
                         key={item.value}
                         value={item.value}
                         sx={{
-                            color: EFontColor.grey4,
+                            color: EFontColor.lightMarine4,
                         }}
                     >
                         {item.label}
