@@ -7,16 +7,21 @@ export const useGetVariables = (): {
 }[] => {
     const {diagramNodes} = useDiagramEditorState()
     return diagramNodes.filter(node => node.data.tag).map((node) => {
+        const tagVariable = {
+            id: node.data.tag as string,
+            display: ` ${node.data.tag}`,
+        }
         if(node.data.type === EDiagramNode.DatasetDatafield && node.data.namedVariables) {
-            return Object.keys(node.data.namedVariables).map((key) => {
+            const datasetVariables = Object.keys(node.data.namedVariables).map((key) => {
               return {
                     id: key,
                     display: ` ${node.data.tag}.${key}`,
             }}).flat()
+            if(node.data.datafield){
+                return [tagVariable, ...datasetVariables]
+            }
+            return datasetVariables
         }
-        return {
-            id: node.data.tag as string,
-            display: ` ${node.data.tag}`,
-        }
+        return tagVariable
     }).flat()
 }
