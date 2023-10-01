@@ -273,7 +273,7 @@ export class RunManager {
                     nodeToExecute.addNodesToExecute(noDataNodes)
                 }
                 const endChainItem = children.endChainItem
-                if (endChainItem && endChainItem.target instanceof GraphMicroLoopNode) {
+                if (endChainItem && endChainItem.target instanceof GraphMicroLoopNode && !endChainItem.target.isAccumulative) {
                     if (target instanceof GraphMicroLoopNode && !target.isAccumulative) {
                         if (!target.isLoopActive) {
                             nodeToExecute.addNodesToCurrent([endChainItem])
