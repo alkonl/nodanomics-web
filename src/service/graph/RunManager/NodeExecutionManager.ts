@@ -6,67 +6,39 @@ export class NodeExecutionManager {
     current: IChainItem[]
     next: IChainItem[]
     runManager: RunManager
-    reason?: string
-    private executePerOneStep = false
 
     constructor(runManager: RunManager, starters: IChainItem[]) {
         this.runManager = runManager
         this.current = []
         this.next = [...starters]
-        const nodes = starters.map(({target}) => target)
     }
 
     invokeNodesToExecute() {
-        // if (this.executionCount === 0) {
-            this.current = [...this.next]
-            this.executionCount = this.next.length
-            this.next = []
-            // if (this.current.length !== 0) {
-                // const isStart = this.current[0]?.target instanceof GraphStartNode
+        this.current = [...this.next]
+        this.executionCount = this.next.length
+        this.next = []
 
+        for (const argument of this.current) {
+            this.executionCount--
+            this.runManager.executeNode(argument, this, {invoke: true})
+        }
 
-                for (const argument of this.current) {
-                    console.log('invokeNodesToExecute', argument.target.data.name, this.executionCount)
-                    // const compensation = argument.stepExecutionCompensation
-                    //     ? argument.stepExecutionCompensation
-                    //     : 0
-                    // const currentLayerTick = this.runManager.diagramRunCount
-                    // const invoke = this.runManager.countOfExecuted === currentLayerTick - compensation
-
-                    this.executionCount--
-                    this.runManager.executeNode(argument, this, {invoke: true})
-
-                }
-                this.runManager.addCountOfExecuted()
-                // this.invokeNodesToExecute()
-            // }
-        // }
-
+        this.runManager.addCountOfExecuted()
     }
 
 
     invokeAll() {
 
-            this.current = [...this.next]
-            this.executionCount = this.next.length
-            this.next = []
-            if (this.current.length !== 0) {
-                for (const argument of this.current) {
-                    this.executionCount--
-                    this.runManager.executeNode(argument, this, {invoke: true})
-                    this.invokeAll()
-                }
+        this.current = [...this.next]
+        this.executionCount = this.next.length
+        this.next = []
+        if (this.current.length !== 0) {
+            for (const argument of this.current) {
+                this.executionCount--
+                this.runManager.executeNode(argument, this, {invoke: true})
+                this.invokeAll()
             }
-    }
-
-
-
-    setExecutePerOneStep(value: boolean) {
-        this.executePerOneStep = value
-    }
-
-    getOtherNodesToExecute() {
-        return this.next
+        }
     }
 
     addNodesToExecute(chainItems: IChainItem[]) {
