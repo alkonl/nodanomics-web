@@ -1,8 +1,7 @@
-import {IDiagramNodeBaseData, INodeData, IUpdateGraphNodeState} from "../../../../interface";
+import {IConnectedNodeInfo, IDiagramNodeBaseData, INodeData, IUpdateGraphNodeState} from "../../../../interface";
 import {GraphBaseEdge} from "../../GraphEdge";
 import {RunManager} from "../../RunManager";
 import {GraphNodeManager} from "../../NodeManager";
-import {GraphMatchManagerNode} from "../../GraphMatchManager";
 
 export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseData = INodeData>
     implements IUpdateGraphNodeState {
@@ -101,15 +100,22 @@ export abstract class GraphBaseNode<IGenericNodeData extends IDiagramNodeBaseDat
     }
 
     updateConnectedNodes() {
-        const outgoingNodeNames = this._outgoingEdges.map(e => e.target.data.name);
-        const incomingNodeNames = this._incomingEdges.map(e => e.source.data.name);
+        const outgoingNodeNames = this._outgoingEdges.map(e => e.target.data);
+        const incomingNodeNames = this._incomingEdges.map(e => e.source.data);
         // remove duplicates
-        const currentConnectedNodes = [...outgoingNodeNames, ...incomingNodeNames].filter((value, index, self) => {
-            return self.indexOf(value) === index;
-        });
+        const currentConnectedNodes = [...outgoingNodeNames, ...incomingNodeNames].filter((node, index, self) =>
+                index === self.findIndex((t) => (
+                    t.id === node.id
+                ))
+        )
+
+        const formatted: IConnectedNodeInfo[] = currentConnectedNodes.map(node => ({
+            id: node.id,
+            label: node.name,
+        }))
         this._data = {
             ...this._data,
-            connectedNodes: currentConnectedNodes
+            connectedNodes: formatted
         }
     }
 }

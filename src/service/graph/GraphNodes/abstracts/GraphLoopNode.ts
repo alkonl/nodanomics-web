@@ -113,7 +113,8 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
         const connectedNodes = this.data.connectedNodes
         if (children && connectedNodes) {
             const childrenNodeNames = children.map(child => child.name)
-            const filteredNodes = connectedNodes.filter(connectedNode => !childrenNodeNames.includes(connectedNode))
+            const filteredNodes = connectedNodes.filter(connectedNode => !childrenNodeNames.includes(connectedNode.label))
+            // const filteredNodes = connectedNodes.filter(connectedNode => !childrenNodeNames.includes(connectedNode))
             this._data = {
                 ...this.data,
                 connectedNodes: filteredNodes
