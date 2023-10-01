@@ -1,4 +1,4 @@
-import {GraphInvokableNode, GraphLoopNode} from "./GraphNodes";
+import {GraphDataNode, GraphInvokableNode, GraphLoopNode} from "./GraphNodes";
 import {GraphChainEdge} from "./GraphEdge";
 import {GenericGraphNode} from "./GenericGraphNode";
 import {GraphMicroLoopNode} from "./GraphNodes/GraphMicroLoopNode";
@@ -60,7 +60,6 @@ export class GraphHelper {
 
         let maxDepth = 0;
         let theLongestBranchIsInner = false
-        console.log(`node.outgoingEdges ${node.data.name}`, node.outgoingEdges.map(e => e.target.data.name))
         for (const edge of node.outgoingEdges) {
             let isInnerNode = false
             let skipEdge = false
@@ -72,7 +71,6 @@ export class GraphHelper {
                     skipEdge = true
                 }
             }
-            console.log(`skipEdge ${edge.target.data.name}`, skipEdge)
 
             if (skipEdge) {
                 continue
@@ -84,7 +82,6 @@ export class GraphHelper {
                     maxDepth = depth
                     theLongestBranchIsInner = isInnerNode
                 }
-                console.log(`out.depth ${edge.target.data.name}`, depth, isInnerNode)
             }
         }
 
@@ -109,5 +106,33 @@ export class GraphHelper {
         return maxLength;
     }
 
+    static isNodeFurthest(source: GenericGraphNode, target: GenericGraphNode): boolean {
+        const distances = new Map<GenericGraphNode, number>();
+        const visited = new Set<GenericGraphNode>();
+        const queue: { node: GenericGraphNode, distance: number }[] = [{ node: source, distance: 0 }];
+
+        let maxDistance = 0;
+
+        while (queue.length > 0) {
+            const current = queue.shift();
+            if(current){
+                distances.set(current.node, current.distance);
+                visited.add(current.node);
+
+                maxDistance = Math.max(maxDistance, current.distance);
+
+
+                for (const edge of current.node.outgoingEdges) {
+                    const notCheck = edge.target instanceof GraphDataNode
+                    if (!visited.has(edge.target) && !notCheck) {
+                        queue.push({ node: edge.target, distance: current.distance + 1 });
+                    }
+                }
+            }
+
+        }
+
+        return distances.get(target) === maxDistance;
+    }
 
 }

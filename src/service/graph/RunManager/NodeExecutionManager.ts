@@ -17,37 +17,35 @@ export class NodeExecutionManager {
     }
 
     invokeNodesToExecute() {
-        if (this.executionCount === 0) {
+        // if (this.executionCount === 0) {
             this.current = [...this.next]
             this.executionCount = this.next.length
             this.next = []
-            if (this.current.length !== 0) {
+            // if (this.current.length !== 0) {
                 // const isStart = this.current[0]?.target instanceof GraphStartNode
 
 
                 for (const argument of this.current) {
-                    console.log('argument', argument.target.data.name)
-                    const compensation = argument.stepExecutionCompensation
-                        ? argument.stepExecutionCompensation
-                        : 0
-                    const currentLayerTick = this.runManager.diagramRunCount
-                    const invoke = this.runManager.countOfExecuted === currentLayerTick - compensation
+                    console.log('invokeNodesToExecute', argument.target.data.name, this.executionCount)
+                    // const compensation = argument.stepExecutionCompensation
+                    //     ? argument.stepExecutionCompensation
+                    //     : 0
+                    // const currentLayerTick = this.runManager.diagramRunCount
+                    // const invoke = this.runManager.countOfExecuted === currentLayerTick - compensation
 
                     this.executionCount--
-                    this.runManager.executeNode(argument, this, {invoke})
+                    this.runManager.executeNode(argument, this, {invoke: true})
 
                 }
                 this.runManager.addCountOfExecuted()
-                console.log('this.executionCount', this.executionCount)
-                this.invokeNodesToExecute()
-            }
-        }
+                // this.invokeNodesToExecute()
+            // }
+        // }
 
     }
 
 
     invokeAll() {
-        if (this.executionCount === 0) {
 
             this.current = [...this.next]
             this.executionCount = this.next.length
@@ -59,7 +57,6 @@ export class NodeExecutionManager {
                     this.invokeAll()
                 }
             }
-        }
     }
 
 

@@ -2,7 +2,6 @@ import {Graph} from "../Graph";
 import {
     EConnectionMode,
     isIIsEventTriggered,
-    isIIsExecuteOutgoingNodes,
     isIResetBeforeStep,
     isITriggeredEvent,
     isIUpdateGraphNodeStatePerStep,
@@ -24,6 +23,7 @@ import {GenericGraphNode} from "../GenericGraphNode";
 import {findChainItemByTarget} from "../helper";
 import {IChainItem} from "./ChainItem";
 import {NodeExecutionManager} from "./NodeExecutionManager";
+import {GraphWhileLoopNode} from "../GraphNodes/GraphWhileLoopNode";
 
 export class RunManager {
     private _graph: Graph
@@ -71,6 +71,7 @@ export class RunManager {
     }
 
     resetCurrentStep() {
+        this.nodeToExecute = new NodeExecutionManager(this, [])
         this._diagramRunCount = 0
         this._currentStep = 0
     }
@@ -99,15 +100,35 @@ export class RunManager {
 
     private nodeToExecute = new NodeExecutionManager(this, [])
 
-    invokeStep() {
+    invokeStep2() {
 
         this.resetCountOfExecuted()
         this.resetBeforeStep()
         const chain = this.getExecutionOrder()
         this.setExecutionOrder(chain)
         this._diameter = this.getDiameter()
-        console.log('diameter: ', this._diameter)
         this.executeChainOrder(chain, this.nodeToExecute)
+        this.updateNodePerStep()
+        this.incrementStep()
+        const updatedDiameter = this.getDiameter()
+        if (updatedDiameter === this._diameter) {
+            this.resetAfterDiagramRun()
+
+        }
+    }
+
+    invokeStep() {
+        this.resetCountOfExecuted()
+        this.resetBeforeStep()
+        const chain = this.getExecutionOrder()
+        this.setExecutionOrder(chain)
+        this._diameter = this.getDiameter()
+        console.log('this.nodeToExecute', this.nodeToExecute.next.map(item => item.target.data.name))
+        if (this._currentStep === 0 || this.isDiagramFinished) {
+            const initiatorsNodes = this.getStartedInitiatorsChainItems()
+            this.nodeToExecute.addNodesToExecute(initiatorsNodes)
+        }
+        this.nodeToExecute.invokeNodesToExecute()
         this.updateNodePerStep()
         this.incrementStep()
         const updatedDiameter = this.getDiameter()
@@ -140,6 +161,7 @@ export class RunManager {
     executeNode(chainItem: IChainItem, nodeToExecute: NodeExecutionManager, options: { invoke: boolean }) {
         const target = chainItem.target
         const edge = chainItem.edge
+        console.log(`start: ${target.data.name}`)
         const isEdgeMeetCondition = edge === undefined
             ? true
             : edge.isMeetCondition
@@ -151,29 +173,30 @@ export class RunManager {
 
             if (target instanceof GraphLoopNode) {
                 if (target instanceof GraphMicroLoopNode && target.data.isAccumulative) {
-                    notInvokeLoop = false
+                    if (target.currentLoopCount === target.loopCount) {
+                        notInvokeLoop = true
+                    }
                 } else if (target instanceof GraphLoopNode && !target.isLoopActive) {
                     notInvokeLoop = true
                 }
             }
             if (options.invoke && !notInvokeLoop) {
                 target.invokeStep()
-                if (target instanceof GraphLoopNode && chainItem.inner) {
-                    console.log(target.data?.isAccumulative)
-                    if (target instanceof GraphMicroLoopNode && target.data.isAccumulative) {
+                if (target instanceof GraphLoopNode) {
+                    if (target instanceof GraphMicroLoopNode && target.data.isAccumulative || target instanceof GraphWhileLoopNode) {
                         // accumulative logic
-
+                        const inner = this.getChainChildren(chainItem).inner
                         // check if loop is has a parent loop
                         const hasParentLoop = target.data.parentId !== undefined
 
                         if (hasParentLoop && target instanceof GraphMicroLoopNode) {
                             target.resetLoopStep()
                             for (let i = 0; i < target.loopCount; i++) {
-                                const loopNodeExecutionManager = new NodeExecutionManager(this, chainItem.inner)
+                                const loopNodeExecutionManager = new NodeExecutionManager(this, inner)
                                 loopNodeExecutionManager.invokeAll()
                             }
                         } else {
-                            const loopNodeExecutionManager = new NodeExecutionManager(this, chainItem.inner)
+                            const loopNodeExecutionManager = new NodeExecutionManager(this, inner)
                             loopNodeExecutionManager.invokeAll()
                         }
                     }
@@ -184,21 +207,44 @@ export class RunManager {
                     const listenerNodes = this.executionOrder
                         .filter(node => node.target instanceof GraphEventListenerNode
                             && node.target.eventName === triggeredEventName)
-                    const roots = Array.from(GraphHelper.findAllRootsOfBranch(target))
-                    const distanceFromTargetToRoot = GraphHelper.shortestDistance(roots[0], target)
-                    if (distanceFromTargetToRoot) {
-                        const compensation = chainItem.stepExecutionCompensation > 0
-                            ? distanceFromTargetToRoot + chainItem.stepExecutionCompensation + 1
-                            : distanceFromTargetToRoot
-                        listenerNodes.map(listenerChainItem => {
-                            listenerChainItem.target.setStepExecutionCompensation(compensation)
 
-                        })
-                    }
+                    nodeToExecute.addNodesToExecute(listenerNodes)
+                    // const roots = Array.from(GraphHelper.findAllRootsOfBranch(target))
+                    // const distanceFromTargetToRoot = GraphHelper.shortestDistance(roots[0], target)
+                    // if (distanceFromTargetToRoot) {
+                    //     const compensation = chainItem.stepExecutionCompensation > 0
+                    //         ? distanceFromTargetToRoot + chainItem.stepExecutionCompensation + 1
+                    //         : distanceFromTargetToRoot
+                    //     listenerNodes.map(listenerChainItem => {
+                    //         listenerChainItem.target.setStepExecutionCompensation(compensation)
+                    //
+                    //     })
+                    // }
                 }
 
                 if (edge instanceof GraphChainEdge) {
                     chainItem.edge?.onExecute()
+                }
+
+                // execute loop again
+                // check if node in a loop
+                if (target.parentId) {
+                    // get loop node
+                    // const loopNode = this.findDeepChanItemByTargetId(target.parentId)
+                    // if (loopNode) {
+                    //     // check if it is the deepest node to loop
+                    //     const isTheDeepestNodeToParent = GraphHelper.isNodeFurthest(loopNode.target, target)
+                    //     // if it is the deepest node, the last queue in the loop is executed.
+                    //     // The loop must be added to the next queue to execute
+                    //     if (isTheDeepestNodeToParent) {
+                    //         loopNode.target.setStepExecutionCompensation(this._currentStep)
+                    //         debugger
+                    //         nodeToExecute.addNodesToExecute([loopNode])
+                    //     }
+                    //     console.log(`deepest ${target.data.name}`, isTheDeepestNodeToParent)
+                    //
+                    //     // add loop to next execution order
+                    // }
                 }
 
             }
@@ -223,21 +269,33 @@ export class RunManager {
             //     }
             // }
 
-            if (target instanceof GraphMicroLoopNode && !target.data.isAccumulative && chainItem.inner) {
-                console.log('non accumulative logic: ', chainItem.inner)
-
-                nodeToExecute.addNodesToCurrent(chainItem.inner)
+            const children = this.getChainChildren(chainItem)
+            const outgoingConnected = children.outgoingConnected
+            console.log('outgoingConnected', outgoingConnected)
+            if (target instanceof GraphStartNode) {
+                nodeToExecute.addNodesToCurrent(outgoingConnected)
+            } else {
+                const noDataNodes = outgoingConnected.filter(item => !(item.target instanceof GraphDataNode))
+                console.log('executeNode', chainItem.target.data.name, noDataNodes.map(item => item.target.data.name))
+                nodeToExecute.addNodesToExecute(noDataNodes)
             }
 
-            const isExecuteOutgoingNodes = (isIIsExecuteOutgoingNodes(target) ? target.isExecuteOutgoingNodes : true)
 
-            if (chainItem.outgoingConnected && isExecuteOutgoingNodes) {
-                console.log('executeNode', chainItem.target.data.name, chainItem.outgoingConnected.map(item => item.target.data.name))
-                chainItem.outgoingConnected.forEach(nextChainItem => {
-                    nextChainItem.target.setStepExecutionCompensation(chainItem.stepExecutionCompensation)
-                })
-                nodeToExecute.addNodesToExecute(chainItem.outgoingConnected)
-            }
+            // if (target instanceof GraphMicroLoopNode && !target.data.isAccumulative && chainItem.inner) {
+            //     console.log('non accumulative logic: ', chainItem.inner)
+            //
+            //     nodeToExecute.addNodesToCurrent(chainItem.inner)
+            // }
+            //
+            // const isExecuteOutgoingNodes = (isIIsExecuteOutgoingNodes(target) ? target.isExecuteOutgoingNodes : true)
+            //
+            // if (chainItem.outgoingConnected && isExecuteOutgoingNodes) {
+            //     console.log('executeNode', chainItem.target.data.name, chainItem.outgoingConnected.map(item => item.target.data.name))
+            //     chainItem.outgoingConnected.forEach(nextChainItem => {
+            //         nextChainItem.target.setStepExecutionCompensation(chainItem.stepExecutionCompensation)
+            //     })
+            //     nodeToExecute.addNodesToExecute(chainItem.outgoingConnected)
+            // }
 
 
         }
@@ -246,6 +304,32 @@ export class RunManager {
 
     findDeepChainItemByNode(node: GenericGraphNode): IChainItem | undefined {
         return findChainItemByTarget(this._executionOrder, node);
+    }
+
+    findDeepChanItemByTargetId(id: string, chain = this._executionOrder): IChainItem | undefined {
+        for (const chainItem of chain) {
+            if (chainItem.target.data.id === id) {
+                return chainItem;
+            }
+
+            // Check outgoingConnected chain items recursively
+            if (chainItem.outgoingConnected) {
+                const outgoingResult = this.findDeepChanItemByTargetId(id, chainItem.outgoingConnected);
+                if (outgoingResult) {
+                    return outgoingResult;
+                }
+            }
+
+            // Check inner connected chain items recursively
+            if (chainItem.inner) {
+                const innerResult = this.findDeepChanItemByTargetId(id, chainItem.inner);
+                if (innerResult) {
+                    return innerResult;
+                }
+            }
+        }
+
+        return undefined; // Item not found
     }
 
 
@@ -293,6 +377,16 @@ export class RunManager {
             if (node instanceof GraphStartNode || node instanceof GraphEventListenerNode || node instanceof GraphFormulaNode && node.data.isAutomatic) {
                 return node
             }
+        })
+    }
+
+    private getStartedChainItems() {
+        return this.getStartedNodes().map(node => new IChainItem(node as GraphInvokableNode))
+    }
+    private getStartedInitiatorsChainItems() {
+        const startedNodes = this.getStartedChainItems()
+        return  startedNodes.filter(chainItem => {
+            return !(chainItem.target instanceof GraphEventListenerNode);
         })
     }
 
@@ -381,6 +475,36 @@ export class RunManager {
         }
     }
 
+    private getChainChildrenV2(chainItem: IChainItem): {
+        outgoingConnected: IChainItem[]
+        inner: IChainItem[]
+        endChainItem: IChainItem | undefined
+    } {
+        const outgoingConnected: IChainItem[] = []
+        const inner: IChainItem[] = []
+        let endChainItem: IChainItem | undefined
+
+        chainItem.target.outgoingEdges.forEach(edge => {
+            const target = edge.target
+            if ((edge instanceof GraphChainEdge || target instanceof GraphDataNode) && target instanceof GraphInvokableNode) {
+                const newChainItem = new IChainItem(target, edge as GraphChainEdge)
+                if (edge.sourceMode === EConnectionMode.LoopInnerToChildren) {
+                    inner.push(newChainItem)
+                } else if (edge.targetMode === EConnectionMode.LoopChildrenToExternal) {
+                    endChainItem = newChainItem
+                } else {
+                    outgoingConnected.push(newChainItem)
+                }
+            }
+        })
+
+        return {
+            outgoingConnected,
+            inner,
+            endChainItem,
+        }
+    }
+
     private resetBeforeStep() {
         this.resetIsTransferredResources()
     }
@@ -400,11 +524,14 @@ export class RunManager {
 
 
     get isDiagramFinished() {
-        return this._diagramRunCount === this._diameter
+        return this.nodeToExecute.next.length === 0
     }
 
     resetAfterDiagramRun() {
         if (this.isDiagramFinished) {
+            this.nodeToExecute = new NodeExecutionManager(this, [])
+            const initiatorsNodes = this.getStartedInitiatorsChainItems()
+            this.nodeToExecute.addNodesToExecute(initiatorsNodes)
             this._diagramRunCount = 0
             this._graph.nodesManager.resetAfterDiagramRun();
         }
