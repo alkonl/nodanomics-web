@@ -171,15 +171,7 @@ export class RunManager {
 
         if (target instanceof GraphInvokableNode) {
 
-            // if (target instanceof GraphLoopNode) {
-            //     if (target instanceof GraphMicroLoopNode && target.data.isAccumulative) {
-            //         if (target.currentLoopCount === target.loopCount) {
-            //             notInvokeLoop = true
-            //         }
-            //     } else if (target instanceof GraphLoopNode && !target.isLoopActive) {
-            //         notInvokeLoop = true
-            //     }
-            //
+
             const isItLoop = target instanceof GraphLoopNode
             let isInvokeLoop = false
             if (target instanceof GraphLoopNode) {
@@ -217,9 +209,14 @@ export class RunManager {
                             loopNodeExecutionManager.invokeAll()
                         }
                     } else if (target.isLoopActive) {
+                        target.children.forEach(child => {
+                            if (child instanceof GraphMicroLoopNode && !child.data.isAccumulative) {
+                                child.resetLoopStep()
+                            }
+                        })
+
                         //not accumulative logic
                         nodeToExecute.addNodesToCurrent(innerNodes)
-                        console.log('not accumulative logic')
                     }
                 }
 
