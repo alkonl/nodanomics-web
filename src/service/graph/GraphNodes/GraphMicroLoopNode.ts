@@ -11,6 +11,10 @@ export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
         super(value, runManager, nodeManager);
     }
 
+    get isAccumulative() {
+        return this.data.isAccumulative || false
+    }
+
     get currentLoopCount() {
         return this.data.currentLoopCount;
     }
@@ -29,14 +33,15 @@ export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
 
     resetBeforeStep() {
         super.resetBeforeStep();
-        const hasParent = this.data.parentId !== undefined
-        if (hasParent) {
-            this.resetLoopStep()
-        }
+        // const hasParent = this.data.parentId !== undefined
+        // if (hasParent) {
+        //     this.resetLoopStep()
+        // }
     }
 
     protected checkIsLoopActive() {
-        const isLoopActive = this.currentLoopCount < this.loopCount
+        const isLoopActive = this.currentLoopCount <= this.loopCount
+        console.log('checkIsLoopActive', this.data.name, isLoopActive, this.currentLoopCount, this.loopCount)
         this.setIsLoopActive(isLoopActive)
         return isLoopActive
     }
@@ -56,16 +61,15 @@ export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
 
     invokeStep() {
         super.invokeStep()
-        if (this.checkIsLoopActive()) {
-            this.addStep()
-        }
+        this.addStep()
+
     }
 
     private addStep() {
         const updatedLoopCount = this.currentLoopCount + 1
         const isPossibleToAddStep = updatedLoopCount <= this.loopCount
-        if (isPossibleToAddStep) {
+        // if (isPossibleToAddStep) {
             this.updateNode({currentLoopCount: updatedLoopCount})
-        }
+        // }
     }
 }
