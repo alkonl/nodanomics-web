@@ -49,13 +49,13 @@ export class RunManager {
         return this._currentStep
     }
 
-    private resetCountOfExecuted() {
-        this._countOfExecuted = 0
-    }
-
-    addCountOfExecuted() {
-        this._countOfExecuted++
-    }
+    // private resetCountOfExecuted() {
+    //     this._countOfExecuted = 0
+    // }
+    //
+    // addCountOfExecuted() {
+    //     this._countOfExecuted++
+    // }
 
     resetCurrentStep() {
         this.nodeToExecute = new NodeExecutionManager(this, [])
@@ -88,7 +88,7 @@ export class RunManager {
     private nodeToExecute = new NodeExecutionManager(this, [])
 
     invokeStep() {
-        this.resetCountOfExecuted()
+        // this.resetCountOfExecuted()
         this.resetBeforeStep()
         const chain = this.getExecutionOrder()
         this.setExecutionOrder(chain)
@@ -131,16 +131,18 @@ export class RunManager {
     executeNode(chainItem: IChainItem, nodeToExecute: NodeExecutionManager, options: { invoke: boolean }) {
         const target = chainItem.target
         const edge = chainItem.edge
+
+        //check if incoming edge is meet condition
         const isEdgeMeetCondition = edge === undefined
             ? true
             : edge.isMeetCondition
+
+        // if not meet just abroad execution
         if (!isEdgeMeetCondition && !(target instanceof GraphDataNode)) {
             return
         }
 
         if (target instanceof GraphInvokableNode) {
-
-
             const isItLoop = target instanceof GraphLoopNode
             let isInvokeLoop = false
             if (target instanceof GraphLoopNode) {
@@ -152,20 +154,28 @@ export class RunManager {
                     isInvokeLoop = true
                 }
             }
+
+            // algorithm has specific logic for accumulative loops
             const isInvoke = isItLoop
                 ? isInvokeLoop && options.invoke
                 : options.invoke
 
+
             if (isInvoke) {
                 target.invokeStep()
+
+
                 if (target instanceof GraphLoopNode) {
+                    // internal nodes are nodes that are the first nodes within the cycle
                     const innerNodes = this.getChainChildren(chainItem).inner
+
 
                     if (target instanceof GraphMicroLoopNode && target.data.isAccumulative || target instanceof GraphWhileLoopNode) {
                         // accumulative logic
                         // check if loop is has a parent loop
                         const hasParentLoop = target.data.parentId !== undefined
 
+                        // if has parent loop, then reset loop step
                         if (hasParentLoop && target instanceof GraphMicroLoopNode) {
                             target.resetLoopStep()
                             for (let i = 0; i < target.loopCount; i++) {
@@ -177,8 +187,9 @@ export class RunManager {
                             loopNodeExecutionManager.invokeAll()
                         }
                     } else if (target.isLoopActive) {
+
                         target.children.forEach(child => {
-                            if (child instanceof GraphMicroLoopNode && !child.data.isAccumulative) {
+                            if (child instanceof GraphMicroLoopNode) {
                                 child.resetLoopStep()
                             }
                         })
@@ -188,6 +199,8 @@ export class RunManager {
                     }
                 }
 
+
+                // check event triggers
                 if (isITriggeredEvent(target)) {
                     const triggeredEventName = target.getTriggeredEvent()
                     const listenerNodes = this.executionOrder

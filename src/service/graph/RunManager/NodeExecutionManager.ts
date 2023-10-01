@@ -23,7 +23,7 @@ export class NodeExecutionManager {
             this.runManager.executeNode(argument, this, {invoke: true})
         }
 
-        this.runManager.addCountOfExecuted()
+        // this.runManager.addCountOfExecuted()
     }
 
 
