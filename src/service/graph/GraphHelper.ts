@@ -1,7 +1,8 @@
-import {GraphBaseNode, GraphInvokableNode} from "./GraphNodes";
+import {GraphDataNode, GraphInvokableNode, GraphLoopNode} from "./GraphNodes";
 import {GraphChainEdge} from "./GraphEdge";
-import {EConnectionMode} from "../../interface";
 import {GenericGraphNode} from "./GenericGraphNode";
+import {GraphMicroLoopNode} from "./GraphNodes/GraphMicroLoopNode";
+import {EConnectionMode} from "../../interface";
 
 
 export class GraphHelper {
@@ -58,14 +59,38 @@ export class GraphHelper {
         visited.add(node);
 
         let maxDepth = 0;
+        let theLongestBranchIsInner = false
         for (const edge of node.outgoingEdges) {
-            if (!visited.has(edge.target) && edge instanceof GraphChainEdge && edge.sourceMode !== EConnectionMode.LoopInnerToChildren) {
-                maxDepth = Math.max(maxDepth, this.longestBranchFromNode(edge.target, visited));
+            let isInnerNode = false
+            let skipEdge = false
+            if (edge.source instanceof GraphLoopNode) {
+                if (edge.source instanceof GraphMicroLoopNode && !edge.source.data.isAccumulative) {
+                    isInnerNode = true
+                    skipEdge = false
+                } else if (edge.sourceMode === EConnectionMode.LoopInnerToChildren) {
+                    skipEdge = true
+                }
+            }
+
+            if (skipEdge) {
+                continue
+            }
+            if (!visited.has(edge.target) && edge instanceof GraphChainEdge) {
+
+                const depth = this.longestBranchFromNode(edge.target, visited);
+                if (depth > maxDepth) {
+                    maxDepth = depth
+                    theLongestBranchIsInner = isInnerNode
+                }
             }
         }
 
+        const isMicroLoop = node instanceof GraphMicroLoopNode
+        if(theLongestBranchIsInner && isMicroLoop){
+           return maxDepth * node.loopCount
+        }
 
-        return maxDepth + 1; // +1 to count the current node
+        return maxDepth  + 1; // +1 to count the current node
     }
 
     static findLongestBranch(nodes: GenericGraphNode[]): number {
@@ -81,5 +106,33 @@ export class GraphHelper {
         return maxLength;
     }
 
+    static isNodeFurthest(source: GenericGraphNode, target: GenericGraphNode): boolean {
+        const distances = new Map<GenericGraphNode, number>();
+        const visited = new Set<GenericGraphNode>();
+        const queue: { node: GenericGraphNode, distance: number }[] = [{ node: source, distance: 0 }];
+
+        let maxDistance = 0;
+
+        while (queue.length > 0) {
+            const current = queue.shift();
+            if(current){
+                distances.set(current.node, current.distance);
+                visited.add(current.node);
+
+                maxDistance = Math.max(maxDistance, current.distance);
+
+
+                for (const edge of current.node.outgoingEdges) {
+                    const notCheck = edge.target instanceof GraphDataNode
+                    if (!visited.has(edge.target) && !notCheck) {
+                        queue.push({ node: edge.target, distance: current.distance + 1 });
+                    }
+                }
+            }
+
+        }
+
+        return distances.get(target) === maxDistance;
+    }
 
 }

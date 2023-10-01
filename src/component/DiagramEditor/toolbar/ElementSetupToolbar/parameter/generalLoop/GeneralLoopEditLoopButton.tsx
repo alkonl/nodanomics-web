@@ -19,7 +19,7 @@ export const GeneralLoopEditLoopButton: React.FC<{
     }
 
     return (
-        <ElementParameter label="Children Nodes">
+        <ElementParameter label="">
             <MButton.Submit
                 onClick={onClickEditLoop}
                 sx={{

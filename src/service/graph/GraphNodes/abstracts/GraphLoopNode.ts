@@ -87,10 +87,15 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
         }
     }
 
-    updateChildrenNodesList() {
-        const children: { id: string, name: string }[] = this.nodeManager.nodes.filter(node => {
+    get children() {
+        return this.nodeManager.nodes.filter(node => {
             return node.parentId === this.data.id
-        }).map(node => ({
+        })
+    }
+
+    updateChildrenNodesList() {
+        const childrenNodes = this.children
+        const children: { id: string, name: string }[] = childrenNodes.map(node => ({
             id: node.data.id,
             name: node.data.name,
         }))
@@ -98,6 +103,7 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
             ...this.data,
             children
         }
+        return childrenNodes
     }
 
     updateConnectedNodes() {

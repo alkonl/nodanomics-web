@@ -21,7 +21,7 @@ import {
     DataFieldParameter,
     DatasetParameter,
     DatasetReadOnly,
-    ForLoopLoopsParameter,
+    ForLoopParameterContainer,
     NodeConnectedNodesParameter,
     NodeFormulaParameterContainer
 } from "../parameter";
@@ -78,7 +78,7 @@ export const PropertiesSection: React.FC<{
 
                 {'trigger' in selectedElementData && <NodeTriggerModeParameter nodeData={selectedElementData}/>}
                 {selectedElementData.type === EDiagramNode.MicroLoop
-                    && <ForLoopLoopsParameter nodeData={selectedElementData}/>}
+                    && <ForLoopParameterContainer nodeData={selectedElementData}/>}
                 {'actionMode' in selectedElementData && <NodeActionParameter node={selectedElementData}/>}
                 {selectedElementData.elementType === EElementType.Node
                     && selectedElementData.type === EDiagramNode.DatasetDatafield

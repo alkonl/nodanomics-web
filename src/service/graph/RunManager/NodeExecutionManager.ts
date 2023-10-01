@@ -1,4 +1,5 @@
-import {IChainItem, RunManager} from "./RunManager";
+import {IChainItem} from "./ChainItem";
+import {RunManager} from "./RunManager";
 
 export class NodeExecutionManager {
     executionCount = 0
@@ -16,41 +17,35 @@ export class NodeExecutionManager {
     }
 
     invokeNodesToExecute() {
-        if (this.executionCount === 0) {
+        // if (this.executionCount === 0) {
             this.current = [...this.next]
             this.executionCount = this.next.length
             this.next = []
-            if (this.current.length !== 0) {
+            // if (this.current.length !== 0) {
                 // const isStart = this.current[0]?.target instanceof GraphStartNode
 
 
-
-
-
                 for (const argument of this.current) {
-                    const compensation = argument.stepExecutionCompensation
-                        ? argument.stepExecutionCompensation
-                        : 0
-                    const currentLayerTick = this.runManager.diagramRunCount
-                    const invoke = this.runManager.countOfExecuted === currentLayerTick - compensation
+                    console.log('invokeNodesToExecute', argument.target.data.name, this.executionCount)
+                    // const compensation = argument.stepExecutionCompensation
+                    //     ? argument.stepExecutionCompensation
+                    //     : 0
+                    // const currentLayerTick = this.runManager.diagramRunCount
+                    // const invoke = this.runManager.countOfExecuted === currentLayerTick - compensation
 
                     this.executionCount--
-                    this.runManager.executeNode(argument, this, {invoke})
+                    this.runManager.executeNode(argument, this, {invoke: true})
 
                 }
                 this.runManager.addCountOfExecuted()
-                this.invokeNodesToExecute()
-            }
-        }
+                // this.invokeNodesToExecute()
+            // }
+        // }
 
     }
 
-    getToCompensation() {
-
-    }
 
     invokeAll() {
-        if (this.executionCount === 0) {
 
             this.current = [...this.next]
             this.executionCount = this.next.length
@@ -62,8 +57,8 @@ export class NodeExecutionManager {
                     this.invokeAll()
                 }
             }
-        }
     }
+
 
 
     setExecutePerOneStep(value: boolean) {
@@ -74,7 +69,13 @@ export class NodeExecutionManager {
         return this.next
     }
 
-    addNodesToExecute(chainItem: IChainItem[]) {
-        this.next.push(...chainItem)
+    addNodesToExecute(chainItems: IChainItem[]) {
+        this.next.push(...chainItems)
+    }
+
+    addNodesToCurrent(chainItem: IChainItem[]) {
+        this.current.push(...chainItem)
+        this.executionCount += chainItem.length
+
     }
 }
