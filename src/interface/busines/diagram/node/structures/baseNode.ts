@@ -18,13 +18,17 @@ export enum EDiagramNode {
     Label = 'Label',
 }
 
+export type IConnectedNodeInfo = {
+    id: string;
+    label: string;
+}
 
 export interface IDiagramNodeBaseData extends IDiagramBaseInteractiveElementData  {
     type: EDiagramNode;
     parentId?: string;
     isCollapsed: boolean;
     tag?: string;
-    connectedNodes?: string[];
+    connectedNodes?: IConnectedNodeInfo[];
     defaultZIndex?: number;
     layerId: string;
 }

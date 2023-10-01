@@ -19,7 +19,10 @@ export const NodeConnectedNodesParameter: React.FC<{
                 value: variable.value + variable.variableName
             }))
         }
-        return baseNodeData.connectedNodes
+        return baseNodeData.connectedNodes?.map(node => ({
+            label: node.label,
+            value: node.id
+        }))
     }, [baseNodeData])
 
     return (
