@@ -1,10 +1,16 @@
 import {GraphLoopNode} from "./abstracts";
-import {EConnectionMode, IMicroLoopNodeData, IResetBeforeStep, IUpdateGraphNodeState} from "../../../interface";
+import {
+    EConnectionMode,
+    IMicroLoopNodeData,
+    IResetAfterDiagramRun,
+    IResetBeforeStep,
+    IUpdateGraphNodeState
+} from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
 
 export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
-    implements IUpdateGraphNodeState, IResetBeforeStep {
+    implements IUpdateGraphNodeState, IResetBeforeStep, IResetAfterDiagramRun {
 
 
     constructor(value: IMicroLoopNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
@@ -29,6 +35,10 @@ export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
             }
         }
         return 0
+    }
+
+    resetAfterDiagramRun() {
+        this.resetLoopStep()
     }
 
     resetBeforeStep() {

@@ -264,23 +264,23 @@ export class RunManager {
                 nodeToExecute.addNodesToCurrent(outgoingConnected)
             } else {
                 const noDataNodes = outgoingConnected.filter(item => !(item.target instanceof GraphDataNode))
-                console.log('executeNode', chainItem.target.data.name, noDataNodes.map(item => item.target.data.name))
-                if (target instanceof GraphMicroLoopNode) {
-                    console.log(`GraphLoopNode ${target.data.name}`, target.isAccumulative, !target.isLoopActive,)
-                }
 
                 if (target instanceof GraphMicroLoopNode && !target.isAccumulative) {
-                    if(!target.isLoopActive){
+                    if (!target.isLoopActive) {
                         nodeToExecute.addNodesToCurrent(noDataNodes)
-
                     }
                 } else {
                     nodeToExecute.addNodesToExecute(noDataNodes)
-
                 }
                 const endChainItem = children.endChainItem
                 if (endChainItem && endChainItem.target instanceof GraphMicroLoopNode) {
-                    nodeToExecute.addNodesToExecute([endChainItem])
+                    if (target instanceof GraphMicroLoopNode && !target.isAccumulative) {
+                        if (!target.isLoopActive) {
+                            nodeToExecute.addNodesToCurrent([endChainItem])
+                        }
+                    } else {
+                        nodeToExecute.addNodesToExecute([endChainItem])
+                    }
                 }
             }
 
