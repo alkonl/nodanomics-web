@@ -1,7 +1,7 @@
 import React from 'react';
 import {Box, Typography} from "@mui/material";
 import {EColor, EFontColor} from "../../../../constant";
-import {EElementType, nodeSetupToolbarNames} from "../../../../interface";
+import {EDiagramNode, EElementType, nodeSetupToolbarNames} from "../../../../interface";
 import {useCurrentEditElement} from "../../../../hooks";
 import {CommentSection, NodeStatisticSection, PropertiesSection} from "./section";
 import {StyleSection} from "./section/StyleSection";
@@ -68,7 +68,7 @@ export const ElementSetupToolbar = () => {
                                 justifyContent: 'flex-end',
                             }}
                         >
-                            <NodeDeleteButton nodeId={selectedElementData.id}/>
+                            {selectedElementData.type !== EDiagramNode.Start  && <NodeDeleteButton nodeId={selectedElementData.id}/>}
                         </Box>}
                     </Box>
                     : <Typography sx={{
