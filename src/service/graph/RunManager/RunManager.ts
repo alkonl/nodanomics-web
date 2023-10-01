@@ -1,7 +1,6 @@
 import {Graph} from "../Graph";
 import {
     EConnectionMode,
-    isIIsEventTriggered,
     isIResetBeforeStep,
     isITriggeredEvent,
     isIUpdateGraphNodeStatePerStep,
@@ -94,7 +93,6 @@ export class RunManager {
         const chain = this.getExecutionOrder()
         this.setExecutionOrder(chain)
         this._diameter = this.getDiameter()
-        console.log('this.nodeToExecute', this.nodeToExecute.next.map(item => item.target.data.name))
         if (this._currentStep === 0 || this.isDiagramFinished) {
             const initiatorsNodes = this.getStartedInitiatorsChainItems()
             this.nodeToExecute.addNodesToExecute(initiatorsNodes)
@@ -133,7 +131,6 @@ export class RunManager {
     executeNode(chainItem: IChainItem, nodeToExecute: NodeExecutionManager, options: { invoke: boolean }) {
         const target = chainItem.target
         const edge = chainItem.edge
-        console.log(`start: ${target.data.name}`)
         const isEdgeMeetCondition = edge === undefined
             ? true
             : edge.isMeetCondition
@@ -152,7 +149,6 @@ export class RunManager {
                 } else if (target instanceof GraphWhileLoopNode) {
                     isInvokeLoop = true
                 } else if (target instanceof GraphLoopNode && target.isLoopActive) {
-                    console.log(`target.isLoopActive ${target.data.name}`, target.isLoopActive)
                     isInvokeLoop = true
                 }
             }
@@ -217,7 +213,6 @@ export class RunManager {
             }
             const children = this.getChainChildren(chainItem)
             const outgoingConnected = children.outgoingConnected
-            console.log('outgoingConnected', outgoingConnected)
             if (target instanceof GraphStartNode) {
                 nodeToExecute.addNodesToCurrent(outgoingConnected)
             } else {

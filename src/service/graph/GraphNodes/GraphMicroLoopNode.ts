@@ -51,7 +51,6 @@ export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
 
     protected checkIsLoopActive() {
         const isLoopActive = this.currentLoopCount <= this.loopCount
-        console.log('checkIsLoopActive', this.data.name, isLoopActive, this.currentLoopCount, this.loopCount)
         this.setIsLoopActive(isLoopActive)
         return isLoopActive
     }
