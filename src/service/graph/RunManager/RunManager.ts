@@ -168,37 +168,41 @@ export class RunManager {
         if (!isEdgeMeetCondition && !(target instanceof GraphDataNode)) {
             return
         }
-        let notInvokeLoop = false
         if (target instanceof GraphInvokableNode) {
 
-            if (target instanceof GraphLoopNode) {
-                if (target instanceof GraphMicroLoopNode && target.data.isAccumulative) {
-                    if (target.currentLoopCount === target.loopCount) {
-                        notInvokeLoop = true
-                    }
-                } else if (target instanceof GraphLoopNode && !target.isLoopActive) {
-                    notInvokeLoop = true
-                }
-            }
-            if (options.invoke && !notInvokeLoop) {
+            // if (target instanceof GraphLoopNode) {
+            //     if (target instanceof GraphMicroLoopNode && target.data.isAccumulative) {
+            //         if (target.currentLoopCount === target.loopCount) {
+            //             notInvokeLoop = true
+            //         }
+            //     } else if (target instanceof GraphLoopNode && !target.isLoopActive) {
+            //         notInvokeLoop = true
+            //     }
+            //
+            if (options.invoke) {
                 target.invokeStep()
                 if (target instanceof GraphLoopNode) {
+                    const innerNodes = this.getChainChildren(chainItem).inner
+
                     if (target instanceof GraphMicroLoopNode && target.data.isAccumulative || target instanceof GraphWhileLoopNode) {
                         // accumulative logic
-                        const inner = this.getChainChildren(chainItem).inner
                         // check if loop is has a parent loop
                         const hasParentLoop = target.data.parentId !== undefined
 
                         if (hasParentLoop && target instanceof GraphMicroLoopNode) {
                             target.resetLoopStep()
                             for (let i = 0; i < target.loopCount; i++) {
-                                const loopNodeExecutionManager = new NodeExecutionManager(this, inner)
+                                const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
                                 loopNodeExecutionManager.invokeAll()
                             }
                         } else {
-                            const loopNodeExecutionManager = new NodeExecutionManager(this, inner)
+                            const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
                             loopNodeExecutionManager.invokeAll()
                         }
+                    } else {
+                        //not accumulative logic
+                        nodeToExecute.addNodesToCurrent(innerNodes)
+                        console.log('not accumulative logic')
                     }
                 }
 
