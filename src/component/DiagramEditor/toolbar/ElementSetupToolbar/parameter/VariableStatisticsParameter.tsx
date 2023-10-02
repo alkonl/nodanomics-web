@@ -3,9 +3,10 @@ import {Box} from "@mui/material";
 import ReactApexChart from "react-apexcharts";
 import {ApexOptions} from "apexcharts";
 import {Parameter} from "../../../../base";
-import {useWidthAndHeight} from "../../../../../hooks";
+import {useExecutionGraphStepCount, useWidthAndHeight} from "../../../../../hooks";
 import {EColor} from "../../../../../constant";
-import {useDiagramEditorState} from "../../../../../redux";
+import {createChartSeries} from "../../../../../service/diagram/createChartSeries";
+import {IDiagramNodeBaseData, INodeHistory} from "../../../../../interface";
 
 
 const options: ApexOptions = {
@@ -63,22 +64,12 @@ const options: ApexOptions = {
 }
 
 export const VariableStatisticsParameter: React.FC<{
-    resourcesCountHistory?: number[],
-}> = ({resourcesCountHistory = []}) => {
-    const {currentRunningDiagramStep} = useDiagramEditorState()
-    const {series} = useMemo(() => {
-        const arrayWithZero = Array.from({length: currentRunningDiagramStep - resourcesCountHistory.length}, () => 0)
-        const formattedHistory = [...arrayWithZero, ...resourcesCountHistory]
-        const chartData = [{
-            name: 'Resources',
-            data: formattedHistory || [],
-        }]
-        const isShowChart = formattedHistory.length > 0
-        return {
-            series: chartData,
-            isShowChart,
-        }
-    }, [resourcesCountHistory])
+    nodeData: IDiagramNodeBaseData & INodeHistory,
+}> = ({nodeData}) => {
+    const resourcesCountHistory = nodeData.history
+    const stepCount = useExecutionGraphStepCount()
+
+    const series = useMemo(() => createChartSeries(nodeData, 0, stepCount), [nodeData])
 
     const {elementRef, elementSize} = useWidthAndHeight()
 
@@ -109,7 +100,7 @@ export const VariableStatisticsParameter: React.FC<{
                     width={elementSize.width}
                     height={elementSize.height}
                     options={options}
-                    series={series}
+                    series={[series]}
                     type="line"
                 />
             </Box>

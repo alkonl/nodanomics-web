@@ -29,7 +29,7 @@ export const NodeStatisticSection: React.FC<{
             >
 
                 <VariableStatisticsParameter
-                    resourcesCountHistory={nodeData.history}
+                    nodeData={nodeData}
                 />
                 <Parameter.Container columns={9} gap={1}>
                     <>
