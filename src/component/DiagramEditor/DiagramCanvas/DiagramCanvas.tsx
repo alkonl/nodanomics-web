@@ -1,7 +1,7 @@
 import React, {DragEvent, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import type {EdgeChange, NodeChange, ReactFlowInstance} from 'reactflow'
 // eslint-disable-next-line import/named
-import ReactFlow, {Background, BackgroundVariant, ConnectionMode, Controls} from 'reactflow';
+import ReactFlow, {Background, BackgroundVariant, ConnectionMode, Controls, SelectionMode} from 'reactflow';
 import 'reactflow/dist/style.css';
 
 import {
@@ -168,7 +168,9 @@ export const DiagramCanvas = () => {
                     connectionMode={ConnectionMode.Loose}
                     onEdgeClick={onEdgeClick}
                     onSelectionChange={onSelectionChange}
+                    elementsSelectable={isInteractive}
                     multiSelectionKeyCode={multiSelectKeyCodes}
+                    // selectionMode={SelectionMode.Partial}
                     // we have custom way to delete nodes
                     deleteKeyCode={'undefined'}
                 >
