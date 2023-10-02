@@ -230,12 +230,13 @@ export class RunManager {
                 nodeToExecute.addNodesToCurrent(outgoingConnected)
             } else {
                 const noDataNodes = outgoingConnected.filter(item => !(item.target instanceof GraphDataNode))
-
+                const dataNodes = outgoingConnected.filter(item => item.target instanceof GraphDataNode)
                 if (target instanceof GraphMicroLoopNode && !target.isAccumulative) {
                     if (!target.isLoopActive) {
                         nodeToExecute.addNodesToCurrent(noDataNodes)
                     }
                 } else {
+                    nodeToExecute.addNodesToCurrent(dataNodes)
                     nodeToExecute.addNodesToExecute(noDataNodes)
                 }
                 const endChainItem = children.endChainItem
