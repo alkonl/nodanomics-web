@@ -12,23 +12,24 @@ export const useShouldLoadRoute = () => {
                 return setIsNoSessionMoreThan2Seconds(true)
             }
 
-        }, 2000)
+        }, 10000)
         return () => clearTimeout(timeOut)
     }, [session]);
 
     return useMemo(() => {
-
+        console.info('wait: ', isNoSessionMoreThan2Seconds)
         if (isNoSessionMoreThan2Seconds) {
             return {isLoading: false, hasInvalidClaims: true}
         }
 
         if (!session) {
+            console.info('no session')
             return {isLoading: true}
         }
-        if (!session.loading && session.invalidClaims.length === 0) {
-            return {isLoading: false, hasInvalidClaims: false}
+        if (!session.loading) {
+            console.info('claims: ',  session.invalidClaims, session)
+            return {isLoading: false, hasInvalidClaims: session.invalidClaims.length > 0}
         }
-
-        return {isLoading: false, hasInvalidClaims: true}
+        return {isLoading: true}
     }, [session, isNoSessionMoreThan2Seconds])
 }
