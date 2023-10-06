@@ -10,13 +10,32 @@ export class GraphTagManager {
     ) {
     }
 
+
+    updateTagVariable({
+                       tag, value
+                   }: {
+        tag: string
+        value: number | undefined
+    }) {
+        if (value) {
+            this.setVariable({tag, value})
+        } else {
+            this.clearVariable(tag)
+        }
+    }
+
+
     setVariable({
-                    name, value
+                    tag, value
                 }: {
-        name: string
+        tag: string
         value: number
     }) {
-        this.tagVariables.set(name, value)
+        this.tagVariables.set(tag, value)
+    }
+
+    clearVariable(tag: string) {
+        this.tagVariables.delete(tag)
     }
 
     getNodeValueByTag({tag}: { tag: string }) {

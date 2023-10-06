@@ -113,10 +113,10 @@ export class RunManager {
 
     private updateAllTags() {
         this.graph.nodesManager.nodes.forEach((node)=>{
-            if(node.data.tag && isIGetNodeExternalValue(node) && node.nodeExternalValue !== undefined){
-                this.graph.graphTagManager.setVariable({
+            if(node.data.tag && isIGetNodeExternalValue(node)){
+                this.graph.graphTagManager.updateTagVariable({
                     value: node.nodeExternalValue,
-                    name: node.data.tag,
+                    tag: node.data.tag,
                 })
             }
         })
@@ -178,9 +178,9 @@ export class RunManager {
             if (isInvoke) {
                 target.invokeStep()
                 if(target.data.tag && isIGetNodeExternalValue(target) && target.nodeExternalValue !== undefined){
-                    this.graph.graphTagManager.setVariable({
+                    this.graph.graphTagManager.updateTagVariable({
                         value: target.nodeExternalValue,
-                        name: target.data.tag,
+                        tag: target.data.tag,
                     })
                 }
 
