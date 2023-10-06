@@ -28,19 +28,36 @@ export class NodeExecutionManager {
 
 
     invokeAll() {
-        this.current = [...this.next]
-        this.executionCount = this.next.length
-        this.next = []
-        if (this.executionCount > 0) {
-            for (const argument of this.current) {
-                this.executionCount--
-                this.runManager.executeNode(argument, this, {invoke: true})
+        while (true) {
+            this.current = [...this.next];
+            this.executionCount = this.next.length;
+            this.next = [];
 
+            if (this.executionCount > 0) {
+                for (const argument of this.current) {
+                    this.executionCount--;
+                    this.runManager.executeNode(argument, this, {invoke: true});
+                }
+            }
+
+            // Break the loop if executionCount is 0 and there are no next items to process.
+            if (this.executionCount === 0 && this.next.length === 0) {
+                break;
             }
         }
-        if(this.executionCount === 0 && this.next.length > 0){
-            this.invokeAll()
-        }
+        // this.current = [...this.next]
+        // this.executionCount = this.next.length
+        // this.next = []
+        // if (this.executionCount > 0) {
+        //     for (const argument of this.current) {
+        //         this.executionCount--
+        //         this.runManager.executeNode(argument, this, {invoke: true})
+        //
+        //     }
+        // }
+        // if(this.executionCount === 0 && this.next.length > 0){
+        //     this.invokeAll()
+        // }
     }
 
     addNodesToExecute(chainItems: IChainItem[]) {
