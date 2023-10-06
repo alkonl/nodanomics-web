@@ -20,6 +20,7 @@ import {geAllChildrenNodes, Graph, resetNodeStates, RunManager} from "../../serv
 import {canNodeHasChildren} from "../../service/reactflow/node/canNodeHasChildren";
 import {ApexOptions} from "apexcharts";
 import {DIAGRAM_RUN_DURATION} from "../../constant";
+import {runManager, graph} from "./diagramGraphInstance";
 
 interface IDiagramElements {
     diagramNodes: IReactFlowNode[]
@@ -90,9 +91,9 @@ const initialState: IDiagramEditorState = {
     history: initialHistory,
 }
 
-const graph = new Graph()
-const runManager = new RunManager(graph)
-graph.attachRunManager(runManager)
+// const graph = new Graph()
+// const runManager = new RunManager(graph)
+// graph.attachRunManager(runManager)
 
 const updateNodesFromGraph = (diagramNodes: IReactFlowNode[]) => {
     diagramNodes.forEach(node => {
@@ -418,7 +419,7 @@ export const diagramEditorSlice = createSlice({
             })
         },
         invokeStep: (state) => {
-            runManager.invokeStep()
+            // runManager.invokeStep()
             updateNodesFromGraph(state.diagramNodes)
             updateEdgesFromGraph(state.diagramEdges)
             state.currentRunningDiagramStep = runManager.currentStep
