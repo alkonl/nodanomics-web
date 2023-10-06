@@ -37,8 +37,10 @@ export abstract class GraphMatchManager {
         formula: string,
         variables: INumberVariable[]
     }) {
-        if(Number(formula)){
-
+        if (Number(formula) && !isNaN(Number(formula))) {
+            return Number(formula)
+        } else if (formula === 'true') {
+            return true
         }
 
         // pattern to get dataset tags from formula (mmrRangeDataset.lengthX, mmrRangeDataset[1][2])

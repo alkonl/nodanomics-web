@@ -26,26 +26,39 @@ export class GraphTagManager {
         }
     }
 
+    // getNodeTagVariables(): INumberVariable[] {
+    //     const variables: INumberVariable[] = [];
+    //     this.tagVariables.forEach((value, key) => {
+    //         variables.push({
+    //             value,
+    //             variableName: key
+    //         })
+    //     })
+    //     return variables
+    //     // const variables: INumberVariable[] = [];
+    //     //
+    //     // for (const node of this.nodeManager.nodes) {
+    //     //     if (isIGetNodeExternalValue(node) && node.tag && node.nodeExternalValue !== undefined) {
+    //     //         variables.push({
+    //     //             variableName: node.tag,
+    //     //             value: node.nodeExternalValue,
+    //     //         });
+    //     //     }
+    //     // }
+    //     // return variables;
+    // }
     getNodeTagVariables(): INumberVariable[] {
         const variables: INumberVariable[] = [];
-        this.tagVariables.forEach((value, key) => {
-            variables.push({
-                value,
-                variableName: key
-            })
-        })
-        return variables
-        // const variables: INumberVariable[] = [];
-        //
-        // for (const node of this.nodeManager.nodes) {
-        //     if (isIGetNodeExternalValue(node) && node.tag && node.nodeExternalValue !== undefined) {
-        //         variables.push({
-        //             variableName: node.tag,
-        //             value: node.nodeExternalValue,
-        //         });
-        //     }
-        // }
-        // return variables;
+
+        for (const node of this.nodeManager.nodes) {
+            if (isIGetNodeExternalValue(node) && node.tag && node.nodeExternalValue !== undefined) {
+                variables.push({
+                    variableName: node.tag,
+                    value: node.nodeExternalValue,
+                });
+            }
+        }
+        return variables;
     }
 
 }
