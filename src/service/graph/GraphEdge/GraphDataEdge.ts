@@ -1,6 +1,6 @@
 import {GraphBaseEdge} from "./abstracts";
 import {IDataConnectionData, IResetBeforeStep} from "../../../interface";
-import {GraphBaseNode, GraphDataNode} from "../GraphNodes";
+import {GraphBaseNode, GraphDataNode, GraphTagManager} from "../GraphNodes";
 import {GraphNodeManager} from "../NodeManager";
 import {GraphMatchManagerConnections} from "../GraphMatchManager";
 
@@ -15,9 +15,10 @@ implements IResetBeforeStep{
         target: GraphBaseNode,
         data: IDataConnectionData,
         nodesManager: GraphNodeManager,
+        tagManager: GraphTagManager
     ) {
         super(source, target, data);
-        this.matchManager = new GraphMatchManagerConnections(this, nodesManager);
+        this.matchManager = new GraphMatchManagerConnections(this, nodesManager, tagManager);
     }
 
     resetBeforeStep() {

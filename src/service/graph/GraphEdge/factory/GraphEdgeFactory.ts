@@ -15,7 +15,7 @@ export class GraphEdgeFactory {
         const edgeType = edgeData.type;
         switch (edgeType) {
             case EConnection.DataConnection:
-                return new GraphDataEdge(source, target, edgeData, graph.nodesManager);
+                return new GraphDataEdge(source, target, edgeData, graph.nodesManager, graph.graphTagManager);
             case EConnection.LogicConnection:
                 return new GraphLogicEdge(source, target, edgeData, graph.nodesManager);
             case EConnection.ChainConnection:

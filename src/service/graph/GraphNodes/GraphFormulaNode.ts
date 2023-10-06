@@ -25,7 +25,7 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
 
     constructor(value: IFormulaNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(value, runManager, nodeManager);
-        this.matchManager = new GraphMatchManagerNode(this.incomingEdges, nodeManager)
+        this.matchManager = new GraphMatchManagerNode(this.incomingEdges, nodeManager, this.runManager.graph.graphTagManager)
     }
 
 

@@ -13,7 +13,7 @@ export abstract class GraphLoopNode<IGenericNodeData extends ILoopNodeData = ILo
 
     constructor(value: IGenericNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(value, runManager, nodeManager);
-        this.matchManager = new GraphMatchManagerNode(this.incomingEdges, nodeManager)
+        this.matchManager = new GraphMatchManagerNode(this.incomingEdges, nodeManager, this.runManager.graph.graphTagManager)
     }
 
     abstract isEventTriggered(mode?: EConnectionMode): boolean;

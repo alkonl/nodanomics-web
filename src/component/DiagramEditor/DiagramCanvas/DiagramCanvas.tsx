@@ -170,6 +170,7 @@ export const DiagramCanvas = () => {
                     onSelectionChange={onSelectionChange}
                     elementsSelectable={isInteractive}
                     multiSelectionKeyCode={multiSelectKeyCodes}
+                    minZoom={0.1}
                     // selectionMode={SelectionMode.Partial}
                     // we have custom way to delete nodes
                     deleteKeyCode={'undefined'}

@@ -1,6 +1,6 @@
 import {Graph} from "../Graph";
 import {
-    EConnectionMode,
+    EConnectionMode, isIGetNodeExternalValue,
     isIResetBeforeStep,
     isITriggeredEvent,
     isIUpdateGraphNodeStatePerStep,
@@ -64,6 +64,7 @@ export class RunManager {
     }
 
     updateState() {
+        this.updateAllTags()
         const nodes = this._graph.nodes
         nodes.forEach(node => {
             if (isUpdateGraphNodeState(node)) {
@@ -90,6 +91,8 @@ export class RunManager {
     invokeStep() {
         // this.resetCountOfExecuted()
         this.resetBeforeStep()
+        this.updateAllTags()
+
         const chain = this.getExecutionOrder()
         this.setExecutionOrder(chain)
         this._diameter = this.getDiameter()
@@ -108,6 +111,16 @@ export class RunManager {
         }
     }
 
+    private updateAllTags() {
+        this.graph.nodesManager.nodes.forEach((node)=>{
+            if(node.data.tag && isIGetNodeExternalValue(node) && node.nodeExternalValue !== undefined){
+                this.graph.graphTagManager.setVariable({
+                    value: node.nodeExternalValue,
+                    name: node.data.tag,
+                })
+            }
+        })
+    }
 
     // deprecated. Don't need to track diameter
     private getDiameter() {
@@ -164,7 +177,12 @@ export class RunManager {
 
             if (isInvoke) {
                 target.invokeStep()
-
+                if(target.data.tag && isIGetNodeExternalValue(target) && target.nodeExternalValue !== undefined){
+                    this.graph.graphTagManager.setVariable({
+                        value: target.nodeExternalValue,
+                        name: target.data.tag,
+                    })
+                }
 
                 if (target instanceof GraphLoopNode) {
                     // internal nodes are nodes that are the first nodes within the cycle

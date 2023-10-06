@@ -10,9 +10,9 @@ export abstract class GraphMatchManager {
     private readonly nodeManager: GraphNodeManager
     private readonly tagManager: GraphTagManager
 
-    constructor(nodeManager: GraphNodeManager) {
+    constructor(nodeManager: GraphNodeManager, tagManager: GraphTagManager) {
         this.nodeManager = nodeManager
-        this.tagManager = new GraphTagManager(nodeManager)
+        this.tagManager = tagManager
     }
 
     datasetData({datasetTag}: { datasetTag: string }): GraphDatasetDatafieldNode | undefined {
