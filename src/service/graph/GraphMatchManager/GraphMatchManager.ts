@@ -37,6 +37,9 @@ export abstract class GraphMatchManager {
         formula: string,
         variables: INumberVariable[]
     }) {
+        if(Number(formula)){
+
+        }
 
         // pattern to get dataset tags from formula (mmrRangeDataset.lengthX, mmrRangeDataset[1][2])
         const datasetPattern = /(\w+)(?:\.\w+|\[\d+\])+/g;

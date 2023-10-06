@@ -19,7 +19,7 @@ export class GraphEdgeFactory {
             case EConnection.LogicConnection:
                 return new GraphLogicEdge(source, target, edgeData, graph.nodesManager);
             case EConnection.ChainConnection:
-                return new GraphChainEdge(source, target, edgeData, graph.nodesManager);
+                return new GraphChainEdge(source, target, edgeData, graph.nodesManager, graph.graphTagManager);
             default:
                 throw new Error(`Unknown edge type: ${edgeType}`);
         }

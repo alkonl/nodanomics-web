@@ -16,6 +16,11 @@ export class GraphMatchManagerConnections extends GraphMatchManager {
     }
 
     calculateFormula({formula}: { formula: string }) {
+        if (Number(formula) && !isNaN(Number(formula))) {
+            return Number(formula)
+        } else if (formula === 'true') {
+            return true
+        }
         const source = this.edge.source;
         const variables: INumberVariable[] = [];
         let formattedFormula = formula;

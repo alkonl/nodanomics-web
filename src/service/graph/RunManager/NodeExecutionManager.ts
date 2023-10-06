@@ -28,16 +28,18 @@ export class NodeExecutionManager {
 
 
     invokeAll() {
-
         this.current = [...this.next]
         this.executionCount = this.next.length
         this.next = []
-        if (this.current.length !== 0) {
+        if (this.executionCount > 0) {
             for (const argument of this.current) {
                 this.executionCount--
                 this.runManager.executeNode(argument, this, {invoke: true})
-                this.invokeAll()
+
             }
+        }
+        if(this.executionCount === 0 && this.next.length > 0){
+            this.invokeAll()
         }
     }
 
