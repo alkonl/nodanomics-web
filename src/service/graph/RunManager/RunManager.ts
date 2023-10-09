@@ -494,7 +494,7 @@ export class RunManager {
 
     private invokeAutomaticNodesPerStep() {
         this._graph.nodes.forEach(node => {
-            if (isNodeAutomatic(node.data) && node instanceof GraphInvokableNode) {
+            if (isNodeAutomatic(node.data) && node.data.isAutomatic && node instanceof GraphInvokableNode) {
                 node.invokeStep()
             }
         })
