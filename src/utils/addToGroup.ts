@@ -1,4 +1,5 @@
-import {EDateMarker, IGroupedItems} from "../interface";
+import {IGroupedItems} from "../interface";
+import {EDateMarker} from "../constant";
 import moment from "moment";
 
 const groupValue: {

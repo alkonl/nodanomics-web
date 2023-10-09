@@ -1,6 +1,6 @@
 import {GraphBaseEdge} from "./abstracts";
 import {IChainConnectionData, IResetBeforeStep} from "../../../interface";
-import {GraphBaseNode} from "../GraphNodes";
+import {GraphBaseNode, GraphTagManager} from "../GraphNodes";
 import {GraphNodeManager} from "../NodeManager";
 import {GraphMatchManagerConnections} from "../GraphMatchManager";
 
@@ -14,9 +14,10 @@ export class GraphChainEdge extends GraphBaseEdge<IChainConnectionData>
         target: GraphBaseNode,
         data: IChainConnectionData,
         nodesManager: GraphNodeManager,
+        tagManager: GraphTagManager
     ) {
         super(source, target, data);
-        this.matchManager = new GraphMatchManagerConnections(this, nodesManager);
+        this.matchManager = new GraphMatchManagerConnections(this, nodesManager, tagManager);
     }
 
 

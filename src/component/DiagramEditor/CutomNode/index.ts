@@ -1,4 +1,4 @@
-export * from './StaticVariableNode'
+// export * from './StaticVariableNode'
 export * from './FormulaNode'
 export * from './OriginNode'
 export * from './DataNode'

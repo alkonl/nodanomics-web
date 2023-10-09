@@ -10,9 +10,9 @@ export abstract class GraphMatchManager {
     private readonly nodeManager: GraphNodeManager
     private readonly tagManager: GraphTagManager
 
-    constructor(nodeManager: GraphNodeManager) {
+    constructor(nodeManager: GraphNodeManager, tagManager: GraphTagManager) {
         this.nodeManager = nodeManager
-        this.tagManager = new GraphTagManager(nodeManager)
+        this.tagManager = tagManager
     }
 
     datasetData({datasetTag}: { datasetTag: string }): GraphDatasetDatafieldNode | undefined {
@@ -37,6 +37,11 @@ export abstract class GraphMatchManager {
         formula: string,
         variables: INumberVariable[]
     }) {
+        if (Number(formula) && !isNaN(Number(formula))) {
+            return Number(formula)
+        } else if (formula === 'true') {
+            return true
+        }
 
         // pattern to get dataset tags from formula (mmrRangeDataset.lengthX, mmrRangeDataset[1][2])
         const datasetPattern = /(\w+)(?:\.\w+|\[\d+\])+/g;

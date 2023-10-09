@@ -1,6 +1,8 @@
 import {Graph} from "../Graph";
 import {
     EConnectionMode,
+    IDiagramConnectionData,
+    isIGetNodeExternalValue,
     isIResetBeforeStep,
     isITriggeredEvent,
     isIUpdateGraphNodeStatePerStep,
@@ -21,6 +23,8 @@ import {GraphChainEdge} from "../GraphEdge";
 import {IChainItem} from "./ChainItem";
 import {NodeExecutionManager} from "./NodeExecutionManager";
 import {GraphWhileLoopNode} from "../GraphNodes/GraphWhileLoopNode";
+import {workerInstance} from "../../../ws/workerInstance";
+
 
 export class RunManager {
     private _graph: Graph
@@ -36,6 +40,8 @@ export class RunManager {
     constructor(graph: Graph) {
         this._graph = graph
     }
+
+
 
     get executionOrder() {
         return this._executionOrder
@@ -64,6 +70,7 @@ export class RunManager {
     }
 
     updateState() {
+        this.updateAllTags()
         const nodes = this._graph.nodes
         nodes.forEach(node => {
             if (isUpdateGraphNodeState(node)) {
@@ -87,9 +94,12 @@ export class RunManager {
 
     private nodeToExecute = new NodeExecutionManager(this, [])
 
-    invokeStep() {
+    async invokeStep() {
         // this.resetCountOfExecuted()
         this.resetBeforeStep()
+        this.updateAllTags()
+
+
         const chain = this.getExecutionOrder()
         this.setExecutionOrder(chain)
         this._diameter = this.getDiameter()
@@ -97,7 +107,7 @@ export class RunManager {
             const initiatorsNodes = this.getStartedInitiatorsChainItems()
             this.nodeToExecute.addNodesToExecute(initiatorsNodes)
         }
-        this.nodeToExecute.invokeNodesToExecute()
+        await this.nodeToExecute.invokeNodesToExecute()
         this.updateNodePerStep()
         this.invokeAutomaticNodesPerStep()
         this.incrementStep()
@@ -108,6 +118,16 @@ export class RunManager {
         }
     }
 
+    private updateAllTags() {
+        this.graph.nodesManager.nodes.forEach((node) => {
+            if (node.data.tag && isIGetNodeExternalValue(node)) {
+                this.graph.graphTagManager.updateTagVariable({
+                    value: node.nodeExternalValue,
+                    tag: node.data.tag,
+                })
+            }
+        })
+    }
 
     // deprecated. Don't need to track diameter
     private getDiameter() {
@@ -129,7 +149,7 @@ export class RunManager {
         return GraphHelper.findLongestBranch(startNodes)
     }
 
-    executeNode(chainItem: IChainItem, nodeToExecute: NodeExecutionManager, options: { invoke: boolean }) {
+    async executeNode(chainItem: IChainItem, nodeToExecute: NodeExecutionManager, options: { invoke: boolean }) {
         const target = chainItem.target
         const edge = chainItem.edge
 
@@ -164,7 +184,12 @@ export class RunManager {
 
             if (isInvoke) {
                 target.invokeStep()
-
+                if (target.data.tag && isIGetNodeExternalValue(target) && target.nodeExternalValue !== undefined) {
+                    this.graph.graphTagManager.updateTagVariable({
+                        value: target.nodeExternalValue,
+                        tag: target.data.tag,
+                    })
+                }
 
                 if (target instanceof GraphLoopNode) {
                     // internal nodes are nodes that are the first nodes within the cycle
@@ -177,16 +202,35 @@ export class RunManager {
                         const hasParentLoop = target.data.parentId !== undefined
 
                         // if has parent loop, then reset loop step
-                        if (hasParentLoop && target instanceof GraphMicroLoopNode) {
+                        if (target instanceof GraphMicroLoopNode) {
                             target.resetLoopStep()
+                            // console.log('before')
+                            // try {
+                            //     await workerInstance.runLoop({
+                            //         loop: target.data,
+                            //         nodes: this._graph.nodes.map(item => item.data),
+                            //         edges: this._graph.edges.map(item => item.data as IDiagramConnectionData),
+                            //     }).catch(e => {
+                            //         console.error(e)
+                            //     })
+                            // } catch (e) {
+                            //     console.error('webworker: ', e)
+                            // }
+                            // console.log('after')
                             for (let i = 0; i < target.loopCount; i++) {
                                 const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
-                                loopNodeExecutionManager.invokeAll()
+                                await loopNodeExecutionManager.invokeAll()
+
+                                // const timeOut = setTimeout(() => {
+                                //     loopNodeExecutionManager.invokeAll()
+                                //     clearTimeout(timeOut)
+                                // }, 0)
                             }
-                        } else {
-                            const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
-                            loopNodeExecutionManager.invokeAll()
                         }
+                        // else {
+                        //     const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
+                        //     loopNodeExecutionManager.invokeAll()
+                        // }
                     } else if (target.isLoopActive) {
 
                         target.children.forEach(child => {

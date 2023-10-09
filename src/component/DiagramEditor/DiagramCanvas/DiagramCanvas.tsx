@@ -29,7 +29,7 @@ import {
     OriginNode,
     SinkNode,
     StartNode,
-    StaticVariableNode,
+    // StaticVariableNode,
     TransferNode,
     WhileLoopNode
 } from "../CutomNode";
@@ -44,7 +44,7 @@ import {EColor, multiSelectKeyCodes} from "../../../constant";
 import './reactflowOverwrite.scss'
 
 const nodeTypes = {
-    [EDiagramNode.StaticVariable]: StaticVariableNode,
+    // [EDiagramNode.StaticVariable]: StaticVariableNode,
     [EDiagramNode.Formula]: FormulaNode,
     [EDiagramNode.Origin]: OriginNode,
     [EDiagramNode.Data]: DataNode,
@@ -170,6 +170,7 @@ export const DiagramCanvas = () => {
                     onSelectionChange={onSelectionChange}
                     elementsSelectable={isInteractive}
                     multiSelectionKeyCode={multiSelectKeyCodes}
+                    minZoom={0.1}
                     // selectionMode={SelectionMode.Partial}
                     // we have custom way to delete nodes
                     deleteKeyCode={'undefined'}

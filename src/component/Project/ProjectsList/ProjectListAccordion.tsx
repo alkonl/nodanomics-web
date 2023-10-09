@@ -1,7 +1,8 @@
 import React from 'react';
-import {EDateMarker, IBaseProject, dataMarkerTitle} from "../../../interface";
+import {IBaseProject} from "../../../interface";
 import {ProjectsListElement} from "./ProjectsListElement";
 import {MAccordion} from "../../base";
+import {dataMarkerTitle, EDateMarker} from "../../../constant";
 
 
 export const ProjectListAccordion: React.FC<{

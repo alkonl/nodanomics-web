@@ -1,5 +1,5 @@
 import {IDiagramConnectionData, INodeData, IStructuredSpreadsheetsData,} from "../../interface";
-import {GraphBaseNode, GraphNodeFactory} from "./GraphNodes";
+import {GraphBaseNode, GraphNodeFactory, GraphTagManager} from "./GraphNodes";
 import {GraphBaseEdge, GraphEdgeFactory} from "./GraphEdge";
 import {Optionalize} from "../../utils";
 import {GraphNodeManager} from "./NodeManager";
@@ -12,6 +12,7 @@ export class Graph {
     private _edges: GraphBaseEdge[] = [];
     private runManager?: RunManager;
     private readonly graphSpreadsheetManager: GraphSpreadsheetManager = new GraphSpreadsheetManager();
+    readonly graphTagManager = new GraphTagManager(this._nodeManager)
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     constructor() {
@@ -186,4 +187,5 @@ export class Graph {
     setSpreadsheetsData({spreadsheetData}: { spreadsheetData: IStructuredSpreadsheetsData }) {
         this.graphSpreadsheetManager.setSpreadsheets(spreadsheetData);
     }
+
 }

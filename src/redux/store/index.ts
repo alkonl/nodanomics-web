@@ -5,6 +5,7 @@ import {diagramEditorSlice} from "./diagramEditor";
 import {projectDashboardSlice} from "./projectDashboard";
 import {teamDashboardSlice} from "./teamDashboard";
 import {diagramDashboardSlice} from "./diagramDashboard";
+import {diagramEditorMiddlewares} from "./middleware";
 
 const store = configureStore({
     reducer: combineReducers({
@@ -15,7 +16,7 @@ const store = configureStore({
         [diagramDashboardSlice.name]: diagramDashboardSlice.reducer,
     }),
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(baseApi.middleware),
+        getDefaultMiddleware().concat(baseApi.middleware, diagramEditorMiddlewares),
 })
 
 setupListeners(store.dispatch)
