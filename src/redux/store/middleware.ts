@@ -9,7 +9,7 @@ export const diagramEditorMiddlewares: Middleware<any> = (store) => (next) => as
     if (diagramEditorActions.invokeStep.match(action)) {
         console.log('invokeStep')
         const {currentRunningDiagramStep, targetSteps} = store.getState()
-        runManager.invokeStep()
+        await runManager.invokeStep()
     }
 
     return next(action)

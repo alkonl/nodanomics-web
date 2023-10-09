@@ -1,6 +1,7 @@
 import {Graph} from "../Graph";
 import {
-    EConnectionMode, isIGetNodeExternalValue,
+    EConnectionMode,
+    isIGetNodeExternalValue,
     isIResetBeforeStep,
     isITriggeredEvent,
     isIUpdateGraphNodeStatePerStep,
@@ -21,7 +22,13 @@ import {GraphChainEdge} from "../GraphEdge";
 import {IChainItem} from "./ChainItem";
 import {NodeExecutionManager} from "./NodeExecutionManager";
 import {GraphWhileLoopNode} from "../GraphNodes/GraphWhileLoopNode";
+import Comlink from "comlink";
 
+const myWorker = new Worker(new URL('./worker.ts', import.meta.url));
+
+myWorker.onmessage = (e) => {
+    console.log('worker: ', e)
+};
 export class RunManager {
     private _graph: Graph
     private _countOfExecuted = 0
@@ -88,7 +95,10 @@ export class RunManager {
 
     private nodeToExecute = new NodeExecutionManager(this, [])
 
-    invokeStep() {
+    async invokeStep() {
+
+        myWorker.postMessage({ cmd: 'calculate', input: {} });
+
         // this.resetCountOfExecuted()
         this.resetBeforeStep()
         this.updateAllTags()
@@ -100,7 +110,7 @@ export class RunManager {
             const initiatorsNodes = this.getStartedInitiatorsChainItems()
             this.nodeToExecute.addNodesToExecute(initiatorsNodes)
         }
-        this.nodeToExecute.invokeNodesToExecute()
+        await this.nodeToExecute.invokeNodesToExecute()
         this.updateNodePerStep()
         this.invokeAutomaticNodesPerStep()
         this.incrementStep()
@@ -112,8 +122,8 @@ export class RunManager {
     }
 
     private updateAllTags() {
-        this.graph.nodesManager.nodes.forEach((node)=>{
-            if(node.data.tag && isIGetNodeExternalValue(node)){
+        this.graph.nodesManager.nodes.forEach((node) => {
+            if (node.data.tag && isIGetNodeExternalValue(node)) {
                 this.graph.graphTagManager.updateTagVariable({
                     value: node.nodeExternalValue,
                     tag: node.data.tag,
@@ -142,7 +152,7 @@ export class RunManager {
         return GraphHelper.findLongestBranch(startNodes)
     }
 
-    executeNode(chainItem: IChainItem, nodeToExecute: NodeExecutionManager, options: { invoke: boolean }) {
+    async executeNode(chainItem: IChainItem, nodeToExecute: NodeExecutionManager, options: { invoke: boolean }) {
         const target = chainItem.target
         const edge = chainItem.edge
 
@@ -177,7 +187,7 @@ export class RunManager {
 
             if (isInvoke) {
                 target.invokeStep()
-                if(target.data.tag && isIGetNodeExternalValue(target) && target.nodeExternalValue !== undefined){
+                if (target.data.tag && isIGetNodeExternalValue(target) && target.nodeExternalValue !== undefined) {
                     this.graph.graphTagManager.updateTagVariable({
                         value: target.nodeExternalValue,
                         tag: target.data.tag,
@@ -195,16 +205,22 @@ export class RunManager {
                         const hasParentLoop = target.data.parentId !== undefined
 
                         // if has parent loop, then reset loop step
-                        if (hasParentLoop && target instanceof GraphMicroLoopNode) {
+                        if (target instanceof GraphMicroLoopNode) {
                             target.resetLoopStep()
                             for (let i = 0; i < target.loopCount; i++) {
                                 const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
-                                loopNodeExecutionManager.invokeAll()
+                                await loopNodeExecutionManager.invokeAll()
+
+                                // const timeOut = setTimeout(() => {
+                                //     loopNodeExecutionManager.invokeAll()
+                                //     clearTimeout(timeOut)
+                                // }, 0)
                             }
-                        } else {
-                            const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
-                            loopNodeExecutionManager.invokeAll()
                         }
+                        // else {
+                        //     const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
+                        //     loopNodeExecutionManager.invokeAll()
+                        // }
                     } else if (target.isLoopActive) {
 
                         target.children.forEach(child => {

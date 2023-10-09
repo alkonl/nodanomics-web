@@ -1,5 +1,6 @@
 import {IChainItem} from "./ChainItem";
 import {RunManager} from "./RunManager";
+import {yieldToMain} from "../../../utils";
 
 export class NodeExecutionManager {
     executionCount = 0
@@ -13,21 +14,21 @@ export class NodeExecutionManager {
         this.next = [...starters]
     }
 
-    invokeNodesToExecute() {
+    async invokeNodesToExecute() {
         this.current = [...this.next]
         this.executionCount = this.next.length
         this.next = []
 
         for (const argument of this.current) {
             this.executionCount--
-            this.runManager.executeNode(argument, this, {invoke: true})
+            await this.runManager.executeNode(argument, this, {invoke: true})
         }
 
         // this.runManager.addCountOfExecuted()
     }
 
 
-    invokeAll() {
+    async invokeAll() {
         while (true) {
             this.current = [...this.next];
             this.executionCount = this.next.length;
@@ -36,28 +37,16 @@ export class NodeExecutionManager {
             if (this.executionCount > 0) {
                 for (const argument of this.current) {
                     this.executionCount--;
-                    this.runManager.executeNode(argument, this, {invoke: true});
+                    await this.runManager.executeNode(argument, this, {invoke: true});
+
                 }
             }
-
             // Break the loop if executionCount is 0 and there are no next items to process.
             if (this.executionCount === 0 && this.next.length === 0) {
                 break;
             }
         }
-        // this.current = [...this.next]
-        // this.executionCount = this.next.length
-        // this.next = []
-        // if (this.executionCount > 0) {
-        //     for (const argument of this.current) {
-        //         this.executionCount--
-        //         this.runManager.executeNode(argument, this, {invoke: true})
-        //
-        //     }
-        // }
-        // if(this.executionCount === 0 && this.next.length > 0){
-        //     this.invokeAll()
-        // }
+
     }
 
     addNodesToExecute(chainItems: IChainItem[]) {
