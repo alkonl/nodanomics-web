@@ -4,7 +4,7 @@ import {
     isIResetBeforeStep,
     isITriggeredEvent,
     isIUpdateGraphNodeStatePerStep,
-    isIUpdateStatePerNodeUpdate,
+    isIUpdateStatePerNodeUpdate, isNodeAutomatic,
     isUpdateGraphNodeState
 } from "../../../interface";
 import {
@@ -99,6 +99,7 @@ export class RunManager {
         }
         this.nodeToExecute.invokeNodesToExecute()
         this.updateNodePerStep()
+        this.invokeAutomaticNodesPerStep()
         this.incrementStep()
         const updatedDiameter = this.getDiameter()
         if (updatedDiameter === this._diameter) {
@@ -443,6 +444,14 @@ export class RunManager {
         this._graph.nodes.forEach(node => {
             if (isIResetBeforeStep(node)) {
                 node.resetBeforeStep()
+            }
+        })
+    }
+
+    private invokeAutomaticNodesPerStep() {
+        this._graph.nodes.forEach(node => {
+            if (isNodeAutomatic(node.data) && node instanceof GraphInvokableNode) {
+                node.invokeStep()
             }
         })
     }
