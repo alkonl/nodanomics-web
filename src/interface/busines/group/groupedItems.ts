@@ -1,4 +1,4 @@
-import {EDateMarker} from "../date";
+import {EDateMarker} from "../../../constant";
 
 export type IGroupedItems<T> = {
     group: {

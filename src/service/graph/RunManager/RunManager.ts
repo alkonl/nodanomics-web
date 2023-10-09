@@ -1,6 +1,7 @@
 import {Graph} from "../Graph";
 import {
     EConnectionMode,
+    IDiagramConnectionData,
     isIGetNodeExternalValue,
     isIResetBeforeStep,
     isITriggeredEvent,
@@ -22,13 +23,9 @@ import {GraphChainEdge} from "../GraphEdge";
 import {IChainItem} from "./ChainItem";
 import {NodeExecutionManager} from "./NodeExecutionManager";
 import {GraphWhileLoopNode} from "../GraphNodes/GraphWhileLoopNode";
-import Comlink from "comlink";
+import {workerInstance} from "../../../ws/workerInstance";
 
-const myWorker = new Worker(new URL('./worker.ts', import.meta.url));
 
-myWorker.onmessage = (e) => {
-    console.log('worker: ', e)
-};
 export class RunManager {
     private _graph: Graph
     private _countOfExecuted = 0
@@ -43,6 +40,8 @@ export class RunManager {
     constructor(graph: Graph) {
         this._graph = graph
     }
+
+
 
     get executionOrder() {
         return this._executionOrder
@@ -96,12 +95,10 @@ export class RunManager {
     private nodeToExecute = new NodeExecutionManager(this, [])
 
     async invokeStep() {
-
-        myWorker.postMessage({ cmd: 'calculate', input: {} });
-
         // this.resetCountOfExecuted()
         this.resetBeforeStep()
         this.updateAllTags()
+
 
         const chain = this.getExecutionOrder()
         this.setExecutionOrder(chain)
@@ -207,6 +204,19 @@ export class RunManager {
                         // if has parent loop, then reset loop step
                         if (target instanceof GraphMicroLoopNode) {
                             target.resetLoopStep()
+                            // console.log('before')
+                            // try {
+                            //     await workerInstance.runLoop({
+                            //         loop: target.data,
+                            //         nodes: this._graph.nodes.map(item => item.data),
+                            //         edges: this._graph.edges.map(item => item.data as IDiagramConnectionData),
+                            //     }).catch(e => {
+                            //         console.error(e)
+                            //     })
+                            // } catch (e) {
+                            //     console.error('webworker: ', e)
+                            // }
+                            // console.log('after')
                             for (let i = 0; i < target.loopCount; i++) {
                                 const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
                                 await loopNodeExecutionManager.invokeAll()

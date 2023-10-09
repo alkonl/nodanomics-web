@@ -149,7 +149,6 @@ export const diagramEditorSlice = createSlice({
         }>) => {
             state.currentDiagramId = payload.diagramId
         },
-
         addNode: (state, {payload}: PayloadAction<IReactFlowNode>) => {
             const length = state.diagramNodes.push(payload)
             state.autoSaveCalled++

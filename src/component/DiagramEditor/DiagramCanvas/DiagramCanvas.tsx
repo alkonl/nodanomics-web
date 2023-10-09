@@ -29,7 +29,7 @@ import {
     OriginNode,
     SinkNode,
     StartNode,
-    StaticVariableNode,
+    // StaticVariableNode,
     TransferNode,
     WhileLoopNode
 } from "../CutomNode";
@@ -44,7 +44,7 @@ import {EColor, multiSelectKeyCodes} from "../../../constant";
 import './reactflowOverwrite.scss'
 
 const nodeTypes = {
-    [EDiagramNode.StaticVariable]: StaticVariableNode,
+    // [EDiagramNode.StaticVariable]: StaticVariableNode,
     [EDiagramNode.Formula]: FormulaNode,
     [EDiagramNode.Origin]: OriginNode,
     [EDiagramNode.Data]: DataNode,

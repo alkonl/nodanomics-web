@@ -1,10 +1,4 @@
-export enum EDateMarker {
-    DAY = 'DAY',
-    WEEK = 'WEEK',
-    MONTH = 'MONTH',
-    YEAR = 'YEAR',
-    OLDER = 'OLDER',
-}
+import {EDateMarker} from "./DateMarker";
 
 export const dataMarkerTitle: {
     [key in EDateMarker]: string

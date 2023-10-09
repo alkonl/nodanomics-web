@@ -16,6 +16,9 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    "node_modules/vite-plugin-comlink/client.d.ts"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
