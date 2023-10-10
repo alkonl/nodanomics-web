@@ -50,7 +50,7 @@ export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
     }
 
     protected checkIsLoopActive() {
-        const isLoopActive = this.currentLoopCount <= this.loopCount
+        const isLoopActive = this.currentLoopCount <= this.loopCount - 1
         this.setIsLoopActive(isLoopActive)
         return isLoopActive
     }
@@ -78,7 +78,7 @@ export class GraphMicroLoopNode extends GraphLoopNode<IMicroLoopNodeData>
         const updatedLoopCount = this.currentLoopCount + 1
         const isPossibleToAddStep = updatedLoopCount <= this.loopCount
         // if (isPossibleToAddStep) {
-            this.updateNode({currentLoopCount: updatedLoopCount})
+        this.updateNode({currentLoopCount: updatedLoopCount})
         // }
     }
 }

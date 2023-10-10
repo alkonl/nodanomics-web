@@ -1,12 +1,12 @@
 import {Graph} from "../Graph";
 import {
     EConnectionMode,
-    IDiagramConnectionData,
     isIGetNodeExternalValue,
     isIResetBeforeStep,
     isITriggeredEvent,
     isIUpdateGraphNodeStatePerStep,
-    isIUpdateStatePerNodeUpdate, isNodeAutomatic,
+    isIUpdateStatePerNodeUpdate,
+    isNodeAutomatic,
     isUpdateGraphNodeState
 } from "../../../interface";
 import {
@@ -23,7 +23,6 @@ import {GraphChainEdge} from "../GraphEdge";
 import {IChainItem} from "./ChainItem";
 import {NodeExecutionManager} from "./NodeExecutionManager";
 import {GraphWhileLoopNode} from "../GraphNodes/GraphWhileLoopNode";
-import {workerInstance} from "../../../ws/workerInstance";
 
 
 export class RunManager {
@@ -40,7 +39,6 @@ export class RunManager {
     constructor(graph: Graph) {
         this._graph = graph
     }
-
 
 
     get executionOrder() {
@@ -183,6 +181,9 @@ export class RunManager {
 
 
             if (isInvoke) {
+                if(target.data.name.includes('MP')){
+                    console.log(`target: ${target.data.name}`)
+                }
                 target.invokeStep()
                 if (target.data.tag && isIGetNodeExternalValue(target) && target.nodeExternalValue !== undefined) {
                     this.graph.graphTagManager.updateTagVariable({
@@ -203,7 +204,7 @@ export class RunManager {
 
                         // if has parent loop, then reset loop step
                         if (target instanceof GraphMicroLoopNode) {
-                            target.resetLoopStep()
+                            // target.resetLoopStep()
                             // console.log('before')
                             // try {
                             //     await workerInstance.runLoop({
@@ -217,15 +218,17 @@ export class RunManager {
                             //     console.error('webworker: ', e)
                             // }
                             // console.log('after')
-                            for (let i = 0; i < target.loopCount; i++) {
-                                const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
-                                await loopNodeExecutionManager.invokeAll()
-
-                                // const timeOut = setTimeout(() => {
-                                //     loopNodeExecutionManager.invokeAll()
-                                //     clearTimeout(timeOut)
-                                // }, 0)
-                            }
+                            const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
+                            await loopNodeExecutionManager.invokeNodesToExecute()
+                            // for (let i = 0; i < target.loopCount; i++) {
+                            //     const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
+                            //     await loopNodeExecutionManager.invokeAll()
+                            //
+                            //     // const timeOut = setTimeout(() => {
+                            //     //     loopNodeExecutionManager.invokeAll()
+                            //     //     clearTimeout(timeOut)
+                            //     // }, 0)
+                            // }
                         }
                         // else {
                         //     const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
@@ -271,28 +274,42 @@ export class RunManager {
             }
             const children = this.getChainChildren(chainItem)
             const outgoingConnected = children.outgoingConnected
+
             if (target instanceof GraphStartNode) {
                 nodeToExecute.addNodesToCurrent(outgoingConnected)
             } else {
+                const isChildOfAccumLoop = this._graph.nodesManager.isChildOfAccumLoop(target)
+
                 const noDataNodes = outgoingConnected.filter(item => !(item.target instanceof GraphDataNode))
                 const dataNodes = outgoingConnected.filter(item => item.target instanceof GraphDataNode)
-                if (target instanceof GraphMicroLoopNode && !target.isAccumulative) {
+                if (target instanceof GraphMicroLoopNode) {
                     if (!target.isLoopActive) {
                         nodeToExecute.addNodesToCurrent(noDataNodes)
                     }
                 } else {
+                    if (isChildOfAccumLoop) {
+                        nodeToExecute.addNodesToCurrent(noDataNodes)
+                    } else {
+                        nodeToExecute.addNodesToExecute(noDataNodes)
+                    }
                     nodeToExecute.addNodesToCurrent(dataNodes)
-                    nodeToExecute.addNodesToExecute(noDataNodes)
                 }
                 const endChainItem = children.endChainItem
-                if (endChainItem && endChainItem.target instanceof GraphMicroLoopNode && !endChainItem.target.isAccumulative) {
-                    if (target instanceof GraphMicroLoopNode && !target.isAccumulative) {
-                        if (!target.isLoopActive) {
-                            nodeToExecute.addNodesToCurrent([endChainItem])
+                if (endChainItem && endChainItem.target instanceof GraphMicroLoopNode) {
+                    if (!endChainItem.target.isAccumulative) {
+                        if (target instanceof GraphMicroLoopNode && !target.isAccumulative) {
+                            if (!target.isLoopActive) {
+                                nodeToExecute.addNodesToCurrent([endChainItem])
+                            }
+                        } else {
+                            nodeToExecute.addNodesToExecute([endChainItem])
                         }
-                    } else {
-                        nodeToExecute.addNodesToExecute([endChainItem])
+                    } else if (endChainItem.target.isLoopActive && endChainItem.edge?.isMeetCondition) {
+                        const innerNodeIds = endChainItem.target.children.map(node => node.data.name)
+                        nodeToExecute.removeCurrentNodesById(innerNodeIds)
+                        nodeToExecute.addNodesToCurrent([endChainItem])
                     }
+
                 }
             }
         }
