@@ -1,6 +1,5 @@
 import {IChainItem} from "./ChainItem";
 import {RunManager} from "./RunManager";
-import {yieldToMain} from "../../../utils";
 
 export class NodeExecutionManager {
     executionCount = 0
@@ -19,10 +18,21 @@ export class NodeExecutionManager {
         this.executionCount = this.next.length
         this.next = []
 
-        for (const argument of this.current) {
-            this.executionCount--
-            await this.runManager.executeNode(argument, this, {invoke: true})
+        while (this.current.length > 0) {
+            const argument = this.current.shift()
+            if (argument) {
+                this.executionCount--
+                await this.runManager.executeNode(argument, this, {invoke: true})
+            }
+
+
         }
+
+        // for (const argument of this.current) {
+        //     this.executionCount--
+        //     await this.runManager.executeNode(argument, this, {invoke: true})
+        //     // this.current.shift()
+        // }
 
         // this.runManager.addCountOfExecuted()
     }
@@ -55,7 +65,8 @@ export class NodeExecutionManager {
 
     removeCurrentNodesById(nodeIds: string[]) {
         const nodeIdsSet = new Set(nodeIds)
-        this.current = this.next.filter(node => !nodeIdsSet.has(node.target.data.id))
+        this.current = this.current.filter(node => !nodeIdsSet.has(node.target.data.id))
+        this.next = this.next.filter(node => !nodeIdsSet.has(node.target.data.id))
     }
 
     addNodesToCurrent(chainItem: IChainItem[]) {

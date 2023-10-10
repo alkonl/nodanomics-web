@@ -179,9 +179,11 @@ export class RunManager {
                 ? isInvokeLoop && options.invoke
                 : options.invoke
 
-            console.log(`target: ${target.data.name}`)
 
             if (isInvoke) {
+                if(target.data.name.includes('MP')){
+                    console.log(`target: ${target.data.name}`)
+                }
                 target.invokeStep()
                 if (target.data.tag && isIGetNodeExternalValue(target) && target.nodeExternalValue !== undefined) {
                     this.graph.graphTagManager.updateTagVariable({
@@ -277,7 +279,7 @@ export class RunManager {
                 nodeToExecute.addNodesToCurrent(outgoingConnected)
             } else {
                 const isChildOfAccumLoop = this._graph.nodesManager.isChildOfAccumLoop(target)
-                console.log(`isChildOfAccumLoop: ${target.data.name}: `, isChildOfAccumLoop)
+
                 const noDataNodes = outgoingConnected.filter(item => !(item.target instanceof GraphDataNode))
                 const dataNodes = outgoingConnected.filter(item => item.target instanceof GraphDataNode)
                 if (target instanceof GraphMicroLoopNode) {
@@ -303,7 +305,7 @@ export class RunManager {
                             nodeToExecute.addNodesToExecute([endChainItem])
                         }
                     } else if (endChainItem.target.isLoopActive && endChainItem.edge?.isMeetCondition) {
-                        const innerNodeIds = endChainItem.target.children.map(node => node.data.id)
+                        const innerNodeIds = endChainItem.target.children.map(node => node.data.name)
                         nodeToExecute.removeCurrentNodesById(innerNodeIds)
                         nodeToExecute.addNodesToCurrent([endChainItem])
                     }
