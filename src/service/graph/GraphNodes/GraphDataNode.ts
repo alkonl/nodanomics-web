@@ -190,13 +190,13 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     private addResourcesToNode(resource: IResource) {
-        this.updateResourcesToProvide()
         this.updateNode({
             resources: {
                 value: this.currentResourcesCount + resource.value
             }
         })
         this.updatePreviousResourcesCount()
+        this.updateResourcesToProvide()
         return this.data
     }
 
