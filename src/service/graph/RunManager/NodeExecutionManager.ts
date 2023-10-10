@@ -53,6 +53,11 @@ export class NodeExecutionManager {
         this.next.push(...chainItems)
     }
 
+    removeCurrentNodesById(nodeIds: string[]) {
+        const nodeIdsSet = new Set(nodeIds)
+        this.current = this.next.filter(node => !nodeIdsSet.has(node.target.data.id))
+    }
+
     addNodesToCurrent(chainItem: IChainItem[]) {
         this.current.push(...chainItem)
         this.executionCount += chainItem.length

@@ -1,5 +1,7 @@
 import {GraphBaseNode, GraphDataNode, GraphDatasetDatafieldNode} from "../GraphNodes";
 import {isIResetAfterDiagramRun, isIResetNodeNoStoreProperties} from "../../../interface";
+import {GraphWhileLoopNode} from "../GraphNodes/GraphWhileLoopNode";
+import {GraphMicroLoopNode} from "../GraphNodes/GraphMicroLoopNode";
 
 export class GraphNodeManager {
     private _nodes: GraphBaseNode[] = [];
@@ -61,12 +63,23 @@ export class GraphNodeManager {
         return this._nodes.includes(node);
     }
 
-    get assignedHistoryNode(){
+    get assignedHistoryNode() {
         return this._nodes.find(node => node instanceof GraphDataNode && node.isAssigned) as GraphDataNode | undefined
     }
 
     get assignedNodeChanged(): boolean {
         return this.assignedHistoryNode?.isValueChanged || false
+    }
+
+    isChildOfAccumLoop(node: GraphBaseNode<any>): boolean {
+        const parentId = node.data.parentId;
+        if (parentId) {
+            const parentNode = this.findById({nodeId: parentId});
+            if(parentNode instanceof GraphWhileLoopNode || parentNode instanceof GraphMicroLoopNode && parentNode.data.isAccumulative){
+                return true;
+            }
+        }
+        return  false;
     }
 
     resetAfterDiagramRun() {
