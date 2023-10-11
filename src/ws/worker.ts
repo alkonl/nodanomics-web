@@ -13,6 +13,5 @@ export const runLoop = async ({loop, edges, nodes}: {
     nodes: INodeData[],
     edges: IDiagramConnectionData[]
 }) => {
-    console.log(' before attached: ', loop)
-    console.log('attached: ',)
+
 }

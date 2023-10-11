@@ -181,9 +181,7 @@ export class RunManager {
 
 
             if (isInvoke) {
-                if(target.data.name.includes('MP')){
-                    console.log(`target: ${target.data.name}`)
-                }
+
                 target.invokeStep()
                 if (target.data.tag && isIGetNodeExternalValue(target) && target.nodeExternalValue !== undefined) {
                     this.graph.graphTagManager.updateTagVariable({
@@ -198,7 +196,6 @@ export class RunManager {
 
 
                     if (target instanceof GraphMicroLoopNode && target.data.isAccumulative || target instanceof GraphWhileLoopNode) {
-                        console.log(`target: ${target.data.name}: `)
                         target.children.forEach(child => {
                             if (child instanceof GraphMicroLoopNode) {
                                 child.resetLoopStep()
