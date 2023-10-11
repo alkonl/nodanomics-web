@@ -224,9 +224,9 @@ export class RunManager {
                             //     console.error('webworker: ', e)
                             // }
                             // console.log('after')
-                            nodeToExecute.addNodesToCurrent(innerNodes)
-                            // const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
-                            // await loopNodeExecutionManager.invokeNodesToExecute()
+                            // nodeToExecute.addNodesToCurrent(innerNodes)
+                            const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
+                            await loopNodeExecutionManager.invokeNodesToExecute()
                             // for (let i = 0; i < target.loopCount; i++) {
                             //     const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
                             //     await loopNodeExecutionManager.invokeAll()
@@ -316,7 +316,6 @@ export class RunManager {
                         nodeToExecute.removeCurrentNodesById(innerNodeIds)
                         nodeToExecute.addNodesToCurrent([endChainItem])
                     }
-
                 }
             }
         }
