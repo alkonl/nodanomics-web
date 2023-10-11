@@ -198,6 +198,12 @@ export class RunManager {
 
 
                     if (target instanceof GraphMicroLoopNode && target.data.isAccumulative || target instanceof GraphWhileLoopNode) {
+                        console.log(`target: ${target.data.name}: `)
+                        target.children.forEach(child => {
+                            if (child instanceof GraphMicroLoopNode) {
+                                child.resetLoopStep()
+                            }
+                        })
                         // accumulative logic
                         // check if loop is has a parent loop
                         const hasParentLoop = target.data.parentId !== undefined
@@ -218,8 +224,9 @@ export class RunManager {
                             //     console.error('webworker: ', e)
                             // }
                             // console.log('after')
-                            const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
-                            await loopNodeExecutionManager.invokeNodesToExecute()
+                            nodeToExecute.addNodesToCurrent(innerNodes)
+                            // const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
+                            // await loopNodeExecutionManager.invokeNodesToExecute()
                             // for (let i = 0; i < target.loopCount; i++) {
                             //     const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
                             //     await loopNodeExecutionManager.invokeAll()
@@ -305,7 +312,7 @@ export class RunManager {
                             nodeToExecute.addNodesToExecute([endChainItem])
                         }
                     } else if (endChainItem.target.isLoopActive && endChainItem.edge?.isMeetCondition) {
-                        const innerNodeIds = endChainItem.target.children.map(node => node.data.name)
+                        const innerNodeIds = endChainItem.target.children.map(node => node.data.id)
                         nodeToExecute.removeCurrentNodesById(innerNodeIds)
                         nodeToExecute.addNodesToCurrent([endChainItem])
                     }
