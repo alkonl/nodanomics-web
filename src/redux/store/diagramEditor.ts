@@ -177,7 +177,6 @@ export const diagramEditorSlice = createSlice({
             oldEdge: IReactFlowEdge,
             newConnection: IReactFlowEdgeConnection
         }>) => {
-            console.log('onEdgeUpdate', payload)
             state.diagramEdges = updateEdge({
                 ...payload.oldEdge,
                 data: {
@@ -187,7 +186,6 @@ export const diagramEditorSlice = createSlice({
                 shouldReplaceId: false,
             })
             const s = state.diagramEdges.find(edge => edge.id === payload.oldEdge.id)
-            console.log('new: ', s)
             const {source, target} = payload.newConnection
             if (source !== null && target !== null) {
                 graph.updateConnectionSourceAndTarget({
@@ -227,7 +225,6 @@ export const diagramEditorSlice = createSlice({
             updateHistory(state)
         },
         onConnect: (state, {payload}: PayloadAction<IReactFlowEdge | IReactFlowEdgeConnection>) => {
-            console.log('onConnect', payload)
             state.diagramEdges = addEdge(payload, state.diagramEdges)
             if (payload.target && payload.source && payload.data) {
                 graph.addEdge({
