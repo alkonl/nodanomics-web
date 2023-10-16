@@ -1,6 +1,6 @@
 import {ChangeEvent} from "react";
 import {readFileAsText} from "../utils";
-import {EDiagramNode, IImportAndExport} from "../interface";
+import {EDiagramNode, IImportAndExport, IReactFlowEdge} from "../interface";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {changeElementIds} from "../service";
 import {useOffHistoryExecuted} from "./useOffHistoryExecuted";
@@ -34,8 +34,12 @@ export const useUploadDiagram = () => {
                     const source = isConnectedToStart ? diagramStartNode?.id : edge.source
                     return {
                         ...edge,
+                        data: {
+                          ...edge.data,
+                            sourceId: source,
+                        },
                         source
-                    }
+                    } as IReactFlowEdge
                 })
                 const updatedNodes = updatedElements.nodes.filter(node => node.data.type !== EDiagramNode.Start)
                 dispatch(addManyNodes(updatedNodes))
