@@ -4,9 +4,17 @@ import {useGetSpreadSheetQuery, useUpdateSpreadsheetMutation, useUseDeleteSpread
 import {MButton} from "../base";
 import {EColor, EFontColor} from "../../constant";
 import {useDiagramEditorState} from "../../redux";
-import {IGetSpreadsheetResponse} from "../../interface";
+import {ISpreadsheetRowsData, IStructuredSpreadsheetData} from "../../interface";
 import lodash from "lodash";
 import {ISpreadsheetView} from "../../interface/busines/spreadsheet/spreadsheetView";
+
+const getValueFromDataset = ({dataset, x, y}: {
+    dataset: IStructuredSpreadsheetData,
+    x: number,
+    y: number,
+}) => {
+    return dataset.rows[x - dataset.yAxisIndex - 1][y - dataset.xAxisIndex - 1]
+}
 
 export const SpreadsheetViewer: React.FC<{
     spreadsheetId: string;
@@ -28,14 +36,17 @@ export const SpreadsheetViewer: React.FC<{
                 let isValueFromDataset = false
                 if (datasetData) {
                     try {
-                        const editorCellContent = datasetData.rows[i - datasetData.yAxisIndex - 1][j - datasetData.xAxisIndex - 1]
+                        // const editorCellContent = datasetData.rows[i - datasetData.yAxisIndex - 1][j - datasetData.xAxisIndex - 1]
+                        const editorCellContent = getValueFromDataset({
+                            dataset: datasetData,
+                            x: i,
+                            y: j,
+                        })
                         if (editorCellContent) {
-                            if(editorCellContent.toString() !== cellContent.toString()){
+                            if (editorCellContent.toString() !== cellContent.toString()) {
                                 cellContent = editorCellContent.toString()
                                 isValueFromDataset = true
                             }
-
-
                         }
                     } catch (e) {
                         console.error(`error during getting cell content from dataset ${spreadsheetId}`, e)
