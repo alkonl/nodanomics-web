@@ -1,5 +1,10 @@
 export interface ISpreadsheetNewValueView {
     content: string;
+    isNew: boolean;
+    // index shows the order of the row after the last existing row
+    rowIndex: number;
+    // index shows the order of the column after the last existing column
+    columnIndex: number;
 }
 
 export interface ISpreadsheetExistedValueView {
@@ -25,7 +30,7 @@ export const isISpreadsheetExistedValueView = (value: ISpreadsheetValueView): va
 }
 
 export const isISpreadsheetNewValueView = (value: ISpreadsheetValueView): value is ISpreadsheetNewValueView => {
-    return (value as ISpreadsheetNewValueView).content !== undefined;
+    return (value as ISpreadsheetNewValueView).isNew;
 }
 
 export type ISpreadsheetValueView = ISpreadsheetNewValueView | ISpreadsheetExistedValueView;
@@ -34,10 +39,12 @@ export interface ISpreadsheetExistedRowView {
     id: string;
     sheetId: string;
     values: ISpreadsheetValueView[];
+    rowIndex: number
 }
 
 export interface ISpreadsheetNewRowView {
     sheetId: string;
+
     values: ISpreadsheetValueView[];
 }
 

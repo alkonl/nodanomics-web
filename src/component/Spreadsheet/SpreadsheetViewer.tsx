@@ -4,9 +4,13 @@ import {useGetSpreadSheetQuery, useUpdateSpreadsheetMutation, useUseDeleteSpread
 import {MButton} from "../base";
 import {EColor, EFontColor} from "../../constant";
 import {useDiagramEditorState} from "../../redux";
-import {IStructuredSpreadsheetData} from "../../interface";
+import {ICreateNewValue, IStructuredSpreadsheetData, IUpdateExistedValue} from "../../interface";
 import lodash from "lodash";
-import {isISpreadsheetExistedValueView, ISpreadsheetView} from "../../interface/busines/spreadsheet/spreadsheetView";
+import {
+    isISpreadsheetExistedValueView,
+    isISpreadsheetNewValueView,
+    ISpreadsheetView
+} from "../../interface/busines/spreadsheet/spreadsheetView";
 
 const getValueFromDataset = ({dataset, x, y}: {
     dataset: IStructuredSpreadsheetData,
@@ -64,20 +68,30 @@ export const SpreadsheetViewer: React.FC<{
         const datasetDataRowLength = datasetData?.rows.length || 0
         const updatedLength = datasetDataRowLength - mappedSpreadSheet.rows.length
         if (updatedLength > 0 && datasetData) {
+            let rowIndex = mappedSpreadSheet.rows.length
+            for (let i = rowIndex; i < datasetData.rows.length; i++) {
 
-            for (let i = mappedSpreadSheet.rows.length; i < datasetData.rows.length; i++) {
-                const formattedNewDatasetValues = datasetData.rows[i].map((content) => ({
-                    content: content.toString(),
-                }))
+
                 // fill xAxis cells
-                const fillXAxisCells = Array.from({length: datasetData.xAxisIndex + 1}, () => ({
+                const fillXAxisCells = Array.from({length: datasetData.xAxisIndex + 1}, (_, columnIndex) => ({
                     content: '',
+                    columnIndex: columnIndex,
+                    rowIndex: rowIndex,
+                    isNew: true,
                 }))
+                const formattedNewDatasetValues = datasetData.rows[i].map((content, columnIndex) => ({
+                    content: content.toString(),
+                    columnIndex: columnIndex + fillXAxisCells.length,
+                    rowIndex: rowIndex,
+                    isNew: true,
+                }))
+
                 const formattedValues = [...fillXAxisCells, ...formattedNewDatasetValues]
                 mappedSpreadSheet.rows.push({
                     sheetId: spreadsheetId,
                     values: formattedValues,
                 })
+                rowIndex++
             }
         }
         return mappedSpreadSheet
@@ -143,10 +157,9 @@ export const SpreadsheetViewer: React.FC<{
 
     const updateSpreadsheet = () => {
         if (mappedSpreadSheet) {
-            const toUpdateValues: {
-                id: string
-                content: string
-            }[] = []
+            const toUpdateValues: IUpdateExistedValue[] = []
+            const newCells: ICreateNewValue[] = []
+
             mappedSpreadSheet.rows.forEach((row) => {
                 return row.values.forEach((cell) => {
                     if (isISpreadsheetExistedValueView(cell) && cell.isChanged) {
@@ -154,12 +167,20 @@ export const SpreadsheetViewer: React.FC<{
                             id: cell.id,
                             content: cell.content.toString(),
                         })
+                    } else if(isISpreadsheetNewValueView(cell))  {
+                        newCells.push({
+                            content: cell.content.toString(),
+                            columnIndex: cell.columnIndex,
+                            rowIndex: cell.rowIndex,
+                        })
                     }
                 })
             })
+
             reqUpdateSpreadsheet({
                 spreadsheetId,
-                values: toUpdateValues,
+                existedCells: toUpdateValues,
+                newCells: newCells,
             })
         }
     }
