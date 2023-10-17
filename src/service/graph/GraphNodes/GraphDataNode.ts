@@ -18,6 +18,7 @@ import {GraphOriginNode} from "./GraphOriginNode";
 import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
 import {GraphHistoryManager} from "../GraphHistoryManager";
+import {GraphSpreadsheetManager} from "../GraphSpreadsheetManager";
 
 export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue,
@@ -28,9 +29,11 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     private previousStepResourcesCount?: number
     private currentStepResourcesCount?: number
     private historyManager: GraphHistoryManager = new GraphHistoryManager(this, this.nodeManager);
+    private graphSpreadsheetManager: GraphSpreadsheetManager;
 
-    constructor(data: IDataNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
+    constructor(data: IDataNodeData, runManager: RunManager, nodeManager: GraphNodeManager, graphSpreadsheetManager: GraphSpreadsheetManager) {
         super(data, runManager, nodeManager);
+        this.graphSpreadsheetManager = graphSpreadsheetManager;
     }
 
     private get _resourcesToProvide(): IResource {
@@ -109,7 +112,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         this.updateResourcesToProvide()
     }
 
-    addResource(resources: IResource,  params?: {
+    addResource(resources: IResource, params?: {
         onSuccess?: (resourcesCount: number) => void,
         mode?: EModeAddResourcesToDataNode,
     }) {
@@ -207,6 +210,29 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     invokeStep() {
         super.invokeStep();
+        this.recordToDataset()
+    }
+
+    private recordToDataset() {
+        const x = this.data.datasetX
+        const y = this.data.datasetY
+        const datasetId = this.data.datasetReceiverId
+        if (datasetId && x !== undefined && y !== undefined) {
+            this.graphSpreadsheetManager.setValue({
+                spreadsheetId: datasetId,
+                x,
+                y,
+                value: this.currentResourcesCount
+            })
+            const value = this.graphSpreadsheetManager.getValue({
+                spreadsheetId: datasetId,
+                x,
+                y
+            })
+            console.log(value)
+
+        }
+
     }
 
 
