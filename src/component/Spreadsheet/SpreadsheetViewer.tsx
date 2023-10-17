@@ -3,6 +3,7 @@ import {Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typog
 import {useGetSpreadSheetQuery, useUseDeleteSpreadsheetMutation} from "../../api";
 import {MButton} from "../base";
 import {EColor, EFontColor} from "../../constant";
+import {useDiagramEditorState} from "../../redux";
 
 export const SpreadsheetViewer: React.FC<{
     spreadsheetId: string;
@@ -12,42 +13,63 @@ export const SpreadsheetViewer: React.FC<{
         spreadsheetId,
     })
 
+    const {spreadsheets} = useDiagramEditorState()
+
     const formattedTable = useMemo(() => {
         if (!data) return undefined
 
         // replace empty cells with
-        const fomattedRows = []
+        const formattedRows = []
         for (let i = 0; i < data.rows.length; i++) {
-            const values = []
+            const values: {
+                content: string | number,
+                colspan?: number,
+            }[] = []
             let skipValues: {
                 from: number
                 to: number
             } | undefined = undefined
             for (let j = 0; j < data.rows[i].values.length; j++) {
-                const cell = data.rows[i].values[j]
+                const defaultCell = data.rows[i].values[j]
+
                 if (skipValues && j >= skipValues.from && j <= skipValues.to) {
                     continue
                 }
-                const colspan = cell.merge ? (cell.merge.e.c - cell.merge.s.c + 1) : undefined
+                const colspan = defaultCell.merge ? (defaultCell.merge.e.c - defaultCell.merge.s.c + 1) : undefined
                 if (colspan && colspan > 1) {
                     skipValues = {
                         from: j,
                         to: j + colspan - 1,
                     }
                 }
+                const datasetData = spreadsheets?.[spreadsheetId]
+                let cellContent: string | number = defaultCell.content
+                if (datasetData) {
+                    try {
+                        const editorCellContent = datasetData.rows[i - datasetData.yAxisIndex - 1][j - datasetData.xAxisIndex - 1]
+                        if (editorCellContent) {
+                            cellContent = editorCellContent
+                        }
+                    } catch (e) {
+                        console.error(`error during getting cell content from dataset ${spreadsheetId}`, e)
+                    }
+
+                }
+
+
                 values.push({
-                    content: cell.content,
+                    content: cellContent,
                     colspan,
                 })
             }
-            fomattedRows.push({
+            formattedRows.push({
                 ...data.rows[i],
                 values,
             })
         }
         return {
             name: data.name,
-            rows: fomattedRows,
+            rows: formattedRows,
         }
     }, [data])
 

@@ -188,4 +188,8 @@ export class Graph {
         this.graphSpreadsheetManager.setSpreadsheets(spreadsheetData);
     }
 
+    getSpreadsheetsData(){
+        return this.graphSpreadsheetManager.spreadsheets
+    }
+
 }

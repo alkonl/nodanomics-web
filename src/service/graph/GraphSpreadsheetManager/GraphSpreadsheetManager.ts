@@ -8,6 +8,10 @@ export class GraphSpreadsheetManager {
         this._spreadsheets = spreadsheet;
     }
 
+    get spreadsheets() {
+        return this._spreadsheets;
+    }
+
     getSpreadsheet({spreadsheetId}: {
         spreadsheetId: string,
     }) {
