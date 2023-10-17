@@ -49,7 +49,7 @@ import {
     ISignUpRequest,
     ISubmitNewPasswordRequest,
     IUpdateExecutionGraphPropertiesRequest,
-    IUpdateExecutionGraphPropertiesResponse,
+    IUpdateExecutionGraphPropertiesResponse, IUpdateSpreadsheetRequests,
     IUpdateUserDataRequest,
     IUpdateUserDataResponse,
     IUploadSpreadSheetRequest
@@ -620,10 +620,11 @@ export const baseApi = createApi({
             },
             invalidatesTags: [ERTKTags.Spreadsheet]
         }),
-        updateSpreadsheet: builder.mutation<unknown, string>({
-            query: (spreadsheetId: string) => {
+        updateSpreadsheet: builder.mutation<unknown, IUpdateSpreadsheetRequests>({
+            query: (data: IUpdateSpreadsheetRequests) => {
                 return {
-                    url: `/project/spreadsheet/${spreadsheetId}`,
+                    url: `/project/spreadsheet`,
+                    body: data,
                     method: 'PUT',
                 }
             },

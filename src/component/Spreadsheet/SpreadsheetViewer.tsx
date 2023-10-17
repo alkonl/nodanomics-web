@@ -101,7 +101,9 @@ export const SpreadsheetViewer: React.FC<{
     }
 
     const updateSpreadsheet = () => {
-        reqUpdateSpreadsheet('')
+        if (mappedSpreadSheet) {
+            reqUpdateSpreadsheet(mappedSpreadSheet)
+        }
     }
 
     return (
@@ -130,7 +132,9 @@ export const SpreadsheetViewer: React.FC<{
                         alignItems: 'center',
                         gap: 1,
                     }}>
-                        <MButton.Submit>
+                        <MButton.Submit
+                            onClick={updateSpreadsheet}
+                        >
                             Save changes
                         </MButton.Submit>
                         <MButton.Submit
