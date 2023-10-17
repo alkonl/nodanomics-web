@@ -65,7 +65,6 @@ import {
     IGetExecutionGraphPropertiesRequest,
     IGetExecutionGraphPropertiesResponse
 } from "../interface/api/executionGraph/getExecutionGraphProperties";
-import {diagramEditorActions} from "../redux";
 
 
 const baseQuery = fetchBaseQuery(({
@@ -621,6 +620,15 @@ export const baseApi = createApi({
             },
             invalidatesTags: [ERTKTags.Spreadsheet]
         }),
+        updateSpreadsheet: builder.mutation<unknown, string>({
+            query: (spreadsheetId: string) => {
+                return {
+                    url: `/project/spreadsheet/${spreadsheetId}`,
+                    method: 'PUT',
+                }
+            },
+            invalidatesTags: [ERTKTags.Spreadsheet]
+        }),
         getAllUserGoogleSpreadSheet: builder.query<IGetAllGoogleSpreadsheetResponse, undefined>({
             query: () => {
                 return {
@@ -722,5 +730,6 @@ export const {
     useAddDiagramLayerMutation,
     useGetDiagramSettingsQuery,
     useDeleteLayerMutation,
+    useUpdateSpreadsheetMutation
 } = baseApi;
 

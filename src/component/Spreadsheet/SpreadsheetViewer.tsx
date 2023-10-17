@@ -1,9 +1,11 @@
 import React, {useEffect, useMemo} from "react";
 import {Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography} from "@mui/material";
-import {useGetSpreadSheetQuery, useUseDeleteSpreadsheetMutation} from "../../api";
+import {useGetSpreadSheetQuery, useUpdateSpreadsheetMutation, useUseDeleteSpreadsheetMutation} from "../../api";
 import {MButton} from "../base";
 import {EColor, EFontColor} from "../../constant";
 import {useDiagramEditorState} from "../../redux";
+import {IGetSpreadsheetResponse} from "../../interface";
+import lodash from "lodash";
 
 export const SpreadsheetViewer: React.FC<{
     spreadsheetId: string;
@@ -15,12 +17,38 @@ export const SpreadsheetViewer: React.FC<{
 
     const {spreadsheets} = useDiagramEditorState()
 
-    const formattedTable = useMemo(() => {
+    const mappedSpreadSheet = useMemo(() => {
         if (!data) return undefined
+        const mappedSpreadSheet: IGetSpreadsheetResponse = lodash.cloneDeep(data)
+        for (let i = 0; i < data.rows.length; i++) {
+            for (let j = 0; j < data.rows[i].values.length; j++) {
+                const datasetData = spreadsheets?.[spreadsheetId]
+                let cellContent: string = data.rows[i].values[j].content
+                if (datasetData) {
+                    console.log('datasetData', datasetData)
+                    try {
+                        const editorCellContent = datasetData.rows[i - datasetData.yAxisIndex - 1][j - datasetData.xAxisIndex - 1]
+                        if (editorCellContent) {
+                            cellContent = editorCellContent.toString()
+                        }
+                    } catch (e) {
+                        console.error(`error during getting cell content from dataset ${spreadsheetId}`, e)
+                    }
+
+                }
+                mappedSpreadSheet.rows[i].values[j].content = cellContent
+            }
+        }
+        return mappedSpreadSheet
+
+    }, [spreadsheets, data])
+
+    const formattedTable = useMemo(() => {
+        if (!mappedSpreadSheet) return undefined
 
         // replace empty cells with
         const formattedRows = []
-        for (let i = 0; i < data.rows.length; i++) {
+        for (let i = 0; i < mappedSpreadSheet.rows.length; i++) {
             const values: {
                 content: string | number,
                 colspan?: number,
@@ -29,8 +57,8 @@ export const SpreadsheetViewer: React.FC<{
                 from: number
                 to: number
             } | undefined = undefined
-            for (let j = 0; j < data.rows[i].values.length; j++) {
-                const defaultCell = data.rows[i].values[j]
+            for (let j = 0; j < mappedSpreadSheet.rows[i].values.length; j++) {
+                const defaultCell = mappedSpreadSheet.rows[i].values[j]
 
                 if (skipValues && j >= skipValues.from && j <= skipValues.to) {
                     continue
@@ -42,39 +70,25 @@ export const SpreadsheetViewer: React.FC<{
                         to: j + colspan - 1,
                     }
                 }
-                const datasetData = spreadsheets?.[spreadsheetId]
-                let cellContent: string | number = defaultCell.content
-                if (datasetData) {
-                    try {
-                        const editorCellContent = datasetData.rows[i - datasetData.yAxisIndex - 1][j - datasetData.xAxisIndex - 1]
-                        if (editorCellContent) {
-                            cellContent = editorCellContent
-                        }
-                    } catch (e) {
-                        console.error(`error during getting cell content from dataset ${spreadsheetId}`, e)
-                    }
-
-                }
-
-
                 values.push({
-                    content: cellContent,
+                    content: defaultCell.content,
                     colspan,
                 })
             }
             formattedRows.push({
-                ...data.rows[i],
+                ...mappedSpreadSheet.rows[i],
                 values,
             })
         }
         return {
-            name: data.name,
+            name: mappedSpreadSheet.name,
             rows: formattedRows,
         }
-    }, [data])
+    }, [mappedSpreadSheet])
 
 
     const [reqDeleteSpreadsheet, {isSuccess: isSpreadsheetDeleted}] = useUseDeleteSpreadsheetMutation()
+    const [reqUpdateSpreadsheet, {isSuccess: isSpreadsheetUpdated}] = useUpdateSpreadsheetMutation()
 
     useEffect(() => {
         if (isSpreadsheetDeleted && onDelete) {
@@ -84,6 +98,10 @@ export const SpreadsheetViewer: React.FC<{
 
     const handleDeleteSpreadsheet = () => {
         reqDeleteSpreadsheet(spreadsheetId)
+    }
+
+    const updateSpreadsheet = () => {
+        reqUpdateSpreadsheet('')
     }
 
     return (
@@ -106,11 +124,22 @@ export const SpreadsheetViewer: React.FC<{
                     }}>
                         {formattedTable.name}
                     </Typography>
-                    <MButton.Submit
-                        onClick={handleDeleteSpreadsheet}
-                    >
-                        Delete
-                    </MButton.Submit>
+                    <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        gap: 1,
+                    }}>
+                        <MButton.Submit>
+                            Save changes
+                        </MButton.Submit>
+                        <MButton.Submit
+                            onClick={handleDeleteSpreadsheet}
+                        >
+                            Delete
+                        </MButton.Submit>
+
+                    </Box>
                 </Box>
 
                 <TableContainer component={Paper}>
