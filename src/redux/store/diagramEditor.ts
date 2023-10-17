@@ -185,7 +185,6 @@ export const diagramEditorSlice = createSlice({
             }, payload.newConnection, state.diagramEdges, {
                 shouldReplaceId: false,
             })
-            const s = state.diagramEdges.find(edge => edge.id === payload.oldEdge.id)
             const {source, target} = payload.newConnection
             if (source !== null && target !== null) {
                 graph.updateConnectionSourceAndTarget({

@@ -2,7 +2,7 @@ import React from 'react';
 import {ElementParameter} from "../ElementParameter";
 import {Parameter} from "../../../../../base";
 import {Box} from "@mui/material";
-import {IDataNodeData, IDatasetRecorder, IDiagramNodeBaseData} from "../../../../../../interface";
+import {IDatasetRecorder, IDiagramNodeBaseData} from "../../../../../../interface";
 import {useUpdateNode} from "../../../../../../hooks";
 
 export const NodeDatasetFieldToRecordCoordinates: React.FC<{

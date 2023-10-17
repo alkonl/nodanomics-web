@@ -9,7 +9,7 @@ import {useDiagramEditorState} from "../../../../../../redux";
 export const NodeDatasetFieldToRecordSelectDataset: React.FC<{
     nodeData: IDiagramNodeBaseData & IDatasetRecorder
 }> = ({nodeData}) => {
-    const {currentDiagramId, spreadsheets} = useDiagramEditorState()
+    const {spreadsheets} = useDiagramEditorState()
 
     const {updateNodeData} = useUpdateNode<IDiagramNodeBaseData & IDatasetRecorder>({
         nodeId: nodeData.id,
