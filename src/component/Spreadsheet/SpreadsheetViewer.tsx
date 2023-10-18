@@ -12,13 +12,6 @@ import {
     ISpreadsheetView
 } from "../../interface/busines/spreadsheet/spreadsheetView";
 
-const getValueFromDataset = ({dataset, x, y}: {
-    dataset: IStructuredSpreadsheetData,
-    x: number,
-    y: number,
-}) => {
-    return dataset.rows[x - dataset.yAxisIndex - 1][y - dataset.xAxisIndex - 1]
-}
 
 export const SpreadsheetViewer: React.FC<{
     spreadsheetId: string;
@@ -42,11 +35,11 @@ export const SpreadsheetViewer: React.FC<{
                 if (datasetData) {
                     try {
                         // const editorCellContent = datasetData.rows[i - datasetData.yAxisIndex - 1][j - datasetData.xAxisIndex - 1]
-                        const editorCellContent = getValueFromDataset({
-                            dataset: datasetData,
-                            x: i,
-                            y: j,
-                        })
+                        const rowIndex = i - datasetData.yAxisIndex - 1
+                        const cellIndex = j - datasetData.xAxisIndex - 1
+
+                        console.log(`cell content: ${rowIndex} ${cellIndex}`, cellContent)
+                        const editorCellContent = datasetData.rows[rowIndex][cellIndex]
                         if (editorCellContent) {
                             if (editorCellContent.toString() !== cellContent.toString()) {
                                 cellContent = editorCellContent.toString()
@@ -65,33 +58,36 @@ export const SpreadsheetViewer: React.FC<{
                 }
             }
         }
-        const datasetDataRowLength = datasetData?.rows.length || 0
-        const updatedLength = datasetDataRowLength - mappedSpreadSheet.rows.length
-        if (updatedLength > 0 && datasetData) {
-            let rowIndex = mappedSpreadSheet.rows.length
-            for (let i = rowIndex; i < datasetData.rows.length; i++) {
+        if (datasetData) {
+            const datasetDataRowLength = datasetData?.rows.length || 0
+            const mappedSpreadSheetDataRowLength = mappedSpreadSheet.rows.length - datasetData.yAxisIndex
+            const updatedLength = datasetDataRowLength - mappedSpreadSheetDataRowLength
+            if (updatedLength > 0 && datasetData) {
+                console.log('updatedLength', updatedLength)
+                for (let rowIndex = mappedSpreadSheetDataRowLength - 1; rowIndex < datasetData.rows.length; rowIndex++) {
 
 
-                // fill xAxis cells
-                const fillXAxisCells = Array.from({length: datasetData.xAxisIndex + 1}, (_, columnIndex) => ({
-                    content: '',
-                    columnIndex: columnIndex,
-                    rowIndex: rowIndex,
-                    isNew: true,
-                }))
-                const formattedNewDatasetValues = datasetData.rows[i].map((content, columnIndex) => ({
-                    content: content.toString(),
-                    columnIndex: columnIndex + fillXAxisCells.length,
-                    rowIndex: rowIndex,
-                    isNew: true,
-                }))
+                    // fill xAxis cells
+                    const rowIndexToWrite = rowIndex + 1 + datasetData.yAxisIndex
+                    const fillXAxisCells = Array.from({length: datasetData.xAxisIndex + 1}, (_, columnIndex) => ({
+                        content: '',
+                        columnIndex: columnIndex,
+                        rowIndex: rowIndexToWrite,
+                        isNew: true,
+                    }))
+                    const formattedNewDatasetValues = datasetData.rows[rowIndex].map((content, columnIndex) => ({
+                        content: content.toString(),
+                        columnIndex: columnIndex + fillXAxisCells.length,
+                        rowIndex: rowIndexToWrite,
+                        isNew: true,
+                    }))
 
-                const formattedValues = [...fillXAxisCells, ...formattedNewDatasetValues]
-                mappedSpreadSheet.rows.push({
-                    sheetId: spreadsheetId,
-                    values: formattedValues,
-                })
-                rowIndex++
+                    const formattedValues = [...fillXAxisCells, ...formattedNewDatasetValues]
+                    mappedSpreadSheet.rows.push({
+                        sheetId: spreadsheetId,
+                        values: formattedValues,
+                    })
+                }
             }
         }
         return mappedSpreadSheet
@@ -167,7 +163,7 @@ export const SpreadsheetViewer: React.FC<{
                             id: cell.id,
                             content: cell.content.toString(),
                         })
-                    } else if(isISpreadsheetNewValueView(cell))  {
+                    } else if (isISpreadsheetNewValueView(cell)) {
                         newCells.push({
                             content: cell.content.toString(),
                             columnIndex: cell.columnIndex,
