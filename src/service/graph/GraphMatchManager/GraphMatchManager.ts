@@ -5,7 +5,7 @@ import {GraphDatasetDatafieldNode, GraphTagManager} from "../GraphNodes";
 import {GraphMatchNodeAdapter} from "./GraphMatchNodeAdapter";
 
 
-export abstract class GraphMatchManager {
+export class GraphMatchManager {
 
     private readonly nodeManager: GraphNodeManager
     private readonly tagManager: GraphTagManager
@@ -33,9 +33,9 @@ export abstract class GraphMatchManager {
         return {rowsPerTag, datasetPerTag}
     }
 
-    calculateFormula({formula, variables}: {
+    calculateFormula({formula, variables = []}: {
         formula: string,
-        variables: INumberVariable[]
+        variables?: INumberVariable[]
     }) {
         if (Number(formula) && !isNaN(Number(formula))) {
             return Number(formula)

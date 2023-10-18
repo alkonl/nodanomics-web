@@ -39,7 +39,7 @@ export class GraphNodeFactory {
             case EDiagramNode.Origin:
                 return new GraphOriginNode(value.node, runManager, graph.nodesManager);
             case EDiagramNode.Data:
-                return new GraphDataNode(value.node, runManager, graph.nodesManager, graph.spreadsheetManager);
+                return new GraphDataNode(value.node, runManager, graph.nodesManager);
             case EDiagramNode.EventTrigger:
                 return new GraphEventTriggerNode(value.node, runManager, graph.nodesManager);
             case EDiagramNode.EventListener:

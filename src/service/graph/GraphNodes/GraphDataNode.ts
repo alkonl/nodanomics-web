@@ -18,9 +18,7 @@ import {GraphOriginNode} from "./GraphOriginNode";
 import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
 import {GraphHistoryManager} from "../GraphHistoryManager";
-import {GraphSpreadsheetManager} from "../GraphSpreadsheetManager";
-import {GraphTagManager} from "./helper";
-import {GraphMatchManagerNode} from "../GraphMatchManager";
+import {GraphDatasetRecorder} from "./helper";
 
 export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue,
@@ -31,13 +29,11 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     private previousStepResourcesCount?: number
     private currentStepResourcesCount?: number
     private historyManager: GraphHistoryManager = new GraphHistoryManager(this, this.nodeManager);
-    private graphSpreadsheetManager: GraphSpreadsheetManager;
-    private matchManager: GraphMatchManagerNode;
+    private graphDatasetRecorder: GraphDatasetRecorder = new GraphDatasetRecorder(this.runManager)
 
-    constructor(data: IDataNodeData, runManager: RunManager, nodeManager: GraphNodeManager, graphSpreadsheetManager: GraphSpreadsheetManager) {
+    constructor(data: IDataNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(data, runManager, nodeManager);
-        this.graphSpreadsheetManager = graphSpreadsheetManager;
-        this.matchManager = new GraphMatchManagerNode(this.incomingEdges, nodeManager, this.runManager.graph.graphTagManager)
+
     }
 
     private get _resourcesToProvide(): IResource {
@@ -218,29 +214,14 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     private recordToDataset() {
-        const datasetId = this.data.datasetReceiverId
-        if (datasetId && this.data.datasetY !== undefined && this.data.datasetX !== undefined) {
-            const x = this.matchManager.calculateFormula({
-                formula: this.data.datasetX,
+        if (this.data.datasetX && this.data.datasetY && this.data.datasetReceiverId) {
+            this.graphDatasetRecorder.recordToDataset({
+                value: this.currentResourcesCount,
+                spreadsheetId: this.data.datasetReceiverId,
+                x: this.data.datasetX,
+                y: this.data.datasetY
             })
-            const y = this.matchManager.calculateFormula({
-                formula: this.data.datasetY,
-            })
-            this.graphSpreadsheetManager.setValue({
-                spreadsheetId: datasetId,
-                x,
-                y,
-                value: this.currentResourcesCount
-            })
-            const value = this.graphSpreadsheetManager.getValue({
-                spreadsheetId: datasetId,
-                x,
-                y
-            })
-            console.log(value)
-
         }
-
     }
 
 
