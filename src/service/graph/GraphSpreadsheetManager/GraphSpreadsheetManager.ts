@@ -45,7 +45,7 @@ export class GraphSpreadsheetManager {
         if (spreadsheet) {
             try {
                 return {
-                    x: spreadsheet.rows[0].length,
+                    x: spreadsheet.columns.length,
                     y: spreadsheet.rows.length,
                 }
             } catch (e) {
