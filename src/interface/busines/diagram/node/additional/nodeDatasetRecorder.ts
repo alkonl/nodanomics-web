@@ -2,8 +2,8 @@ import {EDiagramNode, IDiagramNodeBaseData} from "../structures";
 
 export interface IDatasetRecorder {
     datasetReceiverId?: string
-    datasetX?: number
-    datasetY?: number
+    datasetX?: string
+    datasetY?: string
 }
 
 export const isINodeDatasetRecorder = <T extends  IDiagramNodeBaseData>(obj: T): obj is (T & IDatasetRecorder) => {

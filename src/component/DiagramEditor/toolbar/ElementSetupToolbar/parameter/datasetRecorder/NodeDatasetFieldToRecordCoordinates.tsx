@@ -15,13 +15,13 @@ export const NodeDatasetFieldToRecordCoordinates: React.FC<{
 
     const onDatasetXChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         updateNodeData({
-            datasetX: Number(event.target.value),
+            datasetX: event.target.value,
         })
     }
 
     const onDatasetYChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         updateNodeData({
-            datasetY: Number(event.target.value),
+            datasetY: event.target.value,
         })
     }
 
@@ -35,15 +35,12 @@ export const NodeDatasetFieldToRecordCoordinates: React.FC<{
     : '';
 
     return (
-        <ElementParameter label="Coordinates">
+        <ElementParameter label="">
         <Box sx={{
             display: 'flex',
             gap: 1,
         }}>
-            <Box sx={{
-                display: 'flex',
-                alignItems: 'center'
-            }}>
+
                 <Parameter.Text sx={{
                     fontWeight: 400,
                     marginRight: 0.25,
@@ -51,7 +48,6 @@ export const NodeDatasetFieldToRecordCoordinates: React.FC<{
                     X
                 </Parameter.Text>
                 <Parameter.Input
-                    type="number"
                     value={showDatasetX}
                     onChange={onDatasetXChange}
                 />
@@ -68,12 +64,10 @@ export const NodeDatasetFieldToRecordCoordinates: React.FC<{
                     Y
                 </Parameter.Text>
                 <Parameter.Input
-                    type="number"
                     value={showDatasetY}
                     onChange={onDatasetYChange}
                 />
             </Box>
-        </Box>
         </ElementParameter>
     );
 };

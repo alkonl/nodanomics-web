@@ -19,6 +19,8 @@ import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
 import {GraphHistoryManager} from "../GraphHistoryManager";
 import {GraphSpreadsheetManager} from "../GraphSpreadsheetManager";
+import {GraphTagManager} from "./helper";
+import {GraphMatchManagerNode} from "../GraphMatchManager";
 
 export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue,
@@ -30,10 +32,12 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     private currentStepResourcesCount?: number
     private historyManager: GraphHistoryManager = new GraphHistoryManager(this, this.nodeManager);
     private graphSpreadsheetManager: GraphSpreadsheetManager;
+    private matchManager: GraphMatchManagerNode;
 
     constructor(data: IDataNodeData, runManager: RunManager, nodeManager: GraphNodeManager, graphSpreadsheetManager: GraphSpreadsheetManager) {
         super(data, runManager, nodeManager);
         this.graphSpreadsheetManager = graphSpreadsheetManager;
+        this.matchManager = new GraphMatchManagerNode(this.incomingEdges, nodeManager, this.runManager.graph.graphTagManager)
     }
 
     private get _resourcesToProvide(): IResource {
@@ -214,10 +218,14 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     private recordToDataset() {
-        const x = this.data.datasetX
-        const y = this.data.datasetY
         const datasetId = this.data.datasetReceiverId
-        if (datasetId && x !== undefined && y !== undefined) {
+        if (datasetId && this.data.datasetY !== undefined && this.data.datasetX !== undefined) {
+            const x = this.matchManager.calculateFormula({
+                formula: this.data.datasetX,
+            })
+            const y = this.matchManager.calculateFormula({
+                formula: this.data.datasetY,
+            })
             this.graphSpreadsheetManager.setValue({
                 spreadsheetId: datasetId,
                 x,
