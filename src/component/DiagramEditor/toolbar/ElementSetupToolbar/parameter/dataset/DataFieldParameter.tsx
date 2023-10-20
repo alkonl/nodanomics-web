@@ -14,9 +14,9 @@ export const DataFieldParameter: React.FC<{
     const {spreadsheets} = useDiagramEditorState()
 
     const fields: IParametersSelectValue[] = useMemo(() => {
-        if (spreadsheets && nodeData.datasetId) {
+        if (spreadsheets && nodeData.datasetId && spreadsheets[nodeData.datasetId]) {
             const fields: IParametersSelectValue[] = []
-            const rows = spreadsheets[nodeData.datasetId].rows
+            const rows = spreadsheets[nodeData.datasetId]?.rows
             for (let y = 0; y < rows.length; y++) {
                 for (let x = 0; x < rows[y].length; x++) {
 

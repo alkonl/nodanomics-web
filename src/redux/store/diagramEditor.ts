@@ -13,14 +13,14 @@ import {
     IUpdateReactflowNode
 } from "../../interface";
 
-import type {Connection, EdgeAddChange, EdgeChange, NodeChange,} from 'reactflow'
+import type {EdgeAddChange, EdgeChange, NodeChange,} from 'reactflow'
 import {addEdge, applyEdgeChanges, applyNodeChanges, updateEdge} from "reactflow";
 import {Optionalize} from "../../utils";
-import {geAllChildrenNodes, Graph, resetNodeStates, RunManager} from "../../service";
+import {geAllChildrenNodes, resetNodeStates} from "../../service";
 import {canNodeHasChildren} from "../../service/reactflow/node/canNodeHasChildren";
 import {ApexOptions} from "apexcharts";
 import {DIAGRAM_RUN_DURATION} from "../../constant";
-import {runManager, graph} from "./diagramGraphInstance";
+import {graph, runManager} from "./diagramGraphInstance";
 
 interface IDiagramElements {
     diagramNodes: IReactFlowNode[]
@@ -185,7 +185,6 @@ export const diagramEditorSlice = createSlice({
             }, payload.newConnection, state.diagramEdges, {
                 shouldReplaceId: false,
             })
-            const s = state.diagramEdges.find(edge => edge.id === payload.oldEdge.id)
             const {source, target} = payload.newConnection
             if (source !== null && target !== null) {
                 graph.updateConnectionSourceAndTarget({
@@ -424,6 +423,7 @@ export const diagramEditorSlice = createSlice({
             // runManager.invokeStep()
             updateNodesFromGraph(state.diagramNodes)
             updateEdgesFromGraph(state.diagramEdges)
+            state.spreadsheets = graph.getSpreadsheetsData()
             state.currentRunningDiagramStep = runManager.currentStep
         },
         setIsDiagramRunning: (state, {payload: {isDiagramRunningInterval, isRunning}}: PayloadAction<{

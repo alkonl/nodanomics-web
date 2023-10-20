@@ -49,7 +49,7 @@ import {
     ISignUpRequest,
     ISubmitNewPasswordRequest,
     IUpdateExecutionGraphPropertiesRequest,
-    IUpdateExecutionGraphPropertiesResponse,
+    IUpdateExecutionGraphPropertiesResponse, IUpdateSpreadsheetRequests,
     IUpdateUserDataRequest,
     IUpdateUserDataResponse,
     IUploadSpreadSheetRequest
@@ -65,7 +65,6 @@ import {
     IGetExecutionGraphPropertiesRequest,
     IGetExecutionGraphPropertiesResponse
 } from "../interface/api/executionGraph/getExecutionGraphProperties";
-import {diagramEditorActions} from "../redux";
 
 
 const baseQuery = fetchBaseQuery(({
@@ -621,6 +620,16 @@ export const baseApi = createApi({
             },
             invalidatesTags: [ERTKTags.Spreadsheet]
         }),
+        updateSpreadsheet: builder.mutation<unknown, IUpdateSpreadsheetRequests>({
+            query: (data: IUpdateSpreadsheetRequests) => {
+                return {
+                    url: `/project/spreadsheet`,
+                    body: data,
+                    method: 'PUT',
+                }
+            },
+            invalidatesTags: [ERTKTags.Spreadsheet]
+        }),
         getAllUserGoogleSpreadSheet: builder.query<IGetAllGoogleSpreadsheetResponse, undefined>({
             query: () => {
                 return {
@@ -722,5 +731,6 @@ export const {
     useAddDiagramLayerMutation,
     useGetDiagramSettingsQuery,
     useDeleteLayerMutation,
+    useUpdateSpreadsheetMutation
 } = baseApi;
 

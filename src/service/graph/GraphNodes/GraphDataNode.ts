@@ -18,6 +18,7 @@ import {GraphOriginNode} from "./GraphOriginNode";
 import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
 import {GraphHistoryManager} from "../GraphHistoryManager";
+import {GraphDatasetRecorder} from "./helper";
 
 export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue,
@@ -28,9 +29,11 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     private previousStepResourcesCount?: number
     private currentStepResourcesCount?: number
     private historyManager: GraphHistoryManager = new GraphHistoryManager(this, this.nodeManager);
+    private graphDatasetRecorder: GraphDatasetRecorder = new GraphDatasetRecorder(this.runManager)
 
     constructor(data: IDataNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(data, runManager, nodeManager);
+
     }
 
     private get _resourcesToProvide(): IResource {
@@ -109,7 +112,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         this.updateResourcesToProvide()
     }
 
-    addResource(resources: IResource,  params?: {
+    addResource(resources: IResource, params?: {
         onSuccess?: (resourcesCount: number) => void,
         mode?: EModeAddResourcesToDataNode,
     }) {
@@ -207,6 +210,18 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     invokeStep() {
         super.invokeStep();
+        this.recordToDataset()
+    }
+
+    private recordToDataset() {
+        if (this.data.datasetX && this.data.datasetY && this.data.datasetReceiverId) {
+            this.graphDatasetRecorder.recordToDataset({
+                value: this.currentResourcesCount,
+                spreadsheetId: this.data.datasetReceiverId,
+                x: this.data.datasetX,
+                y: this.data.datasetY
+            })
+        }
     }
 
 
