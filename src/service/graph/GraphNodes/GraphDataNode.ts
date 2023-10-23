@@ -210,11 +210,12 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     invokeStep() {
         super.invokeStep();
+
         this.recordToDataset()
     }
 
     private recordToDataset() {
-        if (this.data.datasetX && this.data.datasetY && this.data.datasetReceiverId) {
+        if (this.data.datasetX !== undefined && this.data.datasetY !== undefined && this.data.datasetReceiverId) {
             this.graphDatasetRecorder.recordToDataset({
                 value: this.currentResourcesCount,
                 spreadsheetId: this.data.datasetReceiverId,

@@ -309,7 +309,9 @@ export class RunManager {
                             nodeToExecute.addNodesToExecute([endChainItem])
                         }
                     } else if (endChainItem.target.isLoopActive && endChainItem.edge?.isMeetCondition) {
-                        const innerNodeIds = endChainItem.target.children.map(node => node.data.id)
+                        const innerNodeIds = endChainItem.target.children
+                            .filter((childNode) => !(childNode instanceof GraphDataNode))
+                            .map(node => node.data.id)
                         nodeToExecute.removeCurrentNodesById(innerNodeIds)
                         nodeToExecute.addNodesToCurrent([endChainItem])
                     }
