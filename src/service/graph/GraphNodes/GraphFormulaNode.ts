@@ -10,7 +10,7 @@ import {
 } from "../../../interface";
 import {RunManager} from "../RunManager";
 import {GraphInvokableNode} from "./abstracts";
-import {GraphLogicManager} from "./helper";
+import {GraphDatasetRecorder, GraphLogicManager} from "./helper";
 import {GraphNodeManager} from "../NodeManager";
 import {GraphMatchManagerNode} from "../GraphMatchManager";
 import {GraphHistoryManager} from "../GraphHistoryManager";
@@ -22,6 +22,7 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
     private readonly matchManager: GraphMatchManagerNode
     private readonly logicManager: GraphLogicManager = new GraphLogicManager(this.incomingEdges);
     private readonly historyManager: GraphHistoryManager = new GraphHistoryManager(this, this.nodeManager);
+    private graphDatasetRecorder: GraphDatasetRecorder = new GraphDatasetRecorder(this.runManager)
 
     constructor(value: IFormulaNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(value, runManager, nodeManager);
@@ -50,6 +51,7 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
     invokeStep() {
         super.invokeStep()
         this.updateState()
+        this.recordToDataset()
     }
 
     updateState() {
@@ -88,6 +90,18 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
             } else if (result !== undefined) {
                 console.error(`Unknown result type ${JSON.stringify(this.data)} result: ${JSON.stringify(result, null, 2)}`)
             }
+        }
+    }
+
+
+    private recordToDataset() {
+        if (this.data.datasetX && this.data.datasetY && this.data.datasetReceiverId && this.result?.value && this.result?.type === 'number' ) {
+            this.graphDatasetRecorder.recordToDataset({
+                value: this.result.value,
+                spreadsheetId: this.data.datasetReceiverId,
+                x: this.data.datasetX,
+                y: this.data.datasetY
+            })
         }
     }
 
