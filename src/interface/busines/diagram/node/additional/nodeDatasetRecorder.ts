@@ -7,5 +7,5 @@ export interface IDatasetRecorder {
 }
 
 export const isINodeDatasetRecorder = <T extends  IDiagramNodeBaseData>(obj: T): obj is (T & IDatasetRecorder) => {
-    return [EDiagramNode.Data].includes(obj.type)
+    return [EDiagramNode.Data, EDiagramNode.Formula].includes(obj.type)
 }

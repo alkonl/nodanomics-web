@@ -1,5 +1,6 @@
 import {EDiagramNode, IDiagramNodeBaseData, IInvokableNode} from "./structures";
 import {
+    IDatasetRecorder,
     IIsNodeAutomatic,
     IIsShowInExecutionGraphNode,
     INodeDecimal,
@@ -23,7 +24,7 @@ export type IFormulaResult = IFormulaResultBoolean | IFormulaResultNumber
 
 export interface IFormulaNodeData extends IInvokableNode, INodeNumberVariable,
     INodeDecimal, INodeHistory, IIsShowInExecutionGraphNode,
-    IIsNodeAutomatic, IIsElementExecuted {
+    IIsNodeAutomatic, IIsElementExecuted, IDatasetRecorder {
     type: EDiagramNode.Formula;
     formula?: string
     result?: IFormulaResult
