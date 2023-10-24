@@ -38,14 +38,16 @@ export const SpreadsheetViewer: React.FC<{
                         const rowIndex = i - datasetData.yAxisIndex - 1
                         const cellIndex = j - datasetData.xAxisIndex - 1
 
-                        console.log(`cell content: ${rowIndex} ${cellIndex}`, cellContent)
-                        const editorCellContent = datasetData.rows[rowIndex][cellIndex]
-                        if (editorCellContent) {
-                            if (editorCellContent.toString() !== cellContent.toString()) {
-                                cellContent = editorCellContent.toString()
-                                isValueFromDataset = true
+                        if(rowIndex >= 0 && cellIndex >= 0) {
+                            const editorCellContent = datasetData.rows[rowIndex][cellIndex]
+                            if (editorCellContent) {
+                                if (editorCellContent.toString() !== cellContent.toString()) {
+                                    cellContent = editorCellContent.toString()
+                                    isValueFromDataset = true
+                                }
                             }
                         }
+
                     } catch (e) {
                         console.error(`error during getting cell content from dataset ${spreadsheetId}`, e)
                     }
@@ -181,6 +183,11 @@ export const SpreadsheetViewer: React.FC<{
         }
     }
 
+
+    const clearChanges = () => {
+
+    }
+
     return (
         <Box sx={{
             padding: 1,
@@ -207,6 +214,11 @@ export const SpreadsheetViewer: React.FC<{
                         alignItems: 'center',
                         gap: 1,
                     }}>
+                        <MButton.Submit
+                            onClick={updateSpreadsheet}
+                        >
+                            Clear
+                        </MButton.Submit>
                         <MButton.Submit
                             onClick={updateSpreadsheet}
                         >
