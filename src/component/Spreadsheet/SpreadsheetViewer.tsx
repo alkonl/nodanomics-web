@@ -11,8 +11,10 @@ import {
     isISpreadsheetNewValueView,
     ISpreadsheetView
 } from "../../interface/busines/spreadsheet/spreadsheetView";
-import {getExcelSpreadsheet, mapSpreadsheet} from "../../service";
+import {getCSV, getExcelSpreadsheet, mapSpreadsheet} from "../../service";
 import {useDownloadExcel} from "../../hooks";
+import {downloadFile} from "../../utils/downloadFile";
+import {DownloadSpreadsheet} from "./DownloadSpreadsheet";
 
 
 export const SpreadsheetViewer: React.FC<{
@@ -197,17 +199,7 @@ export const SpreadsheetViewer: React.FC<{
         }
     }
 
-    const downloadExcel= useDownloadExcel()
 
-    const downloadSpreadsheet = () => {
-        if(mappedSpreadSheet){
-            const excelBlob =  getExcelSpreadsheet(mappedSpreadSheet)
-            downloadExcel({
-                excelBlob,
-                fileName: mappedSpreadSheet.name
-            })
-        }
-    }
 
     return (
         <Box sx={{
@@ -235,11 +227,7 @@ export const SpreadsheetViewer: React.FC<{
                         alignItems: 'center',
                         gap: 1,
                     }}>
-                        <MButton.Submit
-                            onClick={downloadSpreadsheet}
-                        >
-                            Download
-                        </MButton.Submit>
+                        {mappedSpreadSheet && <DownloadSpreadsheet spreadsheet={mappedSpreadSheet}/>}
                         <MButton.Submit
                             onClick={clearChanges}
                         >
