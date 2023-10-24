@@ -3,20 +3,22 @@ import {Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typog
 import {useGetSpreadSheetQuery, useUpdateSpreadsheetMutation, useUseDeleteSpreadsheetMutation} from "../../api";
 import {MButton} from "../base";
 import {EColor, EFontColor} from "../../constant";
-import {useDiagramEditorState} from "../../redux";
-import {ICreateNewValue, IStructuredSpreadsheetData, IUpdateExistedValue} from "../../interface";
+import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../../redux";
+import {ICreateNewValue, IUpdateExistedValue} from "../../interface";
 import lodash from "lodash";
 import {
     isISpreadsheetExistedValueView,
     isISpreadsheetNewValueView,
     ISpreadsheetView
 } from "../../interface/busines/spreadsheet/spreadsheetView";
+import {mapSpreadsheet} from "../../service";
 
 
 export const SpreadsheetViewer: React.FC<{
     spreadsheetId: string;
     onDelete?: () => void;
 }> = ({spreadsheetId, onDelete}) => {
+    const dispatch = useAppDispatch()
     const {data} = useGetSpreadSheetQuery({
         spreadsheetId,
     })
@@ -38,14 +40,16 @@ export const SpreadsheetViewer: React.FC<{
                         const rowIndex = i - datasetData.yAxisIndex - 1
                         const cellIndex = j - datasetData.xAxisIndex - 1
 
-                        console.log(`cell content: ${rowIndex} ${cellIndex}`, cellContent)
-                        const editorCellContent = datasetData.rows[rowIndex][cellIndex]
-                        if (editorCellContent) {
-                            if (editorCellContent.toString() !== cellContent.toString()) {
-                                cellContent = editorCellContent.toString()
-                                isValueFromDataset = true
+                        if (rowIndex >= 0 && cellIndex >= 0) {
+                            const editorCellContent = datasetData.rows[rowIndex][cellIndex]
+                            if (editorCellContent) {
+                                if (editorCellContent.toString() !== cellContent.toString()) {
+                                    cellContent = editorCellContent.toString()
+                                    isValueFromDataset = true
+                                }
                             }
                         }
+
                     } catch (e) {
                         console.error(`error during getting cell content from dataset ${spreadsheetId}`, e)
                     }
@@ -181,6 +185,17 @@ export const SpreadsheetViewer: React.FC<{
         }
     }
 
+
+    const clearChanges = () => {
+        if (data) {
+            const mappedSpreadSheet = mapSpreadsheet(data)
+            dispatch(diagramEditorActions.setSpreadsheet({
+                spreadsheetId,
+                spreadsheet: mappedSpreadSheet,
+            }))
+        }
+    }
+
     return (
         <Box sx={{
             padding: 1,
@@ -207,6 +222,11 @@ export const SpreadsheetViewer: React.FC<{
                         alignItems: 'center',
                         gap: 1,
                     }}>
+                        <MButton.Submit
+                            onClick={clearChanges}
+                        >
+                            Clear
+                        </MButton.Submit>
                         <MButton.Submit
                             onClick={updateSpreadsheet}
                         >

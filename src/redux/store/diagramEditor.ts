@@ -9,6 +9,7 @@ import {
     IReactFlowEdgeConnection,
     IReactFlowNode,
     isINodeSize,
+    IStructuredSpreadsheetData,
     IStructuredSpreadsheetsData,
     IUpdateReactflowNode
 } from "../../interface";
@@ -450,6 +451,21 @@ export const diagramEditorSlice = createSlice({
             state.spreadsheets = payload.spreadsheets
             graph.setSpreadsheetsData({
                 spreadsheetData: payload.spreadsheets
+            })
+            runManager.updateState()
+            updateNodesFromGraph(state.diagramNodes)
+            updateEdgesFromGraph(state.diagramEdges)
+        },
+        setSpreadsheet: (state, {payload}: PayloadAction<{
+            spreadsheetId: string,
+            spreadsheet: IStructuredSpreadsheetData
+        }>) => {
+            state.spreadsheets = {
+                ...state.spreadsheets,
+                [payload.spreadsheetId]: payload.spreadsheet
+            }
+            graph.setSpreadsheetsData({
+                spreadsheetData: state.spreadsheets
             })
             runManager.updateState()
             updateNodesFromGraph(state.diagramNodes)
