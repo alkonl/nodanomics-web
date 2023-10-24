@@ -3,8 +3,8 @@ import {MButton} from "../base";
 import {getCSV, getExcelSpreadsheet} from "../../service";
 import {downloadFile} from "../../utils/downloadFile";
 import {ISpreadsheetView} from "../../interface/busines/spreadsheet/spreadsheetView";
-import {Box, FormControlLabel, Radio as MuiRadio, RadioGroup, Typography, styled} from "@mui/material";
-import {EFontColor} from "../../constant";
+import {Box, FormControlLabel, Radio as MuiRadio, RadioGroup, styled, Typography} from "@mui/material";
+import {EFontColor, FileType} from "../../constant";
 
 const Label = styled(Typography)(() => ({
     fontWeight: 600,
@@ -12,31 +12,41 @@ const Label = styled(Typography)(() => ({
     color: EFontColor.white,
 }));
 
-const Radio =styled(MuiRadio)(() => ({
+const Radio = styled(MuiRadio)(() => ({
     padding: '2px'
 }));
 
 export const DownloadSpreadsheet: React.FC<{
     spreadsheet: ISpreadsheetView
 }> = ({spreadsheet}) => {
-    const [fileType, setFileType] = useState<'csv' | 'xlsx'>('csv');
+    const [fileType, setFileType] = useState<FileType.csv | FileType.xlsx>(FileType.xlsx);
 
     const handleFileTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setFileType((event.target as HTMLInputElement).value as 'csv' | 'xlsx');
+        setFileType((event.target as HTMLInputElement).value as FileType.xlsx | FileType.csv);
     };
 
     const downloadSpreadsheet = () => {
         if (spreadsheet) {
-            const excelBlob = getExcelSpreadsheet(spreadsheet)
-            const csvBlob = getCSV(spreadsheet)
-            downloadFile({
-                filename: `${spreadsheet.name}.xlsx`,
-                blob: excelBlob,
-            })
-            downloadFile({
-                filename: `${spreadsheet.name}.csv`,
-                blob: csvBlob,
-            })
+            switch (fileType) {
+                case FileType.xlsx: {
+                    const excelBlob = getExcelSpreadsheet(spreadsheet)
+                    downloadFile({
+                        filename: `${spreadsheet.name}.xlsx`,
+                        blob: excelBlob,
+                    })
+                }
+                    break;
+                case FileType.csv: {
+                    const csvBlob = getCSV(spreadsheet)
+
+                    downloadFile({
+                        filename: `${spreadsheet.name}.csv`,
+                        blob: csvBlob,
+                    })
+                }
+                    break;
+            }
+
 
         }
     }
