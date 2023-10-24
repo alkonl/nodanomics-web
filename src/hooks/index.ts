@@ -1,3 +1,5 @@
+import {useDownloadExcel} from "./useDownloadExcel";
+
 export * from './useWidthAndHeight'
 export * from './useDidMountEffect'
 export * from './useToggle'
@@ -64,3 +66,4 @@ export * from './useDiagramLayerManagement'
 export * from './useChangeLayer'
 export * from './useToggleResourceAnimationLatency'
 export * from './useExecutionGraphStepCount'
+export * from './useDownloadExcel'

@@ -52,6 +52,7 @@
     "supertokens-auth-react": "^0.34.1",
     "supertokens-web-js": "^0.7.2",
     "vite-plugin-comlink": "^3.0.5",
+    "xlsx": "^0.18.5",
     "zod": "^3.21.4"
   },
   "devDependencies": {
