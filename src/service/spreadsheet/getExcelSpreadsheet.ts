@@ -25,6 +25,20 @@ export const getExcelSpreadsheet = (spreadsheetView: ISpreadsheetView): Blob => 
     });
     const workSheet = XLSX.utils.aoa_to_sheet(ws_data);
 
+    const merges = [];
+    for (const row of spreadsheetView.rows) {
+        for (const value of row.values) {
+            if ('merge' in value && value.merge) {
+                merges.push({
+                    s: {c: value.merge.s.c, r: value.merge.s.r},
+                    e: {c: value.merge.e.c, r: value.merge.e.r}
+                });
+            }
+        }
+    }
+
+    workSheet['!merges'] = merges;
+
     XLSX.utils.book_append_sheet(workBook, workSheet, spreadsheetView.name);
 
     const workBookBlob = XLSX.write(workBook, { bookType: 'xlsx', type: 'binary' });
