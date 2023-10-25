@@ -52,7 +52,7 @@ import {
     IUpdateExecutionGraphPropertiesResponse, IUpdateSpreadsheetRequests,
     IUpdateUserDataRequest,
     IUpdateUserDataResponse,
-    IUploadSpreadSheetRequest
+    IUploadSpreadSheetRequest, UpdateSpreadsheetParamsRequest
 } from "../interface";
 import {CONFIG, getSocketAsync} from "../utils";
 
@@ -686,7 +686,17 @@ export const baseApi = createApi({
                 }
             },
             invalidatesTags: [ERTKTags.DiagramSettings],
-        })
+        }),
+        updateSpreadsheetParams: builder.mutation<unknown, UpdateSpreadsheetParamsRequest>({
+            query: (data: UpdateSpreadsheetParamsRequest) => {
+                return {
+                    url: `/project/spreadsheet/params`,
+                    body: data,
+                    method: 'PUT',
+                }
+            },
+            invalidatesTags: [ERTKTags.Spreadsheet],
+        }),
     }),
 })
 export const {
@@ -731,6 +741,7 @@ export const {
     useAddDiagramLayerMutation,
     useGetDiagramSettingsQuery,
     useDeleteLayerMutation,
-    useUpdateSpreadsheetMutation
+    useUpdateSpreadsheetMutation,
+    useUpdateSpreadsheetParamsMutation,
 } = baseApi;
 
