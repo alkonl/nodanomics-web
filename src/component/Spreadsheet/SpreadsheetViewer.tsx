@@ -15,6 +15,7 @@ import {getCSV, getExcelSpreadsheet, mapSpreadsheet} from "../../service";
 import {useDownloadExcel} from "../../hooks";
 import {downloadFile} from "../../utils/downloadFile";
 import {DownloadSpreadsheet} from "./DownloadSpreadsheet";
+import {UpdateSpreadsheetParamsButton} from "./UpdateSpreadsheetParamsButton";
 
 
 export const SpreadsheetViewer: React.FC<{
@@ -227,6 +228,7 @@ export const SpreadsheetViewer: React.FC<{
                         alignItems: 'center',
                         gap: 1,
                     }}>
+                       <UpdateSpreadsheetParamsButton spreadsheetId={spreadsheetId}/>
                         {mappedSpreadSheet && <DownloadSpreadsheet spreadsheet={mappedSpreadSheet}/>}
                         <MButton.Submit
                             onClick={clearChanges}

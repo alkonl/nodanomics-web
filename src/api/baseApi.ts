@@ -694,7 +694,8 @@ export const baseApi = createApi({
                     body: data,
                     method: 'PUT',
                 }
-            }
+            },
+            invalidatesTags: [ERTKTags.Spreadsheet],
         }),
     }),
 })
