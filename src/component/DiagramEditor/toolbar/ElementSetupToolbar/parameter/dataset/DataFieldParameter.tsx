@@ -21,7 +21,7 @@ export const DataFieldParameter: React.FC<{
                 for (let x = 0; x < rows[y].length; x++) {
 
                     const value = rows[y][x]
-                    const label = `[${y}][${x}]:${value}`
+                    const label = `[${x}][${y}]:${value}`
                     const field: IParametersSelectValue = {
                         value: JSON.stringify({
                             x,

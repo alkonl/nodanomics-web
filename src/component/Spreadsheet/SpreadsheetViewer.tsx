@@ -27,6 +27,7 @@ export const SpreadsheetViewer: React.FC<{
 
     const {spreadsheets} = useDiagramEditorState()
 
+    // here markers
     const mappedSpreadSheet = useMemo(() => {
         if (!data) return undefined
         const mappedSpreadSheet: ISpreadsheetView = lodash.cloneDeep(data)
@@ -38,9 +39,8 @@ export const SpreadsheetViewer: React.FC<{
                 let isValueFromDataset = false
                 if (datasetData) {
                     try {
-                        // const editorCellContent = datasetData.rows[i - datasetData.yAxisIndex - 1][j - datasetData.xAxisIndex - 1]
-                        const rowIndex = i - datasetData.yAxisIndex - 1
-                        const cellIndex = j - datasetData.xAxisIndex - 1
+                        const rowIndex = i - datasetData.yAxisIndex
+                        const cellIndex = j - datasetData.xAxisIndex
 
                         if (rowIndex >= 0 && cellIndex >= 0) {
                             const editorCellContent = datasetData.rows[rowIndex][cellIndex]
@@ -70,17 +70,19 @@ export const SpreadsheetViewer: React.FC<{
             const updatedLength = datasetDataRowLength - mappedSpreadSheetDataRowLength
             if (updatedLength > 0 && datasetData) {
                 console.log('updatedLength', updatedLength)
-                for (let rowIndex = mappedSpreadSheetDataRowLength - 1; rowIndex < datasetData.rows.length; rowIndex++) {
+                // here was mappedSpreadSheetDataRowLength - 1
+                for (let rowIndex = mappedSpreadSheetDataRowLength; rowIndex < datasetData.rows.length; rowIndex++) {
 
 
                     // fill xAxis cells
-                    const rowIndexToWrite = rowIndex + 1 + datasetData.yAxisIndex
-                    const fillXAxisCells = Array.from({length: datasetData.xAxisIndex + 1}, (_, columnIndex) => ({
+                    const rowIndexToWrite = rowIndex + datasetData.yAxisIndex
+                    const fillXAxisCells = Array.from({length: datasetData.xAxisIndex}, (_, columnIndex) => ({
                         content: '',
                         columnIndex: columnIndex,
                         rowIndex: rowIndexToWrite,
                         isNew: true,
                     }))
+                    console.log('rowIndex: ', rowIndex)
                     const formattedNewDatasetValues = datasetData.rows[rowIndex].map((content, columnIndex) => ({
                         content: content.toString(),
                         columnIndex: columnIndex + fillXAxisCells.length,
