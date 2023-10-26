@@ -7,6 +7,7 @@ export interface ISpreadsheetInfo {
 
 export type ISpreadsheetRowsData = (string | number)[][]
 
+// here markers done
 export interface IStructuredSpreadsheetData {
     xAxisIndex: number
     yAxisIndex: number

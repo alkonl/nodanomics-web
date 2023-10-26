@@ -80,15 +80,6 @@ export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield>
         }
     }
 
-
-    get yOffset() {
-        return (this.spreadsheet?.yAxisIndex || 0) + 1
-    }
-
-    get xOffset() {
-        return (this.spreadsheet?.xAxisIndex || 0)
-    }
-
     getValue(coordinates: {
         x: number,
         y: number,

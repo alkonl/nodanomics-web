@@ -1,9 +1,15 @@
 import {IGetSpreadsheetResponse, IStructuredSpreadsheetData} from "../../interface";
 
+
+// function to structure spreadsheet data
+// if spreadsheet doesn't have x or y axis, markers will be 0
 export const mapSpreadsheet = (spreadsheet: IGetSpreadsheetResponse): IStructuredSpreadsheetData => {
     // find y column index, where rows starts
-    const yAxisIndex = spreadsheet.rows.findIndex((cells) => cells.values.some((cell) => cell.content === 'Y Axis'))
+    const yAxisIndexMarker = spreadsheet.rows.findIndex((cells) => cells.values.some((cell) => cell.content === 'Y Axis'))
+    const yAxisIndexWhereStartValues = spreadsheet.rows.findIndex((cells) => cells.values.some((cell) => !isNaN(Number(cell.content))))
+    const yAxisIndex = yAxisIndexMarker === -1 ? yAxisIndexWhereStartValues : yAxisIndexMarker + 1
 
+    // here markers done
     // find x column index, where columns starts
     let xAxisIndex = 0
     spreadsheet.rows.find((cells, index) => {
@@ -13,7 +19,6 @@ export const mapSpreadsheet = (spreadsheet: IGetSpreadsheetResponse): IStructure
         }
     })
 
-    // const yAxisIndex = spreadsheet.rows.findIndex((cells) => cells.values.some((cell) => cell.content === 'Y Axis'))
 
     const columns = spreadsheet.rows[yAxisIndex]?.values
         .map((cell) => cell.content)
@@ -21,11 +26,11 @@ export const mapSpreadsheet = (spreadsheet: IGetSpreadsheetResponse): IStructure
 
     const rows: (string | number)[][] = [];
 
-    for (let i = yAxisIndex + 1; i < spreadsheet.rows.length; i++) {
+    for (let i = yAxisIndex; i < spreadsheet.rows.length; i++) {
         const row = spreadsheet.rows[i];
         const newRow: (string | number)[] = [];
 
-        for (let j = xAxisIndex + 1; j < row.values.length; j++) {
+        for (let j = xAxisIndex; j < row.values.length; j++) {
             const cell = row.values[j];
             const numContent = Number(cell.content);
 

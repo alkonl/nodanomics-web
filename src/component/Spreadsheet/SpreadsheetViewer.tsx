@@ -27,6 +27,7 @@ export const SpreadsheetViewer: React.FC<{
 
     const {spreadsheets} = useDiagramEditorState()
 
+    // here markers
     const mappedSpreadSheet = useMemo(() => {
         if (!data) return undefined
         const mappedSpreadSheet: ISpreadsheetView = lodash.cloneDeep(data)
@@ -38,9 +39,8 @@ export const SpreadsheetViewer: React.FC<{
                 let isValueFromDataset = false
                 if (datasetData) {
                     try {
-                        // const editorCellContent = datasetData.rows[i - datasetData.yAxisIndex - 1][j - datasetData.xAxisIndex - 1]
-                        const rowIndex = i - datasetData.yAxisIndex - 1
-                        const cellIndex = j - datasetData.xAxisIndex - 1
+                        const rowIndex = i - datasetData.yAxisIndex
+                        const cellIndex = j - datasetData.xAxisIndex
 
                         if (rowIndex >= 0 && cellIndex >= 0) {
                             const editorCellContent = datasetData.rows[rowIndex][cellIndex]
@@ -74,8 +74,8 @@ export const SpreadsheetViewer: React.FC<{
 
 
                     // fill xAxis cells
-                    const rowIndexToWrite = rowIndex + 1 + datasetData.yAxisIndex
-                    const fillXAxisCells = Array.from({length: datasetData.xAxisIndex + 1}, (_, columnIndex) => ({
+                    const rowIndexToWrite = rowIndex + datasetData.yAxisIndex
+                    const fillXAxisCells = Array.from({length: datasetData.xAxisIndex}, (_, columnIndex) => ({
                         content: '',
                         columnIndex: columnIndex,
                         rowIndex: rowIndexToWrite,
