@@ -24,6 +24,7 @@ export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield>
     updateState() {
         super.updateState();
         const dataSetVariables = this.getDynamicVariables()
+        console.log('dataSetVariables: ', dataSetVariables)
         this.updateNode({
             namedVariables: dataSetVariables
         })
@@ -119,12 +120,14 @@ export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield>
         anchors.forEach(anchor => {
             row.forEach((value, index) => {
                 const columnName = columns?.[index];
+                console.log('columnName: ', columnName, value)
                 if (typeof value !== 'string' && columnName) {
                     const name = this.composeObjectName(anchor, columnName);
                     object[name] = value;
                 }
             });
         });
+        console.log('object: ', object)
         return object;
     }
 

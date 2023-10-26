@@ -14,13 +14,13 @@ export const mapSpreadsheet = (spreadsheet: IGetSpreadsheetResponse): IStructure
     let xAxisIndex = 0
     spreadsheet.rows.find((cells, index) => {
         if (cells.values.some((cell) => cell.content === 'X Axis')) {
-            xAxisIndex = index
+            xAxisIndex = index + 1
             return true
         }
     })
 
 
-    const columns = spreadsheet.rows[yAxisIndex]?.values
+    const columns = spreadsheet.rows[yAxisIndex - 1]?.values
         .map((cell) => cell.content)
         .filter((content) => content !== 'Y Axis')
 
