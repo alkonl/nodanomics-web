@@ -6,12 +6,20 @@ import {IGetSpreadsheetResponse, IStructuredSpreadsheetData} from "../../interfa
 export const mapSpreadsheet = (spreadsheet: IGetSpreadsheetResponse): IStructuredSpreadsheetData => {
     // find y column index, where rows starts
     const yAxisIndexMarker = spreadsheet.rows.findIndex((cells) => cells.values.some((cell) => cell.content === 'Y Axis'))
-    const yAxisIndexWhereStartValues = spreadsheet.rows.findIndex((cells) => cells.values.some((cell) => !isNaN(Number(cell.content))))
-    const yAxisIndex = yAxisIndexMarker === -1 ? yAxisIndexWhereStartValues : yAxisIndexMarker + 1
+    const yAxisIndexWhereStartValues = spreadsheet.rows.findIndex((cells) => cells.values.every((cell) => !isNaN(Number(cell.content))))
+    let yAxisIndex: number
+    if (yAxisIndexMarker !== -1) {
+        yAxisIndex = yAxisIndexMarker + 1
+    } else if (yAxisIndexWhereStartValues !== -1) {
+        yAxisIndex = yAxisIndexWhereStartValues
+    } else {
+        yAxisIndex = spreadsheet.rows.length
+    }
 
     // here markers done
     // find x column index, where columns starts
     let xAxisIndex = 0
+
     spreadsheet.rows.find((cells, index) => {
         if (cells.values.some((cell) => cell.content === 'X Axis')) {
             xAxisIndex = index + 1
@@ -25,7 +33,9 @@ export const mapSpreadsheet = (spreadsheet: IGetSpreadsheetResponse): IStructure
         .filter((content) => content !== 'Y Axis')
 
     const rows: (string | number)[][] = [];
-
+    // if(spreadsheet.name === 'dd'){
+    //     debugger
+    // }
     for (let i = yAxisIndex; i < spreadsheet.rows.length; i++) {
         const row = spreadsheet.rows[i];
         const newRow: (string | number)[] = [];

@@ -70,7 +70,8 @@ export const SpreadsheetViewer: React.FC<{
             const updatedLength = datasetDataRowLength - mappedSpreadSheetDataRowLength
             if (updatedLength > 0 && datasetData) {
                 console.log('updatedLength', updatedLength)
-                for (let rowIndex = mappedSpreadSheetDataRowLength - 1; rowIndex < datasetData.rows.length; rowIndex++) {
+                // here was mappedSpreadSheetDataRowLength - 1
+                for (let rowIndex = mappedSpreadSheetDataRowLength; rowIndex < datasetData.rows.length; rowIndex++) {
 
 
                     // fill xAxis cells
@@ -81,6 +82,7 @@ export const SpreadsheetViewer: React.FC<{
                         rowIndex: rowIndexToWrite,
                         isNew: true,
                     }))
+                    console.log('rowIndex: ', rowIndex)
                     const formattedNewDatasetValues = datasetData.rows[rowIndex].map((content, columnIndex) => ({
                         content: content.toString(),
                         columnIndex: columnIndex + fillXAxisCells.length,
