@@ -95,7 +95,7 @@ export class GraphFormulaNode extends GraphInvokableNode<IFormulaNodeData>
 
 
     private recordToDataset() {
-        if (this.data.datasetX && this.data.datasetY && this.data.datasetReceiverId && this.result?.value !== undefined && this.result?.type === 'number' ) {
+        if (this.data.datasetX && this.data.datasetY && this.data.datasetReceiverId && this.result?.value && this.result?.type === 'number' ) {
             this.graphDatasetRecorder.recordToDataset({
                 value: this.result.value,
                 spreadsheetId: this.data.datasetReceiverId,

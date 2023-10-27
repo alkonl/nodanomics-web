@@ -69,7 +69,6 @@ export const SpreadsheetViewer: React.FC<{
             const mappedSpreadSheetDataRowLength = mappedSpreadSheet.rows.length - datasetData.yAxisIndex
             const updatedLength = datasetDataRowLength - mappedSpreadSheetDataRowLength
             if (updatedLength > 0 && datasetData) {
-                console.log('updatedLength', updatedLength)
                 // here was mappedSpreadSheetDataRowLength - 1
                 for (let rowIndex = mappedSpreadSheetDataRowLength; rowIndex < datasetData.rows.length; rowIndex++) {
 
@@ -82,9 +81,8 @@ export const SpreadsheetViewer: React.FC<{
                         rowIndex: rowIndexToWrite,
                         isNew: true,
                     }))
-                    console.log('rowIndex: ', rowIndex)
                     const formattedNewDatasetValues = datasetData.rows[rowIndex].map((content, columnIndex) => ({
-                        content: content.toString(),
+                        content: content ?  content?.toString() : '',
                         columnIndex: columnIndex + fillXAxisCells.length,
                         rowIndex: rowIndexToWrite,
                         isNew: true,
@@ -104,7 +102,6 @@ export const SpreadsheetViewer: React.FC<{
 
     const formattedTable = useMemo(() => {
         if (!mappedSpreadSheet) return undefined
-        console.log('mappedSpreadSheet', mappedSpreadSheet)
         // replace empty cells with
         const formattedRows = []
         for (let i = 0; i < mappedSpreadSheet.rows.length; i++) {
@@ -129,10 +126,13 @@ export const SpreadsheetViewer: React.FC<{
                         to: j + colspan - 1,
                     }
                 }
-                values.push({
-                    content: defaultCell.content,
-                    colspan,
-                })
+                if(defaultCell){
+                    values.push({
+                        content: defaultCell.content,
+                        colspan,
+                    })
+                }
+
             }
             formattedRows.push({
                 ...mappedSpreadSheet.rows[i],
@@ -206,7 +206,7 @@ export const SpreadsheetViewer: React.FC<{
         <Box sx={{
             padding: 1,
             maxHeight: '80vh',
-            maxWidth: '100vw',
+            maxWidth: '95vw',
             overflow: 'auto',
             backgroundColor: EColor.darkMarineLight,
         }}>
