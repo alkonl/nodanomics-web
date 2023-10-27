@@ -84,7 +84,7 @@ export const SpreadsheetViewer: React.FC<{
                     }))
                     console.log('rowIndex: ', rowIndex)
                     const formattedNewDatasetValues = datasetData.rows[rowIndex].map((content, columnIndex) => ({
-                        content: content.toString(),
+                        content: content ?  content?.toString() : '',
                         columnIndex: columnIndex + fillXAxisCells.length,
                         rowIndex: rowIndexToWrite,
                         isNew: true,
@@ -129,10 +129,13 @@ export const SpreadsheetViewer: React.FC<{
                         to: j + colspan - 1,
                     }
                 }
-                values.push({
-                    content: defaultCell.content,
-                    colspan,
-                })
+                if(defaultCell){
+                    values.push({
+                        content: defaultCell.content,
+                        colspan,
+                    })
+                }
+
             }
             formattedRows.push({
                 ...mappedSpreadSheet.rows[i],
@@ -206,7 +209,7 @@ export const SpreadsheetViewer: React.FC<{
         <Box sx={{
             padding: 1,
             maxHeight: '80vh',
-            maxWidth: '100vw',
+            maxWidth: '95vw',
             overflow: 'auto',
             backgroundColor: EColor.darkMarineLight,
         }}>

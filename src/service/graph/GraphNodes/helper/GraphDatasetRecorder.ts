@@ -13,6 +13,8 @@ export class GraphDatasetRecorder {
 
     }
     recordToDataset(params: { value: string | number, spreadsheetId: string, x: string, y: string }) {
+        const validatedValue = params.value === null ? '' : params.value
+
         // const datasetId = this.data.datasetReceiverId
         if (params.spreadsheetId && params.x !== undefined && params.y !== undefined) {
             const x = this.matchManager.calculateFormula({
@@ -25,14 +27,8 @@ export class GraphDatasetRecorder {
                 spreadsheetId: params.spreadsheetId,
                 x,
                 y,
-                value: params.value
+                value: validatedValue
             })
-            const value = this.graphSpreadsheetManager.getValue({
-                spreadsheetId: params.spreadsheetId,
-                x,
-                y
-            })
-            console.log(value)
         }
 
     }

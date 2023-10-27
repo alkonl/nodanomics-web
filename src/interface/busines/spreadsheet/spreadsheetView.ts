@@ -26,7 +26,7 @@ export interface ISpreadsheetExistedValueView {
 }
 
 export const isISpreadsheetExistedValueView = (value: ISpreadsheetValueView): value is ISpreadsheetExistedValueView => {
-    return (value as ISpreadsheetExistedValueView).id !== undefined;
+    return (value as ISpreadsheetExistedValueView)?.id !== undefined;
 }
 
 export const isISpreadsheetNewValueView = (value: ISpreadsheetValueView): value is ISpreadsheetNewValueView => {

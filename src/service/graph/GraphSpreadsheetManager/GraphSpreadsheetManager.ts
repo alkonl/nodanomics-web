@@ -60,6 +60,7 @@ export class GraphSpreadsheetManager {
         y: number,
         value: string | number,
     }) {
+
         const spreadsheet = this.getSpreadsheet({
             spreadsheetId,
         });
@@ -68,17 +69,21 @@ export class GraphSpreadsheetManager {
                 const updatedRows = [...spreadsheet.rows]; // Create a shallow copy of rows array
                 if (!updatedRows[y]) {
                     const length = this.length({spreadsheetId});
-                    const xLength = length?.x || 0;
+                    const xLength = updatedRows[y]?.length || this.length({spreadsheetId})?.x || 0;
                     const yLength = length?.y || 0;
                     const fill = y - yLength + 1;
                     updatedRows.push(...Array(fill).fill(Array(xLength).fill(''))); // Add a new row if it doesn't exist
                 }
                 const updatedRow = [...updatedRows[y]]; // Create a shallow copy of the specific row
 
+                // fill empty cells in the row
+                if (!updatedRow[x]) {
+                    const fill = x - updatedRow.length + 1;
+                    updatedRow.push(...Array(fill).fill('')); // Add a new cell if it doesn't exist
+                }
                 updatedRow[x] = value; // Update the value in the copied row
 
                 updatedRows[y] = updatedRow; // Update the copied row in the copied rows array
-                console.log('updatedRows', updatedRows)
                 const updatedSpreadsheet = {
                     ...spreadsheet,
                     rows: updatedRows, // Update the rows in the copied spreadsheet
