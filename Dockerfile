@@ -1,8 +1,9 @@
-FROM node:18.15.0-alpine as build-stage
+FROM node:18.16.0-alpine as build-stage
 
 WORKDIR /app
 
-COPY package.json /app/
+# not good practice
+COPY package.json package-lock.json /app/
 
 RUN npm install
 
