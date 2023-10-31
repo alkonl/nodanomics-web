@@ -8,6 +8,7 @@ COPY package.json package-lock.json /app/
 RUN npm install
 
 COPY ./ /app/
+COPY .dev-stage.env /app/.env
 
 RUN npm run build
 
