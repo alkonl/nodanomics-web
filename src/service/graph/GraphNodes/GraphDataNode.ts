@@ -215,6 +215,9 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     private recordToDataset() {
+        console.log('record: ', {
+            x: this.data.datasetX,
+        })
         if (this.data.datasetX !== undefined && this.data.datasetY !== undefined && this.data.datasetReceiverId) {
             this.graphDatasetRecorder.recordToDataset({
                 value: this.currentResourcesCount,
