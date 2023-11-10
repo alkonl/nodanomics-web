@@ -77,7 +77,7 @@ export class GraphSpreadsheetManager {
                 const updatedRow = [...updatedRows[y]]; // Create a shallow copy of the specific row
 
                 // fill empty cells in the row
-                if (!updatedRow[x] && x > 0) {
+                if ((updatedRow[x] === undefined || updatedRow[x] === null) && x > 0) {
                     const fill = x - updatedRow.length + 1;
                     updatedRow.push(...Array(fill).fill('')); // Add a new cell if it doesn't exist
                 }
