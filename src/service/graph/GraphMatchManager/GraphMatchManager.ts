@@ -44,26 +44,29 @@ export class GraphMatchManager {
         }
 
         // pattern to get dataset tags from formula (mmrRangeDataset.lengthX, mmrRangeDataset[1][2])
-        const datasetPattern = /(\w+)(?:\.\w+|\[\d+\])+/g;
+        const datasetPattern = /(\w+)(?:\.\w+|\[[a-zA-Z0-9]+\])+/g;
         const datasetTags = [...formula.matchAll(datasetPattern)].map((match) => match[1])
             .filter((value, index, self) => self.indexOf(value) === index);
         const {rowsPerTag: datasetRows, datasetPerTag} = this.getDatasetRowsByTags({tags: datasetTags})
-        const transformedFormula = this.transformString(formula);
+        const tagVariables = this.tagManager.getNodeTagVariables()
+        const allVariables = [...variables, ...tagVariables]
+        const mappedVariables = allVariables.reduce((acc: {
+            [key: string]: number
+        }, variable) => {
+            const variableName = variable.variableName || '-'
+            if (variable.value !== undefined) {
+                acc[variableName] = variable.value
+            }
+            return acc
+        }, {})
+        console.log('mappedVariables: ', mappedVariables)
+        const transformedFormula = this.transformString({formula, variables: mappedVariables})
         try {
 
             if (formula) {
-                const tagVariables = this.tagManager.getNodeTagVariables()
-                const allVariables = [...variables, ...tagVariables]
+                console.log('transformedFormula: ', transformedFormula)
                 const compiledFormula = Match.compile(transformedFormula)
-                const mappedVariables = allVariables.reduce((acc: {
-                    [key: string]: number
-                }, variable) => {
-                    const variableName = variable.variableName || '-'
-                    if (variable.value !== undefined) {
-                        acc[variableName] = variable.value
-                    }
-                    return acc
-                }, {})
+
 
                 const res = compiledFormula.evaluate({...mappedVariables, ...datasetRows, ...datasetPerTag})
 
@@ -73,7 +76,7 @@ export class GraphMatchManager {
                 return res
             }
         } catch (e) {
-            console.error(e, {transformedFormula: transformedFormula}, {variables}, {datasetTags}, datasetPerTag, {datasetRows})
+            console.error(e, {transformedFormula: transformedFormula}, {variables: allVariables}, {datasetTags}, datasetPerTag, {datasetRows})
         }
     }
 
@@ -81,12 +84,18 @@ export class GraphMatchManager {
         return this.nodeManager.nodes.map(node => node.tag).filter(Boolean) as string[]
     }
 
-    private transformString(input: string): string {
-        const pattern = /\[(\d+)\]\[(\d+)\]/g;
+    private transformString({formula, variables}: {
+        formula: string, variables: {
+            [key: string]: number
+        }
+    }): string {
+        const pattern = /\[([a-zA-Z0-9]+)\]\[([a-zA-Z0-9]+)\]/g;
 
-        const transformed = input.replace(pattern, (match, num1, num2) => {
-            const newNum1 = parseInt(num1) + 1;
-            const newNum2 = parseInt(num2) + 1;
+        const transformed = formula.replace(pattern, (match, num1, num2) => {
+            const num1Var: number | undefined = variables[num1];
+            const num2Var: number | undefined = variables[num2];
+            const newNum1 = typeof num1Var === 'number'? num1Var + 1 : parseInt(num1) + 1;
+            const newNum2 = typeof num2Var === 'number'? num2Var +1: parseInt(num2) + 1;
             return `[${newNum2},${newNum1}]`;
         });
 
