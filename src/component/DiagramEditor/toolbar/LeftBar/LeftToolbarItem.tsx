@@ -25,6 +25,7 @@ export const LeftToolbarItem: React.FC<{
                       padding: 6,
                       margin: 0,
                       display: 'inline-block',
+                      pointerEvents: 'auto',
                   }}
                   onClick={onClickHandler}
               >

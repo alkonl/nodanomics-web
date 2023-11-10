@@ -80,7 +80,6 @@ export function LeftToolbar() {
     return (
         <Box sx={{
             display: 'flex',
-            pointerEvents: 'auto',
             height: '90%',
         }}>
             <Box
@@ -97,6 +96,7 @@ export function LeftToolbar() {
                     paddingTop: '20px',
                     paddingLeft: '10px',
                     paddingRight: '10px',
+                    pointerEvents: 'none',
                 }}
             >
                 {menuOptions.map((option) => {
