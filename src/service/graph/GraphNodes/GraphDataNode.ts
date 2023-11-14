@@ -193,6 +193,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     }
 
     private addResourcesToNode(resource: IResource) {
+
         this.updateNode({
             resources: {
                 value: this.currentResourcesCount + resource.value
@@ -200,6 +201,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         })
         this.updatePreviousResourcesCount()
         this.updateResourcesToProvide()
+        this.recordToDataset()
         return this.data
     }
 
@@ -210,8 +212,6 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     invokeStep() {
         super.invokeStep();
-
-        this.recordToDataset()
     }
 
     private recordToDataset() {
@@ -323,6 +323,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
                 resourcesToProvide: leftResourcesToProvide,
                 resources: leftResources
             }
+            this.recordToDataset()
             return deletedResourcesToProvide
         }
     }
