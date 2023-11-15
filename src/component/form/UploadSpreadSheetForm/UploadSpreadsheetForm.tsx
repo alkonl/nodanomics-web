@@ -2,17 +2,23 @@ import React, {ChangeEvent, useMemo, useState} from 'react';
 import {Box, FormControl, FormControlLabel, Radio, RadioGroup, Typography} from "@mui/material";
 import {useGetAllUserGoogleSpreadSheetQuery, useUploadSpreadSheetMutation} from "../../../api";
 import {MButton} from "../../base";
-import {EUploadSpreadSheetRequestType} from "../../../interface";
+import {
+    EUploadSpreadSheetRequestType,
+    RewriteSpreadsheet,
+    SpreadsheetAction,
+    UploadNewSpreadsheet
+} from "../../../interface";
 import {useCurrentUser} from "../../../hooks";
 import {GoogleConnectButton} from "../../button";
 import {EFontColor} from "../../../constant";
 
-export const UploadSpreadsheetForm: React.FC<{
-    projectId: string;
+export type UploadSpreadsheetFormProps = {
     onSuccessLogin?: () => void;
-}> = ({
+} & SpreadsheetAction
+
+export const UploadSpreadsheetForm: React.FC<UploadSpreadsheetFormProps> = ({
           onSuccessLogin,
-          projectId,
+          ...params
       }) => {
 
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -35,17 +41,17 @@ export const UploadSpreadsheetForm: React.FC<{
     }
 
     const onSubmit = () => {
-        if (uploadedFile) {
+        if (uploadedFile && params.type === 'uploadNewSpreadsheet') {
             uploadSpreadSheet({
                 type: EUploadSpreadSheetRequestType.File,
                 file: uploadedFile,
-                projectId: projectId,
+                projectId: params.projectId,
             });
-        } else if (googleSheetId) {
+        } else if (googleSheetId &&  params.type === 'uploadNewSpreadsheet') {
             uploadSpreadSheet({
                 type: EUploadSpreadSheetRequestType.GoogleSpreadsheetId,
                 googleSpreadsheetId: googleSheetId,
-                projectId: projectId,
+                projectId: params.projectId,
             });
         }
     }
@@ -88,8 +94,6 @@ export const UploadSpreadsheetForm: React.FC<{
                 maxHeight: '60vh',
             }}>
                 <Box
-
-
                     sx={{
                         display: 'flex',
                         flexDirection: 'column',
