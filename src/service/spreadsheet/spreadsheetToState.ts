@@ -3,7 +3,7 @@ import {IGetSpreadsheetResponse, IStructuredSpreadsheetData} from "../../interfa
 
 // function to structure spreadsheet data
 // if spreadsheet doesn't have x or y axis, markers will be 0
-export const mapSpreadsheet = (spreadsheet: IGetSpreadsheetResponse): IStructuredSpreadsheetData => {
+export const spreadsheetToState = (spreadsheet: IGetSpreadsheetResponse): IStructuredSpreadsheetData => {
     // find y column index, where rows starts
     const yAxisIndexMarker = spreadsheet.rows.findIndex((cells) => cells.values.some((cell) => cell.content === 'Y Axis'))
     const yAxisIndexWhereStartValues = spreadsheet.rows.findIndex((cells) => cells.values.every((cell) => !isNaN(Number(cell.content))))

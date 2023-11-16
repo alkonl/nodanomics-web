@@ -2,7 +2,7 @@ import {useGetManySpreadsheetQuery, useGetProjectInfoQuery, useGetSpreadSheetsBa
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {useEffect} from "react";
 import {IStructuredSpreadsheetsData} from "../interface";
-import {mapSpreadsheet} from "../service";
+import {spreadsheetToState} from "../service";
 
 export const useSetAllSpreadSheetsToState = () => {
     const dispatch = useAppDispatch()
@@ -31,7 +31,7 @@ export const useSetAllSpreadSheetsToState = () => {
     useEffect(() => {
         if (projectSpreadsheets) {
             const formatted: IStructuredSpreadsheetsData = projectSpreadsheets.reduce((accSpreadsheet, spreadsheet) => {
-                const newSpreadsheet = mapSpreadsheet(spreadsheet)
+                const newSpreadsheet = spreadsheetToState(spreadsheet)
                 return {
                     [spreadsheet.id]: newSpreadsheet,
                     ...accSpreadsheet
