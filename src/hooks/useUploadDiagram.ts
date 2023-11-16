@@ -4,12 +4,15 @@ import {EDiagramNode, IImportAndExport, IReactFlowEdge} from "../interface";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {changeElementIds} from "../service";
 import {useOffHistoryExecuted} from "./useOffHistoryExecuted";
+import {useUploadJsonBodySpreadsheetsMutation} from "../api";
+import {useOpenedDiagramProject} from "./useOpenedDiagramProject";
 
 export const useUploadDiagram = () => {
     const dispatch = useAppDispatch()
     const {diagramNodes} = useDiagramEditorState()
+    const [uploadSpreadsheet] = useUploadJsonBodySpreadsheetsMutation()
     const diagramStartNode = diagramNodes.find(node => node.data.type === EDiagramNode.Start)
-
+    const project = useOpenedDiagramProject()
     const {addManyNodes, addManyEdges} = diagramEditorActions
     const offHistory = useOffHistoryExecuted()
 
@@ -27,7 +30,7 @@ export const useUploadDiagram = () => {
             })?.id
 
             offHistory('useUploadDiagram')
-
+            // manage nodes and edges
             if (startId && diagramStartNode) {
                 const updatedEdges = updatedElements.edges.map(edge => {
                     const isConnectedToStart = edge.source === startId
@@ -35,7 +38,7 @@ export const useUploadDiagram = () => {
                     return {
                         ...edge,
                         data: {
-                          ...edge.data,
+                            ...edge.data,
                             sourceId: source,
                         },
                         source
@@ -47,6 +50,13 @@ export const useUploadDiagram = () => {
             } else {
                 dispatch(addManyNodes(updatedElements.nodes))
                 dispatch(addManyEdges(updatedElements.edges))
+            }
+            // manage spreadsheets
+            if (parsedData.spreadsheets && parsedData.spreadsheets.length > 0 && project) {
+                uploadSpreadsheet({
+                    spreadsheets: parsedData.spreadsheets,
+                    projectId: project.id,
+                })
             }
 
 

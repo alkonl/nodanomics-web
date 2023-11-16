@@ -46,7 +46,7 @@ import {
     ISendEmailToResetPasswordRequest,
     IServerErrorResponse,
     ISessionUserDataResponse,
-    ISignUpRequest,
+    ISignUpRequest, ISpreadsheetView,
     ISubmitNewPasswordRequest,
     IUpdateExecutionGraphPropertiesRequest,
     IUpdateExecutionGraphPropertiesResponse, IUpdateSpreadsheetRequests,
@@ -597,6 +597,16 @@ export const baseApi = createApi({
                 return [{type: ERTKTags.Spreadsheet, id: arg?.spreadsheetId}]
             }
         }),
+        uploadJsonBodySpreadsheets: builder.mutation<unknown, {spreadsheets: ISpreadsheetView[], projectId: string}>({
+            query: (params: {spreadsheets: ISpreadsheetView[], projectId: string}) => {
+                return {
+                    url: `/project/spreadsheet/upload/body-json`,
+                    method: 'POST',
+                    body: params,
+                }
+            },
+            invalidatesTags: [ERTKTags.Spreadsheet]
+        }),
         getSpreadSheetsBaseInfo: builder.query<IGetSpreadsheetBaseInfoResponse, IGetSpreadsheetsBaseInfoRequests>({
             query: (params: IGetSpreadsheetsBaseInfoRequests) => {
                 return {
@@ -766,5 +776,6 @@ export const {
     useUpdateSpreadsheetMutation,
     useUpdateSpreadsheetParamsMutation,
     useRewriteSpreadsheetMutation,
+    useUploadJsonBodySpreadsheetsMutation,
 } = baseApi;
 
