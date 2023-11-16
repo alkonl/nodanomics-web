@@ -575,6 +575,28 @@ export const baseApi = createApi({
             },
             invalidatesTags: [ERTKTags.Spreadsheet]
         }),
+        rewriteSpreadsheet: builder.mutation<unknown, {
+            spreadsheetId: string,
+            file: File
+        }>({
+            query: (params: {
+                spreadsheetId: string,
+                file: File
+            }) => {
+                const formData = new FormData();
+                formData.append('file', params.file);
+                formData.append('spreadsheetId', params.spreadsheetId);
+                return {
+                    url: `/spreadsheet/rewrite`,
+                    method: 'PUT',
+                    body: formData,
+                    formData: true
+                }
+            },
+            invalidatesTags: (result, error, arg) => {
+                return [{type: ERTKTags.Spreadsheet, id: arg?.spreadsheetId}]
+            }
+        }),
         getSpreadSheetsBaseInfo: builder.query<IGetSpreadsheetBaseInfoResponse, IGetSpreadsheetsBaseInfoRequests>({
             query: (params: IGetSpreadsheetsBaseInfoRequests) => {
                 return {
@@ -743,5 +765,6 @@ export const {
     useDeleteLayerMutation,
     useUpdateSpreadsheetMutation,
     useUpdateSpreadsheetParamsMutation,
+    useRewriteSpreadsheetMutation,
 } = baseApi;
 

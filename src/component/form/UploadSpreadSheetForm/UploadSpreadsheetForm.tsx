@@ -1,12 +1,14 @@
 import React, {ChangeEvent, useMemo, useState} from 'react';
 import {Box, FormControl, FormControlLabel, Radio, RadioGroup, Typography} from "@mui/material";
-import {useGetAllUserGoogleSpreadSheetQuery, useUploadSpreadSheetMutation} from "../../../api";
+import {
+    useGetAllUserGoogleSpreadSheetQuery,
+    useRewriteSpreadsheetMutation,
+    useUploadSpreadSheetMutation
+} from "../../../api";
 import {MButton} from "../../base";
 import {
     EUploadSpreadSheetRequestType,
-    RewriteSpreadsheet,
     SpreadsheetAction,
-    UploadNewSpreadsheet
 } from "../../../interface";
 import {useCurrentUser} from "../../../hooks";
 import {GoogleConnectButton} from "../../button";
@@ -27,6 +29,7 @@ export const UploadSpreadsheetForm: React.FC<UploadSpreadsheetFormProps> = ({
 
     const isUserConnectedToGoogle = currentUser?.googleUserId
     const [uploadSpreadSheet, {isSuccess, isError}] = useUploadSpreadSheetMutation();
+    const [rewriteSpreadSheet, {isSuccess: isRewritten, isError: isErrorOnRewriten}] = useRewriteSpreadsheetMutation();
     const {data: allUserGoogleSpreadsheets, isLoading: isAllUserGoogleSpreadsheetsLoading} = useGetAllUserGoogleSpreadSheetQuery(undefined);
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -41,19 +44,27 @@ export const UploadSpreadsheetForm: React.FC<UploadSpreadsheetFormProps> = ({
     }
 
     const onSubmit = () => {
-        if (uploadedFile && params.type === 'uploadNewSpreadsheet') {
-            uploadSpreadSheet({
-                type: EUploadSpreadSheetRequestType.File,
+        if(params.type === 'uploadNewSpreadsheet'){
+            if (uploadedFile) {
+                uploadSpreadSheet({
+                    type: EUploadSpreadSheetRequestType.File,
+                    file: uploadedFile,
+                    projectId: params.projectId,
+                });
+            } else if (googleSheetId ) {
+                uploadSpreadSheet({
+                    type: EUploadSpreadSheetRequestType.GoogleSpreadsheetId,
+                    googleSpreadsheetId: googleSheetId,
+                    projectId: params.projectId,
+                });
+            }
+        } else if(params.type === 'rewriteSpreadsheet' && uploadedFile){
+            rewriteSpreadSheet({
+                spreadsheetId: params.spreadsheetId,
                 file: uploadedFile,
-                projectId: params.projectId,
-            });
-        } else if (googleSheetId &&  params.type === 'uploadNewSpreadsheet') {
-            uploadSpreadSheet({
-                type: EUploadSpreadSheetRequestType.GoogleSpreadsheetId,
-                googleSpreadsheetId: googleSheetId,
-                projectId: params.projectId,
-            });
+            })
         }
+
     }
 
     const onSuccessLoginHandler = async () => {

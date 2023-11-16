@@ -51,6 +51,7 @@ export const useGetInfinityProjects = () => {
             }
 
         }
+
     }, [allProjects, reachedBottom, isLoading])
 
     useEffect(() => {
