@@ -32,57 +32,68 @@ export const ImportDiagramPopup: React.FC<{
     return (
         <Dialog open={isShow} onClose={onClose}>
             <BasePopUp>
-                <Dialog.Panel>
+                <Dialog.Panel >
+
                     <Box sx={{
                         padding: 3,
                         backgroundColor: EColor.darkMarine3,
+                        maxWidth: 500,
+                        width: '100%',
                     }}>
-
                         <Typography sx={{
                             color: EFontColor.grey,
-                            maxWidth: 400,
-                            mb: 1,
-                        }}>
-                            This project already has spreadsheets with the same id as the following spreadsheets in your
-                            imported diagram
-
-                        </Typography>
-                        <Typography sx={{
-                            color: EFontColor.grey,
-                            mb: 1,
-                        }}>
-                            Spreadsheets to overwrite
-                        </Typography>
-                        <Box sx={{
+                            fontWeight: 600,
                             mb: 2,
                         }}>
-                            <Box>
-                                {importDiagramState.sameSpreadsheetNames.map((spreadsheet) => {
-                                    const isChecked = spreadsheetsToOverwrite.includes(spreadsheet.spreadsheetId)
-                                    return (
-                                        <Box sx={{
-                                            display: 'flex',
-                                            gap: 2,
-                                            alignItems: 'center',
-                                            justifyContent: 'space-between'
-                                        }} key={spreadsheet.spreadsheetId}>
-                                            <Typography sx={{
-                                                color: EFontColor.purple,
-                                                fontWeight: 600,
-                                            }}>
-                                                {spreadsheet.name}
-                                            </Typography>
-                                            <ParameterCheckbox
-                                                checked={isChecked}
-                                                onChange={(_, checked) => {
-                                                    onCheckHandler(spreadsheet.spreadsheetId, checked)
-                                                }}
-                                            />
-                                        </Box>
-                                    )
-                                })}
-                            </Box>
-                        </Box>
+                            Import Diagram
+                        </Typography>
+                        {importDiagramState.sameSpreadsheetNames.length > 0 && <>
+                            <Typography sx={{
+                                color: EFontColor.grey,
+                                maxWidth: 400,
+                                mb: 1,
+                            }}>
+                                This project already has spreadsheets with the same id as the following spreadsheets in
+                                your
+                                imported diagram
+
+                            </Typography>
+                            <Typography sx={{
+                                color: EFontColor.grey,
+                                mb: 1,
+                            }}>
+                                Spreadsheets to overwrite
+                            </Typography>
+                            <Box sx={{
+                                mb: 2,
+                            }}>
+                                <Box>
+                                    {importDiagramState.sameSpreadsheetNames.map((spreadsheet) => {
+                                        const isChecked = spreadsheetsToOverwrite.includes(spreadsheet.spreadsheetId)
+                                        return (
+                                            <Box sx={{
+                                                display: 'flex',
+                                                gap: 2,
+                                                alignItems: 'center',
+                                                justifyContent: 'space-between'
+                                            }} key={spreadsheet.spreadsheetId}>
+                                                <Typography sx={{
+                                                    color: EFontColor.purple,
+                                                    fontWeight: 600,
+                                                }}>
+                                                    {spreadsheet.name}
+                                                </Typography>
+                                                <ParameterCheckbox
+                                                    checked={isChecked}
+                                                    onChange={(_, checked) => {
+                                                        onCheckHandler(spreadsheet.spreadsheetId, checked)
+                                                    }}
+                                                />
+                                            </Box>
+                                        )
+                                    })}
+                                </Box>
+                            </Box></>}
                         <MButton.Submit onClick={async () => {
                             await approve({
                                 spreadsheetsToOverwrite: spreadsheetsToOverwrite
