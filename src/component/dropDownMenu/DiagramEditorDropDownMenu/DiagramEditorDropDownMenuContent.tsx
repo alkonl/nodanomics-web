@@ -10,6 +10,7 @@ import {CreateDiagramPopUp} from "../../popUp";
 import {DiagramManagerPopUp} from "../../popUp/NewDiagramPopUp";
 import {useDownloadDiagram} from "../../../hooks/useDownloadDiagram";
 import {EColor} from "../../../constant";
+import {ImportDiagramPopup} from "../../ImportDiagram";
 
 type IMenuButton = {
     name: string
@@ -70,7 +71,8 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
     }
 
     const download = useDownloadDiagram()
-    const uploadDiagram = useUploadDiagram()
+    const {uploadFile, importDiagramState, cancelImport, approveImport} = useUploadDiagram()
+
 
     const buttons: IMenuButton[] = [{
         name: 'New',
@@ -95,7 +97,7 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
                 cursor: 'pointer'
             }}
         >
-            <input type="file" accept=".json" onChange={uploadDiagram} hidden/>
+            <input type="file" accept=".json" onChange={uploadFile} hidden/>
             Import
         </label>
     }, {
@@ -126,6 +128,12 @@ export const DiagramEditorDropDownMenuContent: React.FC<{
                         }}
                     />}
             </Box>
+            {importDiagramState && <ImportDiagramPopup
+                importDiagramState={importDiagramState}
+                approve={approveImport}
+                isShow={Boolean(importDiagramState)}
+                onClose={cancelImport}
+            />}
 
             <Menu
                 sx={{

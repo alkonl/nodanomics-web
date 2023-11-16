@@ -4,6 +4,7 @@ import {BasePopUp} from "../PopUp";
 import {Box} from "@mui/material";
 import {EColor} from "../../../constant";
 import {CreateDiagramForm} from "../../form";
+import {IImportAndExport} from "../../../interface";
 
 export const CreateDiagramPopUp: React.FC<{
     isShow: boolean;
