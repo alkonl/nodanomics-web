@@ -51,7 +51,6 @@ export const useUploadDiagram = () => {
 
         // manage nodes and edges
         if (startId && diagramStartNode) {
-            console.log('updatedSpreadsheetIds: ', updatedSpreadsheetIds)
             const updatedEdges = updatedElements.edges.map(edge => {
                 const isConnectedToStart = edge.source === startId
                 const source = isConnectedToStart ? diagramStartNode?.id : edge.source
@@ -76,6 +75,18 @@ export const useUploadDiagram = () => {
                         }
                     }
                 }
+                if (node.data.type === EDiagramNode.DatasetDatafield && node.data.datasetId && updatedSpreadsheetIds) {
+                    const oldSpreadsheetId = node.data.datasetId
+                    const newSpreadsheetId = updatedSpreadsheetIds.find(spreadsheetId => spreadsheetId.previousSpreadsheetId === oldSpreadsheetId)?.newSpreadsheetId
+                    return {
+
+                        ...node,
+                        data: {
+                            ...node.data,
+                            datasetId: newSpreadsheetId,
+                        }
+                    }
+                }
                 return node
             })
             dispatch(addManyNodes(updatedNodes))
@@ -92,6 +103,7 @@ export const useUploadDiagram = () => {
         const file = event.target.files?.[0];
         if (file) {
             const data = await readFileAsText(file)
+            event.target.value = ''
             return JSON.parse(data) as IImportAndExport
         }
         event.target.value = ''
