@@ -1,18 +1,26 @@
 import React, {ChangeEvent, useMemo, useState} from 'react';
 import {Box, FormControl, FormControlLabel, Radio, RadioGroup, Typography} from "@mui/material";
-import {useGetAllUserGoogleSpreadSheetQuery, useUploadSpreadSheetMutation} from "../../../api";
+import {
+    useGetAllUserGoogleSpreadSheetQuery,
+    useRewriteSpreadsheetMutation,
+    useUploadSpreadSheetMutation
+} from "../../../api";
 import {MButton} from "../../base";
-import {EUploadSpreadSheetRequestType} from "../../../interface";
+import {
+    EUploadSpreadSheetRequestType,
+    SpreadsheetAction,
+} from "../../../interface";
 import {useCurrentUser} from "../../../hooks";
 import {GoogleConnectButton} from "../../button";
 import {EFontColor} from "../../../constant";
 
-export const UploadSpreadsheetForm: React.FC<{
-    projectId: string;
+export type UploadSpreadsheetFormProps = {
     onSuccessLogin?: () => void;
-}> = ({
+} & SpreadsheetAction
+
+export const UploadSpreadsheetForm: React.FC<UploadSpreadsheetFormProps> = ({
           onSuccessLogin,
-          projectId,
+          ...params
       }) => {
 
     const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -21,6 +29,7 @@ export const UploadSpreadsheetForm: React.FC<{
 
     const isUserConnectedToGoogle = currentUser?.googleUserId
     const [uploadSpreadSheet, {isSuccess, isError}] = useUploadSpreadSheetMutation();
+    const [rewriteSpreadSheet, {isSuccess: isRewritten, isError: isErrorOnRewriten}] = useRewriteSpreadsheetMutation();
     const {data: allUserGoogleSpreadsheets, isLoading: isAllUserGoogleSpreadsheetsLoading} = useGetAllUserGoogleSpreadSheetQuery(undefined);
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -35,19 +44,27 @@ export const UploadSpreadsheetForm: React.FC<{
     }
 
     const onSubmit = () => {
-        if (uploadedFile) {
-            uploadSpreadSheet({
-                type: EUploadSpreadSheetRequestType.File,
+        if(params.type === 'uploadNewSpreadsheet'){
+            if (uploadedFile) {
+                uploadSpreadSheet({
+                    type: EUploadSpreadSheetRequestType.File,
+                    file: uploadedFile,
+                    projectId: params.projectId,
+                });
+            } else if (googleSheetId ) {
+                uploadSpreadSheet({
+                    type: EUploadSpreadSheetRequestType.GoogleSpreadsheetId,
+                    googleSpreadsheetId: googleSheetId,
+                    projectId: params.projectId,
+                });
+            }
+        } else if(params.type === 'rewriteSpreadsheet' && uploadedFile){
+            rewriteSpreadSheet({
+                spreadsheetId: params.spreadsheetId,
                 file: uploadedFile,
-                projectId: projectId,
-            });
-        } else if (googleSheetId) {
-            uploadSpreadSheet({
-                type: EUploadSpreadSheetRequestType.GoogleSpreadsheetId,
-                googleSpreadsheetId: googleSheetId,
-                projectId: projectId,
-            });
+            })
         }
+
     }
 
     const onSuccessLoginHandler = async () => {
@@ -88,8 +105,6 @@ export const UploadSpreadsheetForm: React.FC<{
                 maxHeight: '60vh',
             }}>
                 <Box
-
-
                     sx={{
                         display: 'flex',
                         flexDirection: 'column',

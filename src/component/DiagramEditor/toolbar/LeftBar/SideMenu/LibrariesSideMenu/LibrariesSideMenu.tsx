@@ -26,6 +26,7 @@ export const LibrariesSideMenu: React.FC = () => {
     return (
         <>
             {resProjectInfo && <UploadSpreadSheetPopUp
+                type="uploadNewSpreadsheet"
                 projectId={resProjectInfo.id}
                 onClose={uploadSpreadSheetPopUpManager.close}
                 isShow={uploadSpreadSheetPopUpManager.isOpened}

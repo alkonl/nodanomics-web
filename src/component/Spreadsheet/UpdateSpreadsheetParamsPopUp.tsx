@@ -1,14 +1,15 @@
-import React, {useEffect} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import {Dialog} from "@headlessui/react";
 import {MButton, ParameterInputForm} from "../base";
-import {BasePopUp} from "../popUp";
+import {BasePopUp, UploadSpreadSheetPopUp} from "../popUp";
 import {Box, Typography} from "@mui/material";
-import {EColor} from "../../constant";
+import {EColor, EFontColor} from "../../constant";
 import {useGetSpreadSheetQuery, useUpdateSpreadsheetParamsMutation} from "../../api";
 
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
+import {useToggle} from "../../hooks";
 
 
 enum EFormFields {
@@ -26,6 +27,7 @@ export const UpdateSpreadsheetParamsPopUp: React.FC<{
     onClose: () => void;
     spreadsheetId: string
 }> = ({isShow, onClose, spreadsheetId}) => {
+    const uploadSpreadSheetPopUpManager = useToggle();
     const {data: spreadsheet} = useGetSpreadSheetQuery({
         spreadsheetId,
     })
@@ -50,8 +52,19 @@ export const UpdateSpreadsheetParamsPopUp: React.FC<{
         })
     }
 
+
+
+
     return (
+        <>
+
         <Dialog open={isShow} onClose={onClose}>
+            <UploadSpreadSheetPopUp
+                type="rewriteSpreadsheet"
+                spreadsheetId={spreadsheetId}
+                onClose={uploadSpreadSheetPopUpManager.close}
+                isShow={uploadSpreadSheetPopUpManager.isOpened}
+            />
             <BasePopUp>
                 <Dialog.Panel>
                     <Box
@@ -68,6 +81,23 @@ export const UpdateSpreadsheetParamsPopUp: React.FC<{
                         }}
                         component="form"
                     >
+                        <Box>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: 1,
+                                    justifyContent: 'center',
+                                }}
+                            >
+
+                                <MButton.Submit
+                                    onClick={uploadSpreadSheetPopUpManager.open}
+                                   >Change spreadsheet</MButton.Submit>
+
+                            </Box>
+                        </Box>
+
                         <Box sx={{
                             display: 'flex',
                             gap: 1,
@@ -98,6 +128,7 @@ export const UpdateSpreadsheetParamsPopUp: React.FC<{
                 </Dialog.Panel>
             </BasePopUp>
         </Dialog>
+        </>
     );
 };
 

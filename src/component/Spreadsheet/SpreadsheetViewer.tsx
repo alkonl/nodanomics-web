@@ -37,12 +37,12 @@ export const SpreadsheetViewer: React.FC<{
             for (let j = 0; j < data.rows[i].values.length; j++) {
                 let cellContent: string = data.rows[i].values[j].content
                 let isValueFromDataset = false
-                if (datasetData) {
+                if (datasetData && datasetData.rows) {
                     try {
                         const rowIndex = i - datasetData.yAxisIndex
                         const cellIndex = j - datasetData.xAxisIndex
 
-                        if (rowIndex >= 0 && cellIndex >= 0) {
+                        if (rowIndex >= 0 && cellIndex >= 0 &&  datasetData.rows[rowIndex] && datasetData.rows[rowIndex][cellIndex]) {
                             const editorCellContent = datasetData.rows[rowIndex][cellIndex]
                             if (editorCellContent) {
                                 if (editorCellContent.toString() !== cellContent.toString()) {
@@ -64,7 +64,7 @@ export const SpreadsheetViewer: React.FC<{
                 }
             }
         }
-        if (datasetData) {
+        if (datasetData && datasetData?.rows) {
             const datasetDataRowLength = datasetData?.rows.length || 0
             const mappedSpreadSheetDataRowLength = mappedSpreadSheet.rows.length - datasetData.yAxisIndex
             const updatedLength = datasetDataRowLength - mappedSpreadSheetDataRowLength
@@ -81,12 +81,12 @@ export const SpreadsheetViewer: React.FC<{
                         rowIndex: rowIndexToWrite,
                         isNew: true,
                     }))
-                    const formattedNewDatasetValues = datasetData.rows[rowIndex].map((content, columnIndex) => ({
+                    const formattedNewDatasetValues = datasetData.rows[rowIndex]?.map((content, columnIndex) => ({
                         content: content ?  content?.toString() : '',
                         columnIndex: columnIndex + fillXAxisCells.length,
                         rowIndex: rowIndexToWrite,
                         isNew: true,
-                    }))
+                    })) || []
 
                     const formattedValues = [...fillXAxisCells, ...formattedNewDatasetValues]
                     mappedSpreadSheet.rows.push({
