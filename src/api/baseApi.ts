@@ -597,7 +597,10 @@ export const baseApi = createApi({
                 return [{type: ERTKTags.Spreadsheet, id: arg?.spreadsheetId}]
             }
         }),
-        uploadJsonBodySpreadsheets: builder.mutation<unknown, {spreadsheets: ISpreadsheetView[], projectId: string}>({
+        uploadJsonBodySpreadsheets: builder.mutation<{
+            previousSpreadsheetId: string,
+            newSpreadsheetId: string,
+        }[], {spreadsheets: ISpreadsheetView[], projectId: string}>({
             query: (params: {spreadsheets: ISpreadsheetView[], projectId: string}) => {
                 return {
                     url: `/project/spreadsheet/upload/body-json`,

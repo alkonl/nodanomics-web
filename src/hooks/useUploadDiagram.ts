@@ -1,6 +1,6 @@
 import {ChangeEvent} from "react";
 import {readFileAsText} from "../utils";
-import {EDiagramNode, IImportAndExport, IReactFlowEdge} from "../interface";
+import {EDiagramNode, IImportAndExport, IReactFlowEdge, isINodeDatasetRecorder} from "../interface";
 import {diagramEditorActions, useAppDispatch, useDiagramEditorState} from "../redux";
 import {changeElementIds} from "../service";
 import {useOffHistoryExecuted} from "./useOffHistoryExecuted";
@@ -30,8 +30,25 @@ export const useUploadDiagram = () => {
             })?.id
 
             offHistory('useUploadDiagram')
+
+            // manage spreadsheets
+            let updatedSpreadsheetIds: {
+                previousSpreadsheetId: string,
+                newSpreadsheetId: string,
+            }[] | undefined = undefined
+            if (parsedData.spreadsheets && parsedData.spreadsheets.length > 0 && project) {
+                const savedSpreadsheetIds = await uploadSpreadsheet({
+                    spreadsheets: parsedData.spreadsheets,
+                    projectId: project.id,
+                })
+                if ('data' in savedSpreadsheetIds) {
+                    updatedSpreadsheetIds = savedSpreadsheetIds.data
+                }
+            }
+
             // manage nodes and edges
             if (startId && diagramStartNode) {
+                console.log('updatedSpreadsheetIds: ', updatedSpreadsheetIds)
                 const updatedEdges = updatedElements.edges.map(edge => {
                     const isConnectedToStart = edge.source === startId
                     const source = isConnectedToStart ? diagramStartNode?.id : edge.source
@@ -44,19 +61,25 @@ export const useUploadDiagram = () => {
                         source
                     } as IReactFlowEdge
                 })
-                const updatedNodes = updatedElements.nodes.filter(node => node.data.type !== EDiagramNode.Start)
+                const updatedNodes = updatedElements.nodes.filter(node => node.data.type !== EDiagramNode.Start).map(node => {
+                    if (isINodeDatasetRecorder(node.data) && node.data.datasetReceiverId && updatedSpreadsheetIds) {
+                        const datasetReceiverId = node.data.datasetReceiverId
+                        const updatedSpreadsheetId = updatedSpreadsheetIds.find(spreadsheetId => spreadsheetId.previousSpreadsheetId === datasetReceiverId)?.newSpreadsheetId
+                        return {
+                            ...node,
+                            data: {
+                                ...node.data,
+                                datasetReceiverId: updatedSpreadsheetId,
+                            }
+                        }
+                    }
+                    return node
+                })
                 dispatch(addManyNodes(updatedNodes))
                 dispatch(addManyEdges(updatedEdges))
             } else {
                 dispatch(addManyNodes(updatedElements.nodes))
                 dispatch(addManyEdges(updatedElements.edges))
-            }
-            // manage spreadsheets
-            if (parsedData.spreadsheets && parsedData.spreadsheets.length > 0 && project) {
-                uploadSpreadsheet({
-                    spreadsheets: parsedData.spreadsheets,
-                    projectId: project.id,
-                })
             }
 
 
