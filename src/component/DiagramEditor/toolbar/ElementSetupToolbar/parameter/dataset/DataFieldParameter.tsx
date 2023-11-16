@@ -17,21 +17,24 @@ export const DataFieldParameter: React.FC<{
         if (spreadsheets && nodeData.datasetId && spreadsheets[nodeData.datasetId]) {
             const fields: IParametersSelectValue[] = []
             const rows = spreadsheets[nodeData.datasetId]?.rows
-            for (let y = 0; y < rows.length; y++) {
-                for (let x = 0; x < rows[y].length; x++) {
+            if(rows){
+                for (let y = 0; y < rows.length; y++) {
+                    for (let x = 0; x < rows[y].length; x++) {
 
-                    const value = rows[y][x]
-                    const label = `[${x}][${y}]:${value}`
-                    const field: IParametersSelectValue = {
-                        value: JSON.stringify({
-                            x,
-                            y,
-                        }),
-                        label,
+                        const value = rows[y][x]
+                        const label = `[${x}][${y}]:${value}`
+                        const field: IParametersSelectValue = {
+                            value: JSON.stringify({
+                                x,
+                                y,
+                            }),
+                            label,
+                        }
+                        fields.push(field)
                     }
-                    fields.push(field)
                 }
             }
+
             return fields
         }
         return []

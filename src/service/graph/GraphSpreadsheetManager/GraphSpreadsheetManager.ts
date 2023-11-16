@@ -26,7 +26,7 @@ export class GraphSpreadsheetManager {
         const spreadsheet = this.getSpreadsheet({
             spreadsheetId,
         })
-        if (spreadsheet) {
+        if (spreadsheet &&  spreadsheet.rows) {
             try {
                 return spreadsheet.rows[y][x]
             } catch (e) {
@@ -46,7 +46,7 @@ export class GraphSpreadsheetManager {
             try {
                 return {
                     x: spreadsheet.columns.length,
-                    y: spreadsheet.rows.length,
+                    y:  spreadsheet.rows ? spreadsheet.rows.length : 0,
                 }
             } catch (e) {
                 console.error(e)
@@ -65,7 +65,7 @@ export class GraphSpreadsheetManager {
             spreadsheetId,
         });
         try {
-            if (spreadsheet) {
+            if (spreadsheet && spreadsheet.rows) {
                 const updatedRows = [...spreadsheet.rows]; // Create a shallow copy of rows array
                 if (!updatedRows[y]) {
                     const length = this.length({spreadsheetId});

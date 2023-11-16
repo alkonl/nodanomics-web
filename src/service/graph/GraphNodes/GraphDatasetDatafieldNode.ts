@@ -38,7 +38,7 @@ export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield>
     }
 
     get lengthY() {
-        return this.spreadsheet?.rows.length
+        return this.spreadsheet?.rows?.length
     }
 
     get nodeExternalValue() {
@@ -57,7 +57,7 @@ export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield>
 
     get lengthX() {
         // max length of rows
-        return this.spreadsheet?.rows.reduce((acc, row) => {
+        return this.spreadsheet?.rows?.reduce((acc, row) => {
             return Math.max(acc, row.length)
         }, 0)
     }
@@ -87,7 +87,7 @@ export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield>
         try {
             const x = coordinates.x
             const y = coordinates.y
-            return this.spreadsheet?.rows[y][x]
+            return this.spreadsheet?.rows?.[y][x]
         } catch (e) {
             console.error(e)
         }
@@ -95,7 +95,7 @@ export class GraphDatasetDatafieldNode extends GraphBaseNode<IDatasetDatafield>
 
 
     getDynamicVariables() {
-        return this.spreadsheet?.rows.reduce((acc: {
+        return this.spreadsheet?.rows?.reduce((acc: {
             [key: string]: number | boolean
         }, row) => {
             const newRow = this.buildRow(row)
