@@ -96,7 +96,7 @@ export class RunManager {
         // this.resetCountOfExecuted()
         this.resetBeforeStep()
         this.updateAllTags()
-
+        console.log('graph: ', this._graph)
 
         const chain = this.getExecutionOrder()
         this.setExecutionOrder(chain)
@@ -181,7 +181,9 @@ export class RunManager {
 
 
             if (isInvoke) {
-
+                if (edge instanceof GraphChainEdge) {
+                    chainItem.edge?.onExecute()
+                }
                 target.invokeStep()
                 if (target.data.tag && isIGetNodeExternalValue(target) && target.nodeExternalValue !== undefined) {
                     this.graph.graphTagManager.updateTagVariable({
@@ -234,9 +236,9 @@ export class RunManager {
                     nodeToExecute.addNodesToExecute(listenerNodes)
                 }
 
-                if (edge instanceof GraphChainEdge) {
-                    chainItem.edge?.onExecute()
-                }
+                // if (edge instanceof GraphChainEdge) {
+                //     chainItem.edge?.onExecute()
+                // }
 
             }
 
@@ -256,8 +258,9 @@ export class RunManager {
             } else {
                 const isChildOfAccumLoop = this._graph.nodesManager.isChildOfAccumLoop(target)
 
-                const noDataNodes = outgoingConnected.filter(item => !(item.target instanceof GraphDataNode))
-                const dataNodes = outgoingConnected.filter(item => item.target instanceof GraphDataNode)
+                const noDataNodes = outgoingConnected
+                    .filter(item => !(item.target instanceof GraphDataNode && item.edge instanceof GraphDataNode))
+                const dataNodes = outgoingConnected.filter(item => item.target instanceof GraphDataNode && item.edge instanceof GraphDataNode)
                 if (target instanceof GraphMicroLoopNode) {
                     if (!target.isLoopActive) {
                         nodeToExecute.addNodesToCurrent(noDataNodes)
@@ -291,72 +294,6 @@ export class RunManager {
             }
         }
     }
-
-
-    // findDeepChainItemByNode(node: GenericGraphNode): IChainItem | undefined {
-    //     return findChainItemByTarget(this._executionOrder, node);
-    // }
-    //
-    // findDeepChanItemByTargetId(id: string, chain = this._executionOrder): IChainItem | undefined {
-    //     for (const chainItem of chain) {
-    //         if (chainItem.target.data.id === id) {
-    //             return chainItem;
-    //         }
-    //
-    //         // Check outgoingConnected chain items recursively
-    //         if (chainItem.outgoingConnected) {
-    //             const outgoingResult = this.findDeepChanItemByTargetId(id, chainItem.outgoingConnected);
-    //             if (outgoingResult) {
-    //                 return outgoingResult;
-    //             }
-    //         }
-    //
-    //         // Check inner connected chain items recursively
-    //         if (chainItem.inner) {
-    //             const innerResult = this.findDeepChanItemByTargetId(id, chainItem.inner);
-    //             if (innerResult) {
-    //                 return innerResult;
-    //             }
-    //         }
-    //     }
-    //
-    //     return undefined; // Item not found
-    // }
-    //
-    //
-    // private executeChainOrder(chainItems: IChainItem[], nodeToExecute: NodeExecutionManager) {
-    //     chainItems.forEach(chainItem => {
-    //         const target = chainItem.target
-    //         const chainConnection = chainItem.edge
-    //         const isChainMeetCondition = chainConnection?.isMeetCondition === undefined || chainConnection?.isMeetCondition
-    //
-    //         let isCanAdd = false
-    //         if (target instanceof GraphInvokableNode && isChainMeetCondition) {
-    //             if (isIIsEventTriggered(target)) {
-    //                 if (target.isEventTriggered(chainConnection?.sourceMode)) {
-    //                     isCanAdd = true
-    //                 }
-    //             } else {
-    //                 isCanAdd = true
-    //             }
-    //             if (isCanAdd) {
-    //                 if (chainItem.target instanceof GraphStartNode && chainItem.outgoingConnected) {
-    //                     nodeToExecute.addNodesToExecute(chainItem.outgoingConnected)
-    //                 } else if (chainItem.target instanceof GraphLoopNode && chainItem.inner) {
-    //                     nodeToExecute.addNodesToExecute(chainItem.inner)
-    //                 } else {
-    //                     nodeToExecute.addNodesToExecute([chainItem])
-    //                 }
-    //             }
-    //
-    //         }
-    //
-    //     })
-    //     nodeToExecute.invokeNodesToExecute()
-    //
-    //
-    // }
-
 
     private incrementStep() {
         this._diagramRunCount++
