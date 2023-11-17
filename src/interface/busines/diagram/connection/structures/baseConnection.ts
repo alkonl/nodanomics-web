@@ -11,6 +11,7 @@ export enum EConnectionMode{
     LoopChildrenToExternal = 'LoopChildrenToExternal',
     NodeIncoming = 'NodeIncoming',
     NodeOutgoing = 'NodeOutgoing',
+    RecordToSpreadsheet = 'RecordToSpreadsheet',
 }
 
 export enum EConnectionSide {
