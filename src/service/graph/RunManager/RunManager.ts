@@ -207,37 +207,9 @@ export class RunManager {
 
                         // if has parent loop, then reset loop step
                         if (target instanceof GraphMicroLoopNode) {
-                            // target.resetLoopStep()
-                            // console.log('before')
-                            // try {
-                            //     await workerInstance.runLoop({
-                            //         loop: target.data,
-                            //         nodes: this._graph.nodes.map(item => item.data),
-                            //         edges: this._graph.edges.map(item => item.data as IDiagramConnectionData),
-                            //     }).catch(e => {
-                            //         console.error(e)
-                            //     })
-                            // } catch (e) {
-                            //     console.error('webworker: ', e)
-                            // }
-                            // console.log('after')
-                            // nodeToExecute.addNodesToCurrent(innerNodes)
                             const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
                             await loopNodeExecutionManager.invokeNodesToExecute()
-                            // for (let i = 0; i < target.loopCount; i++) {
-                            //     const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
-                            //     await loopNodeExecutionManager.invokeAll()
-                            //
-                            //     // const timeOut = setTimeout(() => {
-                            //     //     loopNodeExecutionManager.invokeAll()
-                            //     //     clearTimeout(timeOut)
-                            //     // }, 0)
-                            // }
                         }
-                        // else {
-                        //     const loopNodeExecutionManager = new NodeExecutionManager(this, innerNodes)
-                        //     loopNodeExecutionManager.invokeAll()
-                        // }
                     } else if (target.isLoopActive) {
 
                         target.children.forEach(child => {
