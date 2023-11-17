@@ -6,6 +6,7 @@ import {useCurrentEditElement} from "../../../../hooks";
 import {CommentSection, NodeStatisticSection, PropertiesSection, RecordToDataset} from "./section";
 import {StyleSection} from "./section/StyleSection";
 import {NodeDeleteButton} from "./NodeDeleteButton";
+import {ReadFromDataset} from "./section/ReadFromDataset";
 
 
 export const ElementSetupToolbar = () => {
@@ -60,6 +61,10 @@ export const ElementSetupToolbar = () => {
                             {selectedElementData?.elementType === EElementType.Node
                                 && isINodeDatasetRecorder(selectedElementData) &&
                                 <RecordToDataset nodeData={selectedElementData}/>
+                            }
+                            {selectedElementData?.elementType === EElementType.Node
+                                && isINodeDatasetRecorder(selectedElementData) &&
+                                <ReadFromDataset nodeData={selectedElementData}/>
                             }
                             <CommentSection element={selectedElementData}/>
 
