@@ -20,6 +20,7 @@ import {RunManager} from "../RunManager";
 import {GraphNodeManager} from "../NodeManager";
 import {GraphHistoryManager} from "../GraphHistoryManager";
 import {GraphDatasetRecorder} from "./helper";
+import {GraphMatchManager} from "../GraphMatchManager/GraphMatchManager";
 
 export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     implements IUpdateGraphNodeState, IGetNodeExternalValue,
@@ -31,6 +32,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
     private currentStepResourcesCount?: number
     private historyManager: GraphHistoryManager = new GraphHistoryManager(this, this.nodeManager);
     private graphDatasetRecorder: GraphDatasetRecorder = new GraphDatasetRecorder(this.runManager)
+    private mathManager: GraphMatchManager = new GraphMatchManager(this.nodeManager, this.runManager.graph.graphTagManager)
 
     constructor(data: IDataNodeData, runManager: RunManager, nodeManager: GraphNodeManager) {
         super(data, runManager, nodeManager);
@@ -213,12 +215,14 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
 
     invokeStep() {
         let isExecutedRecordToSpreadsheet = false
+        let isExecutedReadFromDataset = false
         let isChainExecuted = false
         this.incomingEdges.forEach(edge => {
             if (edge instanceof GraphChainEdge && edge.data.isExecuted) {
                 isChainExecuted = true
                 const targetMode = edge.targetMode
                 isExecutedRecordToSpreadsheet = targetMode === EConnectionMode.RecordToSpreadsheet
+                isExecutedReadFromDataset = targetMode === EConnectionMode.ReadDataset
 
             }
         })
@@ -228,12 +232,13 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
         if (isExecutedRecordToSpreadsheet) {
             this.recordToDataset()
         }
+        if (isExecutedReadFromDataset) {
+            this.readFromDataset()
+        }
     }
 
     private recordToDataset() {
-        console.log('record: ', {
-            x: this.data.datasetX,
-        })
+
         if (this.data.datasetX !== undefined && this.data.datasetY !== undefined && this.data.datasetReceiverId) {
             console.log('record: ')
             this.graphDatasetRecorder.recordToDataset({
@@ -242,6 +247,19 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
                 x: this.data.datasetX,
                 y: this.data.datasetY
             })
+        }
+    }
+
+    private readFromDataset() {
+        if (this.data.readDatasetX !== undefined && this.data.readDatasetY !== undefined && this.data.datasetToReadTag) {
+            const formula = `${this.data.datasetToReadTag}[${this.data.readDatasetX}][${this.data.readDatasetY}]`
+            const value = this.mathManager.calculateFormula({formula})
+            if (value !== undefined && typeof value === 'number' && !isNaN(value)) {
+                this.updateNode({
+                    resources: {value},
+                    resourcesToProvide: {value}
+                })
+            }
         }
     }
 
@@ -296,6 +314,7 @@ export class GraphDataNode extends GraphInteractiveNode<IDataNodeData>
             return deletedResourcesToProvide
         }
     }
+
 
     static baseNodeIsData(baseNode: GraphBaseNode<IDiagramNodeBaseData>): baseNode is GraphDataNode {
         return baseNode instanceof GraphDataNode;

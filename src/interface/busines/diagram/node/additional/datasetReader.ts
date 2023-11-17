@@ -3,6 +3,7 @@ import {IDatasetRecorder} from "./nodeDatasetRecorder";
 
 export interface IDatasetReader {
     datasetToReadId?: string
+    datasetToReadTag?: string
     readDatasetX?: string
     readDatasetY?: string
 }

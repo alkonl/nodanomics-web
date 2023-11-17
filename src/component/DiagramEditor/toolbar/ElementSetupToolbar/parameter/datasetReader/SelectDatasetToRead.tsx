@@ -33,9 +33,13 @@ export const SelectDatasetToRead: React.FC<{
 
 
     const changeDataset = (event: SelectChangeEvent) => {
-        updateNodeData({
-            datasetToReadId: event.target.value,
-        })
+        const datasetNode = diagramNodes.find((node) => node.id === event.target.value)
+        if(datasetNode && datasetNode.data.tag){
+            updateNodeData({
+                datasetToReadId: event.target.value,
+                datasetToReadTag: datasetNode.data.tag,
+            })
+        }
     }
 
     return (
