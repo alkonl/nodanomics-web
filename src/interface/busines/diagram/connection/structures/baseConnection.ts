@@ -12,6 +12,7 @@ export enum EConnectionMode{
     NodeIncoming = 'NodeIncoming',
     NodeOutgoing = 'NodeOutgoing',
     RecordToSpreadsheet = 'RecordToSpreadsheet',
+    ReadDataset = 'ReadDataset',
 }
 
 export enum EConnectionSide {

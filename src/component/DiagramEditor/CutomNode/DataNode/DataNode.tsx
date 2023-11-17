@@ -108,6 +108,19 @@ export const DataNode: React.FC<NodeProps<IDataNodeData>> = (props) => {
                             record
                         </Typography>
                     </Box>
+                    <Box sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                    }}>
+                        <ChainHandle type={"target"} position={Position.Left} mode={EConnectionMode.ReadDataset} isConnectable={isConnectable}/>
+                        <Typography sx={{
+                            fontSize: 9,
+                            color: EFontColor.lightMarine4,
+                        }}>
+                            read
+                        </Typography>
+                    </Box>
                 </Box>
                 <DataHandle
                     type="source"
