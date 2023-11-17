@@ -8,6 +8,6 @@ export interface IDatasetReader {
     readDatasetY?: string
 }
 
-export const  isDatasetReader = <T extends  IDiagramNodeBaseData>(obj: T): obj is (T & IDatasetRecorder) => {
+export const  isINodeDatasetReader = <T extends  IDiagramNodeBaseData>(obj: T): obj is (T & IDatasetRecorder) => {
     return [EDiagramNode.Data].includes(obj.type)
 }
